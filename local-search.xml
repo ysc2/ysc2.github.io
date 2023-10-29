@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>stm32</title>
+    <link href="/2023/10/29/stm32/"/>
+    <url>/2023/10/29/stm32/</url>
+    
+    <content type="html"><![CDATA[<p>正文的一部分作为摘要</p><span id="more"></span><h1 id="STM32"><a href="#STM32" class="headerlink" title="STM32"></a>STM32</h1><ol><li>单元测试</li></ol><h2 id="二级单元"><a href="#二级单元" class="headerlink" title="二级单元"></a>二级单元</h2><h3 id="三级单元"><a href="#三级单元" class="headerlink" title="三级单元"></a>三级单元</h3><p><img src="/stm32%5CVCG211177178889.jpg" alt="图片"></p><ul><li>这是一个点</li></ul><blockquote><p>这是引用段 asdf</p></blockquote><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;nihao\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>STM32</category>
+      
+      <category>测试</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>测试文章</title>
     <link href="/2023/10/27/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
     <url>/2023/10/27/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</url>
