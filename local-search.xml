@@ -56,6 +56,31 @@
   
   
   <entry>
+    <title>测试文章</title>
+    <link href="/2023/10/27/asdf/"/>
+    <url>/2023/10/27/asdf/</url>
+    
+    <content type="html"><![CDATA[<p>这是一篇测试文章</p><meta name="referrer" content="no-referrer" /><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041637704.jpg"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2023/10/27/hello-world/"/>
     <url>/2023/10/27/hello-world/</url>
