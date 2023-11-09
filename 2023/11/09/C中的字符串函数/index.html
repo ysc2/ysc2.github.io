@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C语言中的内嵌汇编语法解释">
+    <meta name="description" content="讲讲C库中的字符串函数需要特别注意的地方 memset()这个函数我们一般用来初始化一段内存空间,将已开辟内存空间 s 的首 n 个字节的值设为值 c。（注意：会去修改内存得值，如果内存是只读，使用memset会出错） 1void memset(void* s ,int c, size_t n) 需要特别注意：memset是以byte来填充的，也就是一个字节（8bit）一个单位来填充。 1234i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言中的内嵌汇编">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96/index.html">
+<meta property="og:title" content="C中的字符串函数">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/C%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="C语言中的内嵌汇编语法解释">
+<meta property="og:description" content="讲讲C库中的字符串函数需要特别注意的地方 memset()这个函数我们一般用来初始化一段内存空间,将已开辟内存空间 s 的首 n 个字节的值设为值 c。（注意：会去修改内存得值，如果内存是只读，使用memset会出错） 1void memset(void* s ,int c, size_t n) 需要特别注意：memset是以byte来填充的，也就是一个字节（8bit）一个单位来填充。 1234i">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg">
-<meta property="article:published_time" content="2023-11-09T05:15:04.000Z">
-<meta property="article:modified_time" content="2023-11-09T07:35:10.328Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/3.JPG">
+<meta property="article:published_time" content="2023-11-09T10:32:42.000Z">
+<meta property="article:modified_time" content="2023-11-09T10:54:23.400Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/3.JPG">
   
   
   
-  <title>C语言中的内嵌汇编 - Ysc Web</title>
+  <title>C中的字符串函数 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/3.JPG') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C语言中的内嵌汇编"></span>
+            <span id="subtitle" data-typed-text="C中的字符串函数"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-09 13:15" pubdate>
-          2023年11月9日 下午
+        <time datetime="2023-11-09 18:32" pubdate>
+          2023年11月9日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k 字
+          1.1k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          22 分钟
+          9 分钟
         
       </span>
     
@@ -270,68 +270,29 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">C语言中的内嵌汇编</h1>
+            <h1 id="seo-header">C中的字符串函数</h1>
             
             
               <div class="markdown-body">
                 
-                <p>C语言中的内嵌汇编语法解释</p>
-<span id="more"></span>
+                <p>讲讲C库中的字符串函数需要特别注意的地方</p>
+<h2 id="memset"><a href="#memset" class="headerlink" title="memset()"></a>memset()</h2><p>这个函数我们一般用来初始化一段内存空间,将已开辟内存空间 s 的首 n 个字节的值设为值 c。<strong>（注意：会去修改内存得值，如果内存是只读，使用memset会出错）</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">memset</span><span class="hljs-params">(<span class="hljs-type">void</span>* s ,<span class="hljs-type">int</span> c, <span class="hljs-type">size_t</span> n)</span><br></code></pre></td></tr></table></figure>
+<p>需要特别注意：<strong>memset是以byte来填充的，也就是一个字节（8bit）一个单位来填充。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> arr [<span class="hljs-number">10</span>];<br><span class="hljs-type">int</span> a = <span class="hljs-number">1</span>;<br><span class="hljs-built_in">memset</span>(arr,a,<span class="hljs-number">10</span>);<br>pritnf(<span class="hljs-string">&quot;%d\n&quot;</span>,arr[<span class="hljs-number">0</span>]);<br></code></pre></td></tr></table></figure>
 
-<h1 id="内嵌语法格式"><a href="#内嵌语法格式" class="headerlink" title="内嵌语法格式"></a>内嵌语法格式</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">asm</span>(<br>    内嵌汇编指令<br>    ：输出操作数<br>    ：输入操作数<br>    ：破坏描述<br>);<br></code></pre></td></tr></table></figure>
-<p>其中内嵌汇编指令是必不可少的，但可以为空。其他3部分根据程序需要可选。如果只有内嵌汇编指令时，后面的“:”可以省略。如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">asm</span>(<br>    <span class="hljs-string">&quot;break&quot;</span><br>);<br><br>__asm__(<br>    <span class="hljs-string">&quot;break&quot;</span><br>);<br></code></pre></td></tr></table></figure>
-<div class="note note-info">
-            <p>asm是__asm__的别名，所以二者都是可以使用的，但是asm是gcc的扩展。为了保证可移植性，最好使用<code>__asm__</code></p>
-          </div>
+<p>如果你运行这段代码你会发现其不会输出<strong>1</strong>，这是因为<strong>memset是以byte来填充的，也就是一个字节（8bit）一个单位来填充。</strong>。</p>
+<p>因为int是4个字节，因此再int类型中1的表现形式为“00000000000000000000000000000001”，然后将这32位填充1个byte中，高位被舍弃，也就是“00000001”，然后再填充一次就变成“0000000100000001”。那么array[0]其实在内存中存储的就是“00000001000000010000000100000001”。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>将<code>int a</code>改成<code>char a</code>来解决问题。</p>
+<h2 id="memmove-和memcpy"><a href="#memmove-和memcpy" class="headerlink" title="memmove()和memcpy()"></a>memmove()和memcpy()</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<span class="hljs-title function_">memmove</span><span class="hljs-params">(<span class="hljs-type">void</span> *str1, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *str2, <span class="hljs-type">size_t</span> n)</span><br><span class="hljs-type">void</span> *<span class="hljs-title function_">memcpy</span><span class="hljs-params">(<span class="hljs-type">void</span> *dest, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *src, <span class="hljs-type">size_t</span> n)</span><br></code></pre></td></tr></table></figure>
+<p>这两个函数非常类似，但是我们在使用时最好有线使用memmove()，因为其更加安全。</p>
+<p><strong>如果目标区域和源区域有重叠的话，memmove() 能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，复制后源区域的内容会被更改。如果目标区域与源区域没有重叠，则和 memcpy() 函数功能相同。</strong></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>memmove()和memcpy()，优先使用memmove()</p>
+<h2 id="sizeof-和strlen"><a href="#sizeof-和strlen" class="headerlink" title="sizeof()和strlen()"></a>sizeof()和strlen()</h2><p>这两者的比较，首先在于sizeof()<strong>并非一个函数</strong>，而是一个操作符，但是strlen()是一个函数。</p>
+<p>其次sizeof()所计算的时类型的长度，而strlen()所计算的是变量的长度。<br>sizeof()会将字符串末尾的<code>&#39;0&#39;</code>计算进来，但是strlen()只会截止到<code>\0</code>，并且不会将<code>\0</code>算作一个字符</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> arr [<span class="hljs-number">3</span>] = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>&#125;;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,<span class="hljs-built_in">strlen</span>(arr));<br></code></pre></td></tr></table></figure>
 
-<p>关于<code>:</code>的省略问题，只有<strong>内嵌汇编指令</strong>，而后面都没有时，可以省略所有<code>:</code>。内嵌汇编程序中如果没有输出部分，但是有输入部分，那么输出部分的“:”不能省略。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">asm</span> <span class="hljs-title function_">volatile</span><span class="hljs-params">(</span><br><span class="hljs-params">        <span class="hljs-string">&quot;movl %1,%%esp\n\t&quot;</span>     <span class="hljs-comment">/* set task[pid].thread.sp to esp */</span></span><br><span class="hljs-params">        <span class="hljs-string">&quot;pushl %1\n\t&quot;</span>             <span class="hljs-comment">/* push ebp */</span></span><br><span class="hljs-params">        <span class="hljs-string">&quot;pushl %0\n\t&quot;</span>             <span class="hljs-comment">/* push task[pid].thread.ip */</span></span><br><span class="hljs-params">        <span class="hljs-string">&quot;ret\n\t&quot;</span>                 <span class="hljs-comment">/* pop task[pid].thread.ip to eip */</span></span><br><span class="hljs-params">        :</span><br><span class="hljs-params">        : <span class="hljs-string">&quot;c&quot;</span> (task[pid].thread.ip),<span class="hljs-string">&quot;d&quot;</span> (task[pid].thread.sp)    <span class="hljs-comment">/* input c or d mean %ecx/%edx*/</span></span><br><span class="hljs-params">    )</span>;<br><br><br><span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;move $31,%0\n\t&quot;</span> <br>    :        <span class="hljs-comment">/*此处的：不能省略*/</span><br>    :<span class="hljs-string">&quot;r&quot;</span>(a)<br>);<br></code></pre></td></tr></table></figure>
-
-<ol>
-<li>每条指令都以<code>&quot; &quot;</code>为单位。多条指令可以使用<code>&quot; ;&quot;</code>号、<code>\n\t</code>或者换行来分割。</li>
-<li>asm模板里面可以使用<code>/**/</code>或者<code>//</code>添加注释。</li>
-<li>使用寄存器时，要在前面加上<code>$</code></li>
-<li><code>&quot;__volatile__&quot;</code>表示编译器不要优化代码，后面的指令保留原样，<code>&quot;volatile&quot;</code>是它的别名。括号里面是汇编指令。</li>
-</ol>
-<h2 id="输入操作数和输出操作数"><a href="#输入操作数和输出操作数" class="headerlink" title="输入操作数和输出操作数"></a>输入操作数和输出操作数</h2><p> 内嵌汇编中的操作数包括输出操作数和输入操作数，输出操作数和输入操作数里的每一个操作数都由<strong>一个约束字符串</strong>和一个<strong>带括号的c语言表达式或变量</strong>组成，比如<code>“r”(src)</code>。多个操作数之间使用“,”分割。内嵌汇编指令中使用%num的形式依次表示每一个操作数，<strong>num从0开始</strong>。比如：</p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;daddu %0,%1,%2\n\t&quot;</span><br>    :<span class="hljs-string">&quot;=r&quot;</span>(ret)         <span class="hljs-comment">/* 输出操作数，也是第0个操作数%0 */</span><br>    :<span class="hljs-string">&quot;r&quot;</span>(a),<span class="hljs-string">&quot;r&quot;</span>(b)     <span class="hljs-comment">/* 输入操作数，也是第1个操作数和第2个操作数 %1,%2 */</span><br>);<br></code></pre></td></tr></table></figure>
-
-
-<h2 id="破坏描述部分"><a href="#破坏描述部分" class="headerlink" title="破坏描述部分"></a>破坏描述部分</h2><p> 所谓的破坏描述就是告诉gcc，哪些寄存器是会在这个内联汇编中被改变。gcc以此做好防护，防止出现导致程序出错或致命异常。一般是寄存器的名字或者是<code>memory</code></p>
-<p><strong>其实就是告诉编译器我们在内联汇编中使用了哪些寄存器或内存</strong></p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;dadd %0,%1,%2\n\t&quot;</span><br>    <span class="hljs-string">&quot;move $31,%0\n\t&quot;</span><br>    :<span class="hljs-string">&quot;=g&quot;</span>(ret)<br>    :<span class="hljs-string">&quot;r&quot;</span>(a),<span class="hljs-string">&quot;r&quot;</span>(b)<br>    :<span class="hljs-string">&quot;$31&quot;</span><br>);<br></code></pre></td></tr></table></figure>
-
-<p> 上述代码中，<code>&quot;%31&quot;</code>就是告诉gcc，<code>$31</code>遭到了破坏。</p>
-<h2 id="有名操作数和指定操作数"><a href="#有名操作数和指定操作数" class="headerlink" title="有名操作数和指定操作数"></a>有名操作数和指定操作数</h2><p>  从gcc的3.1版本之后，内嵌汇编支持有名操作数。就是可以在内嵌汇编中为输入操作数、输出操作数取名字，名字形式是[name]，放在每个操作数的前面，然后汇编程序模板里面就可以使用%[name]的形式，而不是上面%num形式。例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;daddu %[out],%[in1],%[in2]\n\t&quot;</span><br>     :[out]<span class="hljs-string">&quot;=g&quot;</span>(ret)<br>     :[in1]<span class="hljs-string">&quot;r&quot;</span>(a),[in2]<span class="hljs-string">&quot;r&quot;</span>(b)<br>);<br></code></pre></td></tr></table></figure>
-
-<p>当然我们也可以只给一个操作数命令</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;daddu %[out],%1,%2\n\t&quot;</span><br>    :[out]<span class="hljs-string">&quot;=g&quot;</span>(ret)<br>    :<span class="hljs-string">&quot;r&quot;</span>(a),<span class="hljs-string">&quot;r&quot;</span>(b)<br>);<br></code></pre></td></tr></table></figure>
-
-<h2 id="内联汇编的奇特用法"><a href="#内联汇编的奇特用法" class="headerlink" title="内联汇编的奇特用法"></a>内联汇编的奇特用法</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> sys_id <span class="hljs-title function_">asm</span><span class="hljs-params">(<span class="hljs-string">&quot;$RAX&quot;</span>)</span> = <span class="hljs-number">5001</span>;<br><span class="hljs-comment">//将RAX寄存器中的值设置为5001</span><br></code></pre></td></tr></table></figure>
-<h2 id="约束描述符"><a href="#约束描述符" class="headerlink" title="约束描述符"></a>约束描述符</h2><p>前面我们提到了<code>=r</code> <code>+r</code>。这些 <code>=</code> <code>+</code> 都是约束描述符。 约束字符就是输入操作数和输出操作数前面的修饰符。约束字符可以说明操作数是否可以在寄存器中，以及哪种寄存器；操作数是否可以是内存引用，以及哪种地址；操作数是否可以是立即常数，以及它可能具有的值。本节介绍常用的约束字符信息。</p>
-<h3 id="常用的约束描述符"><a href="#常用的约束描述符" class="headerlink" title="常用的约束描述符"></a>常用的约束描述符</h3><ol>
-<li><p>“b” 将输入变量放入ebx   </p>
-</li>
-<li><p>“c” 将输入变量放入ecx</p>
-</li>
-<li><p>“d” 将输入变量放入edx</p>
-</li>
-<li><p>“s” 将输入变量放入esi</p>
-</li>
-<li><p>“d” 将输入变量放入edi</p>
-</li>
-<li><p>“q” 将输入变量放入eax，ebx，ecx，edx中的一个</p>
-</li>
-<li><p>“r” 将输入变量放入通用寄存器，也就是eax，ebx，ecx，<br>edx，esi，edi中的一个</p>
-</li>
-</ol>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p> <a target="_blank" rel="noopener" href="https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html">GCC官方手册</a></p>
-<p> <a target="_blank" rel="noopener" href="https://www.linuxprobe.com/gcc-how-to.html">https://www.linuxprobe.com/gcc-how-to.html</a></p>
-<p> <a target="_blank" rel="noopener" href="http://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html#s4">http://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html#s4</a></p>
-<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38669561/article/details/105192200?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control">https://blog.csdn.net/weixin_38669561/article/details/105192200?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control</a></p>
-<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/yxc135/article/details/11537763">https://blog.csdn.net/yxc135/article/details/11537763</a></p>
+<p>其会输出<code>1</code>，既不是<strong>2</strong>，也不是<strong>3</strong></p>
 
                 
               </div>
@@ -355,7 +316,7 @@
   
     <span>></span>
     
-  <a href="/categories/C/%E8%AF%AD%E6%B3%95/" class="category-chain-item">语法</a>
+  <a href="/categories/C/%E5%87%BD%E6%95%B0/" class="category-chain-item">函数</a>
   
   
 
@@ -384,8 +345,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C语言中的内嵌汇编</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/09/C语言中的内嵌汇编/</div>
+      <div>C中的字符串函数</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/09/C中的字符串函数/</div>
     </div>
     <div class="license-meta">
       
@@ -429,18 +390,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/09/%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" title="编译器的优化方法">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">编译器的优化方法</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/09/Linux%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E5%87%BD%E6%95%B0mmap%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/" title="Linux内存映射函数mmap函数详解">
-                        <span class="hidden-mobile">Linux内存映射函数mmap函数详解</span>
+                      <a href="/2023/11/09/C%E4%B8%AD%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%88%9D%E5%A7%8B%E5%8C%96%E6%96%B9%E6%B3%95/" title="C中结构体的四种初始化方法">
+                        <span class="hidden-mobile">C中结构体的四种初始化方法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
