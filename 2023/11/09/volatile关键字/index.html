@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="常见的编译器优化方法">
+    <meta name="description" content="volatile关键字总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="编译器的优化方法">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:title" content="volatile关键字">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/volatile%E5%85%B3%E9%94%AE%E5%AD%97/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="常见的编译器优化方法">
+<meta property="og:description" content="volatile关键字总结">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E6%A0%87%E7%AD%BE.jpg">
-<meta property="article:published_time" content="2023-11-09T08:09:35.000Z">
-<meta property="article:modified_time" content="2023-11-09T17:48:48.654Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Shin_chan_Summer_ZYXFwsHT6G.jpg">
+<meta property="article:published_time" content="2023-11-09T13:09:26.000Z">
+<meta property="article:modified_time" content="2023-11-09T17:49:42.032Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E6%A0%87%E7%AD%BE.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Shin_chan_Summer_ZYXFwsHT6G.jpg">
   
   
   
-  <title>编译器的优化方法 - Ysc Web</title>
+  <title>volatile关键字 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/标签.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Shin_chan_Summer_ZYXFwsHT6G.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="编译器的优化方法"></span>
+            <span id="subtitle" data-typed-text="volatile关键字"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-09 16:09" pubdate>
-          2023年11月9日 下午
+        <time datetime="2023-11-09 21:09" pubdate>
+          2023年11月9日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          928 字
+          1.3k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          8 分钟
+          11 分钟
         
       </span>
     
@@ -270,35 +270,36 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">编译器的优化方法</h1>
+            <h1 id="seo-header">volatile关键字</h1>
             
             
               <div class="markdown-body">
                 
-                <p>常见的编译器优化方法</p>
+                <p>volatile关键字总结</p>
 <span id="more"></span>
 
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h2 id="volatile介绍"><a href="#volatile介绍" class="headerlink" title="volatile介绍"></a><code>volatile</code>介绍</h2><p><code>volatile</code>关键字告诉编译器，不要去寄存器中访问某个变量，而是直接去内存中读取。</p>
+<h2 id="volatile关键字的使用场景"><a href="#volatile关键字的使用场景" class="headerlink" title="volatile关键字的使用场景"></a><code>volatile</code>关键字的使用场景</h2><p><code>volatile</code>常用的场景：</p>
+<ol>
+<li>并行设备的寄存器，如状态寄存器</li>
+<li>多线程程序</li>
+<li>一个中断服务子程序访问到的非自动变量</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>为什么在中断中修改了i的值，而在main函数中的i没有被编译器认为是1。而如果不是通过中断修改i，而只是在程序中修改i的值，main函数中的i就会被认为是1。</strong></p>
+<p>这就类似于：就比如我在盯着一个房间有没有人，我一开始进这个房间看了一眼，没有人，那么这个时候我就只需要在门口盯着，确保没有人从门口进去就行了。这个时候中断来了，就类似时间被暂停了，然后有个人进房间了。然后时间恢复，这个时候我依旧只会盯着门看，不会进门去看一下，确认房间是否有人。因为我认为我一直在盯着门。　</p>
+<p>这个就类似一开始编译器从内存中拿出i的值放到寄存器中，然后if(i)反复判断。编译器就会认为我中间没有去做其他事，没有必要再去从内存中拿一次i的值。</p>
+<p>而如果再程序中修改i的值，就类似我在看着门，突然有事离开。然后再回来，我要确保我出去的这段时间，有没有人进房间，所以会进房间看一次有没有人。就类似从内存中取一次i的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    ...<br>     <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br>    &#123;<br>         <span class="hljs-keyword">if</span> (i)<br>         &#123;<br>              dosomething();<br>         &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/* Interrupt service routine. */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">ISR_2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>      i=<span class="hljs-number">1</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
-<h2 id="寄存器分配"><a href="#寄存器分配" class="headerlink" title="寄存器分配"></a>寄存器分配</h2><p>寄存器分配是指，编译器将内存中的值缓存在寄存器中，之后一直用访问寄存器来代表对这个内存的访问的。</p>
-<p>由于计算机中内存访问速度远远不如寄存器的访问速度，所以比编译器一般会把变量拷贝至寄存器中以提高访问速度。但是寄存器的数量是有限的。</p>
-<p>新型 x86 处理器提供以下可以通过编译器进行分配的寄存器：</p>
-<p>所有 x64 处理器提供 16 个 64 位的通用寄存器、8 个 80 位的浮点寄存器和至少 16 个矢量寄存器（每个矢量寄存器至少 128 位）。</p>
-<h2 id="常量折叠-Constant-Folding"><a href="#常量折叠-Constant-Folding" class="headerlink" title="常量折叠 (Constant Folding)"></a>常量折叠 (Constant Folding)</h2><p>常量折叠，又称常量传播 (Constant Propagation)，如果一个表达式可以确定为常量，在他的下一个定义 (Definition) 前，可以进行常量传播。常量，就是说在编译期时，能够直接计算出结果（这个结果往往是常量）的变量，将被编译器由直接计算出的结果常量来替换这个变量。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> x = <span class="hljs-number">1</span>;<br><span class="hljs-type">int</span> y = x;  <span class="hljs-comment">// x = 1, =&gt; y = 1</span><br>x = <span class="hljs-number">3</span>;<br><span class="hljs-type">int</span> z = <span class="hljs-number">2</span> * y;   <span class="hljs-comment">// z =&gt; 2 * y = 2 * 1 = 2</span><br><span class="hljs-type">int</span> y2 = x * <span class="hljs-number">2</span>;  <span class="hljs-comment">// x = 3, =&gt; y2 = 6</span><br></code></pre></td></tr></table></figure>
-<p>这段代码在编译期间即可被转换为：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> x = <span class="hljs-number">1</span>;<br><span class="hljs-type">int</span> y = <span class="hljs-number">1</span>;<br>x = <span class="hljs-number">3</span>;<br><span class="hljs-type">int</span> z = <span class="hljs-number">2</span>;<br><span class="hljs-type">int</span> y2 = <span class="hljs-number">6</span>;<br></code></pre></td></tr></table></figure>
+<p>上述程序的本意是希望ISR_2中断产生时，在main函数中调用dosomething函数，但是，由于编译器判断在main函数里面没有修改过i，因此可能只执行一次对从i到某寄存器的读操作，然后每次if判断都只使用这个寄存器里面的“i副本”，导致dosomething永远也不会被调用。如果将变量加上volatile修饰，则编译器保证对此变量的读写操作都不会被优化（肯定执行）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span>  *output = (<span class="hljs-type">unsigned</span>  <span class="hljs-type">int</span> *)<span class="hljs-number">0xff800000</span>;<span class="hljs-comment">//定义一个IO端口；</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>      <span class="hljs-type">int</span> i;<br>      <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt; <span class="hljs-number">10</span>;i++)&#123;<br><br>         *output = i;<br>      &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>也就是直接使用等号右边的常量值来代替左边的’变量’</p>
-<h2 id="死代码消除-Deadcode-Elimination"><a href="#死代码消除-Deadcode-Elimination" class="headerlink" title="死代码消除 (Deadcode Elimination)"></a>死代码消除 (Deadcode Elimination)</h2><p>没有使用到的代码将会被编译器删除</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">double</span> <span class="hljs-title function_">fun</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">int</span> x = <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> y = <span class="hljs-number">2</span>;<br>    <span class="hljs-type">double</span> xx = <span class="hljs-number">1231.2312</span>;<br>    <span class="hljs-keyword">return</span> xx;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>没有使用<code>volatile</code>关键字，则该代码会被优化为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span>  <span class="hljs-title function_">init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>      *output = <span class="hljs-number">9</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>该代码将会被转换为：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">double</span> <span class="hljs-title function_">fun</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">double</span> xx = <span class="hljs-number">1231.2312</span>;<br>    <span class="hljs-keyword">return</span> xx;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="公共子表达式删除"><a href="#公共子表达式删除" class="headerlink" title="公共子表达式删除"></a>公共子表达式删除</h2><p>公共子表达式消除是说，如果一个表达式E已经计算过了，并且从先前的计算到现在的E中的变量都没有发生变化，那么E的此次出现就成为了公共子表达式，因此，编译器可判断其不需要再次进行计算浪费性能。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/archive/msdn-magazine/2015/may/compilers-what-every-programmer-should-know-about-compiler-optimizations-part-2">编译器使用的寄存器分配优化</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/381490718">https://zhuanlan.zhihu.com/p/381490718</a></p>
-<p><a target="_blank" rel="noopener" href="https://oi-wiki.org/lang/optimizations/">https://oi-wiki.org/lang/optimizations/</a></p>
+<p>所以我们需要使用<code>volatile</code>关键字，来告诉编译器不要优化。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>通过上面的代码，<code>volatile</code>关键字似乎不仅仅是阻止，编译器优化关于<strong>寄存器分配</strong>的优化。由第二段代码可知，<code>volatile</code>还可以阻止编译器进行<strong>死代码消除</strong>的优化。<strong>是否可以认为，只要添加了该关键字，就可以认为编译器不会随便对该对象进行优化。</strong></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhuangquan/p/15057897.html">https://www.cnblogs.com/zhuangquan/p/15057897.html</a></p>
 
                 
               </div>
@@ -317,8 +318,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/" class="category-chain-item">编译器</a>
+  <a href="/categories/C/" class="category-chain-item">C</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/C/%E8%AF%AD%E6%B3%95/" class="category-chain-item">语法</a>
+  
+  
+
   
 
       </span>
@@ -344,8 +352,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>编译器的优化方法</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/09/编译器的优化方法/</div>
+      <div>volatile关键字</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/09/volatile关键字/</div>
     </div>
     <div class="license-meta">
       
@@ -389,9 +397,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/09/C%E4%B8%AD%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%88%9D%E5%A7%8B%E5%8C%96%E6%96%B9%E6%B3%95/" title="C中结构体的四种初始化方法">
+                      <a href="/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="Linux下的进程通信方式">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C中结构体的四种初始化方法</span>
+                        <span class="hidden-mobile">Linux下的进程通信方式</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -399,8 +407,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/09/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96/" title="C语言中的内嵌汇编">
-                        <span class="hidden-mobile">C语言中的内嵌汇编</span>
+                      <a href="/2023/11/09/C%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0/" title="C中的字符串函数">
+                        <span class="hidden-mobile">C中的字符串函数</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
