@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux下的六种进程间通信方式简述">
+    <meta name="description" content="详解管道通信">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux下的进程通信方式">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:title" content="Linux下的进程通信方式之管道">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E7%AE%A1%E9%81%93/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="Linux下的六种进程间通信方式简述">
+<meta property="og:description" content="详解管道通信">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/caoyuan.jpg">
-<meta property="article:published_time" content="2023-11-09T18:34:18.000Z">
-<meta property="article:modified_time" content="2023-11-09T19:02:02.157Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/evening-sky.png">
+<meta property="article:published_time" content="2023-11-10T04:39:06.000Z">
+<meta property="article:modified_time" content="2023-11-10T05:19:32.224Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/caoyuan.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/evening-sky.png">
   
   
   
-  <title>Linux下的进程通信方式 - Ysc Web</title>
+  <title>Linux下的进程通信方式之管道 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/caoyuan.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/evening-sky.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Linux下的进程通信方式"></span>
+            <span id="subtitle" data-typed-text="Linux下的进程通信方式之管道"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-10 02:34" pubdate>
-          2023年11月10日 凌晨
+        <time datetime="2023-11-10 12:39" pubdate>
+          2023年11月10日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          471 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          13 分钟
+          4 分钟
         
       </span>
     
@@ -270,63 +270,25 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Linux下的进程通信方式</h1>
+            <h1 id="seo-header">Linux下的进程通信方式之管道</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Linux下的六种进程间通信方式简述</p>
+                <p>详解管道通信</p>
 <span id="more"></span>
 
-<h1 id="Linux下的六种进程间通信方式"><a href="#Linux下的六种进程间通信方式" class="headerlink" title="Linux下的六种进程间通信方式"></a>Linux下的六种进程间通信方式</h1><ol>
-<li>信号</li>
-<li>信号量</li>
-<li>管道</li>
-<li>消息队列</li>
-<li>套接字</li>
-<li>共享内存</li>
-</ol>
-<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><p>Linux系统定义了大量信号，比如说：<code>SIGINIT</code> <code>SIGKILL</code> <code>SIGHUP</code>等等</p>
-<p>信号用以进行进程之间的通讯，通知接收进程某个事件已经发生。</p>
-<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>管道(pipe)还包含有名管道(FIFO)、流管道(s_pipe)。</p>
-<h3 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h3><p>这是最基础的无名管道，其特点是只可以用于有亲缘关系之间的进程进行通信，并且还是只可以进行半双工（一次性只可以接受或者是发送数据）</p>
-<blockquote>
-<p><strong>无名管道简单方便．但局限于单向通信的工作方式．并且只能在创建它的进程及其子孙进程之间实现管道的共享</strong></p>
-</blockquote>
-<h3 id="s-pipe"><a href="#s-pipe" class="headerlink" title="s_pipe"></a>s_pipe</h3><p>流管道使得管道可以进行全双工通信</p>
-<h3 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h3><p>有名管道使得管道可以进行无亲缘关系的进程之间的通信。</p>
-<blockquote>
-<p><strong>有名管道虽然可以提供给任意关系的进程使用．但是由于其长期存在于系统之中，使用不当容易出错．所以普通用户一般不建议使用。</strong></p>
-</blockquote>
-<h2 id="信号量-semophore"><a href="#信号量-semophore" class="headerlink" title="信号量(semophore)"></a>信号量(semophore)</h2><p>信号量其实是一种同步机制，其是一个计数器。有二元信号量，三元，N元等等。</p>
-<h2 id="套接字-socket"><a href="#套接字-socket" class="headerlink" title="套接字(socket)"></a>套接字(socket)</h2><p>套解口也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同机器间的进程通信</p>
-<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p>消息队列是有消息组成的，其是消息的队列。其克服了消息传递的消息少，管道只可以承受无格式字节流和受限于缓冲区大小的限制。</p>
-<blockquote>
-<p><strong>消息缓冲可以不再局限于父子进程，而允许任意进程通过共享消息队列来实现进程间通信，并由系统调用函数来实现消息发送和接收之间的同步，从而使得用户在使用消息缓冲进行通信时不再需要考虑同步问题，使用方便，但是信息的复制需要额外消耗CPU的时间，不适宜于信息量大或操作频繁的场合。</strong></p>
-</blockquote>
-<h2 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h2><p>共享内存就是内核映射一段能被其他进程所访问的内存。这段共享内存由一个进程创建，但多个进程都可以访问。</p>
-<p><strong>共享内存是最快的 IPC 方式</strong>，它是针对其他进程间通信方式运行效率低而专门设计的。它往往与其他通信机制，如信号量，配合使用，来实现进程间的同步和通信。</p>
-<p>共享内存的通信方式是通过将共享的内存缓冲区直接附加到进程的虚拟地址空间中来实现的，因此，这些进程之间的读写操作的同步问题操作系统无法实现。必须由各进程利用其他同步工具解决。另外，由于内存实体存在于计算机系统中，所以只能由处于同一个计算机系统中的诸进程共享。不方便网络通信。</p>
-<p>共享内存块提供了在<strong>任意数量的进程</strong>之间进行高效双向通信的机制。每个使用者都可以读取写入数据，但是所有程序之间必须达成并遵守一定的协议，以防止诸如在读取信息之前覆写内存空间等竞争状态的出现。</p>
-<p>不幸的是，Linux无法严格保证提供对共享内存块的独占访问，甚至是在您通过使用IPC_PRIVATE创建新的共享内存块的时候也不能保证访问的独占性。 同时，多个使用共享内存块的进程之间必须协调使用同一个键值。</p>
-<blockquote>
-<p><strong>共享内存针对消息缓冲的缺点改而利用内存缓冲区直接交换信息，无须复制，快捷、信息量大是其优点。</strong>，所以大数据量，可以使用共享内存。</p>
-</blockquote>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li><p>管道：速度慢，容量有限，只有父子进程能通讯</p>
-</li>
-<li><p>FIFO：任何进程间都能通讯，但速度慢</p>
-</li>
-<li><p>消息队列：容量受到系统限制，且要注意第一次读的时候，要考虑上一次没有读完数据的问题</p>
-</li>
-<li><p>信号量：不能传递复杂消息，只能用来同步</p>
-</li>
-<li><p>共享内存区：能够很容易控制容量，速度快，但要保持同步，比如一个进程在写的时候，另一个进程要注意读写的问题，相当于线程中的线程安全，当然，共享内存区同样可以用作线程间通讯，不过没这个必要，线程间本来就已经共享了同一进程内的一块内存</p>
-</li>
-</ul>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wuyepeng/p/9747515.html">https://www.cnblogs.com/wuyepeng/p/9747515.html</a></p>
-<p>Linux-Unix系统编程</p>
-
+<h1 id="概述及特点"><a href="#概述及特点" class="headerlink" title="概述及特点"></a>概述及特点</h1><p>当我们需要把一个进程的输出作为另一个进程的输入时，应该如何通讯？管道解决了这个问题。</p>
+<p>管道是UNIX上历史最悠久的IPC方式，它在 20 世纪 70 年代早期 UNIX 的第三个版本上就出现了。在shell中我们是如何使用管道的？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ls</span> | <span class="hljs-built_in">wc</span> -l<br></code></pre></td></tr></table></figure>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311101250265.png" srcset="/img/loading.gif" lazyload alt="管道的工作原理"></p>
+<h2 id="一个管道就是一个字节流"><a href="#一个管道就是一个字节流" class="headerlink" title="一个管道就是一个字节流"></a>一个管道就是一个字节流</h2><p>一个管道就是一个字节流。所以从管道读取数据时，可以是任何的数据大小，而不用管写入时是以多少个字节写入的。并且管道的数据传输是具有顺序的，<strong>从管道中读取出来的字节的顺序与它们被写入管道的顺序是完全一样的。在管道中无法使用 lseek()来随机地访问数据。</strong></p>
+<h2 id="从管道中读取数据时"><a href="#从管道中读取数据时" class="headerlink" title="从管道中读取数据时"></a>从管道中读取数据时</h2><p>如果试图从一个没有数据的管道中读取数据，那么将会被阻塞知道有数据被写入管道中。</p>
+<h2 id="管道是单向的"><a href="#管道是单向的" class="headerlink" title="管道是单向的"></a>管道是单向的</h2><p><strong>管道时半双工通信方式，一次只可以进行读或是写。</strong>并且管道的一段用于写，一端用于读。</p>
+<h2 id="管道数据传输的原子保证"><a href="#管道数据传输的原子保证" class="headerlink" title="管道数据传输的原子保证"></a>管道数据传输的原子保证</h2><p>在单个进程写入数据的时候无需担心管道数据的同步问题，但是在多个进程向一个管道中写入数据时，Linux保证了<strong>写入不超过 PIPE_BUF 字节的操作是原子的</strong>。注意，不同的UNIX实现<code>PIPE_BUF</code>大小是不同的。</p>
+<div class="note note-warning">
+            <p>在</p>
+          </div>
                 
               </div>
             
@@ -349,7 +311,7 @@
   
     <span>></span>
     
-  <a href="/categories/Linux/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  <a href="/categories/Linux/%E8%BF%9B%E7%A8%8B/" class="category-chain-item">进程</a>
   
   
 
@@ -378,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Linux下的进程通信方式</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/10/Linux下的进程通信方式/</div>
+      <div>Linux下的进程通信方式之管道</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/10/Linux下的进程通信方式之管道/</div>
     </div>
     <div class="license-meta">
       
@@ -423,18 +385,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E7%AE%A1%E9%81%93/" title="Linux下的进程通信方式之管道">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux下的进程通信方式之管道</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/09/volatile%E5%85%B3%E9%94%AE%E5%AD%97/" title="volatile关键字">
-                        <span class="hidden-mobile">volatile关键字</span>
+                      <a href="/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="Linux下的进程通信方式">
+                        <span class="hidden-mobile">Linux下的进程通信方式</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

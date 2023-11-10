@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Linux下的进程通信方式之管道</title>
+    <link href="/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E7%AE%A1%E9%81%93/"/>
+    <url>/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E7%AE%A1%E9%81%93/</url>
+    
+    <content type="html"><![CDATA[<p>详解管道通信</p><span id="more"></span><h1 id="概述及特点"><a href="#概述及特点" class="headerlink" title="概述及特点"></a>概述及特点</h1><p>当我们需要把一个进程的输出作为另一个进程的输入时，应该如何通讯？管道解决了这个问题。</p><p>管道是UNIX上历史最悠久的IPC方式，它在 20 世纪 70 年代早期 UNIX 的第三个版本上就出现了。在shell中我们是如何使用管道的？</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ls</span> | <span class="hljs-built_in">wc</span> -l<br></code></pre></td></tr></table></figure><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311101250265.png" alt="管道的工作原理"></p><h2 id="一个管道就是一个字节流"><a href="#一个管道就是一个字节流" class="headerlink" title="一个管道就是一个字节流"></a>一个管道就是一个字节流</h2><p>一个管道就是一个字节流。所以从管道读取数据时，可以是任何的数据大小，而不用管写入时是以多少个字节写入的。并且管道的数据传输是具有顺序的，<strong>从管道中读取出来的字节的顺序与它们被写入管道的顺序是完全一样的。在管道中无法使用 lseek()来随机地访问数据。</strong></p><h2 id="从管道中读取数据时"><a href="#从管道中读取数据时" class="headerlink" title="从管道中读取数据时"></a>从管道中读取数据时</h2><p>如果试图从一个没有数据的管道中读取数据，那么将会被阻塞知道有数据被写入管道中。</p><h2 id="管道是单向的"><a href="#管道是单向的" class="headerlink" title="管道是单向的"></a>管道是单向的</h2><p><strong>管道时半双工通信方式，一次只可以进行读或是写。</strong>并且管道的一段用于写，一端用于读。</p><h2 id="管道数据传输的原子保证"><a href="#管道数据传输的原子保证" class="headerlink" title="管道数据传输的原子保证"></a>管道数据传输的原子保证</h2><p>在单个进程写入数据的时候无需担心管道数据的同步问题，但是在多个进程向一个管道中写入数据时，Linux保证了<strong>写入不超过 PIPE_BUF 字节的操作是原子的</strong>。注意，不同的UNIX实现<code>PIPE_BUF</code>大小是不同的。</p><div class="note note-warning">            <p>在</p>          </div>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux</category>
+      
+      <category>进程</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Linux下的进程通信方式</title>
     <link href="/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/"/>
     <url>/2023/11/10/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/</url>
