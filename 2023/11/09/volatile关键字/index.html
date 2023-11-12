@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Shin_chan_Summer_ZYXFwsHT6G.jpg">
 <meta property="article:published_time" content="2023-11-09T13:09:26.000Z">
-<meta property="article:modified_time" content="2023-11-09T17:49:42.032Z">
+<meta property="article:modified_time" content="2023-11-12T06:37:17.135Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          1.4k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          11 分钟
+          12 分钟
         
       </span>
     
@@ -298,6 +298,10 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span>  <span class="hljs-title function_">init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>      *output = <span class="hljs-number">9</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>所以我们需要使用<code>volatile</code>关键字，来告诉编译器不要优化。</p>
+<h2 id="小练习"><a href="#小练习" class="headerlink" title="小练习"></a>小练习</h2><p>下面函数有什么问题？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span> <span class="hljs-params">(<span class="hljs-type">int</span> a)</span><br>&#123;<br>      <span class="hljs-keyword">return</span> a * a;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面有可能a会被其他的线程所改变。更正：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span> <span class="hljs-params">(<span class="hljs-type">int</span> a)</span><br>&#123;<br>      <span class="hljs-type">int</span> b = a;<br>      <span class="hljs-keyword">return</span> b * b;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>通过上面的代码，<code>volatile</code>关键字似乎不仅仅是阻止，编译器优化关于<strong>寄存器分配</strong>的优化。由第二段代码可知，<code>volatile</code>还可以阻止编译器进行<strong>死代码消除</strong>的优化。<strong>是否可以认为，只要添加了该关键字，就可以认为编译器不会随便对该对象进行优化。</strong></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhuangquan/p/15057897.html">https://www.cnblogs.com/zhuangquan/p/15057897.html</a></p>
 
