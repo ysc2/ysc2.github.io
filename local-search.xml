@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>sw建模</title>
+    <link href="/2023/11/13/sw%E5%BB%BA%E6%A8%A1/"/>
+    <url>/2023/11/13/sw%E5%BB%BA%E6%A8%A1/</url>
+    
+    <content type="html"><![CDATA[<p>SW建模总结、网站汇总</p><span id="more"></span><h1 id="插入-扣合特征"><a href="#插入-扣合特征" class="headerlink" title="插入-&gt;扣合特征"></a>插入-&gt;扣合特征</h1><p><a href="https://www.maoliangcat.com/23140">装配凸台</a></p><p><a href="https://www.maoliangcat.com/2336">弹簧扣凹槽</a></p><blockquote><p>弹簧扣凹槽和弹簧扣是配套的</p></blockquote><p><a href="https://www.maoliangcat.com/2358">唇缘和凹槽</a></p><div class="note note-success">            <p>这个需要注意壁厚，如果壁太薄，则会导致唇缘生成失败</p>          </div><p><a href="https://www.maoliangcat.com/1220">通风口</a></p><p><a href="https://help.solidworks.com/2023/chinese-simplified/SolidWorks/sldworks/HIDD_DVE_LIP_AND_GROOVE.htm">sw官方手册</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>SW</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>单片机开发</title>
+    <link href="/2023/11/13/%E5%8D%95%E7%89%87%E6%9C%BA%E5%BC%80%E5%8F%91/"/>
+    <url>/2023/11/13/%E5%8D%95%E7%89%87%E6%9C%BA%E5%BC%80%E5%8F%91/</url>
+    
+    <content type="html"><![CDATA[<p>单片机知识总结</p><span id="more"></span><h1 id="前置常识"><a href="#前置常识" class="headerlink" title="前置常识"></a>前置常识</h1><p><a href="https://blog.csdn.net/wangyx1234/article/details/107300913">芯片、模组、开发板之间的关系</a></p><p><a href="http://www.cntronics.com/kbupload/kb_1412249007_0.pdf">为什么需要封装</a></p><p><a href="https://cloud.tencent.com/developer/article/1662822">乐鑫和安信可之间的关系</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>单片机</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Linux文件系统</title>
     <link href="/2023/11/12/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"/>
     <url>/2023/11/12/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
