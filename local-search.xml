@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>电容的去耦、退耦</title>
+    <link href="/2023/11/15/%E7%94%B5%E5%AE%B9%E7%9A%84%E5%8E%BB%E8%80%A6%E3%80%81%E9%80%80%E8%80%A6/"/>
+    <url>/2023/11/15/%E7%94%B5%E5%AE%B9%E7%9A%84%E5%8E%BB%E8%80%A6%E3%80%81%E9%80%80%E8%80%A6/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>sw建模</title>
     <link href="/2023/11/13/sw%E5%BB%BA%E6%A8%A1/"/>
     <url>/2023/11/13/sw%E5%BB%BA%E6%A8%A1/</url>
@@ -33,7 +46,7 @@
     <link href="/2023/11/13/%E5%8D%95%E7%89%87%E6%9C%BA%E5%BC%80%E5%8F%91/"/>
     <url>/2023/11/13/%E5%8D%95%E7%89%87%E6%9C%BA%E5%BC%80%E5%8F%91/</url>
     
-    <content type="html"><![CDATA[<p>单片机知识总结</p><span id="more"></span><h1 id="前置常识"><a href="#前置常识" class="headerlink" title="前置常识"></a>前置常识</h1><p><a href="https://blog.csdn.net/wangyx1234/article/details/107300913">芯片、模组、开发板之间的关系</a></p><p><a href="http://www.cntronics.com/kbupload/kb_1412249007_0.pdf">为什么需要封装</a></p><p><a href="https://cloud.tencent.com/developer/article/1662822">乐鑫和安信可之间的关系</a></p>]]></content>
+    <content type="html"><![CDATA[<p>单片机知识总结</p><span id="more"></span><h1 id="前置常识"><a href="#前置常识" class="headerlink" title="前置常识"></a>前置常识</h1><p><a href="https://blog.csdn.net/wangyx1234/article/details/107300913">芯片、模组、开发板之间的关系</a></p><p><a href="http://www.cntronics.com/kbupload/kb_1412249007_0.pdf">为什么需要封装</a></p><p><a href="https://cloud.tencent.com/developer/article/1662822">乐鑫和安信可之间的关系</a></p><p><a href="https://www.cnblogs.com/kerwincui/p/11841851.html">常见的电气符号</a></p><p><a href="http://blog.itpub.net/70010283/viewspace-2896406/">硬件开发基本流程</a></p>]]></content>
     
     
     <categories>
@@ -921,14 +934,12 @@
     <link href="/2023/10/29/stm32/"/>
     <url>/2023/10/29/stm32/</url>
     
-    <content type="html"><![CDATA[<p>正文的一部分作为摘要</p><span id="more"></span><h1 id="STM32"><a href="#STM32" class="headerlink" title="STM32"></a>STM32</h1><ol><li>单元测试</li></ol><h2 id="二级单元"><a href="#二级单元" class="headerlink" title="二级单元"></a>二级单元</h2><h3 id="三级单元"><a href="#三级单元" class="headerlink" title="三级单元"></a>三级单元</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%BD%92%E6%A1%A3.jpg"></p><ul><li>这是一个点</li></ul><blockquote><p>这是引用段 asdf</p></blockquote><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;nihao\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>正文的一部分作为摘要</p><span id="more"></span> <h1 id="最小系统板"><a href="#最小系统板" class="headerlink" title="最小系统板"></a>最小系统板</h1><p><strong>最小系统板由：电源、存储、芯片、时钟组成</strong></p><p>绘制一个最小系统板一般需要包含如下模块：</p><ol><li>5-&gt;3.3v降压电路</li><li>复位电路</li><li>自动下载电路</li><li>usb转串口</li><li>tf卡</li><li>type-c电路</li><li>led灯</li></ol><h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="https://shequ.stmicroelectronics.cn/thread-628996-1-1.html">STM32硬件开发指南</a></p><p><a href="https://www.cnblogs.com/shangdawei/p/3255414.html">TF卡引脚定义</a></p><blockquote><p>shell引脚作用是固定</p></blockquote><p><a href="https://www.usbzh.com/article/detail-722.html">TYPE-C引脚定义</a></p>]]></content>
     
     
     <categories>
       
       <category>STM32</category>
-      
-      <category>测试</category>
       
     </categories>
     
