@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>常见的开源协议总结</title>
+    <link href="/2023/11/16/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/"/>
+    <url>/2023/11/16/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/</url>
+    
+    <content type="html"><![CDATA[<p>常见的开源协议总结</p><span id="more"></span><h1 id="常见的软件开源协议"><a href="#常见的软件开源协议" class="headerlink" title="常见的软件开源协议"></a>常见的软件开源协议</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/bg2011050101.png"></p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/61590003177751b9d5bd.jpg"></p><h1 id="CC协议-Creative-Commons-知识共享协议"><a href="#CC协议-Creative-Commons-知识共享协议" class="headerlink" title="CC协议(Creative Commons 知识共享协议)"></a>CC协议(Creative Commons 知识共享协议)</h1><p>这篇blog就是使用的CC协议，那么CC协议的具体内容是什么？</p><h2 id="开源、可修改、非商用"><a href="#开源、可修改、非商用" class="headerlink" title="开源、可修改、非商用"></a>开源、可修改、非商用</h2><p>大多数的比较严格的CC协议会声明 “署名权，非商业用途，禁止衍生”条款，这意味着你可以自由的分享这个作品，但你不能改变它和对其收费，而且<strong>必须声明作品的归属</strong>。</p><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.runoob.com/w3cnote/open-source-license.html">菜鸟教程</a></p><p><a href="https://creativecommons.org/licenses/by/4.0/deed.zh-hans">CC官网</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>sw建模</title>
     <link href="/2023/11/13/sw%E5%BB%BA%E6%A8%A1/"/>
     <url>/2023/11/13/sw%E5%BB%BA%E6%A8%A1/</url>
