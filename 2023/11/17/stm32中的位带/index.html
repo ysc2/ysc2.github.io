@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="正文的一部分作为摘要">
+    <meta name="description" content="总结stm32中的位带">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/10/29/stm32/index.html">
+<meta property="og:title" content="stm32中的位带">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E4%BD%8D%E5%B8%A6/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="正文的一部分作为摘要">
+<meta property="og:description" content="总结stm32中的位带">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%BD%92%E6%A1%A3.jpg">
-<meta property="article:published_time" content="2023-10-29T09:59:15.000Z">
-<meta property="article:modified_time" content="2023-11-16T16:58:00.944Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg">
+<meta property="article:published_time" content="2023-11-17T04:21:44.000Z">
+<meta property="article:modified_time" content="2023-11-17T14:40:58.101Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%BD%92%E6%A1%A3.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg">
   
   
   
-  <title>stm32 - Ysc Web</title>
+  <title>stm32中的位带 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%88%86%E7%B1%BB.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="stm32"></span>
+            <span id="subtitle" data-typed-text="stm32中的位带"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-29 17:59" pubdate>
-          2023年10月29日 下午
+        <time datetime="2023-11-17 12:21" pubdate>
+          2023年11月17日 中午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          821 字
+          458 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          7 分钟
+          4 分钟
         
       </span>
     
@@ -270,48 +270,21 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">stm32</h1>
+            <h1 id="seo-header">stm32中的位带</h1>
             
             
               <div class="markdown-body">
                 
-                <p>正文的一部分作为摘要</p>
-<span id="more"></span> 
-<h1 id="最小系统板"><a href="#最小系统板" class="headerlink" title="最小系统板"></a>最小系统板</h1><p><strong>最小系统板由：电源、存储、芯片、时钟组成</strong></p>
-<p>绘制一个最小系统板一般需要包含如下模块：</p>
-<ol>
-<li>5-&gt;3.3v降压电路</li>
-<li>复位电路</li>
-<li>自动下载电路</li>
-<li>usb转串口</li>
-<li>tf卡</li>
-<li>type-c电路</li>
-<li>led灯</li>
-</ol>
-<h1 id="各GPIO输入输入模式"><a href="#各GPIO输入输入模式" class="headerlink" title="各GPIO输入输入模式"></a>各GPIO输入输入模式</h1><ol>
-<li>模拟输入：GPIO_Mode_AIN</li>
-<li>浮空输入：GPIO_Mode_IN_FLOATING</li>
-<li>上拉输入：GPIO_Mode_IPU</li>
-<li>下拉输入：GPIO_Mode_IPD</li>
-<li>推挽输出：GPIO_Mode_Out_PP</li>
-<li>开漏输出：GPIO_Mode_Out_OD</li>
-<li>复用推挽输出：GPIO_Mode_AF_OD</li>
-<li>复用开漏输出：GPIO_Mode_AF_OD</li>
-</ol>
-<hr>
-<h2 id="各个模式适用的情况："><a href="#各个模式适用的情况：" class="headerlink" title="各个模式适用的情况："></a>各个模式适用的情况：</h2><p><strong>模拟输入</strong>：关闭施密特触发器，将电压信号传送到片上外设模块（不接上下拉电阻）。<strong>应用ADC模拟输入，或者低功耗下省电。</strong></p>
-<p><strong>浮空输入</strong>：浮空输入状态下，IO的电平状态是不确定的，完全由外部输入决定，如果在该引脚悬空的情况下，读取该端口的电平是不确定的。<strong>可以做KEY识别，RX1。</strong></p>
-<p><strong>上拉输入、下拉输入</strong>：当GPIO引脚无输入时，上拉输入在默认状态下为高电平，下拉输入在默认状态下为低电平。电阻的作用：防止输入端悬空，减少外部电流对芯片的干扰，限流，增加高电平输出时的驱动能力。<strong>IO内部上拉电阻输入。</strong> <strong>IO内部下拉电阻输入。</strong></p>
-<p><strong>推挽输出</strong>：想要输出高电平就输出高电平，想要输出低电平就输出低电平。具有很强的。</p>
-<p><strong>开漏输出</strong>：输出端相当于三极管的集电极。要得到高电平状态需要上拉电阻才行。适合于做电流型的驱动，其<strong>吸收电流的能力相对较强</strong>，一般20mA以内。开漏输出是没有能力输出高电平驱动负载的</p>
-<p><strong>复用开漏输出推挽输出模式</strong>：可以理解为GPIO口被用作第二功能时的配置情况，即并非作为通用IO口使用。片内外设功能，<strong>复用推挽输出：I2C的SCL、SDA。</strong>，<strong>复用开漏输出：片内外设功能，TX1，MOSI，MISO.SCK.SS。</strong></p>
-<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a target="_blank" rel="noopener" href="https://shequ.stmicroelectronics.cn/thread-628996-1-1.html">STM32硬件开发指南</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shangdawei/p/3255414.html">TF卡引脚定义</a></p>
-<blockquote>
-<p>shell引脚作用是固定</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.usbzh.com/article/detail-722.html">TYPE-C引脚定义</a></p>
+                <p>总结stm32中的位带</p>
+<span id="more"></span>
 
+<h1 id="为什么存在位带"><a href="#为什么存在位带" class="headerlink" title="为什么存在位带"></a>为什么存在位带</h1><p>我们知道在stm32中无法直接控制寄存器中的一个<strong>单独的bit</strong>，所以我们使用<code>&amp; ^ ~</code>这类的位操作来对1<code>byte</code>操作，以防止改变不需要改变的位。</p>
+<p><strong>为了解决stm32中的无法直接控制某一个bit的文件，arm公司使用位带来提供相关服务</strong></p>
+<h1 id="位带的形成"><a href="#位带的形成" class="headerlink" title="位带的形成"></a>位带的形成</h1><p>通过映射的方式，将1bit膨胀到32bit。4字节对应的就是那1Bit位的地址，而这个地址中的数据只有最低一位才有效（LSB）。为什么膨胀到4字节后只有最低位有效？这是因为stm32是32位的，4字节是最高效的。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311171630899.png" srcset="/img/loading.gif" lazyload alt="位带的映射关系"></p>
+<p>映射的范围：只有SRAM块和片上外设块的最低的1mb内存被映射到了32mb的地址中<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311171641845.png" srcset="/img/loading.gif" lazyload></p>
+<p>STM32的<strong>全部寄存器</strong>都可以通过访问位带别名区的方式来达到访问原始寄存器比特位的效果，这比51单片机强大很多。 </p>
+<h1 id="转换公式"><a href="#转换公式" class="headerlink" title="转换公式"></a>转换公式</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BITBAND(addr, bitnum) ((addr &amp; 0xF0000000)+0x02000000+((addr &amp; 0x00FFFFFF)&lt;&lt;5)+(bitnum&lt;&lt;2))</span><br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -329,8 +302,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/STM32/" class="category-chain-item">STM32</a>
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/stm32/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
   
 
       </span>
@@ -356,8 +336,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>stm32</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/10/29/stm32/</div>
+      <div>stm32中的位带</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/17/stm32中的位带/</div>
     </div>
     <div class="license-meta">
       
@@ -369,7 +349,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月29日</div>
+          <div>2023年11月17日</div>
         </div>
       
       
@@ -401,9 +381,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Linux%E4%B8%8B%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E9%97%AE%E9%A2%98/" title="读书笔记——Linux下的头文件包含问题">
+                      <a href="/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E4%B8%AD%E6%96%AD%E4%B8%8E%E5%BC%82%E5%B8%B8/" title="NVIC">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">读书笔记——Linux下的头文件包含问题</span>
+                        <span class="hidden-mobile">NVIC</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -411,8 +391,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/27/hexo%E4%BD%BF%E7%94%A8%E8%AF%AD%E6%B3%95/" title="hexo使用语法">
-                        <span class="hidden-mobile">hexo使用语法</span>
+                      <a href="/2023/11/16/%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E3%80%81%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E3%80%81%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E3%80%81%E7%BA%BF%E6%80%A7%E5%9C%B0%E5%9D%80%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/" title="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
+                        <span class="hidden-mobile">物理地址、虚拟地址、逻辑地址、线性地址之间的关系</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
