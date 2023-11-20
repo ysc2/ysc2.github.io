@@ -92,9 +92,9 @@
     
     <categories>
       
-      <category>STM32</category>
+      <category>stm32</category>
       
-      <category>系统外设</category>
+      <category>内核外设</category>
       
     </categories>
     
@@ -146,7 +146,7 @@
     
     <categories>
       
-      <category>STM32</category>
+      <category>stm32</category>
       
       <category>杂项</category>
       
@@ -1231,7 +1231,7 @@
     
     <categories>
       
-      <category>STM32</category>
+      <category>stm32</category>
       
     </categories>
     
