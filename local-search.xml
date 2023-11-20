@@ -110,6 +110,33 @@
   
   
   <entry>
+    <title>stm32中三种延时函数</title>
+    <link href="/2023/11/20/stm32%E4%B8%AD%E4%B8%89%E7%A7%8D%E5%BB%B6%E6%97%B6%E5%87%BD%E6%95%B0/"/>
+    <url>/2023/11/20/stm32%E4%B8%AD%E4%B8%89%E7%A7%8D%E5%BB%B6%E6%97%B6%E5%87%BD%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[<p>stm32中常见的三种延时函数总结</p><span id="more"></span><h1 id="使用循环"><a href="#使用循环" class="headerlink" title="使用循环"></a>使用循环</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//该代码适用于72MHZ下</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delay_ms</span><span class="hljs-params">(u16 time)</span><br>&#123;<br>    u16 i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(time--)&#123;<br>        i = <span class="hljs-number">12000</span>;<br>        <span class="hljs-keyword">while</span>(i--);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure><h1 id="使用Systick"><a href="#使用Systick" class="headerlink" title="使用Systick"></a>使用Systick</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//先在stm32f10x_it.h中定义</span><br><span class="hljs-keyword">extern</span> _IO <span class="hljs-type">uint32_t</span> TimingDelay<br></code></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//在stm32f10x_it.c中定义void SysTick_Hankler(void)</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">SysTick_Hankler</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(TimingDelay != <span class="hljs-number">0x00</span>)&#123;<br>        TimingDelay--;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//在main.c中定义</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">SysTick_Init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(SysTick_config(SystemCoreClock/<span class="hljs-number">1000</span>))<span class="hljs-comment">//1ms的时基</span><br>        <span class="hljs-keyword">for</span>(;;);<br>&#125;<br><br>_IO <span class="hljs-type">uint32_t</span> TimingDelay;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delay_ms</span><span class="hljs-params">(_IO <span class="hljs-type">uint32_t</span> ntime)</span><br>&#123;<br>    TimingDelay = nTime;<br>    <span class="hljs-keyword">while</span>(TimingDelay != <span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure><p>SysTick 时基计算公式：</p><p><strong>Reload Value &#x3D; SysTick Counter Clock (Hz) x  Desired Time base (s)</strong></p><p>Reload Value：就是重加载数，重加载数最大不得超过0xffffff(16,777,215)。<code>SysTick_config()</code>中的参数就是重加载数</p><p>SysTick Counter Clock (Hz)：是系统时钟的频率</p><p>Desired Time：所需要的时基。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">SysTick_Config(SystemCoreClock / <span class="hljs-number">1000</span>) <span class="hljs-comment">//这是1us的重加载数</span><br>SysTick_Config(SystemCoreClock / <span class="hljs-number">1</span>)    <span class="hljs-comment">//这是1s的重加载数</span><br></code></pre></td></tr></table></figure><p>所以需要以x时间为长度，则 <strong>&#x2F;x</strong></p><h1 id="使用汇编进行定时"><a href="#使用汇编进行定时" class="headerlink" title="使用汇编进行定时"></a>使用汇编进行定时</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>stm32</category>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>stm32中的输入输出模式</title>
     <link href="/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E5%BC%8F/"/>
     <url>/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E5%BC%8F/</url>

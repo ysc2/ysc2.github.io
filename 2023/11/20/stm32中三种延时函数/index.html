@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="对SysTick系统外设的总结">
+    <meta name="description" content="stm32中常见的三种延时函数总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SysTick系统定时器">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/20/SysTick%E7%B3%BB%E7%BB%9F%E5%AE%9A%E6%97%B6%E5%99%A8/index.html">
+<meta property="og:title" content="stm32中三种延时函数">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/20/stm32%E4%B8%AD%E4%B8%89%E7%A7%8D%E5%BB%B6%E6%97%B6%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="对SysTick系统外设的总结">
+<meta property="og:description" content="stm32中常见的三种延时函数总结">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-nick-gorniok-18903446.jpg">
-<meta property="article:published_time" content="2023-11-20T02:11:04.000Z">
-<meta property="article:modified_time" content="2023-11-20T03:10:46.692Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
+<meta property="article:published_time" content="2023-11-20T00:57:18.000Z">
+<meta property="article:modified_time" content="2023-11-20T16:04:11.621Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-nick-gorniok-18903446.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
   
   
   
-  <title>SysTick系统定时器 - Ysc Web</title>
+  <title>stm32中三种延时函数 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-nick-gorniok-18903446.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="SysTick系统定时器"></span>
+            <span id="subtitle" data-typed-text="stm32中三种延时函数"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-20 10:11" pubdate>
-          2023年11月20日 上午
+        <time datetime="2023-11-20 08:57" pubdate>
+          2023年11月20日 早上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          471 字
+          879 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          4 分钟
+          8 分钟
         
       </span>
     
@@ -270,20 +270,35 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">SysTick系统定时器</h1>
+            <h1 id="seo-header">stm32中三种延时函数</h1>
             
             
               <div class="markdown-body">
                 
-                <p>对SysTick系统外设的总结</p>
+                <p>stm32中常见的三种延时函数总结</p>
 <span id="more"></span>
 
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>SysTick外设不同于之前的EXTI等等片上外设。它是位于内核的外设，并且其内嵌在NVIC中。</p>
-<p>系统定时器中有四个寄存器，当重装载数值寄存器的值递减到0的时候，系统定时器就产生一次中断，以此循环往复。</p>
-<p>因为SysTick是属于CM3内核的外设，所以所有基于CM3内核的单片机都具有这个系统定时器，使得软件在CM3单片机中可以很容易的移植。 系统定时器一般用于操作系统，用于产生时基，维持操作系统的心跳。</p>
-<p>SysTick中的四个寄存器：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311201017466.png" srcset="/img/loading.gif" lazyload></p>
-<p>其中只有前三个是需要配置的，最后一个不需要配置。</p>
-<h1 id="编程要点"><a href="#编程要点" class="headerlink" title="编程要点"></a>编程要点</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">SysTick_Init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(SysTick_config(SystemCoreClock/<span class="hljs-number">1000</span>))<span class="hljs-comment">//1ms的时基</span><br>        <span class="hljs-keyword">for</span>(;;);<br>&#125;<br><br>_IO <span class="hljs-type">uint32_t</span> TimingDelay;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delay_ms</span><span class="hljs-params">(_IO <span class="hljs-type">uint32_t</span> ntime)</span><br>&#123;<br>    TimingDelay = nTime;<br>    <span class="hljs-keyword">while</span>(TimingDelay != <span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="使用循环"><a href="#使用循环" class="headerlink" title="使用循环"></a>使用循环</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//该代码适用于72MHZ下</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delay_ms</span><span class="hljs-params">(u16 time)</span><br>&#123;<br>    u16 i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(time--)&#123;<br>        i = <span class="hljs-number">12000</span>;<br>        <span class="hljs-keyword">while</span>(i--);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="使用Systick"><a href="#使用Systick" class="headerlink" title="使用Systick"></a>使用Systick</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//先在stm32f10x_it.h中定义</span><br><span class="hljs-keyword">extern</span> _IO <span class="hljs-type">uint32_t</span> TimingDelay<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//在stm32f10x_it.c中定义void SysTick_Hankler(void)</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">SysTick_Hankler</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(TimingDelay != <span class="hljs-number">0x00</span>)&#123;<br>        TimingDelay--;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//在main.c中定义</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">SysTick_Init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(SysTick_config(SystemCoreClock/<span class="hljs-number">1000</span>))<span class="hljs-comment">//1ms的时基</span><br>        <span class="hljs-keyword">for</span>(;;);<br>&#125;<br><br>_IO <span class="hljs-type">uint32_t</span> TimingDelay;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delay_ms</span><span class="hljs-params">(_IO <span class="hljs-type">uint32_t</span> ntime)</span><br>&#123;<br>    TimingDelay = nTime;<br>    <span class="hljs-keyword">while</span>(TimingDelay != <span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>SysTick 时基计算公式：</p>
+<p><strong>Reload Value &#x3D; SysTick Counter Clock (Hz) x  Desired Time base (s)</strong></p>
+<p>Reload Value：就是重加载数，重加载数最大不得超过0xffffff(16,777,215)。<code>SysTick_config()</code>中的参数就是重加载数</p>
+<p>SysTick Counter Clock (Hz)：是系统时钟的频率</p>
+<p>Desired Time：所需要的时基。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">SysTick_Config(SystemCoreClock / <span class="hljs-number">1000</span>) <span class="hljs-comment">//这是1us的重加载数</span><br>SysTick_Config(SystemCoreClock / <span class="hljs-number">1</span>)    <span class="hljs-comment">//这是1s的重加载数</span><br></code></pre></td></tr></table></figure>
+
+<p>所以需要以x时间为长度，则 <strong>&#x2F;x</strong></p>
+<h1 id="使用汇编进行定时"><a href="#使用汇编进行定时" class="headerlink" title="使用汇编进行定时"></a>使用汇编进行定时</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><br></code></pre></td></tr></table></figure>
+
+
+
 
                 
               </div>
@@ -302,12 +317,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/STM32/" class="category-chain-item">STM32</a>
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
   
   
     <span>></span>
     
-  <a href="/categories/STM32/%E7%B3%BB%E7%BB%9F%E5%A4%96%E8%AE%BE/" class="category-chain-item">系统外设</a>
+  <a href="/categories/stm32/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
   
   
 
@@ -336,8 +351,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>SysTick系统定时器</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/20/SysTick系统定时器/</div>
+      <div>stm32中三种延时函数</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/20/stm32中三种延时函数/</div>
     </div>
     <div class="license-meta">
       
@@ -381,9 +396,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/20/USART%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1/" title="USART串口通信">
+                      <a href="/2023/11/20/SysTick%E7%B3%BB%E7%BB%9F%E5%AE%9A%E6%97%B6%E5%99%A8/" title="SysTick系统定时器">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">USART串口通信</span>
+                        <span class="hidden-mobile">SysTick系统定时器</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -391,8 +406,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/20/stm32%E4%B8%AD%E4%B8%89%E7%A7%8D%E5%BB%B6%E6%97%B6%E5%87%BD%E6%95%B0/" title="stm32中三种延时函数">
-                        <span class="hidden-mobile">stm32中三种延时函数</span>
+                      <a href="/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E5%BC%8F/" title="stm32中的输入输出模式">
+                        <span class="hidden-mobile">stm32中的输入输出模式</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
