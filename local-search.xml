@@ -137,6 +137,33 @@
   
   
   <entry>
+    <title>RCC片上外设</title>
+    <link href="/2023/11/17/RCC%E7%9A%84%E4%BD%9C%E7%94%A8/"/>
+    <url>/2023/11/17/RCC%E7%9A%84%E4%BD%9C%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<p>RCC片上外设</p><span id="more"></span><h1 id="什么是RCC"><a href="#什么是RCC" class="headerlink" title="什么是RCC"></a>什么是RCC</h1><p>RCC ：reset clock control  复位和时钟控制器。</p><p>作用：设置系统时钟SYSCLK、设置AHB分频因子（决定HCLK等于多少）、设置APB2分频因子（决定PCLK2等于多少）、 设置APB1分频因子（决定PCLK1等于多少）、设置各个外设的分频因子；控制AHB、APB2和APB1这三条总线时钟的开启、 控制每个外设的时钟的开启。</p><p>简而言之就是<strong>配置时钟树</strong></p><h1 id="RCC的配置函数"><a href="#RCC的配置函数" class="headerlink" title="RCC的配置函数"></a>RCC的配置函数</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>stm32</category>
+      
+      <category>片上外设</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>NVIC</title>
     <link href="/2023/11/17/NVIC/"/>
     <url>/2023/11/17/NVIC/</url>

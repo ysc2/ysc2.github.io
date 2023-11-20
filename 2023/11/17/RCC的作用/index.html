@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="stm32中的八种输入、输出模式总结">
+    <meta name="description" content="RCC片上外设">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32中的输入输出模式">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:title" content="RCC片上外设">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/17/RCC%E7%9A%84%E4%BD%9C%E7%94%A8/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="stm32中的八种输入、输出模式总结">
+<meta property="og:description" content="RCC片上外设">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/13cm_10_8.jpg">
-<meta property="article:published_time" content="2023-11-17T15:01:57.000Z">
-<meta property="article:modified_time" content="2023-11-20T01:57:47.255Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg">
+<meta property="article:published_time" content="2023-11-17T13:44:52.000Z">
+<meta property="article:modified_time" content="2023-11-20T16:03:39.074Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/13cm_10_8.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg">
   
   
   
-  <title>stm32中的输入输出模式 - Ysc Web</title>
+  <title>RCC片上外设 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/13cm_10_8.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="stm32中的输入输出模式"></span>
+            <span id="subtitle" data-typed-text="RCC片上外设"></span>
           
         </div>
 
@@ -210,7 +210,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-17 23:01" pubdate>
+        <time datetime="2023-11-17 21:44" pubdate>
           2023年11月17日 晚上
         </time>
       </span>
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          966 字
+          199 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          9 分钟
+          2 分钟
         
       </span>
     
@@ -270,34 +270,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">stm32中的输入输出模式</h1>
+            <h1 id="seo-header">RCC片上外设</h1>
             
             
               <div class="markdown-body">
                 
-                <p>stm32中的八种输入、输出模式总结</p>
-<span id="more"></span> 
+                <p>RCC片上外设</p>
+<span id="more"></span>
 
-<h1 id="各GPIO输入输入模式"><a href="#各GPIO输入输入模式" class="headerlink" title="各GPIO输入输入模式"></a>各GPIO输入输入模式</h1><ol>
-<li>模拟输入：GPIO_Mode_AIN</li>
-<li>浮空输入：GPIO_Mode_IN_FLOATING</li>
-<li>上拉输入：GPIO_Mode_IPU</li>
-<li>下拉输入：GPIO_Mode_IPD</li>
-<li>推挽输出：GPIO_Mode_Out_PP</li>
-<li>开漏输出：GPIO_Mode_Out_OD</li>
-<li>复用推挽输出：GPIO_Mode_AF_OD</li>
-<li>复用开漏输出：GPIO_Mode_AF_OD</li>
-</ol>
-<hr>
-<h2 id="各个模式适用的情况："><a href="#各个模式适用的情况：" class="headerlink" title="各个模式适用的情况："></a>各个模式适用的情况：</h2><p><strong>模拟输入</strong>：关闭施密特触发器，将电压信号传送到片上外设模块（不接上下拉电阻）。<strong>应用ADC模拟输入，或者低功耗下省电。</strong></p>
-<p><strong>浮空输入</strong>：浮空输入状态下，IO的电平状态是不确定的，完全由外部输入决定，如果在该引脚悬空的情况下，读取该端口的电平是不确定的。<strong>可以做KEY识别，RX1。</strong></p>
-<p><strong>上拉输入、下拉输入</strong>：当GPIO引脚无输入时，上拉输入在默认状态下为高电平，下拉输入在默认状态下为低电平。电阻的作用：防止输入端悬空，减少外部电流对芯片的干扰，限流，增加高电平输出时的驱动能力。<strong>IO内部上拉电阻输入。</strong> <strong>IO内部下拉电阻输入。</strong></p>
-<p><strong>推挽输出</strong>：想要输出高电平就输出高电平，想要输出低电平就输出低电平。</p>
-<p><strong>开漏输出</strong>：输出端相当于三极管的集电极。要得到高电平状态需要上拉电阻才行。适合于做电流型的驱动，其<strong>吸收电流的能力相对较强</strong>，一般20mA以内。开漏输出是没有能力输出高电平驱动负载的。一般情况下开漏输出只可以输出低电平，要输出高电平则需要接上拉电阻。</p>
-<p><strong>复用开漏输出推挽输出模式</strong>：可以理解为GPIO口被用作第二功能时的配置情况，即并非作为通用IO口使用。片内外设功能，<strong>复用推挽输出：I2C的SCL、SDA。</strong>，<strong>复用开漏输出：片内外设功能，TX1，MOSI，MISO.SCK.SS。</strong><br>给片上外设使用的，其他情况下如GPIO则不需要使用这种复用模式。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15315240/3229581">https://blog.51cto.com/u_15315240/3229581</a></p>
-<p><a target="_blank" rel="noopener" href="http://news.eeworld.com.cn/mcu/ic557652.html?ipcity__1865=CqfxR7D=PxuDlxGgx+Oewnq0KDtGCb98eD&alichlgref=http://news.eeworld.com.cn/mcu/ic557652.html">http://news.eeworld.com.cn/mcu/ic557652.html?ipcity__1865=CqfxR7D%3DPxuDlxGgx%2BOewnq0KDtGCb98eD&amp;alichlgref=http%3A%2F%2Fnews.eeworld.com.cn%2Fmcu%2Fic557652.html</a></p>
 
+<h1 id="什么是RCC"><a href="#什么是RCC" class="headerlink" title="什么是RCC"></a>什么是RCC</h1><p>RCC ：reset clock control  复位和时钟控制器。</p>
+<p>作用：设置系统时钟SYSCLK、设置AHB分频因子（决定HCLK等于多少）、设置APB2分频因子（决定PCLK2等于多少）、 设置APB1分频因子（决定PCLK1等于多少）、设置各个外设的分频因子；控制AHB、APB2和APB1这三条总线时钟的开启、 控制每个外设的时钟的开启。</p>
+<p>简而言之就是<strong>配置时钟树</strong></p>
+<h1 id="RCC的配置函数"><a href="#RCC的配置函数" class="headerlink" title="RCC的配置函数"></a>RCC的配置函数</h1>
                 
               </div>
             
@@ -315,12 +300,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/STM32/" class="category-chain-item">STM32</a>
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
   
   
     <span>></span>
     
-  <a href="/categories/STM32/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  <a href="/categories/stm32/%E7%89%87%E4%B8%8A%E5%A4%96%E8%AE%BE/" class="category-chain-item">片上外设</a>
   
   
 
@@ -349,8 +334,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>stm32中的输入输出模式</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/17/stm32中的输入输出模式/</div>
+      <div>RCC片上外设</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/17/RCC的作用/</div>
     </div>
     <div class="license-meta">
       
@@ -394,9 +379,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/20/SysTick%E7%B3%BB%E7%BB%9F%E5%AE%9A%E6%97%B6%E5%99%A8/" title="SysTick系统定时器">
+                      <a href="/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A8%A1%E5%BC%8F/" title="stm32中的输入输出模式">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">SysTick系统定时器</span>
+                        <span class="hidden-mobile">stm32中的输入输出模式</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -404,8 +389,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/17/RCC%E7%9A%84%E4%BD%9C%E7%94%A8/" title="RCC片上外设">
-                        <span class="hidden-mobile">RCC片上外设</span>
+                      <a href="/2023/11/17/NVIC/" title="NVIC">
+                        <span class="hidden-mobile">NVIC</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
