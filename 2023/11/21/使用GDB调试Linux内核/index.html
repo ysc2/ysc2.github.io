@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-adrien-olichon-18528201.jpg">
 <meta property="article:published_time" content="2023-11-21T15:38:23.000Z">
-<meta property="article:modified_time" content="2023-11-22T11:50:55.514Z">
+<meta property="article:modified_time" content="2023-11-24T10:18:28.525Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.1k 字
+          2.5k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          18 分钟
+          21 分钟
         
       </span>
     
@@ -331,6 +331,16 @@
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></p>
 <p><a target="_blank" rel="noopener" href="https://mazhen.tech/p/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95linux%E5%86%85%E6%A0%B8/#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E">https://mazhen.tech/p/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95linux%E5%86%85%E6%A0%B8/#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E</a></p>
 <p><a target="_blank" rel="noopener" href="https://howardlau.me/programming/debugging-linux-kernel-with-vscode-qemu.html#_VSCode">使用vscode+qemu+gdb调试Linux内核</a></p>
+<h1 id="直接使用物理机进行调试"><a href="#直接使用物理机进行调试" class="headerlink" title="直接使用物理机进行调试"></a>直接使用物理机进行调试</h1><p>除开使用虚拟机安装内核后，还可以直接在平台上通过安装内核调试符号包来进行调试。</p>
+<h2 id="查询系统的版本"><a href="#查询系统的版本" class="headerlink" title="查询系统的版本"></a>查询系统的版本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">uname</span> -r <span class="hljs-comment">#查看系统版本</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="下载调试包"><a href="#下载调试包" class="headerlink" title="下载调试包"></a>下载调试包</h2><p>已知自己的版本通过这个版本号去这个网站下载调试包，注意的是下载的调试包需要和自己的系统版本对应<a target="_blank" rel="noopener" href="https://launchpad.net/ubuntu/+source/linux-hwe-5.13">Ubuntu官方网站下的调试包</a></p>
+<p>linux-image-unsigned-5.13.0-52-generic-dbgsym_5.13.0-52.59~20.04.1_amd64.ddeb 这是我的系统对应的版本。</p>
+<h2 id="安装内核源码"><a href="#安装内核源码" class="headerlink" title="安装内核源码"></a>安装内核源码</h2><blockquote>
+<p>这里需要注意的是：amd64就是x86-64也称之intel64</p>
+</blockquote>
+<h2 id="参考资料-1"><a href="#参考资料-1" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="http://advdbg.org/blogs/advdbg_system/articles/7147.aspx">http://advdbg.org/blogs/advdbg_system/articles/7147.aspx</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ebpf.top/post/ubuntu-21-10-dbgsym/">https://www.ebpf.top/post/ubuntu-21-10-dbgsym/</a></p>
 
                 
               </div>
