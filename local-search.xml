@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>GPIO</title>
+    <link href="/2023/11/26/GPIO/"/>
+    <url>/2023/11/26/GPIO/</url>
+    
+    <content type="html"><![CDATA[<p>总结stm32中的GPIO外设</p><span id="more"></span><h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>在野火霸道中需要注意的是，当你直接配置好led灯的gpio后，这个led灯就会亮。这是因为，霸道的原理图中的led灯是低位点亮。而刚刚复位的gpio的数据输出寄存器的默认值就是0。所以会被点亮，想要关闭我们应该在led的配置函数中使用：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_SetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//关闭led灯</span><br>GPIO_ResetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//开启led灯</span><br></code></pre></td></tr></table></figure><p>关于<code>GPIO_SetBits()</code>这个函数是写<code>BSRR</code>这个寄存器，通过写1，对应的数据输出寄存器会被写为1</p><p>关于<code>GPIO_ResetBits()</code>这个函数是写<code>BRR</code>寄存器，通过写1，对应的数据寄存器会被写为0。</p><p>所以我们可以知道，在霸道V2中如果想要打开led灯，则需要使用<code>GPIO_ResetBits</code>函数。想要关闭则使用另一个函数。当然我们也可以使用<code>GPIO_WriteBit()</code>来写<code>BRR</code>和<code>BSRR</code>两个寄存器。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>stm32</category>
+      
+      <category>内核外设</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>GDB详解</title>
     <link href="/2023/11/26/GDB%E8%AF%A6%E8%A7%A3/"/>
     <url>/2023/11/26/GDB%E8%AF%A6%E8%A7%A3/</url>
