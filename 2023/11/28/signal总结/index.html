@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="总结stm32中的GPIO外设">
+    <meta name="description" content="总结Linux系统中的signal">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GPIO">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/26/GPIO/index.html">
+<meta property="og:title" content="signal总结">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/28/signal%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="总结stm32中的GPIO外设">
+<meta property="og:description" content="总结Linux系统中的signal">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg">
-<meta property="article:published_time" content="2023-11-26T15:12:38.000Z">
-<meta property="article:modified_time" content="2023-11-26T15:41:28.878Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-jesse-zheng-732548.jpg">
+<meta property="article:published_time" content="2023-11-28T08:42:21.000Z">
+<meta property="article:modified_time" content="2023-11-28T08:49:20.324Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-jesse-zheng-732548.jpg">
   
   
   
-  <title>GPIO - Ysc Web</title>
+  <title>signal总结 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-jesse-zheng-732548.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="GPIO"></span>
+            <span id="subtitle" data-typed-text="signal总结"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-26 23:12" pubdate>
-          2023年11月26日 晚上
+        <time datetime="2023-11-28 16:42" pubdate>
+          2023年11月28日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          417 字
+          141 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          4 分钟
+          2 分钟
         
       </span>
     
@@ -270,21 +270,16 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">GPIO</h1>
+            <h1 id="seo-header">signal总结</h1>
             
             
               <div class="markdown-body">
                 
-                <p>总结stm32中的GPIO外设</p>
+                <p>总结Linux系统中的signal</p>
 <span id="more"></span>
 
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>在野火霸道中需要注意的是，当你直接配置好led灯的gpio后，这个led灯就会亮。这是因为，霸道的原理图中的led灯是低位点亮。而刚刚复位的gpio的数据输出寄存器的默认值就是0。所以会被点亮，想要关闭我们应该在led的配置函数中使用：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_SetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//关闭led灯</span><br>GPIO_ResetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//开启led灯</span><br></code></pre></td></tr></table></figure>
 
-<p>关于<code>GPIO_SetBits()</code>这个函数是写<code>BSRR</code>这个寄存器，通过写1，对应的数据输出寄存器会被写为1</p>
-<p>关于<code>GPIO_ResetBits()</code>这个函数是写<code>BRR</code>寄存器，通过写1，对应的数据寄存器会被写为0。</p>
-<p>所以我们可以知道，在霸道V2中如果想要打开led灯，则需要使用<code>GPIO_ResetBits</code>函数。想要关闭则使用另一个函数。当然我们也可以使用<code>GPIO_WriteBit()</code>来写<code>BRR</code>和<code>BSRR</code>两个寄存器。</p>
-
+<h2 id="常见的slgnal种类-1-9号"><a href="#常见的slgnal种类-1-9号" class="headerlink" title="常见的slgnal种类 1-9号"></a>常见的slgnal种类 1-9号</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">SIGHUP <span class="hljs-comment">#挂起</span><br>SIGINI <span class="hljs-comment">#中断</span><br>SIGQUIT <span class="hljs-comment">#尽可能终止</span><br>SIGILL <span class="hljs-comment">#未知指令</span><br>SIGTRAP <span class="hljs-comment">#自陷</span><br>SIGABRT <span class="hljs-comment">#终止进程</span><br>SIGBUS <span class="hljs-comment">#内存访问错误</span><br>SIGFPE <span class="hljs-comment">#算术异常</span><br>SIGKILL <span class="hljs-comment">#直接杀死</span><br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -302,12 +297,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
   
   
     <span>></span>
     
-  <a href="/categories/stm32/%E5%86%85%E6%A0%B8%E5%A4%96%E8%AE%BE/" class="category-chain-item">内核外设</a>
+  <a href="/categories/Linux/GDB/" class="category-chain-item">GDB</a>
   
   
 
@@ -336,8 +331,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>GPIO</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/26/GPIO/</div>
+      <div>signal总结</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/28/signal总结/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +344,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月26日</div>
+          <div>2023年11月28日</div>
         </div>
       
       
@@ -381,9 +376,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/28/signal%E6%80%BB%E7%BB%93/" title="signal总结">
+                      <a href="/2023/11/28/socket%E5%AD%A6%E4%B9%A01/" title="socket学习1">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">signal总结</span>
+                        <span class="hidden-mobile">socket学习1</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -391,8 +386,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/26/GDB%E8%AF%A6%E8%A7%A3/" title="GDB详解">
-                        <span class="hidden-mobile">GDB详解</span>
+                      <a href="/2023/11/26/GPIO/" title="GPIO">
+                        <span class="hidden-mobile">GPIO</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

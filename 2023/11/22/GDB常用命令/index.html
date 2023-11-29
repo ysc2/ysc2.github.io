@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-liudmyla-shalimova-18286209.jpg">
 <meta property="article:published_time" content="2023-11-22T11:20:38.000Z">
-<meta property="article:modified_time" content="2023-11-27T17:26:12.669Z">
+<meta property="article:modified_time" content="2023-11-29T11:03:22.700Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.7k 字
+          12k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          81 分钟
+          97 分钟
         
       </span>
     
@@ -414,9 +414,47 @@
 <p>Expression 列：表示查看的变量或表达式。</p>
 <p>取消显示有两个命令：<code>undispaly</code> <code>delete</code>：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">undispaly Num 这个是取消显示，不是直接删除<br>enable display num 重新开启<br><br>delete 从直接从删除自动显示列表中删除它<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><code>info</code>和<code>set</code>&amp;<code>unset</code>跟<code>show</code>之间的关系</li>
+</ol>
+<p>info	查看程序状态信息。例如断点、寄存器、线程、局部变量等</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs txt">info break 查看断点<br>info signal 查看信号<br>info registers 查看寄存器<br>info locals 查看局部变量<br>info signal 查看信号的相关消息<br>....<br>help info 使用这个命令查看更多信息<br></code></pre></td></tr></table></figure>
+<p>show	查看 gdb 配置信息。与 info 不同， show 查看 GDB 本身的配置信息</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">show args 查看程序的参数<br></code></pre></td></tr></table></figure>
+<p>set	    设置变量值。有时指定变量类型才能设置，如 <code>set *(int*)(&amp;a) = 3</code>，还可以配置程序的环境如：环境变脸、参数。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs txt">set args 1 2 设置程序的两个参数为 1 2<br>set env DEBUG 设置程序的环境变量<br></code></pre></td></tr></table></figure>
+
+
+<ol start="7">
+<li><p>线程切换命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">thread n <span class="hljs-comment">#将线程切换为n号线程</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>发送信号的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">signal 9 <span class="hljs-comment">#发送信号9</span><br>signal SIGKILL <span class="hljs-comment">#发送直接杀死信号</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><code>whatis</code>命令和<code>ptype</code>命令之间的关系：<br>首先需要明确的是，这两个命令都是查看对象的类型的命令，只是ptype相当于whatis命令更加详细，会给出结构体的定义，而whatis不会。其他都一致。</p>
+</li>
+<li><p>直接退出当前函数不执行剩下的代码：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">return <br></code></pre></td></tr></table></figure>
+</li>
+<li><p><code>disable</code>命令和<code>enable</code>命令；</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs txt">disable 1 2 打开断点1 2<br>enable 1 关闭断点1<br><br>info break 来查看断点的相关信息<br><br>关于enable命令：<br>enable [breakpoints] [num...]                        激活用 num... 参数指定的多个断点，如果不设定 num...，表示激活所有禁用的断点<br>enable [breakpoints] once num…                 临时激活以 num... 为编号的多个断点，但断点只能使用 1 次，之后会自动回到禁用状态<br>enable [breakpoints] count num...      临时激活以 num... 为编号的多个断点，断点可以使用 count 次，之后进入禁用状态<br>enable [breakpoints] delete num…               激活 num.. 为编号的多个断点，但断点只能使用 1 次，之后会被永久删除。<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>信号的处理配置</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs txt">使用info signal SIGINT <br>Signal        Stop      Print   Pass to program Description<br>SIGINT        Yes       Yes     No              Interrupt<br><br>以上各列的含义是：<br>Signal：各个信号的名称；<br>Stop：当信号发生时，是否终止程序执行。Yes 表示终止，No 表示当信号发生时程序认可继续执行；<br>Print：当信号发生时，是否要求 GDB 打印出一条提示信息。Yes 表示打印，No 表示不打印；<br>Pass：当信号发生时，该信号是否对程序可见。Yes 表示程序可以捕捉到该信息，No 表示程序不会捕捉到该信息；<br>Description：对信号所表示含义的简单描述。<br><br><br>使用下面的命令配置：<br><br>handle signal mode <br><br>mode是：<br>nostop：当信号发生时，GDB 不会暂停程序，其可以继续执行，但会打印出一条提示信息，告诉我们信号已经发生；<br>stop：当信号发生时，GDB 会暂停程序执行。<br>noprint：当信号发生时，GDB 不会打印出任何提示信息；<br>print：当信号发生时，GDB 会打印出必要的提示信息；<br>nopass（或者 ignore）：GDB 捕获目标信号的同时，不允许程序自行处理该信号；<br>pass（或者 noignore）：GDB 调试在捕获目标信号的同时，也允许程序自动处理该信号。<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>edit命令<br>这个命令可以允许在GDB中修改程序的源代码，但是非常不好用，我也不会用。</p>
+</li>
+<li><p>search命令<br>搜索命令，可以快速搜索函数名</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs txt">search &lt;regexp&gt;<br>reverse-search &lt;regexp&gt;<br><br>第一项命令格式表示从当前行的开始向前搜索，后一项表示从当前行开始向后搜索。其中 regexp 就是正则表达式，正则表达式描述了一种字符串匹配的模式，可以用来检查一个串中是否含有某种子串、将匹配的子串替换或者从某个串中取出符合某个条件的子串。很多的编程语言都支持使用正则表达式。<br><br></code></pre></td></tr></table></figure></li>
+</ol>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html">https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/wizardforcel/gdb-tips-100/146735">https://www.kancloud.cn/wizardforcel/gdb-tips-100/146735</a></p>
 <p><a target="_blank" rel="noopener" href="https://brezezee.github.io/2021/06/10/tricks%20and%20tools/gdb/">https://brezezee.github.io/2021/06/10/tricks%20and%20tools/gdb/</a></p>
+<p><a target="_blank" rel="noopener" href="https://c.biancheng.net/view/8219.html">https://c.biancheng.net/view/8219.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.eecs.umich.edu/courses/eecs373/readings/Debugger.pdf">https://www.eecs.umich.edu/courses/eecs373/readings/Debugger.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="https://quickref.me/zh-CN/docs/gdb.html">https://quickref.me/zh-CN/docs/gdb.html</a></p>
 
                 
               </div>

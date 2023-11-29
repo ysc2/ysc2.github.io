@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="总结stm32中的GPIO外设">
+    <meta name="description" content="总结学习计算机网络的知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GPIO">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/26/GPIO/index.html">
+<meta property="og:title" content="计算机网络基础">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/28/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="总结stm32中的GPIO外设">
+<meta property="og:description" content="总结学习计算机网络的知识点">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg">
-<meta property="article:published_time" content="2023-11-26T15:12:38.000Z">
-<meta property="article:modified_time" content="2023-11-26T15:41:28.878Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-cottonbro-studio-10570841.jpg">
+<meta property="article:published_time" content="2023-11-28T12:46:23.000Z">
+<meta property="article:modified_time" content="2023-11-28T15:27:04.913Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-cottonbro-studio-10570841.jpg">
   
   
   
-  <title>GPIO - Ysc Web</title>
+  <title>计算机网络基础 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-cottonbro-studio-10570841.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="GPIO"></span>
+            <span id="subtitle" data-typed-text="计算机网络基础"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-26 23:12" pubdate>
-          2023年11月26日 晚上
+        <time datetime="2023-11-28 20:46" pubdate>
+          2023年11月28日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          417 字
+          574 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -270,20 +270,26 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">GPIO</h1>
+            <h1 id="seo-header">计算机网络基础</h1>
             
             
               <div class="markdown-body">
                 
-                <p>总结stm32中的GPIO外设</p>
+                <p>总结学习计算机网络的知识点</p>
 <span id="more"></span>
 
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>在野火霸道中需要注意的是，当你直接配置好led灯的gpio后，这个led灯就会亮。这是因为，霸道的原理图中的led灯是低位点亮。而刚刚复位的gpio的数据输出寄存器的默认值就是0。所以会被点亮，想要关闭我们应该在led的配置函数中使用：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_SetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//关闭led灯</span><br>GPIO_ResetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//开启led灯</span><br></code></pre></td></tr></table></figure>
 
-<p>关于<code>GPIO_SetBits()</code>这个函数是写<code>BSRR</code>这个寄存器，通过写1，对应的数据输出寄存器会被写为1</p>
-<p>关于<code>GPIO_ResetBits()</code>这个函数是写<code>BRR</code>寄存器，通过写1，对应的数据寄存器会被写为0。</p>
-<p>所以我们可以知道，在霸道V2中如果想要打开led灯，则需要使用<code>GPIO_ResetBits</code>函数。想要关闭则使用另一个函数。当然我们也可以使用<code>GPIO_WriteBit()</code>来写<code>BRR</code>和<code>BSRR</code>两个寄存器。</p>
+<h1 id="网络中的分层"><a href="#网络中的分层" class="headerlink" title="网络中的分层"></a>网络中的分层</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311282046418.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="如何通过网络找到一个计算机"><a href="#如何通过网络找到一个计算机" class="headerlink" title="如何通过网络找到一个计算机"></a>如何通过网络找到一个计算机</h1><h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><blockquote>
+<p>IP地址是 Internet Protocol Address 的缩写，译为“网际协议地址”。</p>
+</blockquote>
+<p>一台计算机可以拥有一个独立的 IP 地址，一个局域网也可以拥有一个独立的 IP 地址（对外就好像只有一台计算机）。对于目前广泛使用 IPv4 地址，它的资源是非常有限的，一台计算机一个 IP 地址是不现实的，往往是一个局域网才拥有一个 IP 地址。</p>
+<h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><blockquote>
+<p>MAC 地址是 Media Access Control Address 的缩写，直译为“媒体访问控制地址”，也称为局域网地址（LAN Address），以太网地址（Ethernet Address）或物理地址（Physical Address）。</p>
+</blockquote>
+<p>但是只是知道ip地址，也就是只知道一个大概的地理地址范围，所以引入了<code>MAC</code>地址，<code>MAC</code>是所有计算机网卡中的一个唯一值，世界上所有的计算机中<code>MAC</code>的值都是不同的。其在网卡出场时就已经被写入了网卡中了。</p>
+<h2 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h2><p>由于一台计算机会提供各种各样的网络服务。所以，如果我们仅仅找到了计算机的地理位置，但是还是不可以与其进行通信，这是因为服务器不知道应该将数据发送给这台计算机中的哪一个程序处理。这是就需要通过指定<strong>端口号</strong>，不同的端口号对应着不同的网络服务程序。如：Web 服务的端口号是 80，FTP 服务的端口号是 21，SMTP 服务的端口号是 25。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311282322751.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -302,15 +308,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  <a href="/categories/%E7%BD%91%E7%BB%9C/" class="category-chain-item">网络</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/stm32/%E5%86%85%E6%A0%B8%E5%A4%96%E8%AE%BE/" class="category-chain-item">内核外设</a>
-  
-  
-
   
 
       </span>
@@ -336,8 +335,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>GPIO</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/26/GPIO/</div>
+      <div>计算机网络基础</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/28/计算机网络基础/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +348,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月26日</div>
+          <div>2023年11月28日</div>
         </div>
       
       
@@ -381,18 +380,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/28/signal%E6%80%BB%E7%BB%93/" title="signal总结">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">signal总结</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/26/GDB%E8%AF%A6%E8%A7%A3/" title="GDB详解">
-                        <span class="hidden-mobile">GDB详解</span>
+                      <a href="/2023/11/28/socket%E5%AD%A6%E4%B9%A01/" title="socket学习1">
+                        <span class="hidden-mobile">socket学习1</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
