@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg">
 <meta property="article:published_time" content="2023-11-26T15:12:38.000Z">
-<meta property="article:modified_time" content="2023-11-26T15:41:28.878Z">
+<meta property="article:modified_time" content="2023-12-01T05:54:46.002Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -278,7 +278,9 @@
                 <p>总结stm32中的GPIO外设</p>
 <span id="more"></span>
 
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>在野火霸道中需要注意的是，当你直接配置好led灯的gpio后，这个led灯就会亮。这是因为，霸道的原理图中的led灯是低位点亮。而刚刚复位的gpio的数据输出寄存器的默认值就是0。所以会被点亮，想要关闭我们应该在led的配置函数中使用：</p>
+
+
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>在野火霸道中需要注意的是，当你直接配置好led灯的gpio后，这个led灯就会亮。这是因为，霸道的原理图中的led灯是低位点亮。而刚刚复位的gpio的数据输出寄存器的默认值就是0。所以会被点亮，想要关闭我们应该在led的配置函数中使用：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_SetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//关闭led灯</span><br>GPIO_ResetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//开启led灯</span><br></code></pre></td></tr></table></figure>
 
 <p>关于<code>GPIO_SetBits()</code>这个函数是写<code>BSRR</code>这个寄存器，通过写1，对应的数据输出寄存器会被写为1</p>
