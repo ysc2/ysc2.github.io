@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-liudmyla-shalimova-18286209.jpg">
 <meta property="article:published_time" content="2023-11-22T11:20:38.000Z">
-<meta property="article:modified_time" content="2023-11-29T11:05:17.500Z">
+<meta property="article:modified_time" content="2023-12-01T18:22:49.349Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -419,7 +419,7 @@
 <li><code>info</code>和<code>set</code>&amp;<code>unset</code>跟<code>show</code>之间的关系</li>
 </ol>
 <p>info	查看程序状态信息。例如断点、寄存器、线程、局部变量等</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs txt">info break 查看断点<br>info signal 查看信号<br>info registers 查看寄存器<br>info locals 查看局部变量<br>info signal 查看信号的相关消息<br>....<br>help info 使用这个命令查看更多信息<br></code></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs txt">info break 查看断点<br>info signal 查看信号<br>info registers 查看寄存器<br>info locals 查看局部变量<br>info signal 查看信号的相关消息<br>info proc 查看当前进程的信息<br>....<br>help info 使用这个命令查看更多信息<br></code></pre></td></tr></table></figure>
 <p>show	查看 gdb 配置信息。与 info 不同， show 查看 GDB 本身的配置信息</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">show args 查看程序的参数<br></code></pre></td></tr></table></figure>
 <p>set	    设置变量值。有时指定变量类型才能设置，如 <code>set *(int*)(&amp;a) = 3</code>，还可以配置程序的环境如：环境变脸、参数。</p>

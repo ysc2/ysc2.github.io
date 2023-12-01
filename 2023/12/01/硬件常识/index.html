@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="总结stm32中的片上外设DMA">
+    <meta name="description" content="总结硬件设计中的知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DMA外设">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/26/DMA%E5%A4%96%E8%AE%BE/index.html">
+<meta property="og:title" content="硬件常识">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/01/%E7%A1%AC%E4%BB%B6%E5%B8%B8%E8%AF%86/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="总结stm32中的片上外设DMA">
+<meta property="og:description" content="总结硬件设计中的知识点">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/building-8357270_1280.jpg">
-<meta property="article:published_time" content="2023-11-25T17:54:48.000Z">
-<meta property="article:modified_time" content="2023-12-01T07:48:08.953Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
+<meta property="article:published_time" content="2023-12-01T09:51:46.000Z">
+<meta property="article:modified_time" content="2023-12-01T09:54:36.561Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/building-8357270_1280.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
   
   
   
-  <title>DMA外设 - Ysc Web</title>
+  <title>硬件常识 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/building-8357270_1280.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="DMA外设"></span>
+            <span id="subtitle" data-typed-text="硬件常识"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-26 01:54" pubdate>
-          2023年11月26日 凌晨
+        <time datetime="2023-12-01 17:51" pubdate>
+          2023年12月1日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          481 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          16 分钟
+          5 分钟
         
       </span>
     
@@ -270,53 +270,24 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">DMA外设</h1>
+            <h1 id="seo-header">硬件常识</h1>
             
             
               <div class="markdown-body">
                 
-                <p>总结stm32中的片上外设DMA</p>
+                <p>总结硬件设计中的知识点</p>
 <span id="more"></span>
 
-
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>是<strong>片上外设</strong></p>
-<p>DMA(Direct Memory Access)—直接存储器存取，是单片机的一个外设，它的主要功能是用来搬数据，但是不需要占用CPU， 即在传输数据的时候，CPU可以干其他的事情，好像是多线程一样。</p>
-<p>这里的存储器可以是FLASH也可以是SARM。</p>
-<div class="note note-info">
-            <p>DMA只是一帮助cpu缓解压力的“小cpu”，其并不是存储空间，而是控制数据传输的方向。</p>
-          </div>
-
-<p>stm32f103系列DMA有DMA1和DMA2两个控制器，DMA1有7个通道，DMA2有5个通道，不同的DMA控制器的通道对应着不同的外设请求， 这决定了我们在软件编程上该怎么设置，具体见DMA请求映像表。</p>
-<h2 id="DMA的组成"><a href="#DMA的组成" class="headerlink" title="DMA的组成"></a>DMA的组成</h2><h3 id="控制器"><a href="#控制器" class="headerlink" title="控制器"></a>控制器</h3><p>最主要的是有DMA控制器，其控制着整个DNA外设，并且在stm32中一般有两个DMA。一个是DMA1一个是DMA2，DMA是只有大容量、互联型的产品中才会有。</p>
-<p>DMA具有12个独立可编程的通道，其中DMA1有7个通道，DMA2有5个通道，每个通道对应不同的外设的DMA请求。 <strong>虽然每个通道可以接收多个外设的请求，但是同一时间只能接收一个，不能同时接收多个。</strong></p>
-<p>DMA的映射如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311260217508.png" srcset="/img/loading.gif" lazyload></p>
-<p>其中ADC3、SDIO和TIM8的DMA请求只在大容量产品中存在，这个在具体项目时要注意。</p>
-<h3 id="仲裁器"><a href="#仲裁器" class="headerlink" title="仲裁器"></a>仲裁器</h3><p>当有多个通道同时传输信号时，我们需要仲裁先后顺序。这分为两步：</p>
-<ol>
-<li>软件自定义，通过在DMA_CCRx寄存器中设置，有4个等级：非常高、高、中和低四个优先级。我们可以自己控制优先级。</li>
-<li>硬件判断，当没有设置软件优先级或者是软件优先级是相同的，此时通过判断通道号，越小优先级越高。</li>
-</ol>
-<p><strong>在大容量产品和互联型产品中， DMA1控制器拥有高于DMA2控制器的优先级。</strong></p>
-<h1 id="DMA的数据配置"><a href="#DMA的数据配置" class="headerlink" title="DMA的数据配置"></a>DMA的数据配置</h1><p>DMA作为一个关于数据传输的片上外设，其最重要的六点是：</p>
-<p><strong>数据从哪里来、数据到哪里去、传输多少数据、分为几次传输、一次传输数据的单位是多少。传输完成了吗</strong><br>下面我们来逐个解决这些问题</p>
-<h2 id="数据从哪里来、到哪里去"><a href="#数据从哪里来、到哪里去" class="headerlink" title="数据从哪里来、到哪里去"></a>数据从哪里来、到哪里去</h2><p>在stm32中，只有以下三种数据传输的方向：</p>
-<ol>
-<li>外设到存储器：以ADC采集为例。DMA外设寄存器的地址对应的就是ADC数据寄存器的地址， DMA存储器的地址就是我们自定义的变量（用来接收存储AD采集的数据）的地址。方向我们设置外设为源地址。</li>
-<li>存储器到外设：stm32发送数据到上位机，这个存储器就是FLASH，外设就是USART</li>
-<li>存储器到存储器：将SARM中的数据传输到FLASH中。跟上面两个不一样的是，这里需要把DMA_CCR位14：MEM2MEM：存储器到存储器模式配置为1，启动M2M模式。</li>
-</ol>
-<h2 id="传输多少、一次传输单位是什么"><a href="#传输多少、一次传输单位是什么" class="headerlink" title="传输多少、一次传输单位是什么"></a>传输多少、一次传输单位是什么</h2><p>要传输好数据，我们必须使双方的数据传输的单位（大小）一致。</p>
-<h2 id="一次传输还是多次传输"><a href="#一次传输还是多次传输" class="headerlink" title="一次传输还是多次传输"></a>一次传输还是多次传输</h2><p>传输完成还分两种模式，是一次传输还是循环传输，一次传输很好理解，即是传输一次之后就停止，<strong>要想再传输的话， 必须关断DMA使能后再重新配置后才能继续传输</strong>。循环传输则是一次传输完成之后又恢复第一次传输时的配置循环传输， 不断的重复。具体的由DMA_CCR寄存器的CIRC 循环模式位控制。</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="设置增量模式"><a href="#设置增量模式" class="headerlink" title="设置增量模式"></a>设置增量模式</h3><h2 id="传输完成了吗"><a href="#传输完成了吗" class="headerlink" title="传输完成了吗?"></a>传输完成了吗?</h2><p>数据什么时候传输完成，我们可以通过查询标志位或者通过中断的方式来鉴别。<strong>每个DMA通道在DMA传输过半、 传输完成和传输错误时都会有相应的标志位</strong>，如果使能了该类型的中断后，则会产生中断。有关各个标志位的详细描述请参考DMA中断状态寄存器DMA_ISR的详细描述。</p>
-<h1 id="DMA编程"><a href="#DMA编程" class="headerlink" title="DMA编程"></a>DMA编程</h1><p>DMA_ InitTypeDef初始化结构体</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">uint32_t</span> DMA_PeripheralBaseAddr;   <span class="hljs-comment">// 外设地址</span><br>    <span class="hljs-type">uint32_t</span> DMA_MemoryBaseAddr;       <span class="hljs-comment">// 存储器地址</span><br>    <span class="hljs-type">uint32_t</span> DMA_DIR;                  <span class="hljs-comment">// 传输方向</span><br>    <span class="hljs-type">uint32_t</span> DMA_BufferSize;           <span class="hljs-comment">// 传输数目</span><br>    <span class="hljs-type">uint32_t</span> DMA_PeripheralInc;        <span class="hljs-comment">// 外设地址增量模式</span><br>    <span class="hljs-type">uint32_t</span> DMA_MemoryInc;            <span class="hljs-comment">// 存储器地址增量模式</span><br>    <span class="hljs-type">uint32_t</span> DMA_PeripheralDataSize;   <span class="hljs-comment">// 外设数据宽度</span><br>    <span class="hljs-type">uint32_t</span> DMA_MemoryDataSize;       <span class="hljs-comment">// 存储器数据宽度</span><br>    <span class="hljs-type">uint32_t</span> DMA_Mode;                 <span class="hljs-comment">// 模式选择</span><br>    <span class="hljs-type">uint32_t</span> DMA_Priority;             <span class="hljs-comment">// 通道优先级</span><br>    <span class="hljs-type">uint32_t</span> DMA_M2M;                  <span class="hljs-comment">// 存储器到存储器模式</span><br>&#125; DMA_InitTypeDef;<br></code></pre></td></tr></table></figure>
-
-<h2 id="DMA配置步骤"><a href="#DMA配置步骤" class="headerlink" title="DMA配置步骤"></a>DMA配置步骤</h2><ol>
-<li>使用RCC函数打开DMA时钟</li>
-<li>定义配置结构体，初始化配置</li>
-<li>使用DMA_Init函数完成初始化</li>
-<li>使用DMA_Cmd函数开启DMA</li>
-</ol>
+<h1 id="电容"><a href="#电容" class="headerlink" title="电容"></a>电容</h1><h2 id="基本分类"><a href="#基本分类" class="headerlink" title="基本分类"></a>基本分类</h2><p>玻璃电容：使用玻璃作为介质的电容器，具有高温稳定性和低损耗等特点，常用于高频和高温环境下的电路中。</p>
+<p>钽电容：使用钽金属作为电极的电容器，具有小尺寸、大电容量和高频特性等优点，常用于微型电路中。</p>
+<p>薄膜电容：使用金属膜或金属箔作为电极的电容器，具有高精度、稳定性好等特点，常用于高性能电子器件中。</p>
+<p>铝电解电容：使用铝箔和电解液作为电极的电容器，具有大电容量、低成本等特点，常用于低频和直流电路中。</p>
+<p>云母电容：使用云母作为介质的电容器，具有高精度、高频特性等特点，常用于精密仪器和高频电路中。</p>
+<p>空气电容：使用空气作为介质的电容器，具有高精度、稳定性好等特点，但体积较大，常用于高频和高压电路中。</p>
+<p>陶瓷电容：使用陶瓷作为介质的电容器，具有小尺寸、高频特性和高温稳定性等优点，常用于电子设备中。</p>
+<p>可调电容：具有可变电容值的电容器，常用于无线电和调谐电路中。</p>
+<p>金属纸电容：使用金属化薄膜作为电极的电容器，具有高精度、稳定性好等特点，常用于高性能电子器件中。</p>
+<p>超级电容：也称为电化学电容器，具有高能量密度、高功率密度和长寿命等特点，常用于储能系统和电动汽车中。</p>
 
                 
               </div>
@@ -335,12 +306,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  <a href="/categories/%E7%A1%AC%E4%BB%B6/" class="category-chain-item">硬件</a>
   
   
     <span>></span>
     
-  <a href="/categories/stm32/%E7%89%87%E4%B8%8A%E5%A4%96%E8%AE%BE/" class="category-chain-item">片上外设</a>
+  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
   
   
 
@@ -369,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>DMA外设</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/26/DMA外设/</div>
+      <div>硬件常识</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/01/硬件常识/</div>
     </div>
     <div class="license-meta">
       
@@ -382,7 +353,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月26日</div>
+          <div>2023年12月1日</div>
         </div>
       
       
@@ -414,9 +385,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/26/GDB%E8%AF%A6%E8%A7%A3/" title="GDB详解">
+                      <a href="/2023/12/02/ADC%E6%80%BB%E7%BB%93/" title="ADC总结">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">GDB详解</span>
+                        <span class="hidden-mobile">ADC总结</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -424,8 +395,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/25/pid/" title="pid详解">
-                        <span class="hidden-mobile">pid详解</span>
+                      <a href="/2023/12/01/IIC%E6%80%BB%E7%BB%93/" title="IIC总结">
+                        <span class="hidden-mobile">IIC总结</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
