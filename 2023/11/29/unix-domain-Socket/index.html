@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="总结学习计算机网络的知识点">
+    <meta name="description" content="总结UNIX admian Socket中的知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算机网络基础">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/28/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:title" content="Socket">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/29/unix-domain-Socket/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="总结学习计算机网络的知识点">
+<meta property="og:description" content="总结UNIX admian Socket中的知识点">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-cottonbro-studio-10570841.jpg">
-<meta property="article:published_time" content="2023-11-28T12:46:23.000Z">
-<meta property="article:modified_time" content="2023-11-28T15:27:04.913Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-tara-winstead-7663157.jpg">
+<meta property="article:published_time" content="2023-11-29T11:42:43.000Z">
+<meta property="article:modified_time" content="2023-11-29T11:53:10.959Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-cottonbro-studio-10570841.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-tara-winstead-7663157.jpg">
   
   
   
-  <title>计算机网络基础 - Ysc Web</title>
+  <title>Socket - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-cottonbro-studio-10570841.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-tara-winstead-7663157.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="计算机网络基础"></span>
+            <span id="subtitle" data-typed-text="Socket"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-28 20:46" pubdate>
-          2023年11月28日 晚上
+        <time datetime="2023-11-29 19:42" pubdate>
+          2023年11月29日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          574 字
+          328 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          5 分钟
+          3 分钟
         
       </span>
     
@@ -270,26 +270,26 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">计算机网络基础</h1>
+            <h1 id="seo-header">Socket</h1>
             
             
               <div class="markdown-body">
                 
-                <p>总结学习计算机网络的知识点</p>
+                <p>总结UNIX admian Socket中的知识点</p>
 <span id="more"></span>
 
 
-<h1 id="网络中的分层"><a href="#网络中的分层" class="headerlink" title="网络中的分层"></a>网络中的分层</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311282046418.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="如何通过网络找到一个计算机"><a href="#如何通过网络找到一个计算机" class="headerlink" title="如何通过网络找到一个计算机"></a>如何通过网络找到一个计算机</h1><h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><blockquote>
-<p>IP地址是 Internet Protocol Address 的缩写，译为“网际协议地址”。</p>
-</blockquote>
-<p>一台计算机可以拥有一个独立的 IP 地址，一个局域网也可以拥有一个独立的 IP 地址（对外就好像只有一台计算机）。对于目前广泛使用 IPv4 地址，它的资源是非常有限的，一台计算机一个 IP 地址是不现实的，往往是一个局域网才拥有一个 IP 地址。</p>
-<h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><blockquote>
-<p>MAC 地址是 Media Access Control Address 的缩写，直译为“媒体访问控制地址”，也称为局域网地址（LAN Address），以太网地址（Ethernet Address）或物理地址（Physical Address）。</p>
-</blockquote>
-<p>但是只是知道ip地址，也就是只知道一个大概的地理地址范围，所以引入了<code>MAC</code>地址，<code>MAC</code>是所有计算机网卡中的一个唯一值，世界上所有的计算机中<code>MAC</code>的值都是不同的。其在网卡出场时就已经被写入了网卡中了。</p>
-<h2 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h2><p>由于一台计算机会提供各种各样的网络服务。所以，如果我们仅仅找到了计算机的地理位置，但是还是不可以与其进行通信，这是因为服务器不知道应该将数据发送给这台计算机中的哪一个程序处理。这是就需要通过指定<strong>端口号</strong>，不同的端口号对应着不同的网络服务程序。如：Web 服务的端口号是 80，FTP 服务的端口号是 21，SMTP 服务的端口号是 25。</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311282322751.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="在UNIX下的套接字"><a href="#在UNIX下的套接字" class="headerlink" title="在UNIX下的套接字"></a>在UNIX下的套接字</h1><p>在本篇BLOG下，所有的套接字都是UNIX下的套接字。</p>
+<h2 id="Socket的地址"><a href="#Socket的地址" class="headerlink" title="Socket的地址"></a>Socket的地址</h2><p>在UNIX admain中使用文件的路径来表示Socket的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_un</span>&#123;</span><br>    <span class="hljs-type">sa_fmaily_t</span> sun_family; <span class="hljs-comment">//这个变量一直是AF_UNIX</span><br>    char_sun_path[<span class="hljs-number">108</span>];     <span class="hljs-comment">//存储路径名</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="需要注意的点"><a href="#需要注意的点" class="headerlink" title="需要注意的点"></a>需要注意的点</h2><ol>
+<li>UNIX admain下的套接字无法使用open()函数打开</li>
+<li>一个路径名只可以绑定一个套接字</li>
+<li>不在需要套接字时，应该使用unlink()或者remove()函数将其对应的文件删除</li>
+<li>最好使用绝对路径来绑定一个套接字，当然相对路径也是可以的，但是最好不要使用。</li>
+</ol>
 
                 
               </div>
@@ -308,8 +308,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%BD%91%E7%BB%9C/" class="category-chain-item">网络</a>
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/Linux/socket/" class="category-chain-item">socket</a>
+  
+  
+
   
 
       </span>
@@ -335,8 +342,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>计算机网络基础</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/28/计算机网络基础/</div>
+      <div>Socket</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/29/unix-domain-Socket/</div>
     </div>
     <div class="license-meta">
       
@@ -348,7 +355,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月28日</div>
+          <div>2023年11月29日</div>
         </div>
       
       
@@ -380,9 +387,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/29/vim%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="vim学习笔记">
+                      <a href="/2023/12/01/%E6%95%B0%E5%AD%97%E4%B8%87%E7%94%A8%E8%A1%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" title="数字万用表的使用">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">vim学习笔记</span>
+                        <span class="hidden-mobile">数字万用表的使用</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -390,8 +397,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/28/socket%E5%AD%A6%E4%B9%A01/" title="socket学习1">
-                        <span class="hidden-mobile">socket学习1</span>
+                      <a href="/2023/11/29/vim%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="vim学习笔记">
+                        <span class="hidden-mobile">vim学习笔记</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
