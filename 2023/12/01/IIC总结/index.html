@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/evening1_22.jpg">
 <meta property="article:published_time" content="2023-12-01T06:57:02.000Z">
-<meta property="article:modified_time" content="2023-12-01T18:49:31.314Z">
+<meta property="article:modified_time" content="2023-12-02T09:13:18.021Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          14 分钟
+          17 分钟
         
       </span>
     
@@ -304,12 +304,26 @@
 <p>第三种：读和写数据</p>
 <p>除了基本的读写，I2C通讯更常用的是复合格式，即第三幅图的情况，该传输过程有两次起始信号(S)。一般在第一次传输中， 主机通过SLAVE_ADDRESS寻找到从设备后，发送一段“数据”，<strong>这段数据通常用于表示从设备内部的寄存器或存储器地址(注意区分它与SLAVE_ADDRESS的区别)<strong>； 在第二次的传输中，对该地址的内容进行读或写。也就是说，第一次通讯是告诉从机读写地址，第二次则是读写的实际内容。如果主机接收器发送一个重复起始条件 它之前应该发送了一个</strong>不响应信号</strong>。</p>
 <h2 id="7bit寻址"><a href="#7bit寻址" class="headerlink" title="7bit寻址"></a>7bit寻址</h2><p>I2C总线的寻址过程是通常在起始条件后的第一个字节决定了主机选择哪一个从机。例外的情况是可以寻址所有器件的 <strong>广播呼叫</strong> 地址 使用这个地址时 理论上所有器件都会发出一个响应，但是也<strong>可以使器件忽略这个地址</strong>，广播呼叫地址的第二个字节定义了要采取的行动。</p>
+<h3 id="第一个字节的未定义"><a href="#第一个字节的未定义" class="headerlink" title="第一个字节的未定义"></a>第一个字节的未定义</h3><p>由于I2C通信每次都是发送8bit数据，其第一个数据一般都是地址位：</p>
+<p>第一个字节的最低位是 0 表示主机会写信息到被选中的从机 1 表示主机会向从机读信息。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312021642843.png" srcset="/img/loading.gif" lazyload></p>
+<p>从机地址由一个固定和一个可编程的部分构成，由于很可能在一个系统中有几个同样的器件。从机地址的可编程部分控制了可以连接到I2C总线上的同器件的最大数量。器件可编程地址位的数量由它可使用的管脚决定。例如，如果器件有 4 个固定的和 3 个可编程的地址位，那么相同的总线上共可以连接 8 个相同的器件。</p>
 <h2 id="stm32中的I2C外设"><a href="#stm32中的I2C外设" class="headerlink" title="stm32中的I2C外设"></a>stm32中的I2C外设</h2><p>在stm32f10x中的，有两个I2C控制器。其结构图如下：</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312011559936.png" srcset="/img/loading.gif" lazyload></p>
 <p>其中接收器和发送器：</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312011601180.png" srcset="/img/loading.gif" lazyload></p>
 <p>注意图中的EV7_1就是EV7</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312011601223.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="I2C通讯的优缺点"><a href="#I2C通讯的优缺点" class="headerlink" title="I2C通讯的优缺点"></a>I2C通讯的优缺点</h2><p>优点：</p>
+<ol>
+<li>只有两根线，结构简单</li>
+<li>具有应答位，数据传输的准确性有一定的保障</li>
+<li>支持多个主机和多个从机</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>有开始位、停止位、应答位，导致数据传输不稳定，传输速度低</li>
+<li>数据帧大小被限制为8bit</li>
+</ol>
 <h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><h2 id="初始化结构体"><a href="#初始化结构体" class="headerlink" title="初始化结构体"></a>初始化结构体</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">uint32_t</span> I2C_ClockSpeed; <span class="hljs-comment">/*!&lt; 设置SCL时钟频率，此值要低于400000*/</span><br>    <span class="hljs-type">uint16_t</span> I2C_Mode;      <span class="hljs-comment">/*!&lt; 指定工作模式，可选I2C模式及SMBUS模式 */</span><br>    <span class="hljs-type">uint16_t</span> I2C_DutyCycle; <span class="hljs-comment">/*指定时钟占空比，可选low/high = 2:1及16:9模式*/</span><br>    <span class="hljs-type">uint16_t</span> I2C_OwnAddress1;     <span class="hljs-comment">/*!&lt; 指定自身的I2C设备地址 */</span><br>    <span class="hljs-type">uint16_t</span> I2C_Ack;                 <span class="hljs-comment">/*!&lt; 使能或关闭响应(一般都要使能) */</span><br>    <span class="hljs-type">uint16_t</span> I2C_AcknowledgedAddress; <span class="hljs-comment">/*!&lt; 指定地址的长度，可为7位及10位 */</span><br>&#125; I2C_InitTypeDef;<br></code></pre></td></tr></table></figure>
 
 <div class="note note-info">
