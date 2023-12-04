@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-abdullah-ghatasheh-1631677.jpg">
 <meta property="article:published_time" content="2023-11-12T14:44:00.000Z">
-<meta property="article:modified_time" content="2023-11-19T11:31:38.773Z">
+<meta property="article:modified_time" content="2023-12-03T17:58:45.803Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          841 字
+          843 字
         
       </span>
     
@@ -284,11 +284,12 @@
 <h1 id="Linux下的内存管理基本知识"><a href="#Linux下的内存管理基本知识" class="headerlink" title="Linux下的内存管理基本知识"></a>Linux下的内存管理基本知识</h1><p>在Linux下，使用一种简单的方法，将存储空间划分为一下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311180909539.png" srcset="/img/loading.gif" lazyload></p>
 <p><strong>超级块</strong>：用来存储文件系统本身的信息。比如，文件系统中各个区域的大小。没有被使用的区域的大小。<br><strong>i-node节点表</strong>：这个表的作用是将文件和文件存储的数据块联系起来。将文件的元数据存储与i-node结点表中。每一个i-node结点表意味着一个文件。<br>为什么需要使用i-node结点来表示一个文件，而不是直接使用块的编号来表示一个文件名。这是因为一个块的大小一般是固定的。（512byte），所以当又一个大文件的时候，其不止占用了一个内存块，这是就需要一个新的概念来表示一个文件。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">ls -i #可以查看i-node节点号和文件名的定义<br></code></pre></td></tr></table></figure>
+
 <p><strong>数据区</strong>：将文件的数据存储在此。</p>
 <h1 id="一个文件的创建过程"><a href="#一个文件的创建过程" class="headerlink" title="一个文件的创建过程"></a>一个文件的创建过程</h1><p>一个文件的创建的过程是：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311180925191.png" srcset="/img/loading.gif" lazyload></p>
 <ol>
 <li>存储文件的属性，在Linux内核的帮助下文件系统会寻找一个空的i-node结点，用以存放该文件的元数据。诸如访问时间、文件大小、访问权限、归属者等等。但是注意<strong>文件名</strong>不是文件的元数据，所以其<strong>也不会存储在i-node结点中</strong>。</li>
-<li>存储文件的内容，内核从空余的存储空间中找的满足文件大小的存储空间，便将其写入到i-node结点中。</li>
+<li>存储文件的内容，内核从空余的存储空间中找的满足文件大小的存储空间，便将其地址写入到i-node结点中。</li>
 <li>添加文件名到目录中。</li>
 </ol>
 <h1 id="一个可执行文件的执行过程"><a href="#一个可执行文件的执行过程" class="headerlink" title="一个可执行文件的执行过程"></a>一个可执行文件的执行过程</h1><ol>
