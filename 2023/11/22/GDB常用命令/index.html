@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-liudmyla-shalimova-18286209.jpg">
 <meta property="article:published_time" content="2023-11-22T11:20:38.000Z">
-<meta property="article:modified_time" content="2023-12-06T16:38:51.112Z">
+<meta property="article:modified_time" content="2023-12-09T12:27:02.149Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -233,7 +233,7 @@
         
         
         
-          98 分钟
+          101 分钟
         
       </span>
     
@@ -439,7 +439,7 @@
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">return <br></code></pre></td></tr></table></figure>
 </li>
 <li><p><code>disable</code>命令和<code>enable</code>命令；</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs txt">disable 1 2 打开断点1 2<br>enable 1 关闭断点1<br><br>info break 来查看断点的相关信息<br><br>关于enable命令：<br>enable [breakpoints] [num...]                        激活用 num... 参数指定的多个断点，如果不设定 num...，表示激活所有禁用的断点<br>enable [breakpoints] once num…                 临时激活以 num... 为编号的多个断点，但断点只能使用 1 次，之后会自动回到禁用状态<br>enable [breakpoints] count num...      临时激活以 num... 为编号的多个断点，断点可以使用 count 次，之后进入禁用状态<br>enable [breakpoints] delete num…               激活 num.. 为编号的多个断点，但断点只能使用 1 次，之后会被永久删除。<br></code></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs txt">disable 1 2 关闭断点1 2<br>enable 1 打开断点1<br><br>上面都是需要断点号，通过info breakpoint<br><br>info break 来查看断点的相关信息<br><br>关于enable命令：<br>enable [breakpoints] [num...]                        激活用 num... 参数指定的多个断点，如果不设定 num...，表示激活所有禁用的断点<br>enable [breakpoints] once num…                 临时激活以 num... 为编号的多个断点，但断点只能使用 1 次，之后会自动回到禁用状态<br>enable [breakpoints] count num...      临时激活以 num... 为编号的多个断点，断点可以使用 count 次，之后进入禁用状态<br>enable [breakpoints] delete num…               激活 num.. 为编号的多个断点，但断点只能使用 1 次，之后会被永久删除。<br></code></pre></td></tr></table></figure>
 </li>
 <li><p>信号的处理配置</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs txt">使用info signal SIGINT <br>Signal        Stop      Print   Pass to program Description<br>SIGINT        Yes       Yes     No              Interrupt<br><br>以上各列的含义是：<br>Signal：各个信号的名称；<br>Stop：当信号发生时，是否终止程序执行。Yes 表示终止，No 表示当信号发生时程序认可继续执行；<br>Print：当信号发生时，是否要求 GDB 打印出一条提示信息。Yes 表示打印，No 表示不打印；<br>Pass：当信号发生时，该信号是否对程序可见。Yes 表示程序可以捕捉到该信息，No 表示程序不会捕捉到该信息；<br>Description：对信号所表示含义的简单描述。<br><br><br>使用下面的命令配置：<br><br>handle signal mode <br><br>mode是：<br>nostop：当信号发生时，GDB 不会暂停程序，其可以继续执行，但会打印出一条提示信息，告诉我们信号已经发生；<br>stop：当信号发生时，GDB 会暂停程序执行。<br>noprint：当信号发生时，GDB 不会打印出任何提示信息；<br>print：当信号发生时，GDB 会打印出必要的提示信息；<br>nopass（或者 ignore）：GDB 捕获目标信号的同时，不允许程序自行处理该信号；<br>pass（或者 noignore）：GDB 调试在捕获目标信号的同时，也允许程序自动处理该信号。<br></code></pre></td></tr></table></figure>
@@ -451,8 +451,16 @@
 <li><p>GDB窗口命令</p>
 </li>
 <li><p><code>attach</code>命令</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">等效于-p gdb -p 1111 使用于还没进入gdb之前<br><br>不同的是<br>attach 1111 是使用于进入了gdb <br></code></pre></td></tr></table></figure></li>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">等效于-p gdb -p 1111 使用于还没进入gdb之前<br><br>不同的是<br>attach 1111 是使用于进入了gdb <br></code></pre></td></tr></table></figure>
+</li>
+<li><p>gdb调试指定源代码、调试符号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#gdb指定具有调试符号的库</span><br>show debug-file-directory <span class="hljs-comment">#可以查看调试库的默认位置，默认就是/usr/lib/debug/</span><br><span class="hljs-built_in">set</span> debug-file-directory /usr/lib/debug/<br><br><span class="hljs-comment">#指定源代码目录</span><br>directory /usr/lib/ <span class="hljs-comment">#其中directory可以简写为dir</span><br></code></pre></td></tr></table></figure></li>
+<li><p>gdb调试如何查看#define</p>
+</li>
 </ol>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wojiuguowei/article/details/82259782?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_title-0&spm=1001.2101.3001.4242">https://blog.csdn.net/wojiuguowei/article/details/82259782?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_title-0&amp;spm=1001.2101.3001.4242</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc -g3 -gdwarf-2或者是-gdwarf-3<br></code></pre></td></tr></table></figure>
+
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html">https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/wizardforcel/gdb-tips-100/146735">https://www.kancloud.cn/wizardforcel/gdb-tips-100/146735</a></p>
 <p><a target="_blank" rel="noopener" href="https://brezezee.github.io/2021/06/10/tricks%20and%20tools/gdb/">https://brezezee.github.io/2021/06/10/tricks%20and%20tools/gdb/</a></p>
