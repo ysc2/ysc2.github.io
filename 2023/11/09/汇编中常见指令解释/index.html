@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg">
 <meta property="article:published_time" content="2023-11-09T05:15:04.000Z">
-<meta property="article:modified_time" content="2023-11-09T07:06:34.155Z">
+<meta property="article:modified_time" content="2023-12-12T15:27:32.463Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2.3k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          17 分钟
+          20 分钟
         
       </span>
     
@@ -395,7 +395,8 @@ retf
 <p>当无符号时：<br>CF&#x3D;1 则说明了有进位或借位，cmp是进行的减操作，故可以看出为借位，所以，此时oprd1&lt;oprd2<br>CF&#x3D;0 则说明了无借位，但此时要注意ZF是否为0，若为0，则说明结果不为0，故此时oprd1&gt;oprd2</p>
 <p>当有符号时：<br>若SF&#x3D;0，OF&#x3D;0 则说明了此时的值为正数，没有溢出，可以直观的看出，oprd1&gt;oprd2<br>若SF&#x3D;1，OF&#x3D;0 则说明了此时的值为负数，没有溢出，则为oprd1&lt;oprd2<br>若SF&#x3D;0，OF&#x3D;1 则说明了此时的值为正数，有溢出，可以看出oprd1&lt;oprd2<br>若SF&#x3D;1，OF&#x3D;1则说明了此时的值为负数，有溢出，可以看出oprd1&gt;oprd2</p>
 <p>最后两个可以作出这种判断的原因是，溢出的本质问题：<br>两数同为正，相加，值为负，则说明溢出<br>两数同为负，相加，值为正，则说明溢出<br>故有，正正得负则溢出，负负得正则溢出</p>
-<h3 id="6-leave"><a href="#6-leave" class="headerlink" title="6. leave"></a>6. leave</h3><p>leave在32位汇编下相当于</p>
+<h3 id="6-leave"><a href="#6-leave" class="headerlink" title="6. leave"></a>6. leave</h3><p>其作用是删除函数的栈帧</p>
+<p>leave在32位汇编下相当于</p>
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-keyword">mov</span> <span class="hljs-built_in">esp</span>,<span class="hljs-built_in">ebp</span>                                            <br><span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebp</span><br></code></pre></td></tr></table></figure>
 <h3 id="7-les"><a href="#7-les" class="headerlink" title="7. les"></a>7. les</h3><p>LES( load ES)指令的功能是：把内存中指定位置的双字操作数的低位字装入指令中指定的寄存器、高位字装入ES寄存器。</p>
 <figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scss">LES DSET，<span class="hljs-attribute">SRC</span><br>LES REG，MEM<br>DEST为<span class="hljs-built_in">destination</span>(目的地址)，<span class="hljs-attribute">SRC</span>为<span class="hljs-built_in">source</span>(源地址)；<br>REG为<span class="hljs-built_in">register</span>(CPU寄存器)，MEM为<span class="hljs-built_in">memory</span>(内存地址)。<br></code></pre></td></tr></table></figure>
@@ -413,6 +414,15 @@ retf
 <p>stosb指令，将AL寄存器的值取出来赋给edi所指向的地址处。mov [edi]，AL；edi&#x3D;edi+1；</p>
 <p>stosw指令去的是一个字。</p>
 <p>stosd指令，取得是双字节，mov [edi]，eax；edi&#x3D;edi+4；</p>
+<h1 id="数学指令"><a href="#数学指令" class="headerlink" title="数学指令"></a>数学指令</h1><p>add src, dest	<br>将 src 添加到 dest 。</p>
+<p>sub src, dest	<br>从 dest 中减去 src 。</p>
+<p>imul src, dest	<br>将 dest 乘以 src 。</p>
+<p>idiv divisor	Divide rdx:rax<br>将 rdx:rax 除以 divisor 。将商存储在 rax 中，并将余数存储在 rdx 中。</p>
+<p>shr reg	<br>shl reg<br>将 reg 向左或向右移动 cl 中的值（ rcx 的低 8 位）。</p>
+<p>ror src, dest	<br>将 dest 向左或向右循环 src 位。</p>
+<p>cmp src, dest	<br>设置与 dest 是否小于、等于或大于 src 相对应的标志</p>
+<h1 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h1><h2 id="endbr64"><a href="#endbr64" class="headerlink" title="endbr64"></a>endbr64</h2><p>如果我们使用gdb查看程序的汇编代码，我们会发现第一句往往是<code>endbr64</code>。这个语句实际上是一个安全语句。为了对付ROP、JOP、COP攻击技术。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/htJ73BQK5zRTReHRaAqwxg">https://mp.weixin.qq.com/s/htJ73BQK5zRTReHRaAqwxg</a></p>
 <h1 id="注"><a href="#注" class="headerlink" title="注"></a>注</h1><p><a target="_blank" rel="noopener" href="https://introspelliam.github.io/">本文章装载于此</a></p>
 
                 
