@@ -17923,7 +17923,7 @@ __webpack_async_result__();
 
 
 
-const DEFAULT_SCALE_VALUE = "page-fit";
+const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE = 1.0;
 const DEFAULT_SCALE_DELTA = 1.1;
 const MIN_SCALE = 0.1;
