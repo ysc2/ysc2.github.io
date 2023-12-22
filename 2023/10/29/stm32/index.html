@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%BD%92%E6%A1%A3.jpg">
 <meta property="article:published_time" content="2023-10-29T09:59:15.000Z">
-<meta property="article:modified_time" content="2023-12-03T09:31:37.293Z">
+<meta property="article:modified_time" content="2023-12-18T13:20:48.014Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          299 字
+          790 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          3 分钟
+          7 分钟
         
       </span>
     
@@ -298,6 +298,7 @@
 </ol>
 </li>
 <li>常见的波特率为4800、9600、115200等。</li>
+<li>1Mhz ~ 1us<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312182106254.png" srcset="/img/loading.gif" lazyload></li>
 </ol>
 <h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a target="_blank" rel="noopener" href="https://shequ.stmicroelectronics.cn/thread-628996-1-1.html">STM32硬件开发指南</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shangdawei/p/3255414.html">TF卡引脚定义</a></p>
@@ -305,6 +306,21 @@
 <p>shell引脚作用是固定</p>
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.usbzh.com/article/detail-722.html">TYPE-C引脚定义</a></p>
+<p>&#x2F;* Type your code here, or load an example. *&#x2F;<br>#include &lt;stdio.h&gt;<br>void call1(void)<br>{<br>    printf(“this is call1 function\n”);<br>    return ;<br>}</p>
+<p>void back(void)<br>{<br>    printf(“this is back function\n”);<br>    return ;<br>}</p>
+<p>void fun (void)<br>{<br>    int address &#x3D; 1;<br>    int arrs [] &#x3D; {100};</p>
+<pre><code class="hljs">arrs[1] = 4;
+arrs[address + 2] = arrs[address];
+arrs[address + 3] = arrs[address + 1];
+
+arrs[address] = (int)&amp;call1;
+arrs[address + 1] = 0;
+
+register int p asm(&quot;edi&quot;);
+p = 3001;
+</code></pre>
+<p>}</p>
+<p>int main (void)<br>{<br>    int a &#x3D; 1110;<br>    fun();<br>    back();<br>    int b &#x3D; 20 + 2;<br>    printf(“%d %d\r\n”,a,b);<br>    return 0;<br>}</p>
 
                 
               </div>
