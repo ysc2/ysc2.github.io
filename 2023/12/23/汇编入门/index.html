@@ -1,0 +1,770 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="汇编基础，入门必备">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编入门">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/23/%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="汇编基础，入门必备">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pawel-czerwinski-C7lsAjG15GM-unsplash.jpg">
+<meta property="article:published_time" content="2023-12-23T08:17:38.000Z">
+<meta property="article:modified_time" content="2023-12-23T08:54:22.863Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pawel-czerwinski-C7lsAjG15GM-unsplash.jpg">
+  
+  
+  
+  <title>汇编入门 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pawel-czerwinski-C7lsAjG15GM-unsplash.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="汇编入门"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-23 16:17" pubdate>
+          2023年12月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">汇编入门</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>汇编基础，入门必备</p>
+<span id="more"></span>
+
+
+
+<h1 id="字-word"><a href="#字-word" class="headerlink" title="字(word)"></a>字(word)</h1><p>CPU可以处理两种尺寸的数据，即字(word)和字节(byte)，CPU和内存之间的数据传送单位通常是一个字长。</p>
+<p>我们知道，1byte &#x3D; 8bit，那么字长又是多少呢？其实字长通常跟CPU的位数相同。例如：64位CPU字长就是64位，即1word &#x3D; 8byte，寄存器大小也是64位。但是也有个别情况，比如 Intel 80386CPU是32位的，但字长却是16位，即1word &#x3D; 2byte，这是为了向后兼容80286CPU(16位)。</p>
+<h1 id="汇编语言分类"><a href="#汇编语言分类" class="headerlink" title="汇编语言分类"></a>汇编语言分类</h1><p>这里主要介绍最常见的两种CPU架构，即ARM架构和Intel架构。ARM架构主要用户移动设备，比如iOS和Android，而Intel架构主要用于台式电脑。每种CPU架构都有其对应的指令集，于是也就有了不同类型的汇编语言。</p>
+<p>常见的汇编语言有两种：ARM汇编和x86汇编。而x86汇编按语法格式又分为Intel汇编和AT&amp;T汇编。Intel和AT&amp;T语法区别见下表：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>Intel</th>
+<th>AT&amp;T</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>寄存器名</td>
+<td>rax</td>
+<td>%rax</td>
+<td>AT&amp;T要在寄存器前加%</td>
+</tr>
+<tr>
+<td>操作数顺序</td>
+<td>目标数在前mov rax, rdx</td>
+<td>目标数在后mov %rdx, %rax</td>
+<td>将rdx的值赋给rax</td>
+</tr>
+<tr>
+<td>立即数</td>
+<td>原样mov rax, 5</td>
+<td>数字前加$mov $5, %rax</td>
+<td>将5赋给rax</td>
+</tr>
+<tr>
+<td>十六进制立即数</td>
+<td>开头加0结尾加H，例如010H</td>
+<td>开头加0x，例如0x10</td>
+<td>十六进制数10</td>
+</tr>
+<tr>
+<td>访问内存长度表示</td>
+<td>开头加BYTE PTR, WORD PTR, DWORD PTR和QWORD PTR</td>
+<td>结尾加b,w,l,q</td>
+<td>分别表示字节，字，双字和四字</td>
+</tr>
+<tr>
+<td>引用全局或静态变量var的值</td>
+<td>[var]</td>
+<td>var</td>
+<td>-</td>
+</tr>
+<tr>
+<td>引用全局或静态变量var的地址</td>
+<td>var</td>
+<td>$var</td>
+<td>-</td>
+</tr>
+<tr>
+<td>直接寻址&#x2F;绝对寻址</td>
+<td>[imm]</td>
+<td>imm</td>
+<td>imm表示立即数</td>
+</tr>
+<tr>
+<td>间接寻址</td>
+<td>[reg]</td>
+<td>(%reg)</td>
+<td>reg表示寄存器</td>
+</tr>
+<tr>
+<td>基址相对寻址</td>
+<td>[reg+imm]</td>
+<td>imm(%reg)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>变址寻址</td>
+<td>[base+index] 或 imm[base+index]</td>
+<td>(base,index) 或 imm(base+index)</td>
+<td>base和index均为寄存器</td>
+</tr>
+<tr>
+<td>比例变址寻址</td>
+<td>imm[base+index*scale]</td>
+<td>imm(base, index, scale)</td>
+<td>scale只能是1, 2, 4, 8其中的一个数字 (1省略不写就是普通变址寻址)</td>
+</tr>
+<tr>
+<td>代码注释</td>
+<td>指令和注释用 ; 分开，例如：mov rax, rdx ;我是注释</td>
+<td>同Intel汇编</td>
+<td>-</td>
+</tr>
+<tr>
+<td>所在平台</td>
+<td>Windows</td>
+<td>Unix</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p><strong>ARM汇编的操作数顺序跟Intel是一样的，这里就不详细展开了，具体可以直接看官方文档。</strong></p>
+<h1 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h1><p>顾名思义，寻址方式就是CPU根据指令中给出的地址信息来寻找有效地址的方式，是确定本条指令的数据地址以及下一条要执行的指令地址的方法。寻址方式分为两类，即指令寻址方式和数据寻址方式。</p>
+<h2 id="0x1-指令寻址方式："><a href="#0x1-指令寻址方式：" class="headerlink" title="0x1. 指令寻址方式："></a>0x1. 指令寻址方式：</h2><p>指令地址在内存中是按顺序安排的，当执行一段程序时，通常是一条指令接着一条指令地顺序进行。也就是说，从内存中取出第一条指令，然后执行；接着从内存中再取出第二条指令，继续执行；依次类推。这种顺序执行的过程，称为顺序寻址方式。为此，必须使用程序计数器PC（ARM下叫PC，x86下叫IP）来计数指令的地址(Tip1)。</p>
+<p>当程序转移执行的顺序时，指令的寻址就采取跳跃寻址方式。所谓跳跃，就是下条指令的地址不再由PC给出，而是由本条指令给出。跳跃后，按新的指令地址开始顺序执行。因此，PC的内容也必须改变，以便能及时跟踪新的指令地址。</p>
+<div class="note note-info">
+            <p>Tip1: 当执行一条指令时，首先需要根据PC中存放的指令地址，将指令由内存取到指令寄存器中，与此同时，PC中的地址或自动加1或由转移指针给出下一条指令的地址。</p>
+          </div>
+<h2 id="0x2-数据寻址方式："><a href="#0x2-数据寻址方式：" class="headerlink" title="0x2. 数据寻址方式："></a>0x2. 数据寻址方式：</h2><p>数据寻址方式比较多，这里只列出几种常见的寻址方式，基本上都是汇编语言里经常用到的。</p>
+<h3 id="0x21-立即寻址"><a href="#0x21-立即寻址" class="headerlink" title="0x21. 立即寻址:"></a>0x21. 立即寻址:</h3><p>指令的地址字段给出的不是操作数的地址，而是操作数本身，由于不需要访问内存取数，所以指令执行时间很短(Note1)。例如：mov 0x123, %rax</p>
+<p>{ % note warning % }<br>Note1: 立即数只能作为源操作数，而不能作为目的操作数。<br>{ % endnote % }</p>
+<h3 id="0x22-直接寻址"><a href="#0x22-直接寻址" class="headerlink" title="0x22. 直接寻址:"></a>0x22. 直接寻址:</h3><p>指令的地址字段给出的是操作数的内存地址。因为直接给出操作数的内存地址而不需要经过某种变换，所以称为直接寻址。</p>
+<h3 id="0x23-间接寻址"><a href="#0x23-间接寻址" class="headerlink" title="0x23. 间接寻址:"></a>0x23. 间接寻址:</h3><p>间接寻址是相对直接寻址而言的，在间接寻址的情况下，指令地址字段给出的地址，是个形式地址不是操作数的真正地址，或者说该地址单元中的内容才是操作数的有效地址。</p>
+<h3 id="0x24-相对寻址"><a href="#0x24-相对寻址" class="headerlink" title="0x24. 相对寻址:"></a>0x24. 相对寻址:</h3><p>相对寻址是把PC的内容加上指令格式中的形式地址D而形成操作数的有效地址。”相对”寻址，就是相对于当前的指令地址而言，好处是程序员无须用指令的绝对地址编程，因而所编程序可以放在内存的任何地方。</p>
+<h3 id="0x25-基址寻址"><a href="#0x25-基址寻址" class="headerlink" title="0x25. 基址寻址:"></a>0x25. 基址寻址:</h3><p>在基址寻址方式中将CPU中的基址寄存器的内容，加上变址寄存器的内容而形成操作数的有效地址。基址寻址的优点是可以扩大寻址能力。</p>
+<h3 id="0x26-变址寻址"><a href="#0x26-变址寻址" class="headerlink" title="0x26. 变址寻址:"></a>0x26. 变址寻址:</h3><p>把CPU中某个变址寄存器的内容与偏移量D相加来形成操作数有效地址。参见上表👆</p>
+<h3 id="0x27-寄存器寻址"><a href="#0x27-寄存器寻址" class="headerlink" title="0x27. 寄存器寻址:"></a>0x27. 寄存器寻址:</h3><p>操作数不放在内存中，而是把操作数本身的值放在CPU的通用寄存器中。</p>
+<h3 id="0x28-寄存器间接寻址"><a href="#0x28-寄存器间接寻址" class="headerlink" title="0x28. 寄存器间接寻址:"></a>0x28. 寄存器间接寻址:</h3><p>把操作数地址放在CPU的通用寄存器中，而操作数本身的值则放在内存中。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.dongxin.online/assembly/assemblybasic.html">https://www.dongxin.online/assembly/assemblybasic.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://css.csail.mit.edu/6.858/2014/readings/i386/s02_03.htm">https://Intel 80386 Reference Programmer's Manual </a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Assembly_language">https://en.wikipedia.org/wiki/Assembly_language</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B1%87%E7%BC%96/" class="category-chain-item">汇编</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>汇编入门</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/23/汇编入门/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/12/24/keil%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/" title="keil调试功能介绍">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">keil调试功能介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/22/ARM%20%E5%AF%84%E5%AD%98%E5%99%A8%E7%AE%80%E4%BB%8B/" title="ARM寄存器简介">
+                        <span class="hidden-mobile">ARM寄存器简介</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

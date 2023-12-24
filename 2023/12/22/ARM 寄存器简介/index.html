@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-jeffry-surianto-8807476.jpg">
 <meta property="article:published_time" content="2023-12-22T08:36:48.000Z">
-<meta property="article:modified_time" content="2023-12-22T10:21:48.616Z">
+<meta property="article:modified_time" content="2023-12-23T18:18:07.333Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.5k 字
+          6k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          47 分钟
+          50 分钟
         
       </span>
     
@@ -277,7 +277,22 @@
                 
                 <p>arm中常用的寄存器</p>
 <span id="more"></span>
-<h1 id="ARM-寄存器简介"><a href="#ARM-寄存器简介" class="headerlink" title="ARM 寄存器简介"></a>ARM 寄存器简介</h1><p>ARM处理器共有37个寄存器。其中包括：31个通用寄存器，包括程序计数器(PC)在内，这些寄存器都是32位寄存器；以及6个32位状态寄存器，但目前只使用了其中12位。ARM处理器共有7种不同的处理器模式，在每一种处理器模式中有一组相应的寄存器组。任意时刻(也就是任意的处理器模式下)，可见的寄存器包括15个通用寄存器(R0～R14)、一个或两个状态寄存器及程序计数器(PC)。在所有的寄存器中，有些是各模式共用的同一个物理寄存器，有一些寄存器是各模式自己拥有的独立的物理寄存器。<br>下表列出了各处理器模式下可见的寄存器情况，寄存器详细可参考 <a target="_blank" rel="noopener" href="http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042e/IHI0042E_aapcs.pdf">AAPCS §5.1.1 Core registers</a>。    </p>
+<h1 id="ARM-寄存器简介"><a href="#ARM-寄存器简介" class="headerlink" title="ARM 寄存器简介"></a>ARM 寄存器简介</h1><p>ARM处理器共有37个寄存器。其中包括：</p>
+<ul>
+<li>31个通用寄存器，包括程序计数器(PC)在内，这些寄存器都是32位寄存器；</li>
+<li>以及6个32位状态寄存器，但目前只使用了其中12位。</li>
+</ul>
+<p>ARM处理器共有<strong>7种不</strong>同的处理器模式，在每一种处理器模式中有一组相应的寄存器组。任意时刻(也就是任意的处理器模式下)，可见的寄存器包括15个通用寄存器(R0～R14)、一个或两个状态寄存器及程序计数器(PC)。在所有的寄存器中，有些是各模式共用的同一个物理寄存器，有一些寄存器是各模式自己拥有的独立的物理寄存器。  </p>
+<p>arm中的七种处理器模式：</p>
+<p>1、用户模式(User)：ARM处理器正常的程序执行状态；</p>
+<p>2、系统模式(System)：运行具有特权的操作系统任务；</p>
+<p>3、快速中断模式(FIQ)：用于高速数据传输或通道处理；</p>
+<p>4、外部中断模式(IRQ)：用于通用的中断处理；</p>
+<p>5、管理模式(Supervisor)：操作系统使用的保护模式；</p>
+<p>6、数据访问终止模式(Abort)：当数据或指令预取终止时进入该模式,可用于虚拟存储及存储保护；</p>
+<p>7、未定义指令中止模式(Undifined)：当未定义的指令执行时进入该模式,可用于支持硬件协处理器的软件仿真；</p>
+<p>8、安全监控模式(Secure Monitor)：主要用于安全交易。</p>
+<p>下表列出了各处理器模式下可见的寄存器情况，寄存器详细可参考 <a target="_blank" rel="noopener" href="http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042e/IHI0042E_aapcs.pdf">AAPCS §5.1.1 Core registers</a>。    </p>
 <table>
 <tbody>
 <tr>
@@ -587,7 +602,12 @@
 </table>
 
 <h2 id="1-通用寄存器的分类："><a href="#1-通用寄存器的分类：" class="headerlink" title="1.通用寄存器的分类："></a>1.通用寄存器的分类：</h2><h3 id="a-未备份寄存器，包括R0-R7"><a href="#a-未备份寄存器，包括R0-R7" class="headerlink" title="a. 未备份寄存器，包括R0-R7"></a>a. 未备份寄存器，包括R0-R7</h3><p>   对每个未备份寄存器来说，在所有的模式下都是指同一个物理寄存器(例如：Usr下的R0与FIQ下的R0是同一个寄存器)。在异常程序中断造成模式切换时，由于不同模式使用的是相同的物理寄存器，这可能导致数据遭到破坏。未备份寄存器没有被系统作为别的用途，任何场合均可采用未备份寄存器。<br>   R7对应于x86下的BP寄存器，相对与SP，R7就是栈底，在进入新一个栈帧之后先把原来的R7压栈，然后R7保存当前BP。R7大部分情况用来保存系统调用号（syscall number）。<br>   R0-R3用于传参数，更多的参数须通过栈来传递，调用函数的时候，参数先从R0依次传递；R0-R1 也作为结果寄存器，保存函数返回结果，被调用的子程序在返回前无须恢复这些寄存器的内容。<br>   R4-R6 没有特殊规定，就是普通的通用寄存器，作为被调保存（callee-save）寄存器，一般保存内部局部变量(local variables)。<br>   被调保存寄存器(callee-save register)是指，如果这个寄存器被调用&#x2F;使用之前，需要被保存。  </p>
-<h3 id="b-备份寄存器，包括R8-R14"><a href="#b-备份寄存器，包括R8-R14" class="headerlink" title="b. 备份寄存器，包括R8-R14"></a>b. 备份寄存器，包括R8-R14</h3><p>   对于备份寄存器R8-R12来说，除FIQ模式下其它模式均使用相同的物理寄存器。在FIQ模式下R8_fiq，R9_fiq，R10_fiq，R11_fiq，R12_fiq，它有自己的物理寄存器。对于R13和R14寄存器每种模式都有自己的物理寄存器(System与Usr的寄存器相同)，当异常中断发生时，系统使用相应模式下的物理寄存器，从而可以避免数据遭到破坏。<br>   R8，R10-R11 没有特殊规定，就是普通的通用寄存器。<br>   R9 是操作系统保留。<br>   R10（SL）被调保存寄存器，Stack Limit。<br>   R11（FP）被调保存寄存器， 帧指针（Flame Pointer）。通常 ARM 模式下 r11 会作为帧指针，THUMB 模式下 r7 则作为帧指针，但在系统有可能根据自己的需要改变这个约定。<br>   R12 又叫IP(intra-procedure scratch )。<br>   该寄存器会被链接器当作擦写寄存器（scratch register）在过程（Procedure）调用之间使用。可擦除寄存器（Scratch registers） 是指数据寄存器 R0, R1, R2 and R3。一个过程（procedure）在返回时，不能修改它的值。这个寄存器不会被Linux gcc 或 glibc 使用，但是另外一个系统可能会。   </p>
+<h3 id="b-备份寄存器，包括R8-R14"><a href="#b-备份寄存器，包括R8-R14" class="headerlink" title="b. 备份寄存器，包括R8-R14"></a>b. 备份寄存器，包括R8-R14</h3><p>   对于备份寄存器R8-R12来说，除FIQ模式下其它模式均使用相同的物理寄存器。在FIQ模式下R8_fiq，R9_fiq，R10_fiq，R11_fiq，R12_fiq，它有自己的物理寄存器。对于R13和R14寄存器每种模式都有自己的物理寄存器(System与Usr的寄存器相同)，当异常中断发生时，系统使用相应模式下的物理寄存器，从而可以避免数据遭到破坏。  </p>
+<p>   R8，R10-R11 没有特殊规定，就是普通的通用寄存器。 </p>
+<p>   R9 是操作系统保留。  </p>
+<p>   R10（SL）被调保存寄存器，Stack Limit。  </p>
+<p>   R11（FP）被调保存寄存器， 帧指针（Flame Pointer）。通常 ARM 模式下 r11 会作为帧指针，THUMB 模式下 r7 则作为帧指针，但在系统有可能根据自己的需要改变这个约定。  </p>
+<p>   R12 又叫IP(intra-procedure scratch )。<br>   该寄存器会被链接器当作擦写寄存器（scratch register）在过程（Procedure）调用之间使用。可擦除寄存器（Scratch registers） 是指数据寄存器 R0, R1, R2 and R3。一个过程（procedure）在返回时，不能修改它的值。这个寄存器不会被Linux gcc 或 glibc 使用，但是另外一个系统可能会。  </p>
 <blockquote>
 <p>Register r12 (IP) may be used by a linker as a scratch register between a routine and any subroutine it calls (for details, see §5.3.1.1, Use of IP by the linker). It can also be used within a routine to hold intermediate values between subroutine calls<br>Both the ARM- and Thumb-state BL instructions are unable to address the full 32-bit address space, so it may be necessary for the linker to insert a veneer between the calling routine and the called subroutine. Veneers may also be needed to support ARM-Thumb inter-working or dynamic linking. Any veneer inserted must preserve the contents of all registers except IP (r12) and the condition code flags; a conforming program must assume that a veneer that alters IP may be inserted at any branch instruction that is exposed to a relocation that supports inter-working or long branches.<br>即是说现在如果汇编代码中存在bl指令，而r12又被用来作为通用寄存器，那么r12的值就很有可能会被链接器插入的veneer程序修改掉了。  </p>
 </blockquote>
@@ -615,6 +635,7 @@
 <p>不同阶段的PC值的关系<br>对应地，在ARM7的三级流水线（取指，译指，执行）和ARM9的五级流水线（取指，译指，执行，存储，写回）中，可以这么说：<br>PC， 总是指向当前正在被取指的指令的地址，<br>PC-4，总是指向当前正在被译指的指令的地址，<br>PC-8，总是指向当前的那条指令，即我们一般说的，正在被执行的指令的地址。  </p>
 <p>其他细节具体可参考 <a target="_blank" rel="noopener" href="http://www.crifan.com/files/doc/docbook/uboot_starts_analysis/release/htmls/why_arm7_pc_8.html">3.4. 为何ARM7中PC&#x3D;PC+8</a>  </p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="http://www.coranac.com/tonc/text/asm.htm">Whirlwind Tour of ARM Assembly</a><br><a target="_blank" rel="noopener" href="https://www.scss.tcd.ie/~waldroj/3d1/arm_arm.pdf">ARM Architecture Reference Manual</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/JnuSimba/AndroidSecNotes/blob/master/Android%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/ARM%20%E5%AF%84%E5%AD%98%E5%99%A8%E7%AE%80%E4%BB%8B.md">https://github.com/JnuSimba/AndroidSecNotes/blob/master/Android%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/ARM%20%E5%AF%84%E5%AD%98%E5%99%A8%E7%AE%80%E4%BB%8B.md</a></p>
 
                 
               </div>
@@ -704,6 +725,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/12/23/%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8/" title="汇编入门">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">汇编入门</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

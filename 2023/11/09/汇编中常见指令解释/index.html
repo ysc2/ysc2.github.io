@@ -16,16 +16,16 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！  ### 1. pop 和 push  常见的汇编指令源码    pop机器码 含义 push机器码 含义    5f pop edi 57 push edi   5e pop esi 56 push esi   5d pop ebp 55 push ebp   5c pop esp 5">
+    <meta name="description" content="这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！   1. pop 和 push常见的汇编指令源码    pop机器码 含义 push机器码 含义    5f pop edi 57 push edi   5e pop esi 56 push esi   5d pop ebp 55 push ebp   5c pop esp 54 pus">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编中常见指令解释">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%B8%B8%E8%A7%81%E6%8C%87%E4%BB%A4%E8%A7%A3%E9%87%8A/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！  ### 1. pop 和 push  常见的汇编指令源码    pop机器码 含义 push机器码 含义    5f pop edi 57 push edi   5e pop esi 56 push esi   5d pop ebp 55 push ebp   5c pop esp 5">
+<meta property="og:description" content="这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！   1. pop 和 push常见的汇编指令源码    pop机器码 含义 push机器码 含义    5f pop edi 57 push edi   5e pop esi 56 push esi   5d pop ebp 55 push ebp   5c pop esp 54 pus">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg">
 <meta property="article:published_time" content="2023-11-09T05:15:04.000Z">
-<meta property="article:modified_time" content="2023-12-12T15:27:32.463Z">
+<meta property="article:modified_time" content="2023-12-23T09:10:27.746Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          6.2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          20 分钟
+          52 分钟
         
       </span>
     
@@ -277,9 +277,8 @@
                 
                 <p><font color=#f00>这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！</font></p>
 <br>
-### 1. pop 和 push
 
-<p>常见的汇编指令源码</p>
+<h3 id="1-pop-和-push"><a href="#1-pop-和-push" class="headerlink" title="1. pop 和 push"></a>1. pop 和 push</h3><p>常见的汇编指令源码</p>
 <table>
 <thead>
 <tr>
@@ -423,7 +422,86 @@ retf
 <p>cmp src, dest	<br>设置与 dest 是否小于、等于或大于 src 相对应的标志</p>
 <h1 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h1><h2 id="endbr64"><a href="#endbr64" class="headerlink" title="endbr64"></a>endbr64</h2><p>如果我们使用gdb查看程序的汇编代码，我们会发现第一句往往是<code>endbr64</code>。这个语句实际上是一个安全语句。为了对付ROP、JOP、COP攻击技术。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/htJ73BQK5zRTReHRaAqwxg">https://mp.weixin.qq.com/s/htJ73BQK5zRTReHRaAqwxg</a></p>
-<h1 id="注"><a href="#注" class="headerlink" title="注"></a>注</h1><p><a target="_blank" rel="noopener" href="https://introspelliam.github.io/">本文章装载于此</a></p>
+<h1 id="0x1-ARM64"><a href="#0x1-ARM64" class="headerlink" title="0x1. ARM64"></a>0x1. ARM64</h1><h2 id="mov"><a href="#mov" class="headerlink" title="mov"></a>mov</h2><p>传送指令：将立即数传送到寄存器&#x2F;内存单元，或互传内存单元和寄存器两者中的数据。</p>
+<p>例如：mov x0, #0x1 &#x2F; mov $0x1, %rdi 将立即数0x1移动到寄存器x0&#x2F;rdi中</p>
+<h2 id="mvn"><a href="#mvn" class="headerlink" title="mvn"></a>mvn</h2><p>该指令与mov唯一不同的是：需要对操作数进行按位取反。</p>
+<h2 id="str"><a href="#str" class="headerlink" title="str"></a>str</h2><p>store register. 将寄存器中的数据存到内存单元中。</p>
+<p>例如：str x0, [sp, #0x28] 将寄存器x0中的数据存到地址sp+0x28处</p>
+<h2 id="stp"><a href="#stp" class="headerlink" title="stp"></a>stp</h2><p>store pair of registers.</p>
+<p>例如：stp x29, x30, [sp, #0x70] 先将x29存到地址sp+0x70处，再将x30存到sp+0x78处 (Tip1)。</p>
+<p>{ %note info % }<br>Tip1: 64位下，寄存器大小为8bytes<br>{ %endnote% }</p>
+<h2 id="ldr"><a href="#ldr" class="headerlink" title="ldr"></a>ldr</h2><p>load register. 从内存中读取数据，存到寄存器中。</p>
+<p>例如：ldr x1, [sp, #0x30] 将内存地址sp+0x30处的数据加载到x1中。</p>
+<h2 id="ldp"><a href="#ldp" class="headerlink" title="ldp"></a>ldp</h2><p>load pair of registers.</p>
+<p>例如：ldp x29, x30, [sp, #0x70] 将内存地址sp+0x70处的数据加载到x29中，再将sp+0x78(Tip1)处的数据加载到x30中。</p>
+<h2 id="b"><a href="#b" class="headerlink" title="b"></a>b</h2><p>branch. 无条件跳转。</p>
+<p>例如：b 0x1b6b79cf8 跳转到0x1b6b79cf8处继续执行。</p>
+<h2 id="bl"><a href="#bl" class="headerlink" title="bl"></a>bl</h2><p>branch with link. 将下一条指令地址copy到lr中，然后跳转。由于保存了下一条指令地址(相对于pc)，所以可实现子程序的返回，而b只能单纯的实现跳转，不能实现子程序返回。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">   0x102b7d8a4 &lt;+160&gt;: bl   0x102bda450 ; symbol stub for: objc_msgSend<br>-&gt; 0x102b7d8a8 &lt;+164&gt;: adrp x0, 107<br></code></pre></td></tr></table></figure>
+
+<p>当程序执行完bl指令时，lr中的内容应该是是bl下一条指令的地址，即0x102b7d8a8。通过控制台查看lr中的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">fp = 0x000000016d2853c0<br>lr = 0x0000000102b7d8a8  `-[AppDelegate application:didFinishLaunchingWithOptions:] + 164 at AppDelegate.m:41:5<br>sp = 0x000000016d285350<br></code></pre></td></tr></table></figure>
+
+<h2 id="cbz"><a href="#cbz" class="headerlink" title="cbz"></a>cbz</h2><p>compare and branch on zero. 比较操作数是否为0，若为0则跳转。</p>
+<p>例如：cbz w24, 0x1b6b798f4 若w24 (x24寄存器低32位) 中的数据为0，则跳转到0x1b6b798f4处执行 (Note1)。</p>
+<p>Note1: 跳转地址需要在cbz&#x2F;cbnz指令之后的4~130字节内。</p>
+<h2 id="cbnz"><a href="#cbnz" class="headerlink" title="cbnz"></a>cbnz</h2><p>compare and branch on non-zero. 操作数不为0，则跳转。</p>
+<p>例如：cbnz w27, 0x1b73c9e2c 若w27中的数据不为0，则跳转到0x1b73c9e2c处执行 (Note1)。</p>
+<h2 id="lsl"><a href="#lsl" class="headerlink" title="lsl"></a>lsl</h2><p>logical shift left. 左移位。</p>
+<p>例如：str x0, [x1, x2, lsl #2] 将x2中的值左移两位，再加上x1中的值，得到的结果为一个内存地址，最后将x0中的数据存到该内存中。</p>
+<h2 id="lsr"><a href="#lsr" class="headerlink" title="lsr"></a>lsr</h2><p>logical shift right. 右移位。</p>
+<h2 id="cmp"><a href="#cmp" class="headerlink" title="cmp"></a>cmp</h2><p>compare. 比较两个数是否相等，首先将两个数相减，若差为0，则ZF (Tip2) 为1，即两者相等。</p>
+<p>cmp w8, #0x3 通过判断w8中的值与0x3的差值是否为0，即ZF (Tip2) 是否为1，来比较两者是否相等。</p>
+<p>Tip2: ZF是零标志位寄存器。它记录相关指令执行后，其结果是否为0。若结果为0，则ZF&#x3D;1；若结果为1，则ZF&#x3D;0。</p>
+<h2 id="adrp"><a href="#adrp" class="headerlink" title="adrp"></a>adrp</h2><p>form pc-relative address to 4KB page. 先将操作数左移12位，再将pc的低12位清零 (即3个十六进制位清零，得到一个页对齐地址)，最后两者相加，赋值给寄存器。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">   0x1b703f074 &lt;+44&gt;:  adrp   x20, 270332<br>-&gt; 0x1b703f078 &lt;+48&gt;:  ldr    x0, [x20, #0x7a0]<br></code></pre></td></tr></table></figure>
+
+<p>执行adrp时，先将操作数270332 (十六进制为0x41ffc) 左移12位得到0x41ffc000，再将pc (0x1b703f074) 低12清零得到 0x1b703f000，最后两者相加得到0x1f903b000赋值给x20。通过控制台查看x20中的内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">x19 = 0x000000016ef25fb0<br>x20 = 0x00000001f903b000  <br>x21 = 0x0000000281454380<br></code></pre></td></tr></table></figure>
+
+<h2 id="adr"><a href="#adr" class="headerlink" title="adr"></a>adr</h2><p>load a program-relative or register-relative address into a register. 是一条伪指令，遇到该指令时汇编器会生成一条add或sub指令，来计算pc和操作数的和或者差，最后将得到的结果，放在寄存器中。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs asm">; 生成加法指令，即x0 = 0x1022c3b08 + 0x2fc48 = 0x1022f3750<br>   0x1022c3b08 &lt;+108&gt;: adr x0, #0x2fc48  ; _MergedGlobals + 16<br>-&gt; 0x1022c3b0c &lt;+112&gt;: nop <br><br>; 生成减法指令，即x2 = 0x1022c3b10 - 0x390 = 0x1022c3780<br>   0x1022c3b10 &lt;+116&gt;: adr x2, #-0x390 ; initializeAvailabilityCheck<br>-&gt; 0x1022c3b14 &lt;+120&gt;: nop<br></code></pre></td></tr></table></figure>
+
+<h2 id="brk"><a href="#brk" class="headerlink" title="brk"></a>brk</h2><p>breakpoint instruction. 用于生成断点指令异常。</p>
+<h2 id="tbz"><a href="#tbz" class="headerlink" title="tbz"></a>tbz</h2><p>test branch zero. 测试位为0，则跳转。</p>
+<p>tbz w24, #0x6, 0x19307005c ; 即w24第6位，若为0，则跳转到0x19307005c执行</p>
+<p>w24 二级制数为：0b00000111000000000000100000000110</p>
+<h2 id="tbnz"><a href="#tbnz" class="headerlink" title="tbnz"></a>tbnz</h2><p>test branch no zero. 测试位不为0，则跳转。</p>
+<p>tbnz w24, #0x6, 0x19307005c ; 即w24第6位，若不为0，则跳转到0x19307005c执行</p>
+<p>w24 二级制数为：0b00000111000000000000100000000110</p>
+<h1 id="0x2-AT-T"><a href="#0x2-AT-T" class="headerlink" title="0x2. AT&amp;T"></a>0x2. AT&amp;T</h1><h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2><p>将指令后的两个数进行按位与操作，其结果影响ZF。通常用来判断某个数是否为0&#x2F;nil。</p>
+<p>例如：</p>
+<p>testq %rax, %rax ; 若%rax中的值为0，则ZF&#x3D;1；反之，ZF&#x3D;0，q表示四字长</p>
+<h2 id="sete"><a href="#sete" class="headerlink" title="sete"></a>sete</h2><p>取ZF中的值，放入目标寄存器中。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">testq %rax, %rax  ; 两个寄存器中的值按位与，结果影响ZF<br>sete  %r12        ; 若%rax和%rbx相等，即ZF=1，则将%r12设为1，反之设为0<br></code></pre></td></tr></table></figure>
+
+<h2 id="setne"><a href="#setne" class="headerlink" title="setne"></a>setne</h2><p>取ZF中的值，然后取反，再放入目标寄存器中。</p>
+<p>例如：setne %rax 若ZF&#x3D;1，则%rax设为0；反之设为1</p>
+<h2 id="je-jz"><a href="#je-jz" class="headerlink" title="je &#x2F; jz"></a>je &#x2F; jz</h2><p>je 和 jz这两条指令虽然名字不同，但做的事情都是一样的。即ZF&#x3D;1，则跳转。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asm">libobjc.A.dylib`objc_retain:<br>    0x7fff50bad350 &lt;+0&gt;:  testq  %rdi, %rdi      ; 判断%rdi中的值(第一个参数)是否为nil<br>    0x7fff50bad353 &lt;+3&gt;:  je     0x7fff50bad371  ; &lt;+33&gt; 若%rdi为nil，则跳转到0x7fff50bad371执行<br>    0x7fff50bad355 &lt;+5&gt;:  js     0x7fff50bad373  ; &lt;+35&gt;<br>-&gt;  0x7fff50bad357 &lt;+7&gt;:  movq   (%rdi), %rax<br></code></pre></td></tr></table></figure>
+<h2 id="jne-jnz"><a href="#jne-jnz" class="headerlink" title="jne &#x2F; jnz"></a>jne &#x2F; jnz</h2><p>jne 和 jnz这两条指令做的事情也都是一样的。即ZF&#x3D;0，则跳转。</p>
+<h2 id="js"><a href="#js" class="headerlink" title="js"></a>js</h2><p>jump if sign. 若结果为负数，即SF&#x3D;1，则进行跳转。</p>
+<p>SF: 符号标志位</p>
+<p>它记录相关指令执行后，其结果是否为负。若结果为负，则SF&#x3D;1；若为非负，则SF&#x3D;0。</p>
+<h2 id="nop"><a href="#nop" class="headerlink" title="nop"></a>nop</h2><p>no operation. 不执行任何操作。是一条单字节指令。 Opcode 90</p>
+<h2 id="ud2"><a href="#ud2" class="headerlink" title="ud2"></a>ud2</h2><p>undefined instruction. 该指令用于生成一个无效操作码。当CPU试图执行无效或未定义的操作码时，将发生无效的操作码异常。UD2指令除了引发无效的操作码异常外，与NOP指令相同。</p>
+<p>这里的异常是指CPU在发生“错误”时生成的。大多数情况下，有些异常并不是真正的错误，而是中断的一种类型。比如: Page Fault。异常分类如下：</p>
+<p>Faults (错误)：这些错误可以被纠正，程序可以像什么都没有发生一样继续运行。<br>Traps (陷阱)：陷阱指令执行后会立即被报告。<br>Aborts (终止)：一些严重的不可恢复的错误。</p>
+<h2 id="ret"><a href="#ret" class="headerlink" title="ret"></a>ret</h2><p>该指令用于子程序的返回。将栈顶数据(返回地址)弹出，赋值给 ip 寄存器，此时 sp 会增加一个内存单元大小，来释放栈空间。</p>
+<p>{ %note info % }<br>栈底 [ … | … , parameters, return address | previous frame pointer, %rbp ] 栈顶</p>
+<p>pop %rbp 👇</p>
+<p>栈底 [ … | … , parameters, return address ] 栈顶</p>
+<p>ret 👇</p>
+<p>栈底 [ … | … , parameters ] 栈顶</p>
+<p>caller release parameters 👇</p>
+<p>栈底 [ … | … ] 栈顶<br>{ %endnote% }</p>
+<h1 id="注"><a href="#注" class="headerlink" title="注"></a>注</h1><p><a target="_blank" rel="noopener" href="https://introspelliam.github.io/">本文章装载于此1</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.dongxin.online/assembly/assemblyinstructions.html#_0x1-arm64">本文章装载于此2</a></p>
 
                 
               </div>
