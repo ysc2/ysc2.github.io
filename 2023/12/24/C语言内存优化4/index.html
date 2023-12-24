@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="三种烧录方式的不同">
+    <meta name="description" content="内存优化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="单片机三种烧录方式ISP、IAP和ICP有什么不同?">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/24/%E5%8D%95%E7%89%87%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%83%A7%E5%BD%95%E6%96%B9%E5%BC%8FISP%E3%80%81IAP%E5%92%8CICP%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C/index.html">
+<meta property="og:title" content="C语言内存优化4">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/24/C%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%964/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="三种烧录方式的不同">
+<meta property="og:description" content="内存优化">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/LostFile_JPG_22875402.jpg">
-<meta property="article:published_time" content="2023-12-23T18:11:20.000Z">
-<meta property="article:modified_time" content="2023-12-24T10:34:50.880Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/LostFile_JPG_23348554.jpg">
+<meta property="article:published_time" content="2023-12-24T15:11:59.675Z">
+<meta property="article:modified_time" content="2023-12-24T15:15:10.225Z">
 <meta property="article:author" content="Ysc">
-<meta property="article:tag" content="原创">
+<meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/LostFile_JPG_22875402.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/LostFile_JPG_23348554.jpg">
   
   
   
-  <title>单片机三种烧录方式ISP、IAP和ICP有什么不同? - Ysc Web</title>
+  <title>C语言内存优化4 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/LostFile_JPG_22875402.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/LostFile_JPG_23348554.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="单片机三种烧录方式ISP、IAP和ICP有什么不同?"></span>
+            <span id="subtitle" data-typed-text="C语言内存优化4"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-24 02:11" pubdate>
-          2023年12月24日 凌晨
+        <time datetime="2023-12-24 23:11" pubdate>
+          2023年12月24日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          263 字
+          356 字
         
       </span>
     
@@ -270,20 +270,16 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">单片机三种烧录方式ISP、IAP和ICP有什么不同?</h1>
+            <h1 id="seo-header">C语言内存优化4</h1>
             
             
               <div class="markdown-body">
                 
-                <p>三种烧录方式的不同</p>
+                <p>内存优化</p>
 <span id="more"></span>
 
-<h1 id="ISP"><a href="#ISP" class="headerlink" title="ISP"></a>ISP</h1><p>ISP：In System Programing，在系统编程。我们使用调试器将程序烧录近单片机就是这种方法。</p>
-<h1 id="IAP"><a href="#IAP" class="headerlink" title="IAP"></a>IAP</h1><p>IAP：In applicaTIng Programing，在应用编程。在程序运行的过程中进行编程（升级程序，更新固件）。</p>
-<p>这种方法相较于ISP更加方便，因为这种方法可以使用网络等方式进行远程烧录、更新。</p>
-<h1 id="ICP"><a href="#ICP" class="headerlink" title="ICP"></a>ICP</h1><p>ICP：In Circuit Programing，在电路编程。如：对EEPROM编程等</p>
-<p>这个方式使用少</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.eet-china.com/mp/a265662.html">https://www.eet-china.com/mp/a265662.html</a></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312242311672.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/624467?spm=a2c6h.14164896.0.0.46e647c5Ly8hUw&scm=20140722.S_community@@%E6%96%87%E7%AB%A0@@624467._.ID_624467-RL_%E6%97%A0%E6%AD%A2%E5%A2%83%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E2%80%94%E2%80%94%E5%81%9C%E4%B8%8D%E4%B8%8B%E7%9A%84%E5%BE%AA%E7%8E%AF-LOC_search~UND~community~UND~item-OR_ser-V_3-P0_0">https://developer.aliyun.com/article/624467?spm=a2c6h.14164896.0.0.46e647c5Ly8hUw&amp;scm=20140722.S_community@@%E6%96%87%E7%AB%A0@@624467._.ID_624467-RL_%E6%97%A0%E6%AD%A2%E5%A2%83%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E2%80%94%E2%80%94%E5%81%9C%E4%B8%8D%E4%B8%8B%E7%9A%84%E5%BE%AA%E7%8E%AF-LOC_search~UND~community~UND~item-OR_ser-V_3-P0_0</a></p>
 
                 
               </div>
@@ -302,7 +298,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  <a href="/categories/c/" class="category-chain-item">c</a>
   
   
 
@@ -317,7 +313,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
       
     </div>
   
@@ -329,8 +325,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>单片机三种烧录方式ISP、IAP和ICP有什么不同?</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/12/24/单片机三种烧录方式ISP、IAP和ICP有什么不同/</div>
+      <div>C语言内存优化4</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/24/C语言内存优化4/</div>
     </div>
     <div class="license-meta">
       
@@ -374,9 +370,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/12/24/C%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%961/" title="C语言内存优化1">
+                      <a href="/2023/12/24/C%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%965/" title="C语言内存优化5">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C语言内存优化1</span>
+                        <span class="hidden-mobile">C语言内存优化5</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -384,8 +380,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/24/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%872500%E8%AF%8D%E6%80%BB%E7%BB%93/" title="嵌入式常见英文2500词总结">
-                        <span class="hidden-mobile">嵌入式常见英文2500词总结</span>
+                      <a href="/2023/12/24/C%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%963/" title="C语言内存优化3">
+                        <span class="hidden-mobile">C语言内存优化3</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
