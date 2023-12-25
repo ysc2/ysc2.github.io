@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="keil的调试使用">
+    <meta name="description" content="bash中的vi模式和Emacs模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="keil调试功能介绍">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/24/keil%E8%B0%83%E8%AF%95%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:title" content="bash中的两种模式">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/26/bash%E4%B8%AD%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="keil的调试使用">
+<meta property="og:description" content="bash中的vi模式和Emacs模式">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/minimalist-valley-mountain-abstract-digital-art-uhdpaper.com-4K-42_1.jpg">
-<meta property="article:published_time" content="2023-12-23T17:46:25.000Z">
-<meta property="article:modified_time" content="2023-12-24T15:56:57.394Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/coffee-cup.jpg">
+<meta property="article:published_time" content="2023-12-25T17:28:36.000Z">
+<meta property="article:modified_time" content="2023-12-25T17:54:22.349Z">
 <meta property="article:author" content="Ysc">
-<meta property="article:tag" content="转载">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/minimalist-valley-mountain-abstract-digital-art-uhdpaper.com-4K-42_1.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/coffee-cup.jpg">
   
   
   
-  <title>keil调试功能介绍 - Ysc Web</title>
+  <title>bash中的两种模式 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/minimalist-valley-mountain-abstract-digital-art-uhdpaper.com-4K-42_1.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/coffee-cup.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="keil调试功能介绍"></span>
+            <span id="subtitle" data-typed-text="bash中的两种模式"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-24 01:46" pubdate>
-          2023年12月24日 凌晨
+        <time datetime="2023-12-26 01:28" pubdate>
+          2023年12月26日 凌晨
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          403 字
+          673 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          4 分钟
+          6 分钟
         
       </span>
     
@@ -270,27 +270,43 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">keil调试功能介绍</h1>
+            <h1 id="seo-header">bash中的两种模式</h1>
             
             
               <div class="markdown-body">
                 
-                <p>keil的调试使用</p>
+                <p>bash中的vi模式和Emacs模式</p>
 <span id="more"></span>
 
-<ul>
-<li><p>keil中如何一步步执行汇编指令？<br>  将鼠标点击汇编窗口后，在单步执行则是单步执行汇编了；同理点击源代码后就是单步执行源代码了。</p>
-</li>
-<li><p>keil 生成反汇编和bin文件<br>填写指令：<br>生成汇编指令：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">fromelf --text -a -c --output=all.dis Objects\StepMonitor.axf<br></code></pre></td></tr></table></figure>
-<p>其中 <code>&quot;all.dis&quot;</code> 和 <code>&quot;Objects\StepMonitor.axf&quot;</code> 都是相对于 <code>&quot;.uvprojx&quot;</code> 所在目录而言的</p>
-</li>
-</ul>
-<p>生成烧写bin文件</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">fromelf --bin --output=test.bin Objects\StepMonitor.axf<br></code></pre></td></tr></table></figure>
-<p>其中，烧写bin文件需要使用到 <code>STM32CubeProgrammer</code></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312240137319.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28576837/article/details/129720659">https://blog.csdn.net/qq_28576837/article/details/129720659</a></p>
+<h1 id="Emacs模式"><a href="#Emacs模式" class="headerlink" title="Emacs模式"></a>Emacs模式</h1><p>首先bash默认的就是这个模式，我们所熟知的快捷键也是这个模式的如：</p>
+<pre><code class="hljs">ALT+A – 光标移动到行首。  
+ALT+B – 光标移动到所在单词词首。  
+ALT+C – 终止正在运行的命令/进程。与 CTRL+C 相同。  
+ALT+D – 关闭空的终端（也就是它会关闭没有输入的终端）。也删除光标后的全部字符。  
+ALT+F – 移动到光标所在单词词末。  
+ALT+T – 交换最后两个单词。  
+ALT+U – 将单词内光标后的字母转为大写。  
+ALT+L – 将单词内光标后的字母转为小写。  
+ALT+R – 撤销对从历史记录中带来的命令的修改。  
+正如你在上面输出所见，我使用反向搜索拉取了一个指令，并更改了那个指令的最后一个字母，并使用 ALT+R 撤销了更改。    
+ALT+. （注意末尾的点号） – 使用上一条命令的最后一个单词。  
+
+CTRL+R – 向后搜索历史记录（反向搜索）。 
+CTRL+S – 向前搜索历史记录。
+CTRL+M – 和 CTRL+J 或 RETURN键相同。
+CTRL+W – 删除光标前的一个单词。
+CTRL+XX – 移动到行首位置（再移动回来）。
+CTRL+Y – 恢复你上一个删除或剪切的条目。
+CTRL+[ – 和 ESC 键等同。
+CTRL+H – 删除光标前的一个字符，和退格键相同。
+CTRL+D – 删除光标后的一个字符。
+</code></pre>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://linux.cn/article-9430-1.html">https://linux.cn/article-9430-1.html</a></p>
+<h1 id="vi模式"><a href="#vi模式" class="headerlink" title="vi模式"></a>vi模式</h1><p>切换到vi模式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#./.bashrc</span><br><span class="hljs-built_in">set</span> -o vi <br></code></pre></td></tr></table></figure>
+
+<p>如果切换到vi模式下，则进入bash时就是插入模式。并且上面的快捷键都无法使用。其他操作都和vi编译器一致。</p>
+<p>如果位于命令模式则<code>v</code>可以直接进入vi。</p>
 
                 
               </div>
@@ -309,7 +325,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  <a href="/categories/bash/" class="category-chain-item">bash</a>
   
   
 
@@ -324,7 +340,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
       
     </div>
   
@@ -336,8 +352,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>keil调试功能介绍</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/12/24/keil调试功能介绍/</div>
+      <div>bash中的两种模式</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/26/bash中的两种模式/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +365,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月24日</div>
+          <div>2023年12月26日</div>
         </div>
       
       
@@ -381,18 +397,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/12/24/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%872500%E8%AF%8D%E6%80%BB%E7%BB%93/" title="嵌入式常见英文2500词总结">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">嵌入式常见英文2500词总结</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/23/%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8/" title="汇编入门">
-                        <span class="hidden-mobile">汇编入门</span>
+                      <a href="/2023/12/25/%E9%93%BE%E6%8E%A5%E7%9B%B8%E5%85%B3/" title="链接相关">
+                        <span class="hidden-mobile">链接相关</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

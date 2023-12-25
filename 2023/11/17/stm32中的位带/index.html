@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg">
 <meta property="article:published_time" content="2023-11-17T04:21:44.000Z">
-<meta property="article:modified_time" content="2023-11-17T15:05:43.005Z">
+<meta property="article:modified_time" content="2023-12-24T15:50:58.033Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          632 字
+          735 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -286,8 +286,13 @@
 <p>STM32的<strong>全部寄存器</strong>都可以通过访问位带别名区的方式来达到访问原始寄存器比特位的效果，这比51单片机强大很多。 </p>
 <h1 id="转换公式"><a href="#转换公式" class="headerlink" title="转换公式"></a>转换公式</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BITBAND(addr, bitnum) ((addr &amp; 0xF0000000)+0x02000000+((addr &amp; 0x00FFFFFF)&lt;&lt;5)+(bitnum&lt;&lt;2))</span><br></code></pre></td></tr></table></figure>
 
-
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://news.eeworld.com.cn/mcu/ic549482.html?ipcity__1865=n4Uxu7DtDQD=itG7zD/FnYO6I=G=eziK4D&alichlgref=http://news.eeworld.com.cn/mcu/ic549482.html">http://news.eeworld.com.cn/mcu/ic549482.html?ipcity__1865=n4Uxu7DtDQD%3DitG7zD%2FFnYO6I%3DG%3DeziK4D&amp;alichlgref=http%3A%2F%2Fnews.eeworld.com.cn%2Fmcu%2Fic549482.html</a></p>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>位带操作的应用场景，通常在于对IO口进行输入输出读取和控制。</p>
+<p>这就和51单片机中直接的端口赋值是一样的。</p>
+<p>比如</p>
+<p>P0.0 &#x3D; 0;</p>
+<p>P0.0 &#x3D; 1;</p>
+<p>直接就是对端口P0.0输出0和1。</p>
+<h1 id="位带的优点"><a href="#位带的优点" class="headerlink" title="位带的优点"></a>位带的优点</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://news.eeworld.com.cn/mcu/ic549482.html?ipcity__1865=n4Uxu7DtDQD=itG7zD/FnYO6I=G=eziK4D&alichlgref=http://news.eeworld.com.cn/mcu/ic549482.html">http://news.eeworld.com.cn/mcu/ic549482.html?ipcity__1865=n4Uxu7DtDQD%3DitG7zD%2FFnYO6I%3DG%3DeziK4D&amp;alichlgref=http%3A%2F%2Fnews.eeworld.com.cn%2Fmcu%2Fic549482.html</a></p>
 
                 
               </div>
