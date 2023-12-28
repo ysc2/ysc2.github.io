@@ -4,6 +4,98 @@
   
   
   <entry>
+    <title>记录使用pip下载出现的问题</title>
+    <link href="/2023/12/29/%E8%AE%B0%E5%BD%95%E4%BD%BF%E7%94%A8pip%E4%B8%8B%E8%BD%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <url>/2023/12/29/%E8%AE%B0%E5%BD%95%E4%BD%BF%E7%94%A8pip%E4%B8%8B%E8%BD%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    
+    <content type="html"><![CDATA[<p>记录pip包管理器的常见用法</p><span id="more"></span> <h1 id="什么是pip"><a href="#什么是pip" class="headerlink" title="什么是pip"></a>什么是pip</h1><p>pip是python2的一种包管理工具，pip3就是python3的管理工具。</p><h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install SomePackage              <span class="hljs-comment"># 最新版本</span><br>pip install SomePackage==1.0.4       <span class="hljs-comment"># 指定版本</span><br>pip install <span class="hljs-string">&#x27;SomePackage&gt;=1.0.4&#x27;</span>     <span class="hljs-comment"># 最小版本</span><br></code></pre></td></tr></table></figure><p>卸载包</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip uninstall Packname<br></code></pre></td></tr></table></figure><h2 id="搜索包"><a href="#搜索包" class="headerlink" title="搜索包"></a>搜索包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip search Packname<br></code></pre></td></tr></table></figure><h2 id="列出安装的包"><a href="#列出安装的包" class="headerlink" title="列出安装的包"></a>列出安装的包</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>很多时候直接使用pip会有超时的错误，这时我们可以设置超时限制，或者是直接更换源。</p><h2 id="设置超时限制"><a href="#设置超时限制" class="headerlink" title="设置超时限制:"></a>设置超时限制:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip --default-timeout=100 install  Packname<br></code></pre></td></tr></table></figure><p>暂时更换源</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple Django<br></code></pre></td></tr></table></figure><p>永久更换源</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install pip -U <span class="hljs-comment"># 先升级pip到最高版本</span><br>pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple<br></code></pre></td></tr></table></figure><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.runoob.com/w3cnote/python-pip-install-usage.html">https://www.runoob.com/w3cnote/python-pip-install-usage.html</a></p><p><a href="https://blog.csdn.net/qq_39161804/article/details/81191977">https://blog.csdn.net/qq_39161804/article/details/81191977</a></p><p><a href="https://pypi.org/project/idna/">这个网站是pip的包</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>stm32看门狗</title>
+    <link href="/2023/12/27/stm32%E7%9C%8B%E9%97%A8%E7%8B%97/"/>
+    <url>/2023/12/27/stm32%E7%9C%8B%E9%97%A8%E7%8B%97/</url>
+    
+    <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>看门狗</p><p>stm32中有两中看门狗，一种是独立看门狗、一种是窗口看门狗。独立看门狗的时间精度较低，适用于对时间没有要求的任务。可以将独立 看门狗看作是宠物狗，将窗口看门狗看作是警犬。</p><h1 id="独立看门狗-IWDG"><a href="#独立看门狗-IWDG" class="headerlink" title="独立看门狗(IWDG)"></a>独立看门狗(IWDG)</h1><p>之所以称之为“独立”是因为：独立看门狗的时钟由独立的RC振荡器LSI提供，即使主时钟发生故障它仍然有效。</p><p>独立看门狗的计数器是一个12位的递减计数器，最大值为0XFFF，当计数器减到0时，会产生一个复位信号:IWDG_RESET， 让程序重新启动运行，如果在计数器减到0之前刷新了计数器的值的话，就不会产生复位信号，重新刷新计数器值的这个动作我们俗称喂狗。</p><p>独立看门狗的简图：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271730577.png"></p><p>其中键寄存器就相当于控制寄存器一样。</p><p>设置多久之内需要喂狗（即重新刷新计数器值）：</p><p>重装载寄存器是一个12位的寄存器，里面装着要刷新到计数器的值，这个值的大小决定着独立看门狗的溢出时间。 超时时间<code>Tout = (4*2^prv) / 40 * rlv (s)</code> ，prv是预分频器寄存器的值，rlv是重装载寄存器的值。</p><h2 id="使用范围"><a href="#使用范围" class="headerlink" title="使用范围"></a>使用范围</h2><p>独立看门狗一般用来检测和解决由程序引起的故障，比如一个程序正常运行的时间是50ms， 在运行完这个段程序之后紧接着进行喂狗，我们设置独立看门狗的定时溢出时间为60ms，比我们需要监控的程序50ms多一点， 如果超过60ms还没有喂狗，那就说明我们监控的程序出故障了，跑飞了，那么就会产生系统复位，让程序重新运行。如果我们需要设置[n m]时间段之内是否喂狗的话则需要使用过窗口看门狗。</p><h2 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 使能 预分频寄存器PR和重装载寄存器RLR可写</span><br>IWDG_WriteAccessCmd( IWDG_WriteAccess_Enable );<br><br><span class="hljs-comment">// 设置预分频器值</span><br>IWDG_SetPrescaler( prv );<br><br><span class="hljs-comment">// 设置重装载寄存器值</span><br>IWDG_SetReload( rlv );<br><br><span class="hljs-comment">// 把重装载寄存器的值放到计数器中</span><br>IWDG_ReloadCounter();<br><br><span class="hljs-comment">// 使能 IWDG</span><br>IWDG_Enable();<br></code></pre></td></tr></table></figure><p>查看是否喂狗了</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span>(RCC_GetFlagStatus(RCC_FLAG_IWDGRST) != RESET)&#123;<br>    <span class="hljs-comment">//没有喂狗</span><br>    ...<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>    IWDG_ReloadCounter();<span class="hljs-comment">//喂狗，重新加载值到计数器中</span><br>&#125;<br></code></pre></td></tr></table></figure><h1 id="窗口看门狗"><a href="#窗口看门狗" class="headerlink" title="窗口看门狗"></a>窗口看门狗</h1><p>可以设置一个时间段，而不单单是在某个时间之前。独立看门狗是当计数寄存器中的值减到0的话就会产生复位信号。但是窗口是变成<code>0x40</code>，而不是<code>0</code>，这被称之为窗口的下限，这个是固定的。上限是可以更改的，只要在上下限之间喂狗了就不会复位。这就是为什么称之为“窗口”。</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271812813.png"></p><p>RLR是重装载寄存器，用来设置独立看门狗的计数器的值。TR是窗口看门狗的计数器的值，由用户独立设置，WR是窗口看门狗的上窗口值，由用户独立设置。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>stm32编码错题集</title>
+    <link href="/2023/12/27/stm32%E7%BC%96%E7%A0%81%E9%94%99%E9%A2%98%E9%9B%86/"/>
+    <url>/2023/12/27/stm32%E7%BC%96%E7%A0%81%E9%94%99%E9%A2%98%E9%9B%86/</url>
+    
+    <content type="html"><![CDATA[<p>记录在写stm32相关代码的时候出现的错误以及解决方法</p><span id="more"></span> <ul><li><p>程序执行到NVIC_Init()这个函数的时候总是无法继续执行</p><p>  解决方法：是我的<code>void USART1_IRQHandler(void)</code>中断函数名写错了，将其写成了<code>void USART1_IQRHandler(void)</code></p><p>  总结：每次写这些具有强制性的函数名的时候一定要仔细查看函数名是否符合要求。</p></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>stm32</category>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>stm32中的TIM</title>
+    <link href="/2023/12/27/stm32%E4%B8%AD%E7%9A%84TIM/"/>
+    <url>/2023/12/27/stm32%E4%B8%AD%E7%9A%84TIM/</url>
+    
+    <content type="html"><![CDATA[<p>总结stm32中的TIM外设</p><span id="more"></span><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在stm32f103中有三种TIM，普通TIM、基本TIM、高级TIM。具体如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271543993.png"></p><h2 id="基本定时器"><a href="#基本定时器" class="headerlink" title="基本定时器"></a>基本定时器</h2><p>这种定时器是最简单的定时器，其结构简图如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271545588.png"></p><p>如何计时的：<br>我们把定时器设置自动重装载寄存器 ARR 的值为 1000，设置时钟预分频器为 71， 则驱动计数器的时钟：CK_CNT &#x3D; CK_INT &#x2F; (71+1)&#x3D;1M， 则计数器计数一次的时间等于：1&#x2F;CK_CNT&#x3D;1us，当计数器计数到 ARR 的值 1000时， 产生一次中断，则中断一次的时间为：1&#x2F;CK_CNT*ARR&#x3D;1ms。</p><h3 id="基本定时器编程"><a href="#基本定时器编程" class="headerlink" title="基本定时器编程"></a>基本定时器编程</h3><p>初始化结构体定义：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    TIM_Prescaler            <span class="hljs-comment">// 都有</span><br>    TIM_CounterMode          <span class="hljs-comment">// TIMx,x[6,7]没有，其他都有</span><br>    TIM_Period               <span class="hljs-comment">// 都有</span><br>    TIM_ClockDivision        <span class="hljs-comment">// TIMx,x[6,7]没有，其他都有</span><br>    TIM_RepetitionCounter    <span class="hljs-comment">// TIMx,x[1,8,15,16,17]才有</span><br>&#125; TIM_TimeBaseInitTypeDef;<br></code></pre></td></tr></table></figure><p>其中 TIM15&#x2F;16&#x2F;17 只存在与互联型产品中，在 F1 大&#x2F;中&#x2F;小容量型号中没有。</p><h1 id="高级定时器"><a href="#高级定时器" class="headerlink" title="高级定时器"></a>高级定时器</h1><h2 id="高级定时器称之为“高级”是因为添加了如下功能："><a href="#高级定时器称之为“高级”是因为添加了如下功能：" class="headerlink" title="高级定时器称之为“高级”是因为添加了如下功能：   "></a>高级定时器称之为“高级”是因为添加了如下功能：   </h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>stm32</category>
+      
+      <category>内核外设</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>bash中的两种模式</title>
     <link href="/2023/12/26/bash%E4%B8%AD%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F/"/>
     <url>/2023/12/26/bash%E4%B8%AD%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F/</url>
@@ -819,7 +911,7 @@
       
       <category>stm32</category>
       
-      <category>IIC</category>
+      <category>SPI</category>
       
     </categories>
     
@@ -2610,7 +2702,7 @@
     <link href="/2023/10/29/stm32/"/>
     <url>/2023/10/29/stm32/</url>
     
-    <content type="html"><![CDATA[<p>stm32中的小常识</p><span id="more"></span> <h1 id="最小系统板"><a href="#最小系统板" class="headerlink" title="最小系统板"></a>最小系统板</h1><p><strong>最小系统板由：电源、存储、芯片、时钟组成</strong></p><p>绘制一个最小系统板一般需要包含如下模块：</p><ol><li>5-&gt;3.3v降压电路</li><li>复位电路</li><li>自动下载电路</li><li>usb转串口</li><li>tf卡</li><li>type-c电路</li><li>led灯</li></ol><h1 id="经验"><a href="#经验" class="headerlink" title="经验"></a>经验</h1><ol><li>一般在stm32中，除开系统外设即位于内核里面的外设是不需要开启时钟的如（NVIC），其他的，什么片上外设都是需要开启时钟的。</li><li>使用一个stm32片上外设的基本步骤：<ol><li>使用RCC函数开时钟</li><li>定义结构体，开始配置</li><li>使用Init函数完成初始化</li><li>使用cmd函数打开这个外设</li></ol></li><li>常见的波特率为4800、9600、115200等。</li><li>1Mhz ~ 1us<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312182106254.png"></li></ol><h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="https://shequ.stmicroelectronics.cn/thread-628996-1-1.html">STM32硬件开发指南</a></p><p><a href="https://www.cnblogs.com/shangdawei/p/3255414.html">TF卡引脚定义</a></p><blockquote><p>shell引脚作用是固定</p></blockquote><p><a href="https://www.usbzh.com/article/detail-722.html">TYPE-C引脚定义</a></p><p>&#x2F;* Type your code here, or load an example. *&#x2F;<br>#include &lt;stdio.h&gt;<br>void call1(void)<br>{<br>    printf(“this is call1 function\n”);<br>    return ;<br>}</p><p>void back(void)<br>{<br>    printf(“this is back function\n”);<br>    return ;<br>}</p><p>void fun (void)<br>{<br>    int address &#x3D; 1;<br>    int arrs [] &#x3D; {100};</p><pre><code class="hljs">arrs[1] = 4;arrs[address + 2] = arrs[address];arrs[address + 3] = arrs[address + 1];arrs[address] = (int)&amp;call1;arrs[address + 1] = 0;register int p asm(&quot;edi&quot;);p = 3001;</code></pre><p>}</p><p>int main (void)<br>{<br>    int a &#x3D; 1110;<br>    fun();<br>    back();<br>    int b &#x3D; 20 + 2;<br>    printf(“%d %d\r\n”,a,b);<br>    return 0;<br>}</p>]]></content>
+    <content type="html"><![CDATA[<p>stm32中的小常识</p><span id="more"></span> <h1 id="最小系统板"><a href="#最小系统板" class="headerlink" title="最小系统板"></a>最小系统板</h1><p><strong>最小系统板由：电源、存储、芯片、时钟组成</strong></p><p>绘制一个最小系统板一般需要包含如下模块：</p><ol><li>5-&gt;3.3v降压电路</li><li>复位电路</li><li>自动下载电路</li><li>usb转串口</li><li>tf卡</li><li>type-c电路</li><li>led灯</li></ol><h1 id="经验"><a href="#经验" class="headerlink" title="经验"></a>经验</h1><ol><li>一般在stm32中，除开系统外设即位于内核里面的外设是不需要开启时钟的如（NVIC），其他的，什么片上外设都是需要开启时钟的。</li><li>使用一个stm32片上外设的基本步骤：<ol><li>使用RCC函数开时钟</li><li>定义结构体，开始配置</li><li>使用Init函数完成初始化</li><li>使用cmd函数打开这个外设</li></ol></li><li>常见的波特率为4800、9600、115200等。</li><li>1Mhz ~ 1us<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312182106254.png"></li></ol><h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="https://shequ.stmicroelectronics.cn/thread-628996-1-1.html">STM32硬件开发指南</a></p><p><a href="https://www.cnblogs.com/shangdawei/p/3255414.html">TF卡引脚定义</a></p><blockquote><p>shell引脚作用是固定</p></blockquote><p><a href="https://www.usbzh.com/article/detail-722.html">TYPE-C引脚定义</a></p><h1 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h1><p>关于预分频、分频、倍频</p><ul><li>预分频：预分频是指在输入信号到达某个模块之前对信号进行分频。预分频可以用于降低信号频率，以适应模块的工作频率范围。预分频通常用于时钟信号的处理，以便将高频率的时钟信号转换为模块所需的低频信号。</li><li>分频：将输出的频率下降</li><li>倍频：将输出的频率上升</li></ul>]]></content>
     
     
     <categories>

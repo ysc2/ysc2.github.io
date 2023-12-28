@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="stm32中的小常识">
+    <meta name="description" content="记录在写stm32相关代码的时候出现的错误以及解决方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/10/29/stm32/index.html">
+<meta property="og:title" content="stm32编码错题集">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/27/stm32%E7%BC%96%E7%A0%81%E9%94%99%E9%A2%98%E9%9B%86/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="stm32中的小常识">
+<meta property="og:description" content="记录在写stm32相关代码的时候出现的错误以及解决方法">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%BD%92%E6%A1%A3.jpg">
-<meta property="article:published_time" content="2023-10-29T09:59:15.000Z">
-<meta property="article:modified_time" content="2023-12-27T17:38:22.946Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(471).png">
+<meta property="article:published_time" content="2023-12-27T08:01:14.000Z">
+<meta property="article:modified_time" content="2023-12-27T08:06:58.635Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%BD%92%E6%A1%A3.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(471).png">
   
   
   
-  <title>stm32 - Ysc Web</title>
+  <title>stm32编码错题集 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E5%88%86%E7%B1%BB.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(471).png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="stm32"></span>
+            <span id="subtitle" data-typed-text="stm32编码错题集"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-29 17:59" pubdate>
-          2023年10月29日 下午
+        <time datetime="2023-12-27 16:01" pubdate>
+          2023年12月27日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          441 字
+          171 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          4 分钟
+          2 分钟
         
       </span>
     
@@ -270,47 +270,20 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">stm32</h1>
+            <h1 id="seo-header">stm32编码错题集</h1>
             
             
               <div class="markdown-body">
                 
-                <p>stm32中的小常识</p>
+                <p>记录在写stm32相关代码的时候出现的错误以及解决方法</p>
 <span id="more"></span> 
-<h1 id="最小系统板"><a href="#最小系统板" class="headerlink" title="最小系统板"></a>最小系统板</h1><p><strong>最小系统板由：电源、存储、芯片、时钟组成</strong></p>
-<p>绘制一个最小系统板一般需要包含如下模块：</p>
-<ol>
-<li>5-&gt;3.3v降压电路</li>
-<li>复位电路</li>
-<li>自动下载电路</li>
-<li>usb转串口</li>
-<li>tf卡</li>
-<li>type-c电路</li>
-<li>led灯</li>
-</ol>
-<h1 id="经验"><a href="#经验" class="headerlink" title="经验"></a>经验</h1><ol>
-<li>一般在stm32中，除开系统外设即位于内核里面的外设是不需要开启时钟的如（NVIC），其他的，什么片上外设都是需要开启时钟的。</li>
-<li>使用一个stm32片上外设的基本步骤：<ol>
-<li>使用RCC函数开时钟</li>
-<li>定义结构体，开始配置</li>
-<li>使用Init函数完成初始化</li>
-<li>使用cmd函数打开这个外设</li>
-</ol>
-</li>
-<li>常见的波特率为4800、9600、115200等。</li>
-<li>1Mhz ~ 1us<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312182106254.png" srcset="/img/loading.gif" lazyload></li>
-</ol>
-<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a target="_blank" rel="noopener" href="https://shequ.stmicroelectronics.cn/thread-628996-1-1.html">STM32硬件开发指南</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shangdawei/p/3255414.html">TF卡引脚定义</a></p>
-<blockquote>
-<p>shell引脚作用是固定</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.usbzh.com/article/detail-722.html">TYPE-C引脚定义</a></p>
-<h1 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h1><p>关于预分频、分频、倍频</p>
+
+
 <ul>
-<li>预分频：预分频是指在输入信号到达某个模块之前对信号进行分频。预分频可以用于降低信号频率，以适应模块的工作频率范围。预分频通常用于时钟信号的处理，以便将高频率的时钟信号转换为模块所需的低频信号。</li>
-<li>分频：将输出的频率下降</li>
-<li>倍频：将输出的频率上升</li>
+<li><p>程序执行到NVIC_Init()这个函数的时候总是无法继续执行</p>
+<p>  解决方法：是我的<code>void USART1_IRQHandler(void)</code>中断函数名写错了，将其写成了<code>void USART1_IQRHandler(void)</code></p>
+<p>  总结：每次写这些具有强制性的函数名的时候一定要仔细查看函数名是否符合要求。</p>
+</li>
 </ul>
 
                 
@@ -332,6 +305,13 @@
         
   <a href="/categories/stm32/" class="category-chain-item">stm32</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/stm32/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
   
 
       </span>
@@ -357,8 +337,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>stm32</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/10/29/stm32/</div>
+      <div>stm32编码错题集</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/27/stm32编码错题集/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +350,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月29日</div>
+          <div>2023年12月27日</div>
         </div>
       
       
@@ -402,9 +382,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Linux%E4%B8%8B%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E9%97%AE%E9%A2%98/" title="读书笔记——Linux下的头文件包含问题">
+                      <a href="/2023/12/27/stm32%E7%9C%8B%E9%97%A8%E7%8B%97/" title="stm32看门狗">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">读书笔记——Linux下的头文件包含问题</span>
+                        <span class="hidden-mobile">stm32看门狗</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -412,8 +392,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/27/hexo%E4%BD%BF%E7%94%A8%E8%AF%AD%E6%B3%95/" title="hexo娴ｈ法鏁ょ拠顓熺《">
-                        <span class="hidden-mobile">hexo娴ｈ法鏁ょ拠顓熺《</span>
+                      <a href="/2023/12/27/stm32%E4%B8%AD%E7%9A%84TIM/" title="stm32中的TIM">
+                        <span class="hidden-mobile">stm32中的TIM</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
