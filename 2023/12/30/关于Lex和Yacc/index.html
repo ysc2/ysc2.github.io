@@ -16,24 +16,21 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Markdown基本语法">
+    <meta name="description" content="前置知识我们知道编译器有一下的执行步骤：词法分析、语法分析、语义分析、IR（中间代码，intermediate Representation）产生、IR优化、代码产生、最终优化。 实际上就是词法分析-&gt;语义分析-&gt;生成中间代码-&gt;代码生成 词法分析的核心是识别源代码，将其划分为一个个的token。lex就是一套框架，由用户提供规则，然后lex按照这个规则对文本进行分析。然后输出以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Markdown基础语法">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/07/Markdown%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:title" content="关于Lex和Yacc">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/30/%E5%85%B3%E4%BA%8ELex%E5%92%8CYacc/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="Markdown基本语法">
+<meta property="og:description" content="前置知识我们知道编译器有一下的执行步骤：词法分析、语法分析、语义分析、IR（中间代码，intermediate Representation）产生、IR优化、代码产生、最终优化。 实际上就是词法分析-&gt;语义分析-&gt;生成中间代码-&gt;代码生成 词法分析的核心是识别源代码，将其划分为一个个的token。lex就是一套框架，由用户提供规则，然后lex按照这个规则对文本进行分析。然后输出以">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o571qp.jpg">
-<meta property="article:published_time" content="2023-11-07T08:48:44.000Z">
-<meta property="article:modified_time" content="2023-12-30T06:52:18.036Z">
+<meta property="article:published_time" content="2023-12-30T10:10:46.000Z">
+<meta property="article:modified_time" content="2023-12-30T15:36:50.772Z">
 <meta property="article:author" content="Ysc">
-<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o571qp.jpg">
   
   
   
-  <title>Markdown基础语法 - Ysc Web</title>
+  <title>关于Lex和Yacc - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +190,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o571qp.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Markdown基础语法"></span>
+            <span id="subtitle" data-typed-text="关于Lex和Yacc"></span>
           
         </div>
 
@@ -210,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-07 16:48" pubdate>
-          2023年11月7日 下午
+        <time datetime="2023-12-30 18:10" pubdate>
+          2023年12月30日 晚上
         </time>
       </span>
     
@@ -222,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          2.2k 字
         
       </span>
     
@@ -233,7 +230,7 @@
         
         
         
-          11 分钟
+          18 分钟
         
       </span>
     
@@ -270,51 +267,90 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Markdown基础语法</h1>
+            <h1 id="seo-header">关于Lex和Yacc</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Markdown基本语法</p>
-<span id="more"></span>
-<h2 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-emphasis">*这是斜体*</span><br><span class="hljs-emphasis">_这也是斜体_</span><br></code></pre></td></tr></table></figure>
+                <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>我们知道编译器有一下的执行步骤：<br>词法分析、语法分析、语义分析、IR（中间代码，intermediate Representation）产生、IR优化、代码产生、最终优化。</p>
+<p>实际上就是<br>词法分析-&gt;语义分析-&gt;生成中间代码-&gt;代码生成</p>
+<p>词法分析的核心是识别源代码，将其划分为一个个的token。lex就是一套框架，由用户提供规则，然后lex按照这个规则对文本进行分析。然后输出以C语言编写的词法分析器源代码。</p>
+<p>Yacc的作用是生成一个语义解析器，其可以在没有分析器时使用，但是，完整的语法分析通常需要外部词法分析器首先执行标记化阶段（单词分析），然后才是解析阶段。</p>
+<p>所以Yacc一般和Lex一同使用。</p>
+<h1 id="Lex语法"><a href="#Lex语法" class="headerlink" title="Lex语法"></a>Lex语法</h1><p>Lex的语法主要包括三部分：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">&lt;定义&gt;<br><br>%%<br><br>&lt;规则&gt;<br><br>%%<br><br>&lt;代码&gt;<br><br></code></pre></td></tr></table></figure>
 
-<h2 id="行内代码"><a href="#行内代码" class="headerlink" title="行内代码"></a>行内代码</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs md">这是<span class="hljs-code">`行内代码`</span><br></code></pre></td></tr></table></figure>
+<p>其中只有<strong>规则</strong>是<strong>必须</strong>的，其他的两个段都是可选的。</p>
+<h2 id="定义段"><a href="#定义段" class="headerlink" title="定义段"></a>定义段</h2><p>定义段主要包括的是：</p>
+<ul>
+<li>C代码定义</li>
+<li>指令定义</li>
+<li>明令正则表达式定义</li>
+</ul>
+<h3 id="C代码定义的格式"><a href="#C代码定义的格式" class="headerlink" title="C代码定义的格式"></a>C代码定义的格式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">%&#123;<br>codes<br>&#125;%<br></code></pre></td></tr></table></figure>
+<p>在 <code>%&#123;</code> 和 <code>%&#125;</code> 之间定义 C 代码，lex 会将这些代码直接拷贝至输出文件中。一般会在这里定义变量，include 语句等。</p>
+<h3 id="指令定义"><a href="#指令定义" class="headerlink" title="指令定义"></a>指令定义</h3><p>指令定义则是通过 <code>lex</code> 提供的一系列以<code>%</code>开头的指令来修改内置变量的默认值。比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Lex">%array：将内置的 yytext 变量的类型设置为 char 数组类型。<br><br>%pointer：将内置的 yytext 标量的类型设置为 char 数组指针类型。<br><br>%s STATE：定义一个 STATE 状态，STATE 可以是任意字符串。lex 默认以 INITIAL 作为初始状态。<br><br>%e size：定义内置的 NFA 表项的数量。默认值是 1000。<br><br>%n size：定义内置的 DFA 表项的数量。默认值是 500。<br><br>%p size：定义内置的 move 表项的数量。默认值是 2500。<br></code></pre></td></tr></table></figure>
+<h3 id="命名正则表达式的格式"><a href="#命名正则表达式的格式" class="headerlink" title="命名正则表达式的格式"></a>命名正则表达式的格式</h3><p>命名正则表达式定义为一系列命名的正则表达式，用于描述不同的标识符，如：<code>function</code>、<code>let</code>、<code>import</code>，其基本格式如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">name expression<br></code></pre></td></tr></table></figure>
+<p>注意<code>name</code>和<code>expression</code>之间需要用空格隔开<br>实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Lex">letter   [a-zA-Z]<br>digit    [0-9]<br>punct    [,.:;!?]<br>nonblank [^ \t]<br>name     &#123;letter&#125;(&#123;letter&#125;│&#123;digit&#125;)<br></code></pre></td></tr></table></figure>
 
-<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>inline-style 的语法：<a href="url-link" title="optional-tips">link-text</a>，其中：</p>
-<p>link-text： 显示的 链接文本<br>url-link： url链接<br>optional-tips： 当鼠标放置在link-text上显示的提示<br>reference-style 的语法包括两部分：</p>
-<p>[link-text][reference-id]<br>[reference-id]:url-link “optional-tips”： 在同一个文件的其他段落定义</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs markdown">这是[<span class="hljs-string">百度搜索</span>](<span class="hljs-link">www.baidu.com &quot;使用百度进行搜索&quot;</span>)inline-style<br><br>这是[<span class="hljs-string">百度搜索</span>][<span class="hljs-symbol">baidu</span>]reference-style<br><br>[<span class="hljs-symbol">baidu</span>]:<span class="hljs-link">www.baidu.com &quot;使用百度进行搜索&quot;</span><br></code></pre></td></tr></table></figure>
+<h2 id="规则段"><a href="#规则段" class="headerlink" title="规则段"></a>规则段</h2><h2 id="代码段"><a href="#代码段" class="headerlink" title="代码段"></a>代码段</h2><p>首先看一个例子，其实现了输出文本的字符数、单词数、行数。<br><code>test.l</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs lex">/* 第一段 */ <br>%&#123;<br>    int chars = 0;<br>    int words = 0;<br>    int lines = 0;<br>%&#125;<br><br>/* 第二段 */  <br>%%<br>[a-zA-Z]+  &#123; words++; chars += strlen(yytext); &#125;<br>\n         &#123; chars++; lines++; &#125;<br>.          &#123; chars++; &#125;<br>%%<br><br>/* 第三段 */  <br>main(int argc, char **argv)<br>&#123;<br>    yylex();<br>    printf(&quot;%8d%8d%8d\n&quot;, lines, words, chars);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-bullet">0.</span> 这是一级有序列表<br><span class="hljs-bullet">    1.</span> 这是二级有序列表<br><span class="hljs-bullet">        1.</span> 这是三级有序列表<br><span class="hljs-bullet">8.</span> 这是一级有序列表<br><span class="hljs-bullet">0.</span> 这是一级有序列表<br><br></code></pre></td></tr></table></figure>
+<p>我们看到这个程序被分为了三段，其中第一段是全局变量的定义，第二段是规则段（如何处理文本），第三段是c代码段。</p>
+<h2 id="如何编译"><a href="#如何编译" class="headerlink" title="如何编译"></a>如何编译</h2><p>编写了<code>test.l</code>文件后我们使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">flex test.h <span class="hljs-comment">#生成lex.yy.c文件，这个文件是一个c文件。</span><br><br>gcc lex.yy.c -lfl <span class="hljs-comment">#这里需要加上-lfl，否则无法通过编译，如果想要直接编译而不加-lfl则需要在test.l文件的第三段加上：</span><br>int <span class="hljs-function"><span class="hljs-title">yywrap</span></span>()<br>&#123;<br>        <span class="hljs-built_in">return</span> 1;<br>&#125;<br><span class="hljs-comment">#这个函数就可以直接编译了。</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-bullet">*</span> 这是无序列表<br><span class="hljs-bullet">+</span> 这是无序列表<br><span class="hljs-bullet">-</span> 这是无序列表<br><br><span class="hljs-bullet">+</span> 这是一级无序列表<br><span class="hljs-bullet">    1.</span> 这是二级有序列表<br><span class="hljs-bullet">    1.</span> 这是二级有序列表<br><span class="hljs-bullet">+</span> 这是一级无序列表<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs md">&gt;这是一级引用<br>&gt;&gt;这是二级引用<br>&gt;&gt;&gt;这是三级引用<br>&gt;&gt;这还是三级引用<br>&gt;这还是三级引用<br><br>&gt;新的引用段落<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs md">表格字段一|表格字段二|表格字段三|表格字段四<br>--|:--|--:|:--:<br>默认居中对齐|左对齐|右对齐|居中对齐<br>cell|cell|cell|cell<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="分隔行"><a href="#分隔行" class="headerlink" title="分隔行"></a>分隔行</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs md">在单独的一个段落中使用三个或多于三个<span class="hljs-emphasis">*或-或_将被渲染成分隔行。</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>Markdown中嵌入图片的语法跟链接的语法类似，差别在于嵌入图片比嵌入链接前多了个!特殊字符表示这是一个指向图片的url。</p>
-<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs md">这是一张使用inline-style链接的图片<br><br>[图片上传失败...(image-6ec809-1531624818276)]<br><br><br>这是一张使用reference-style链接的图片<br>![<span class="hljs-string">当图片无法显示时出现这个文本</span>][<span class="hljs-symbol">reference-id</span>]<br><br>[<span class="hljs-symbol">reference-id</span>]:<span class="hljs-link">image-url &quot;optional-tips&quot;</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="文章内部跳转"><a href="#文章内部跳转" class="headerlink" title="文章内部跳转"></a>文章内部跳转</h2><p>在vscode中左边栏有一个大纲，可以实现跳转</p>
-<ol>
-<li>利用<code>html</code>，在需要跳转到的地方设置一个锚：<span id="jump">跳转到的地方</span></li>
-<li>在跳转地：<a href="#jump">点击跳转</a></li>
-</ol>
-<h2 id="代码块的另一种方式"><a href="#代码块的另一种方式" class="headerlink" title="代码块的另一种方式"></a>代码块的另一种方式</h2><pre><code class="hljs">ls
-</code></pre>
-<h2 id="特殊的代码块"><a href="#特殊的代码块" class="headerlink" title="特殊的代码块"></a>特殊的代码块</h2><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-addition">+ this text is highlighted in green</span><br><span class="hljs-deletion">- this text is highlighted in red</span><br></code></pre></td></tr></table></figure>
-
-<h1 id="其他常用的HTML语法"><a href="#其他常用的HTML语法" class="headerlink" title="其他常用的HTML语法"></a>其他常用的HTML语法</h1><h2 id="下划线"><a href="#下划线" class="headerlink" title="下划线"></a>下划线</h2><p><ins>Underlined text</ins></p>
-<h2 id="方框"><a href="#方框" class="headerlink" title="方框"></a>方框</h2><table><tr><td>Boxed text</td></tr></table>
-
-<h2 id="上标"><a href="#上标" class="headerlink" title="上标"></a>上标</h2><p>Superscript<sup>TM</sup><br>Superscript-italic<sup><em>tm</em></sup></p>
-<h2 id="下标"><a href="#下标" class="headerlink" title="下标"></a>下标</h2><p>Subscript<sub>x</sub><br>Subscript-bold<sub><strong>min</strong></sub></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://markdown.com.cn/basic-syntax/">markdown官方手册</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/Olwiba/Kickass-markdown?tab=readme-ov-file#license">github所支持的Markwodn语法</a></p>
+<h2 id="Lex自定义的变量"><a href="#Lex自定义的变量" class="headerlink" title="Lex自定义的变量"></a>Lex自定义的变量</h2><p> <strong>Lex 变量</strong></p>
+<table>
+<thead>
+<tr>
+<th>yyin</th>
+<th>FILE* 类型。 它指向 lexer 正在解析的当前文件。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yyout</td>
+<td>FILE* 类型。 它指向记录 lexer 输出的位置。 缺省情况下，yyin 和 yyout 都指向标准输入和输出。</td>
+</tr>
+<tr>
+<td>yytext</td>
+<td>匹配模式的文本存储在这一变量中（char*）。</td>
+</tr>
+<tr>
+<td>yyleng</td>
+<td>给出匹配模式的长度。</td>
+</tr>
+<tr>
+<td>yylineno</td>
+<td>提供当前的行数信息。 （lexer不一定支持。）</td>
+</tr>
+</tbody></table>
+<p> <strong>Lex 函数</strong></p>
+<table>
+<thead>
+<tr>
+<th>yylex()</th>
+<th>这一函数开始分析。 它由 Lex 自动生成。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yywrap()</td>
+<td>这一函数在文件（或输入）的末尾调用。 如果函数的返回值是1，就停止解析。 因此它可以用来解析多个文件。 代码可以写在第三段，这就能够解析多个文件。 方法是使用 yyin 文件指针（见上表）指向不同的文件，直到所有的文件都被解析。 最后，yywrap() 可以返回 1 来表示解析的结束。</td>
+</tr>
+<tr>
+<td>yyless(int n)</td>
+<td>这一函数可以用来送回除了前�n? 个字符外的所有读出标记。</td>
+</tr>
+<tr>
+<td>yymore()</td>
+<td>这一函数告诉 Lexer 将下一个标记附加到当前标记后。</td>
+</tr>
+</tbody></table>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www2.cs.arizona.edu/~debray/Teaching/CSc453/DOCS/tutorial-large.pdf">https://www2.cs.arizona.edu/~debray/Teaching/CSc453/DOCS/tutorial-large.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="http://chuquan.me/2022/06/22/compiler-principle-tool-lex/">http://chuquan.me/2022/06/22/compiler-principle-tool-lex/</a></p>
 
                 
               </div>
@@ -323,34 +359,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
-      
-    </div>
   
 </div>
 
@@ -360,8 +368,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Markdown基础语法</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/07/Markdown基础语法/</div>
+      <div>关于Lex和Yacc</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/30/关于Lex和Yacc/</div>
     </div>
     <div class="license-meta">
       
@@ -373,7 +381,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月7日</div>
+          <div>2023年12月30日</div>
         </div>
       
       
@@ -405,18 +413,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/07/Github-%E4%B8%8A%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94SmallChat/" title="Github 上的小项目——SmallChat">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Github 上的小项目——SmallChat</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Linux%E4%B8%8B%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E9%97%AE%E9%A2%98/" title="读书笔记——Linux下的头文件包含问题">
-                        <span class="hidden-mobile">读书笔记——Linux下的头文件包含问题</span>
+                      <a href="/2023/12/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E7%BD%91%E7%AB%99/" title="常用的知识点网站">
+                        <span class="hidden-mobile">常用的知识点网站</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

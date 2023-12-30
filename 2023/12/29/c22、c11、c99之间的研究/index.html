@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Markdown基本语法">
+    <meta name="description" content="总结各主要c标准之间的关系和C语言的知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Markdown基础语法">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/07/Markdown%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:title" content="c语言标准的研究">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/29/c22%E3%80%81c11%E3%80%81c99%E4%B9%8B%E9%97%B4%E7%9A%84%E7%A0%94%E7%A9%B6/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="Markdown基本语法">
+<meta property="og:description" content="总结各主要c标准之间的关系和C语言的知识点">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o571qp.jpg">
-<meta property="article:published_time" content="2023-11-07T08:48:44.000Z">
-<meta property="article:modified_time" content="2023-12-30T06:52:18.036Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png">
+<meta property="article:published_time" content="2023-12-29T15:51:00.000Z">
+<meta property="article:modified_time" content="2023-12-30T06:50:56.246Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o571qp.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png">
   
   
   
-  <title>Markdown基础语法 - Ysc Web</title>
+  <title>c语言标准的研究 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o571qp.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Markdown基础语法"></span>
+            <span id="subtitle" data-typed-text="c语言标准的研究"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-07 16:48" pubdate>
-          2023年11月7日 下午
+        <time datetime="2023-12-29 23:51" pubdate>
+          2023年12月29日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.4k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          11 分钟
+          12 分钟
         
       </span>
     
@@ -270,51 +270,50 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Markdown基础语法</h1>
+            <h1 id="seo-header">c语言标准的研究</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Markdown基本语法</p>
-<span id="more"></span>
-<h2 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-emphasis">*这是斜体*</span><br><span class="hljs-emphasis">_这也是斜体_</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="行内代码"><a href="#行内代码" class="headerlink" title="行内代码"></a>行内代码</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs md">这是<span class="hljs-code">`行内代码`</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>inline-style 的语法：<a href="url-link" title="optional-tips">link-text</a>，其中：</p>
-<p>link-text： 显示的 链接文本<br>url-link： url链接<br>optional-tips： 当鼠标放置在link-text上显示的提示<br>reference-style 的语法包括两部分：</p>
-<p>[link-text][reference-id]<br>[reference-id]:url-link “optional-tips”： 在同一个文件的其他段落定义</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs markdown">这是[<span class="hljs-string">百度搜索</span>](<span class="hljs-link">www.baidu.com &quot;使用百度进行搜索&quot;</span>)inline-style<br><br>这是[<span class="hljs-string">百度搜索</span>][<span class="hljs-symbol">baidu</span>]reference-style<br><br>[<span class="hljs-symbol">baidu</span>]:<span class="hljs-link">www.baidu.com &quot;使用百度进行搜索&quot;</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-bullet">0.</span> 这是一级有序列表<br><span class="hljs-bullet">    1.</span> 这是二级有序列表<br><span class="hljs-bullet">        1.</span> 这是三级有序列表<br><span class="hljs-bullet">8.</span> 这是一级有序列表<br><span class="hljs-bullet">0.</span> 这是一级有序列表<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-bullet">*</span> 这是无序列表<br><span class="hljs-bullet">+</span> 这是无序列表<br><span class="hljs-bullet">-</span> 这是无序列表<br><br><span class="hljs-bullet">+</span> 这是一级无序列表<br><span class="hljs-bullet">    1.</span> 这是二级有序列表<br><span class="hljs-bullet">    1.</span> 这是二级有序列表<br><span class="hljs-bullet">+</span> 这是一级无序列表<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs md">&gt;这是一级引用<br>&gt;&gt;这是二级引用<br>&gt;&gt;&gt;这是三级引用<br>&gt;&gt;这还是三级引用<br>&gt;这还是三级引用<br><br>&gt;新的引用段落<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs md">表格字段一|表格字段二|表格字段三|表格字段四<br>--|:--|--:|:--:<br>默认居中对齐|左对齐|右对齐|居中对齐<br>cell|cell|cell|cell<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="分隔行"><a href="#分隔行" class="headerlink" title="分隔行"></a>分隔行</h2><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs md">在单独的一个段落中使用三个或多于三个<span class="hljs-emphasis">*或-或_将被渲染成分隔行。</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>Markdown中嵌入图片的语法跟链接的语法类似，差别在于嵌入图片比嵌入链接前多了个!特殊字符表示这是一个指向图片的url。</p>
-<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs md">这是一张使用inline-style链接的图片<br><br>[图片上传失败...(image-6ec809-1531624818276)]<br><br><br>这是一张使用reference-style链接的图片<br>![<span class="hljs-string">当图片无法显示时出现这个文本</span>][<span class="hljs-symbol">reference-id</span>]<br><br>[<span class="hljs-symbol">reference-id</span>]:<span class="hljs-link">image-url &quot;optional-tips&quot;</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="文章内部跳转"><a href="#文章内部跳转" class="headerlink" title="文章内部跳转"></a>文章内部跳转</h2><p>在vscode中左边栏有一个大纲，可以实现跳转</p>
-<ol>
-<li>利用<code>html</code>，在需要跳转到的地方设置一个锚：<span id="jump">跳转到的地方</span></li>
-<li>在跳转地：<a href="#jump">点击跳转</a></li>
-</ol>
-<h2 id="代码块的另一种方式"><a href="#代码块的另一种方式" class="headerlink" title="代码块的另一种方式"></a>代码块的另一种方式</h2><pre><code class="hljs">ls
-</code></pre>
-<h2 id="特殊的代码块"><a href="#特殊的代码块" class="headerlink" title="特殊的代码块"></a>特殊的代码块</h2><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-addition">+ this text is highlighted in green</span><br><span class="hljs-deletion">- this text is highlighted in red</span><br></code></pre></td></tr></table></figure>
-
-<h1 id="其他常用的HTML语法"><a href="#其他常用的HTML语法" class="headerlink" title="其他常用的HTML语法"></a>其他常用的HTML语法</h1><h2 id="下划线"><a href="#下划线" class="headerlink" title="下划线"></a>下划线</h2><p><ins>Underlined text</ins></p>
-<h2 id="方框"><a href="#方框" class="headerlink" title="方框"></a>方框</h2><table><tr><td>Boxed text</td></tr></table>
-
-<h2 id="上标"><a href="#上标" class="headerlink" title="上标"></a>上标</h2><p>Superscript<sup>TM</sup><br>Superscript-italic<sup><em>tm</em></sup></p>
-<h2 id="下标"><a href="#下标" class="headerlink" title="下标"></a>下标</h2><p>Subscript<sub>x</sub><br>Subscript-bold<sub><strong>min</strong></sub></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://markdown.com.cn/basic-syntax/">markdown官方手册</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/Olwiba/Kickass-markdown?tab=readme-ov-file#license">github所支持的Markwodn语法</a></p>
+                <h2 id="总结各主要c标准之间的关系和C语言的知识点"><a href="#总结各主要c标准之间的关系和C语言的知识点" class="headerlink" title="总结各主要c标准之间的关系和C语言的知识点"></a>总结各主要c标准之间的关系和C语言的知识点<br><span id="more"></span></h2><h1 id="C语言的历史"><a href="#C语言的历史" class="headerlink" title="C语言的历史"></a>C语言的历史</h1><p>作为编程语言<code>B</code>的后继者，<code>C </code>最初由 Dennis Ritchie与 Ken Thompson在 1972 年至 1973 年间在贝尔实验室开发，用于构建在 Unix 上运行的实用程序。它被应用于重新实现Unix操作系统的内核。20世纪80年代，C逐渐流行起来。它已成为使用最广泛的编程语言之一，其 C 编译器可用于几乎所有现代计算机体系结构和操作系统。</p>
+<p><a target="_blank" rel="noopener" href="https://www.bell-labs.com/usr/dmr/www/chist.html">具体的历史</a></p>
+<h1 id="c标准历史"><a href="#c标准历史" class="headerlink" title="c标准历史"></a>c标准历史</h1><h2 id="C89、ANSIC、C90"><a href="#C89、ANSIC、C90" class="headerlink" title="C89、ANSIC、C90"></a>C89、ANSIC、C90</h2><p>C语言的第一个标准是<code>1989</code>年完成的ANSI X3.159-1989 “Programming Language C”。称之为<code>C89</code>。由于这个标注由<code>ANSI</code>美国国家标准协会制定，所以又称之为<code>ANSIC</code>。</p>
+<p>在1990年，ANSI C标准（带有一些小改动）被国际标准化组织采纳为ISO&#x2F;IEC 9899:1990，这个版本有时候称为<code>C90</code>。<strong>因此，<code>C89</code>和<code>C90</code>通常指同一种语言。</strong></p>
+<p>所以这三种标准实际上是同一种标准的不同叫法。</p>
+<p><strong>需要注意的是<code>K&amp;R C</code>。1978 年，Brian Kernighan 和 Dennis Ritchie 出版了第一版《C 编程语言》。这本书以其作者名字的首字母缩写为 K&amp;R，多年来一直作为该语言的非正式规范。它描述的 C 版本通常称为“K&amp;R C”。由于该产品于 1978 年发布，因此也被称为 C78。本书的第二版涵盖了后来的ANSI C标准，如下所述。</strong></p>
+<p>所以<code>K&amp;R C</code>其实并不是严格意义上的标准，虽然有很多人将其视为最初的C语言标准。</p>
+<h2 id="C99"><a href="#C99" class="headerlink" title="C99"></a>C99</h2><p>在2000年三月，ANSI采纳了ISO&#x2F;IEC 9899:1999标准。这个标准通常指C99。</p>
+<h2 id="C11"><a href="#C11" class="headerlink" title="C11"></a>C11</h2><p>在2011年12月，ANSI采纳了ISO&#x2F;IEC 9899:2011标准。这个标准通常即C11。</p>
+<h2 id="C17"><a href="#C17" class="headerlink" title="C17"></a>C17</h2><p>C17 于 2018 年 6 月作为 ISO&#x2F;IEC 9899:2018 发布，是 C 编程语言的当前标准。<strong>它没有引入新的语言功能</strong>，仅引入技术更正以及对 C11 中的缺陷的澄清。<strong>需要注意的是该标准也被称之为<code>C18</code>，这是因为它于2017年编写并于2018年6月发布。</strong>但是官方的称呼是<code>C17</code>而不是<code>C18</code>。</p>
+<h2 id="C23"><a href="#C23" class="headerlink" title="C23"></a>C23</h2><p>C23 是下一个（C17 之后）主要 C 语言标准修订版的非正式名称。预计将于 2024 年发布。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的描述，我们可以知道c标准发展线：<br><code>K&amp;R C</code>(非正式标准)-&gt;<code>C89</code>(<code>ANSI C</code> <code>C90</code>)-&gt;<code>C99</code>-&gt;<code>C11</code>-&gt;<code>C17</code>(<code>C18</code>)-&gt;<code>C23</code></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300021379.png" srcset="/img/loading.gif" lazyload></p>
+<p>自从<code>C11</code>以来与下一次的C标准之间的时间间隔都是6年。</p>
+<hr>
+<h1 id="具体的标准"><a href="#具体的标准" class="headerlink" title="具体的标准"></a>具体的标准</h1><h1 id="C89"><a href="#C89" class="headerlink" title="C89"></a>C89</h1><p>这一代的标准是第一次严格意义上的C标准，其是<code>K&amp;R C</code>的超集。添加了：函数原型（借自 C++）、 void 指针、对国际字符集和语言环境的支持以及预处理器增强。尽管参数声明的语法得到了扩展以包括 C++ 中使用的样式，但为了与现有源代码兼容，K&amp;R 接口仍然被允许。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300058299.png" srcset="/img/loading.gif" lazyload alt="C89中的关键字"></p>
+<h1 id="c99"><a href="#c99" class="headerlink" title="c99"></a>c99</h1><p><code>c99</code>是1999年发布的C语言标准，所以称之为<code>c99</code>。<code>c99</code>是在<code>c89</code>的基础上进行的改善。</p>
+<h2 id="关键字的变化"><a href="#关键字的变化" class="headerlink" title="关键字的变化"></a>关键字的变化</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300059578.png" srcset="/img/loading.gif" lazyload alt="C99中的关键字"></p>
+<p>其引入了一些新的关键字：</p>
+<ul>
+<li>内联函数<code>inline</code></li>
+<li>指针限定<code>restrict</code></li>
+<li>布尔类型<code>_Bool</code></li>
+<li>虚数类型<code>_Imaginary</code></li>
+<li>复数类型<code>_Complex</code></li>
+</ul>
+<h1 id="C11-1"><a href="#C11-1" class="headerlink" title="C11"></a>C11</h1><h2 id="关键字的变化-1"><a href="#关键字的变化-1" class="headerlink" title="关键字的变化"></a>关键字的变化</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300102915.png" srcset="/img/loading.gif" lazyload alt="C11中的关键字"></p>
+<p>其中引入的新关键字：</p>
+<ul>
+<li><code>_Alignas</code></li>
+<li><code>_Alignof</code></li>
+<li><code>_Atomic</code></li>
+<li><code>_Generic</code></li>
+<li><code>_Noreturn</code></li>
+<li><code>_Starct_assert</code></li>
+<li><code>_Thread_loacl</code></li>
+</ul>
+<h1 id="C17-1"><a href="#C17-1" class="headerlink" title="C17"></a>C17</h1><h2 id="关键字的变化-2"><a href="#关键字的变化-2" class="headerlink" title="关键字的变化"></a>关键字的变化</h2><p>C17没有添加新的关键字。</p>
 
                 
               </div>
@@ -360,8 +359,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Markdown基础语法</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/07/Markdown基础语法/</div>
+      <div>c语言标准的研究</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/29/c22、c11、c99之间的研究/</div>
     </div>
     <div class="license-meta">
       
@@ -373,7 +372,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月7日</div>
+          <div>2023年12月29日</div>
         </div>
       
       
@@ -405,9 +404,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/07/Github-%E4%B8%8A%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE%E2%80%94%E2%80%94SmallChat/" title="Github 上的小项目——SmallChat">
+                      <a href="/2023/12/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E7%BD%91%E7%AB%99/" title="常用的知识点网站">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Github 上的小项目——SmallChat</span>
+                        <span class="hidden-mobile">常用的知识点网站</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -415,8 +414,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Linux%E4%B8%8B%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E9%97%AE%E9%A2%98/" title="读书笔记——Linux下的头文件包含问题">
-                        <span class="hidden-mobile">读书笔记——Linux下的头文件包含问题</span>
+                      <a href="/2023/12/29/%E5%AF%B9%E4%BA%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%A0%94%E7%A9%B6-uftrace/" title="对于开源项目的研究--uftrace">
+                        <span class="hidden-mobile">对于开源项目的研究--uftrace</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
