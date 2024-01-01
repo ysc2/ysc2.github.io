@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>做一个项目需要什么</title>
+    <link href="/2024/01/02/%E5%81%9A%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E9%9C%80%E8%A6%81%E4%BB%80%E4%B9%88/"/>
+    <url>/2024/01/02/%E5%81%9A%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E9%9C%80%E8%A6%81%E4%BB%80%E4%B9%88/</url>
+    
+    <content type="html"><![CDATA[<p>自己对于做项目的一点总结</p><span id="more"></span><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最为一个学生，我们需要通过一些项目来提高自己的代码能力。那么在写代码前，我们需要完成什么？</p><h1 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h1><p>不管是什么项目它都有用处。那么你的项目是干什么的，可以解决什么问题，这是我们首先需要决定的。或者说我们需要确定好一个项目目标，这样我们就有了方向。</p><p>比如做一个学生管理软件，我们就需要知道自己的软件是要解决什么问题的。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401020145043.png"><br>画好图，搞清楚每个事件的基本事件流</p><h1 id="程序背景"><a href="#程序背景" class="headerlink" title="程序背景"></a>程序背景</h1><h2 id="软硬件环境需求"><a href="#软硬件环境需求" class="headerlink" title="软硬件环境需求"></a>软硬件环境需求</h2><p>首先要搞清楚两个东西：</p><ul><li>你在哪个操作系统上写代码（开发环境）</li><li>你为哪个操作系统写代码（运行环境）</li></ul><h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>你的这个项目需要使用哪些技术，这些技术又是哪些东西来进行具体的实现的。</p><h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p>写代码之前，需要画好流程图以方便我们快速实现。</p><iframe src='/myjs/pdfjs/web/viewer.html?file=https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/abi.pdf' style='width:820px;height:800px'></iframe>]]></content>
+    
+    
+    <categories>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>segmentation和保护模式（三）</title>
     <link href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89/"/>
     <url>/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89/</url>
