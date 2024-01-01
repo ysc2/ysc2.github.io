@@ -1,0 +1,663 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分段模式和保护模式（二）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="segmentation和保护模式（二）">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="分段模式和保护模式（二）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1497).png">
+<meta property="article:published_time" content="2024-01-01T17:33:20.000Z">
+<meta property="article:modified_time" content="2024-01-01T17:36:34.400Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1497).png">
+  
+  
+  
+  <title>segmentation和保护模式（二） - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1497).png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="segmentation和保护模式（二）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-02 01:33" pubdate>
+          2024年1月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">segmentation和保护模式（二）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>分段模式和保护模式（二）</p>
+<span id="more"></span>
+
+
+<div class="Post-RichTextContainer"><div class="css-1yuhvjn"><div class="css-376mun"><div class="RichText ztext Post-RichText css-1em8ozd" options="[object Object]"><p data-first-child="" data-pid="8F8nqcAz"><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67735248" class="internal" data-za-detail-view-id="1043">segmentation和保护模式（一）</a></p><p data-pid="Jp2JhZLd">上文讲到了segment descriptor，把这些descriptors放在一起（在内存里连续分布），就构成了<b>GDT</b>（Global Descriptor Table），所以GDT也可以被称为段（描述符）表。</p><p data-pid="xfXwIgSi">页表的首地址是存储在CR3寄存器中的，类似的，GDT的首地址存在GDTR寄存器中。页表的查找是通过使用虚拟地址作为index，而GDT的查找使用的是segment selector。</p><figure data-size="normal"><noscript><img src="https://pic4.zhimg.com/v2-fcb7cb22635b1dd56f332b83b8339edf_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="599" data-rawheight="338" class="origin_image zh-lightbox-thumb" width="599" data-original="https://pic4.zhimg.com/v2-fcb7cb22635b1dd56f332b83b8339edf_r.jpg"/></noscript><div><img src="https://pic4.zhimg.com/80/v2-fcb7cb22635b1dd56f332b83b8339edf_720w.webp" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="599" data-rawheight="338" class="origin_image zh-lightbox-thumb lazy" width="599" data-original="https://pic4.zhimg.com/v2-fcb7cb22635b1dd56f332b83b8339edf_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-fcb7cb22635b1dd56f332b83b8339edf_b.jpg" data-original-token="v2-3eea09135a42fe680b29d72c642b74e5" height="338" data-lazy-status="ok"></div></figure><p data-pid="vdrLInK5">要找到某个page中的一个byte，得先通过虚拟地址的前面20位（以32位系统2级页表，4KB的page为例），查找页表得到物理页面号，再通过虚拟地址的后12位作为偏移（offset），在物理页面中找到对应的byte。</p><p data-pid="ly-x7q1d">类似的，要找到某个segment的一个byte，得先通过segment selector，查找GDT得到segment的基址（base），再通过一个offset，在该segment中找到对应的byte。那segment selector又是从哪些获取的呢？</p><p data-pid="_hCXxg2w">x86中有6个专门的寄存器CS, DS, ES, FS, GS, SS来存放这些selectors（拿专门的寄存器来放selector，主要是为了加快获取selector的速度），CS里存放的selector是指向GDT中code段的描述符，SS里存放的selector是指向GDT中stack段的描述符，DS里存放的selector是指向GDT中data段的描述符。</p><p data-pid="3pMO2ixt">ES（Extra）, FS, GS（FS和GS是80386引入的，是ES的克隆产品）既可以指向code，也可以指向data，但实际应用中大多是指向data，等同于DS（从属性上来说，heap, bss都算是data段，所以可能data需要的段比较多吧）。</p><p data-pid="HCHR1JZO">一个segment seletor的构成如下（16个bit）：</p><figure data-size="normal"><noscript><img src="https://pic4.zhimg.com/v2-3bc5c396e5d128386d402ec38ca0a05b_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="405" data-rawheight="182" class="content_image" width="405"/></noscript><div><img src="https://pic4.zhimg.com/80/v2-3bc5c396e5d128386d402ec38ca0a05b_720w.webp" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="405" data-rawheight="182" class="content_image lazy" width="405" data-actualsrc="https://pic4.zhimg.com/v2-3bc5c396e5d128386d402ec38ca0a05b_b.jpg" data-original-token="v2-bc51c267a671d325472fa6fbbd230cec" height="182" data-lazy-status="ok"></div></figure><p data-pid="Wwu5fbm3"><b>index</b>就是在GDT中查找的索引，占13位，因此GDT最大可以有 <span class="ztext-math" data-eeimg="1" data-tex="2^{13}=8192 "><span></span><span><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax_SVG" id="MathJax-Element-2-Frame" tabindex="0" style="font-size: 100%; display: inline-block; position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>2</mn><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mn>13</mn></mrow></msup><mo>=</mo><mn>8192</mn></math>" role="presentation"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="10.787ex" height="2.442ex" viewBox="0 -949.6 4644.4 1051.3" role="img" focusable="false" aria-hidden="true" style="vertical-align: -0.236ex;"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#MJMAIN-32" x="0" y="0"></use><g transform="translate(500,393)"><use transform="scale(0.707)" xlink:href="#MJMAIN-31"></use><use transform="scale(0.707)" xlink:href="#MJMAIN-33" x="500" y="0"></use></g><use xlink:href="#MJMAIN-3D" x="1586" y="0"></use><g transform="translate(2642,0)"><use xlink:href="#MJMAIN-38"></use><use xlink:href="#MJMAIN-31" x="500" y="0"></use><use xlink:href="#MJMAIN-39" x="1001" y="0"></use><use xlink:href="#MJMAIN-32" x="1501" y="0"></use></g></g></svg><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>2</mn><mrow class="MJX-TeXAtom-ORD"><mn>13</mn></mrow></msup><mo>=</mo><mn>8192</mn></math></span></span><script type="math/tex;mode=inline" id="MathJax-Element-2">2^{13}=8192 </script><span class="tex2jax_ignore math-holder">2^{13}=8192 </span></span></span>个entries。</p><p data-pid="auOEyzZL"><b>TI</b>表示要查的表是GDT还是LDT（Local Descriptor Table）。GDT是所有task共享的，是必须要有的，而LDT是task单独拥有的，是可选的，有点类似于linux中进程的page table是单独拥有的，而kernel的page table是所有进程共享的，但在segmentation的实际应用中，LDT较少被使用。</p><p data-pid="lhfgYCZI">说到<b>RPL</b> (Requested Privilege Level)，还得提到另一个概念，叫CPL (Current Privilege Level) 。CPL是放在CS和SS中的，它只会在当前运行的特权级别更改的时候（比如从用户空间trap到内核空间）被更改，而RPL是软件设置的。</p><p data-pid="3Pl-uJAk">如果要访问的数据也在当前segment，就不需要切换segment，这时的jmp跳转被称作near jump（直接给出offst即可），与之相对的是要重新查找GDT，切换segment的far jmp（需要给出segment和offset）。</p><div class="highlight"><pre><code class="language-c">    <span class="n">jmp</span> <span class="n">eax</span>      <span class="p">;</span> <span class="n">Near</span> <span class="n">jump</span>
+    <span class="n">jmp</span> <span class="mh">0x10</span><span class="o">:</span><span class="n">eax</span> <span class="p">;</span> <span class="n">Far</span> <span class="n">jump</span></code></pre></div><p data-pid="jCWSgTN6">对于CS，只有RPL和CPL的值都小于上文介绍到的segment descriptor里的DPL，也就是特权级别高于要访问的segment要求的级别才可以。在切换segment的时候，需要将新的segment selector放入segment register，此时CPU会进行根据公式 <span class="ztext-math" data-eeimg="1" data-tex="MAX(CPL, RPL)<= DPL"><span></span><span><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax_SVG" id="MathJax-Element-1-Frame" tabindex="0" style="font-size: 100%; display: inline-block; position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy=&quot;false&quot;>(</mo><mi>C</mi><mi>P</mi><mi>L</mi><mo>,</mo><mi>R</mi><mi>P</mi><mi>L</mi><mo stretchy=&quot;false&quot;>)</mo><mo>&amp;lt;=</mo><mi>D</mi><mi>P</mi><mi>L</mi></math>" role="presentation"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="29.355ex" height="2.789ex" viewBox="0 -849.8 12638.7 1200.9" role="img" focusable="false" aria-hidden="true" style="vertical-align: -0.815ex;"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#MJMATHI-4D" x="0" y="0"></use><use xlink:href="#MJMATHI-41" x="1051" y="0"></use><use xlink:href="#MJMATHI-58" x="1802" y="0"></use><use xlink:href="#MJMAIN-28" x="2654" y="0"></use><use xlink:href="#MJMATHI-43" x="3044" y="0"></use><use xlink:href="#MJMATHI-50" x="3804" y="0"></use><use xlink:href="#MJMATHI-4C" x="4556" y="0"></use><use xlink:href="#MJMAIN-2C" x="5237" y="0"></use><use xlink:href="#MJMATHI-52" x="5682" y="0"></use><use xlink:href="#MJMATHI-50" x="6442" y="0"></use><use xlink:href="#MJMATHI-4C" x="7193" y="0"></use><use xlink:href="#MJMAIN-29" x="7875" y="0"></use><g transform="translate(8542,0)"><use xlink:href="#MJMAIN-3C"></use><use xlink:href="#MJMAIN-3D" x="778" y="0"></use></g><use xlink:href="#MJMATHI-44" x="10377" y="0"></use><use xlink:href="#MJMATHI-50" x="11205" y="0"></use><use xlink:href="#MJMATHI-4C" x="11957" y="0"></use></g></svg><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo><mi>C</mi><mi>P</mi><mi>L</mi><mo>,</mo><mi>R</mi><mi>P</mi><mi>L</mi><mo stretchy="false">)</mo><mo>&lt;=</mo><mi>D</mi><mi>P</mi><mi>L</mi></math></span></span><script type="math/tex;mode=inline" id="MathJax-Element-1">MAX(CPL, RPL)<= DPL</script><span class="tex2jax_ignore math-holder">MAX(CPL, RPL)&lt;= DPL</span></span></span> 来进行这一检查，</p><figure data-size="normal"><noscript><img src="https://pic3.zhimg.com/v2-de90e030ae3b71aa159d612053a52e42_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="493" data-rawheight="304" class="origin_image zh-lightbox-thumb" width="493" data-original="https://pic3.zhimg.com/v2-de90e030ae3b71aa159d612053a52e42_r.jpg"/></noscript><div><img src="https://pic3.zhimg.com/80/v2-de90e030ae3b71aa159d612053a52e42_720w.webp" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="493" data-rawheight="304" class="origin_image zh-lightbox-thumb lazy" width="493" data-original="https://pic3.zhimg.com/v2-de90e030ae3b71aa159d612053a52e42_r.jpg" data-actualsrc="https://pic3.zhimg.com/v2-de90e030ae3b71aa159d612053a52e42_b.jpg" data-original-token="v2-e2df83028c844cda274b4f0f79f0a648" height="304" data-lazy-status="ok"></div></figure><p data-pid="5cl4CiPB">出于一些特殊用途的考虑，RPL的值可以设置的比DPL低，但是在访问 segment的时候是无效的，还得听CPL的。只有RPL的值大于DPL，也就是主动降低级别时（也是出于其他用途，在此不展开），RPL才有效。下图中，实线部分的访问（A和B访问E）是被允许的，而虚线部分的访问（C和D访问E）是被禁止的。</p><figure data-size="normal"><noscript><img src="https://pic4.zhimg.com/v2-86e1de0c0b37a1425d8d453c13a1e8af_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="608" data-rawheight="431" class="origin_image zh-lightbox-thumb" width="608" data-original="https://pic4.zhimg.com/v2-86e1de0c0b37a1425d8d453c13a1e8af_r.jpg"/></noscript><div><img src="https://pic4.zhimg.com/80/v2-86e1de0c0b37a1425d8d453c13a1e8af_720w.webp" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="608" data-rawheight="431" class="origin_image zh-lightbox-thumb lazy" width="608" data-original="https://pic4.zhimg.com/v2-86e1de0c0b37a1425d8d453c13a1e8af_r.jpg" data-actualsrc="https://pic4.zhimg.com/v2-86e1de0c0b37a1425d8d453c13a1e8af_b.jpg" data-original-token="v2-bf1542d1163a454b44715d70b412e0bb" height="431" data-lazy-status="ok"></div></figure><p data-pid="VF05PfLy">对于SS, RPL, DPL, CPL的值必须完全一样。</p><p data-pid="-Ptbecy7">介绍完这些bit field的含义，来看一段实际的设置代码：</p><div class="highlight"><pre><code class="language-c"><span class="n">mov</span> <span class="n">ax</span><span class="p">,</span> <span class="mh">0x10</span>
+<span class="n">mov</span> <span class="n">ds</span><span class="p">,</span> <span class="n">ax</span></code></pre></div><p data-pid="GTZ-dgZt">x86里不能把立即数直接往DS里送，得通过AX中转一下（好在AX这个中间商没有赚差价）。代码执行完后DS寄存器中的值应该为0x10，表达为二进制的对应关系如下：</p><figure data-size="normal"><noscript><img src="https://pic3.zhimg.com/v2-a8d350d54d6e17a1ae757745d845799e_b.png" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="349" data-rawheight="57" class="content_image" width="349"/></noscript><div><img src="https://pic3.zhimg.com/80/v2-a8d350d54d6e17a1ae757745d845799e_720w.webp" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="349" data-rawheight="57" class="content_image lazy" width="349" data-actualsrc="https://pic3.zhimg.com/v2-a8d350d54d6e17a1ae757745d845799e_b.png" data-original-token="v2-a8d350d54d6e17a1ae757745d845799e" height="57" data-lazy-status="ok"></div></figure><p data-pid="A908xXwb">则DS中的selector指向的是GDT中的第三个entry（index从0开始算）。</p><p data-pid="mnE4Ucnu">同样的segement:offset的logical address格式，这时表达的linear address就不再是"segment&lt;&lt;4 + offset"，而是"segment base (found from GDT[segment selector]) + offset"了。</p><p data-pid="5c2aw8pD">80286中的segment register不再直接指向segment，而是要经过一个GDT查表的过程，而GDT表中的的segment descriptor有limit和各种权限检测位，起到了对地址访问的保护作用，所以这种内存访问被称作保护模式（protected mode）。</p><figure data-size="normal"><noscript><img src="https://pic1.zhimg.com/v2-7a8c61a37a16abd57d3506911d886d30_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="632" data-rawheight="596" class="origin_image zh-lightbox-thumb" width="632" data-original="https://pic1.zhimg.com/v2-7a8c61a37a16abd57d3506911d886d30_r.jpg"/></noscript><div><img src="https://pic1.zhimg.com/80/v2-7a8c61a37a16abd57d3506911d886d30_720w.webp" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="632" data-rawheight="596" class="origin_image zh-lightbox-thumb lazy" width="632" data-original="https://pic1.zhimg.com/v2-7a8c61a37a16abd57d3506911d886d30_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-7a8c61a37a16abd57d3506911d886d30_b.jpg" data-original-token="v2-687960813e0d0fff5aa5b40da8bb2cb0" height="596" data-lazy-status="ok"></div></figure><p data-pid="gkUyihHu">所有task共用GDT，岂不是task A也可以访问到task B的segment了？理论上是可以的，但是每个task用的segment descriptor，都是操作系统来建立的，建立好之后某个task只能访问为它分配的那几个segments。所以，保护模式下的segmentation机制既提供了不同属性的segment之间的隔离，也提供了多任务环境下不同task之间的隔离。</p><p data-pid="NA-ggbaW"><b>番外 - segmentation中的TLB </b></p><p data-pid="D5jwXoQ0">Paging机制里有为了加快查找速度，缓存页表项的TLB，同样，在segmentation里也有类似的硬件单元。每当一个segment seletor被载入segment register中， 表明该segment当前正在被访问，则将该segment seletor指向的segment descriptor存入专门的nonprogrammable register中（可理解位描述符缓存）。</p><p data-pid="8ie0VzZ9">一个segment register对应一个nonprogrammable register，所以只要segment register中的内容没有发生变化，CPU就不需要去查找GDT，直接从nonprogrammable register获取segment的地址。</p><p data-pid="nqu9Qy2a">segmentation的机制介绍完了，那它和paging机制是怎么共存和交互的呢？请看<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67576012" class="internal" data-za-detail-view-id="1043">下文</a>分解。</p><p class="ztext-empty-paragraph"><br></p><p data-pid="2ilWvwSV"><i>原创文章，转载请注明出处。</i></p></div></div></div></div>
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67714693">文章转载于此</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Linux/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="category-chain-item">内存管理</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>segmentation和保护模式（二）</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/02/segmentation和保护模式（二）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89/" title="segmentation和保护模式（三）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">segmentation和保护模式（三）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" title="segmentation和保护模式（一）">
+                        <span class="hidden-mobile">segmentation和保护模式（一）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
