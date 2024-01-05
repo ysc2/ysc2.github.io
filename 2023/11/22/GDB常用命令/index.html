@@ -16,16 +16,16 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="如何使用GDB调试Linux内核">
+    <meta name="description" content="如何使用GDB进行调试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GDB常用命令">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/22/GDB%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="如何使用GDB调试Linux内核">
+<meta property="og:description" content="如何使用GDB进行调试">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-liudmyla-shalimova-18286209.jpg">
 <meta property="article:published_time" content="2023-11-22T11:20:38.000Z">
-<meta property="article:modified_time" content="2023-12-24T16:38:56.745Z">
+<meta property="article:modified_time" content="2024-01-03T07:15:13.989Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          13k 字
+          14k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          111 分钟
+          114 分钟
         
       </span>
     
@@ -275,7 +275,7 @@
             
               <div class="markdown-body">
                 
-                <p>如何使用GDB调试Linux内核</p>
+                <p>如何使用GDB进行调试</p>
 <span id="more"></span>
 
 
@@ -419,7 +419,7 @@
 <li><code>info</code>和<code>set</code>&amp;<code>unset</code>跟<code>show</code>之间的关系</li>
 </ol>
 <p>info	查看程序状态信息。例如断点、寄存器、线程、局部变量等</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs txt">info break 查看断点<br>info signal 查看信号<br>info registers 查看寄存器<br>info locals 查看局部变量<br>info signal 查看信号的相关消息<br>info proc 查看当前进程的信息<br>....<br>help info 使用这个命令查看更多信息<br></code></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs txt">info break 查看断点<br>info signal 查看信号<br>info registers 查看寄存器<br>info all-registers 查看所有寄存器<br>info locals 查看局部变量<br>info signal 查看信号的相关消息<br>info proc 查看当前进程的信息<br>....<br>help info 使用这个命令查看更多信息<br></code></pre></td></tr></table></figure>
 <p>show	查看 gdb 配置信息。与 info 不同， show 查看 GDB 本身的配置信息</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">show args 查看程序的参数<br></code></pre></td></tr></table></figure>
 <p>set	    设置变量值。有时指定变量类型才能设置，如 <code>set *(int*)(&amp;a) = 3</code>，还可以配置程序的环境如：环境变脸、参数。</p>
@@ -474,9 +474,15 @@
 <ol start="19">
 <li><p>注意以<code>i</code>结尾的命令并不是打断点，单汇编指令执行如：<code>nexti</code> <code>starti</code></p>
 </li>
-<li><p>查看内存上的值：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#格式</span><br>x/NFU ADDRESS <br><span class="hljs-comment">#参数说明：</span><br>N:重复次数<br>F:格式，在后面有写<br>U:单位，右面有写<br></code></pre></td></tr></table></figure></li>
+<li><p>查看内存上的值：<br><br>常使用这个命令查看栈空间。<br>特别需要注意的是在小端序上，显示的值是需要从右往左多：</p>
+<pre><code class="hljs">0xa0  0x92  0x55  0x55  0x55  0x55  0x00  0x00
+</code></pre>
+</li>
 </ol>
+<p>需要右往左读：0x00 00 55 55 55 55 90 a0</p>
+<p><strong>需要注意的一件事是，这里堆地址以 0x5555 开头，栈地址以 0x7fffff 开头。 所以很容易区分栈上的地址和堆上的地址之间的区别。</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#格式</span><br>x/NFU ADDRESS <br><span class="hljs-comment">#参数说明：</span><br>N:重复次数<br>F:格式，在后面有写<br>U:单位，右面有写<br></code></pre></td></tr></table></figure>
+
 <p>F:格式</p>
 <pre><code class="hljs">u:显示为无符号十进制数
 
@@ -500,6 +506,8 @@ h:半字（两个字节）
 w:字（四字节）
 g:双字
 </code></pre>
+<p>特殊用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">x/ls string <span class="hljs-comment">#查看string中的值</span><br></code></pre></td></tr></table></figure>
 <ol start="21">
 <li><p>生成内存转储</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">generate-core-file<br><span class="hljs-comment">#或</span><br>gcore命令可以直接从命令行生成内核转储文件<br></code></pre></td></tr></table></figure>
@@ -516,13 +524,16 @@ g:双字
           </div>
 
 <ol start="23">
-<li>如何快速查看程序的退出原因<ol>
+<li><p>如何快速查看程序的退出原因</p>
+<ol>
 <li>直接执行 <code>c</code></li>
 <li><code>info program</code>这个指令可以直接查看程序退出的原因</li>
 <li>使用<code>info stack</code>查看退出函数的调用栈</li>
 <li>使用<code>info registers</code>查看退出时寄存器中的值</li>
 </ol>
 </li>
+<li><p>改善gdb的输出的设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">set</span> <span class="hljs-built_in">print</span> object on: 当打印指向对象的指针时，显示其真实类型<br><span class="hljs-built_in">set</span> <span class="hljs-built_in">print</span> array on: 用更好的格式打印数组，但是需要占用更多空间<br><span class="hljs-built_in">set</span> <span class="hljs-built_in">print</span> pretty on: 打印结构体/类时使用缩进<br></code></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html">https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/wizardforcel/gdb-tips-100/146735">https://www.kancloud.cn/wizardforcel/gdb-tips-100/146735</a></p>

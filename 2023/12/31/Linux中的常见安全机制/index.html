@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1553).png">
 <meta property="article:published_time" content="2023-12-31T06:55:11.000Z">
-<meta property="article:modified_time" content="2023-12-31T15:38:27.547Z">
+<meta property="article:modified_time" content="2024-01-03T13:47:52.440Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          667 字
+          3.1k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          6 分钟
+          27 分钟
         
       </span>
     
@@ -283,6 +283,32 @@
 <p>Canary的值是栈上的一个随机数，在程序启动时随机生成并保存在比函数返回地址更低的位置。由于栈溢出是从低地址向高地址进行覆盖，因此攻击者要想控制函数的返回指针，就一定要先覆盖到Canary。程序只需要在函数返回前检查Canary是否被篡改，就可以达到保护栈的目的。</p>
 <p><a target="_blank" rel="noopener" href="http://html.rhhz.net/buptjournal/html/2017s127.htm">那么这个随机值是如何产生的？</a></p>
 <p>Canaries通常可分为3类：terminator、random和random XOR，具体的实现有StackGuard、StackShield、ProPoliced等。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>我们通过一个例子来了解金丝雀机制是如何工作的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//test.c</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">char</span> arr [<span class="hljs-number">10</span>];<br>    sacnf(<span class="hljs-string">&quot;%s&quot;</span>,arr);<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ter">gcc -Wstack-protector -g ./test.c<br></code></pre></td></tr></table></figure>
+<p>通过<code>objdump -S ./a.out</code>查看反汇编。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs asm">#include &lt;stdio.h&gt;<br><br>int main (void)<br>&#123;<br>    1169:       f3 0f 1e fa             endbr64<br>    116d:       55                      push   %rbp<br>    116e:       48 89 e5                mov    %rsp,%rbp<br>    1171:       48 83 ec 20             sub    $0x20,%rsp<br>    1175:       64 48 8b 04 25 28 00    mov    %fs:0x28,%rax<br>    117c:       00 00<br>    117e:       48 89 45 f8             mov    %rax,-0x8(%rbp)<br>    1182:       31 c0                   xor    %eax,%eax<br>    char arry [10];<br>    scanf(&quot;%s&quot;,arry);<br>    1184:       48 8d 45 ee             lea    -0x12(%rbp),%rax<br>    1188:       48 89 c6                mov    %rax,%rsi<br>    118b:       48 8d 05 72 0e 00 00    lea    0xe72(%rip),%rax        # 2004 &lt;_IO_stdin_used+0x4&gt;<br>    1192:       48 89 c7                mov    %rax,%rdi<br>    1195:       b8 00 00 00 00          mov    $0x0,%eax<br>    119a:       e8 d1 fe ff ff          call   1070 &lt;__isoc99_scanf@plt&gt;<br><br>    return 0;<br>    119f:       b8 00 00 00 00          mov    $0x0,%eax<br>&#125;<br>    11a4:       48 8b 55 f8             mov    -0x8(%rbp),%rdx<br>    11a8:       64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx<br>    11af:       00 00<br>    11b1:       74 05                   je     11b8 &lt;main+0x4f&gt;<br>    11b3:       e8 a8 fe ff ff          call   1060 &lt;__stack_chk_fail@plt&gt;<br>    11b8:       c9                      leave<br>    11b9:       c3                      ret<br><br>Disassembly of section .fini:<br><br>00000000000011bc &lt;_fini&gt;:<br>    11bc:       f3 0f 1e fa             endbr64<br>    11c0:       48 83 ec 08             sub    $0x8,%rsp<br>    11c4:       48 83 c4 08             add    $0x8,%rsp<br>    11c8:       c3                      ret<br></code></pre></td></tr></table></figure>
+
+<p>在开启了栈保护之后，我们如果输入超过10字节的内容会发生什么？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ter">*** stack smashing detected ***: terminated<br></code></pre></td></tr></table></figure>
+<p>可以看到有东西阻止了错误。如果没有使用保护机制的话就会直接发生<strong>段错误</strong>。</p>
+<h2 id="分析二进制代码"><a href="#分析二进制代码" class="headerlink" title="分析二进制代码"></a>分析二进制代码</h2><p>现在我们查看<code>main</code>函数的二进制代码，可以看到<code>mov    %fs:0x28,%rax</code>这样一句话。在Linux中，fs寄存器被用于存放线程局部存储（Thread Local Storage, TLS），TLS主要是为了避免多个线程同时访存同一全局变量或者静态变量时所导致的冲突，尤其是多个线程同时需要修改这一变量时。TLS为每一个使用该全局变量的线程都提供一个变量值的副本，每一个线程均可以独立地改变自己的副本，而不会和其他线程的副本冲突。从线程的角度看，就好像每一个线程都完全拥有该变量。而从全局变量的角度看，就好像一个全局变量被克隆成了多份副本，每一份副本都可以被一个线程独立地改变。在glibc的实现里，TLS结构体tcbhead_t的定义如下所示，偏移0x28的地方正是stack_guard。</p>
+<p>Ⅰ. Glibc中</p>
+<p>1.内核提供的随机数生成器_dl_random产生随机数</p>
+<p>2.函数_dl_setup_stack_chk_guard根据系统是32位还是64位将随机数处理成4byte或8byte的canary，并赋给变量__stack_chk_guard</p>
+<p>3.宏THREAD_SET_STACK_GUARD通过处理将变量__stack_chk_guard放入结构体tcbhead_t的成员stack_guard中（即fs:28h）</p>
+<p>Ⅱ. GCC中</p>
+<p>4.选择canary的插入位置, 以及引入与canary有关的汇编代码</p>
+<p>Ⅲ. 程序运行中</p>
+<p>5.程序函数开头从 fs:28h 中取出8字节的值插入到栈中，同时清空rax中的副本</p>
+<p>6.函数结束时，程序会再次从 fs:28h 中将canary的值取出与栈上的canary进行比较</p>
+<p>7.如果canary不同则跳到函数 ___stack_chk_fail 直接终止程序，否则继续执行程序</p>
+<h1 id="gcc中的安全选项"><a href="#gcc中的安全选项" class="headerlink" title="gcc中的安全选项"></a>gcc中的安全选项</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">-Wstack-protector <span class="hljs-comment"># 对于alloca系列函数和内部缓冲区大于8字节的函数开启保护</span><br>-fstack-protector-strong <span class="hljs-comment"># 增强对包含局部数组定义和地址引用的函数的保护</span><br>-fstack-protector-all <span class="hljs-comment"># 对所有函数开启保护</span><br><br>-fstack-protector-explicit <span class="hljs-comment"># 对于包含stack_protect属性的函数开启保护</span><br>-fon-fstack-protector <span class="hljs-comment"># 关闭金丝雀保护，为默认情况</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="控制流保护"><a href="#控制流保护" class="headerlink" title="控制流保护"></a>控制流保护</h1><p>有时我们在反汇编的时候会看到<code>endbr64</code>这样一条指令，这条指令就是控制流保护指令，防止攻击者对于控制流的劫持。需要注意的是，<code>endbr64</code>指令通常是由编译器在生成代码时自动插入的，而不是由程序员直接编写的。这是因为它是与控制流保护相关的低级指令，通常不需要直接操作。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://zhakul.top/2019/03/19/Glibc%E4%B8%ADcanary%E7%9A%84%E5%AE%9E%E7%8E%B0/">https://zhakul.top/2019/03/19/Glibc%E4%B8%ADcanary%E7%9A%84%E5%AE%9E%E7%8E%B0/</a></p>
+<p><a target="_blank" rel="noopener" href="https://kiprey.github.io/2022/08/thread_canary/#4-TCB-%E4%BD%8D%E7%BD%AE">https://kiprey.github.io/2022/08/thread_canary/#4-TCB-%E4%BD%8D%E7%BD%AE</a></p>
 
                 
               </div>

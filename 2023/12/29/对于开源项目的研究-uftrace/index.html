@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(620).png">
 <meta property="article:published_time" content="2023-12-29T08:07:33.000Z">
-<meta property="article:modified_time" content="2023-12-29T15:52:30.760Z">
+<meta property="article:modified_time" content="2024-01-05T06:47:06.549Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          2.7k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          11 分钟
+          23 分钟
         
       </span>
     
@@ -283,7 +283,22 @@
 
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过上述代码，可以发现如果某个变量过长的话，应该要将其缩短。这里使用的方法就是通过<code>+=</code>来实现的。</p>
 <p>在C语言中的符号<code>\</code>被专门用来连接上下两行。</p>
-
+<h1 id="对于源代码的研究"><a href="#对于源代码的研究" class="headerlink" title="对于源代码的研究"></a>对于源代码的研究</h1><h2 id="关于提示消息的输入输出"><a href="#关于提示消息的输入输出" class="headerlink" title="关于提示消息的输入输出"></a>关于提示消息的输入输出</h2><p>在这个项目中使用<code>__attrabute__((nead)) static const uftrace_help []</code>来存储帮助信息。使用了<code>__attrabute__((nead))</code>来告诉编译器就算没有使用这个对象也不要优化它。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> __used __attribute__((used))</span><br><br>__used <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span> uftrace_usage[] =<br><span class="hljs-string">&quot; uftrace -- function (graph) tracer for userspace\n&quot;</span><br><span class="hljs-string">&quot;\n&quot;</span><br><span class="hljs-string">&quot; usage: uftrace [COMMAND] [OPTION...] [&lt;program&gt;]\n&quot;</span><br><span class="hljs-string">&quot;\n&quot;</span><br><span class="hljs-string">&quot; COMMAND:\n&quot;</span><br><span class="hljs-string">&quot;   record          Run a program and saves the trace data\n&quot;</span><br><span class="hljs-string">&quot;   replay          Show program execution in the trace data\n&quot;</span><br><span class="hljs-string">&quot;   report          Show performance statistics in the trace data\n&quot;</span><br><span class="hljs-string">&quot;   live            Do record and replay in a row (default)\n&quot;</span><br><span class="hljs-string">&quot;   info            Show system and program info in the trace data\n&quot;</span><br><span class="hljs-string">&quot;   dump            Show low-level trace data\n&quot;</span><br><span class="hljs-string">&quot;   recv            Save the trace data from network\n&quot;</span><br><span class="hljs-string">&quot;   graph           Show function call graph in the trace data\n&quot;</span><br><span class="hljs-string">&quot;   script          Run a script for recorded trace data\n&quot;</span><br><span class="hljs-string">&quot;   tui             Show text user interface for graph and report\n&quot;</span><br><span class="hljs-string">&quot;\n&quot;</span>;<br></code></pre></td></tr></table></figure>
+<p>然后使用变参函数<code>vprintf</code>将其输出：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> __pr_dbg(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *fmt, ...)<br>&#123;<br>	va_list ap;<br><br>	color(TERM_COLOR_GRAY, logfp);<br><br>	va_start(ap, fmt);<br>	<span class="hljs-built_in">vfprintf</span>(logfp, fmt, ap);<br>	va_end(ap);<br><br>	color(TERM_COLOR_RESET, logfp);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>调用该函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">__pr_dbg(uftrace_usage);<br></code></pre></td></tr></table></figure>
+<p>所以这里需要注意的是，虽然使用的是变参函数<code>printf</code>的变体，但是没有直接使用变参函数。而是使用<code>fmt</code>。</p>
+<p>关于这个可变参数函数的用法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> PR_FMT <span class="hljs-string">&quot;uftrace&quot;</span></span><br>__pr_dbg(PR_FMT <span class="hljs-string">&quot;: %s:%d:%s\n ERROR: &quot;</span> fmt, __FILE__, __LINE__, __func__, ##__VA_ARGS__)<br></code></pre></td></tr></table></figure>
+<p>需要注意两点：</p>
+<ul>
+<li>在<code>fmt</code>之前还可以添加字符串</li>
+<li><code>__VA_ARGS__</code>必之前须要添加<code>##</code></li>
+</ul>
+<h3 id="可变参数的其他使用"><a href="#可变参数的其他使用" class="headerlink" title="可变参数的其他使用"></a>可变参数的其他使用</h3><p>可以使用这中函数来输出日志；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">__pr_dbg(<span class="hljs-string">&quot;&quot;</span>)<br></code></pre></td></tr></table></figure>
                 
               </div>
             
