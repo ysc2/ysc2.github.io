@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3779).png">
 <meta property="article:published_time" content="2024-01-02T10:47:04.000Z">
-<meta property="article:modified_time" content="2024-01-05T11:18:31.133Z">
+<meta property="article:modified_time" content="2024-01-05T13:35:12.583Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.3k 字
+          7.5k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          61 分钟
+          63 分钟
         
       </span>
     
@@ -320,8 +320,10 @@
 <p>DS、ES、SS：</p>
 <p>64 位模式下的 DS、ES 和 SS 寄存器。在 64 位模式下，ES、DS 和 SS 段寄存器的内容被忽略。段寄存器隐藏部分中的所有字段（基址、限制和属性）都将被忽略。64 位模式下引用 ES、DS 或 SS 段的地址计算被视为段基址为 0。处理器不执行限制检查，而是检查所有虚拟地址引用是否采用规范形式。</p>
 <p>GS、FS：</p>
-<p>与 CS、DS、ES 和 SS 段不同，FS 和 GS 段覆盖<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote">&lt;span class&#x3D;”hint–top hint–rounded” aria-label&#x3D;”Segment Override 段覆盖   我们已经知道，有效地址是通过段寄存器值加上相应偏移量的值来计算的。但是，如果我们想使用特定代码的默认段之外的其他段寄存器怎么办？段覆盖提供了这样一种方法：</p>
-<pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre><pre><code class="hljs c">GS寄存器常用来访问进程的控制块(PCB)<br><br>FS寄存器常用来访问TLS本地线程存储<br></code></pre>">[2]</span></a></sup>可以在 64 位模式下使用。当在 64 位模式下使用 FS 和 GS 段覆盖时，它们各自的基地址将用于有效地址 (EA<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Effective address (EA) 中文又称之为偏移地址、有效地址。其实就是相对于基地址的偏移">[1]</span></a></sup>) 计算。完整的 EA 计算则变为（FS 或 GS​​）。基数 + 基数 + （规模 + 指数）+ 位移。 FS.base 和 GS.base 值也扩展到完整的 64 位虚拟地址大小，如图 4-5 所示。 64 位线性地址计算中的任何溢出都将被忽略，结果地址会绕到地址空间的另一端。
+<p>与 <code>CS、DS、ES</code> 和 <code>SS</code> 段不同，<code>FS</code> 和 <code>GS</code> 段覆盖<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote">&lt;span class&#x3D;”hint–top hint–rounded” aria-label&#x3D;”Segment Override 段覆盖   我们已经知道，有效地址是通过段寄存器值加上相应偏移量的值来计算的。但是，如果我们想使用特定代码的默认段之外的其他段寄存器怎么办？段覆盖提供了这样一种方法：</p>
+<pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre><pre><code class="hljs c">GS寄存器常用来访问进程的控制块(PCB)<br><br>FS寄存器常用来访问TLS本地线程存储<br></code></pre>">[2]</span></a></sup>可以在 64 位模式下使用。当在 64 位模式下使用 `FS` 和 `GS` 段覆盖时，它们各自的基地址将用于有效地址 (EA<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Effective address (EA) 中文又称之为偏移地址、有效地址。其实就是相对于基地址的偏移">[1]</span></a></sup>) 计算。完整的 `EA` 计算则变为（`FS` 或 `GS​​`）。FS.base 和 GS.base 值也扩展到完整的 64 位虚拟地址大小。
+
+<p><code>fs</code> 和 <code>gs</code> 是唯一在 64 位模式下执行任何操作的段覆盖。</p>
 <h1 id="分页的管理"><a href="#分页的管理" class="headerlink" title="分页的管理"></a>分页的管理</h1><p>我们已经知道，现代cpu的内存管理方式。分段的方法使用的越来越少。下面我们学习cpu是如何分页的。</p>
 <h2 id="长模式"><a href="#长模式" class="headerlink" title="长模式"></a>长模式</h2><p>下面这张图显示了，长模式下两种子模式的内存管理方法。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401011730560.png" srcset="/img/loading.gif" lazyload></p>
 <p>可以看到，实际上在64bit模式下内存管理是直接通过分页机制进行的，而不再需要前文所述的哪些步骤。但是对应兼容模式来说是需要的，首先将逻辑地址转换为线性地址（虚拟地址），然后通过分页机制完成虚拟地址到物理地址的转换。</p>
@@ -426,6 +428,8 @@
 <li>使用二级表，而不是三级表<br>其他和<code>4KB</code>基本一致。</li>
 </ul>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041647561.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h1><h2 id="限制检查"><a href="#限制检查" class="headerlink" title="限制检查"></a>限制检查</h2><p>除 64 位模式外，所有引用内存的指令都会执行限制检查。限制检查检测尝试访问当前段边界之外的内存、尝试执行当前代码段之外的指令以及在当前描述符表之外进行索引。如果指令未通过限制检查，则所有其他段限制违规都会发生一般保护异常，或者堆栈段限制违规会发生堆栈故障异常。</p>
+<p>在 64 位模式下，在访问 CS、DS、ES、FS、GS 和 SS 选择器寄存器引用的任何段期间，不会检查段限制。相反，处理器会检查用于引用内存的虚拟地址是否采用规范地址形式。在 64 位模式下，与传统模式和兼容模式一样，会检查描述符表限制。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>AMD64 Architecture Programmer’s Manual Volume 1:Application Programming</p>
 <p>AMD64 Architecture Programmer’s Manual Volume 2:System Programming</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67735248">https://zhuanlan.zhihu.com/p/67735248</a></p>
