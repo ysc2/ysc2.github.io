@@ -16,17 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言我们知道在一个进程中，所有线程是共享同一个地址空间的。所以，如果一个变量是全局的或者是静态的，那么所有线程访问的是同一份，如果某一个线程对其进行了修改，也就会影响到其他所有的线程。不过我们可能并不希望这样，所以更多的推荐用基于堆栈的自动变量或函数参数来访问数据(也就是使用非static的、局部的对象)，因为基于堆栈的变量总是和特定的线程相联系的。C 库的许多函数使用的 errno 就是一个例子">
+    <meta name="description" content="记载TLS的相关知识点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TLS线程本地存储">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/03/TLS%E7%BA%BF%E7%A8%8B%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言我们知道在一个进程中，所有线程是共享同一个地址空间的。所以，如果一个变量是全局的或者是静态的，那么所有线程访问的是同一份，如果某一个线程对其进行了修改，也就会影响到其他所有的线程。不过我们可能并不希望这样，所以更多的推荐用基于堆栈的自动变量或函数参数来访问数据(也就是使用非static的、局部的对象)，因为基于堆栈的变量总是和特定的线程相联系的。C 库的许多函数使用的 errno 就是一个例子">
+<meta property="og:description" content="记载TLS的相关知识点">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3835).png">
 <meta property="article:published_time" content="2024-01-03T14:35:23.000Z">
-<meta property="article:modified_time" content="2024-01-03T15:10:22.938Z">
+<meta property="article:modified_time" content="2024-01-05T10:47:27.983Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3835).png">
   
   
   
@@ -190,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3835).png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -219,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          394 字
+          405 字
         
       </span>
     
@@ -272,7 +275,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们知道在一个进程中，<strong>所有线程是共享同一个地址空间的</strong>。所以，如果一个变量是全局的或者是静态的，那么所有线程访问的是同一份，如果某一个线程对其进行了修改，也就会影响到其他所有的线程。不过我们可能并不希望这样，所以更多的推荐用基于堆栈的自动变量或函数参数来访问数据(也就是使用非static的、局部的对象)，因为基于堆栈的变量总是和特定的线程相联系的。C 库的许多函数使用的 <code>errno</code> 就是一个例子。</p>
+                <p>记载TLS的相关知识点</p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们知道在一个进程中，<strong>所有线程是共享同一个地址空间的</strong>。所以，如果一个变量是全局的或者是静态的，那么所有线程访问的是同一份，如果某一个线程对其进行了修改，也就会影响到其他所有的线程。不过我们可能并不希望这样，所以更多的推荐用基于堆栈的自动变量或函数参数来访问数据(也就是使用非static的、局部的对象)，因为基于堆栈的变量总是和特定的线程相联系的。C 库的许多函数使用的 <code>errno</code> 就是一个例子。</p>
 <p>不过如果某些时候，我们就是需要依赖全局变量或者静态变量，那有没有办法保证在多线程程序中能访问而不互相影响呢？答案是有的。操作系统帮我们提供了这个功能——TLS线程本地存储。TLS的作用是能将数据和执行的特定的线程联系起来。每一个线程都会有一个本地的副本，相当于每个线程都拥有了这个对象一样。</p>
 <h1 id="Linux中的线程本地存储"><a href="#Linux中的线程本地存储" class="headerlink" title="Linux中的线程本地存储"></a>Linux中的线程本地存储</h1><p>在Linux中，如果想要使用创建线程本地存储只需要使用关键字<code>_thread</code>。</p>
 
@@ -283,6 +289,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 
