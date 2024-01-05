@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="hhttps://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png">
 <meta property="article:published_time" content="2024-01-05T14:17:35.000Z">
-<meta property="article:modified_time" content="2024-01-05T14:20:55.876Z">
+<meta property="article:modified_time" content="2024-01-05T14:22:01.498Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
@@ -233,7 +233,7 @@
         
         
         
-          38 分钟
+          37 分钟
         
       </span>
     
@@ -342,19 +342,9 @@
 <p>上面中提到使用多级页表的方式对于减少页表自身占用的内存空间确实是非常有效的。然而，为此付出的代价就是增加了地址转换过程中对内存的访问次数，进而增加了转换时间。那在除了前面介绍的TLB之外，还有哪些可以减少内存访问次数，加快地址转换的方法呢？HugePage即可以。</p> 
 <p>而HugePage它是使用较大的内存页来代替默认的4k大小，这就意味相同的物理内存，内存页的数量会更少，所以需要的page table（页表条目也会变少），同样TLB的条目数也会变少。<br> 好处是：<br> 节约了页表所占用的内存大小，并且地址转换变少。所以缺页中断变少，TLBmiss变少。从而提高了内存访问性能、TLB命中率，从整体上提高了系统的效率 。</p> 
 <p>另外，由于地址转换所需的信息一般保存在CPU的缓存中，huge page的使用让地址转换信息减少，从而减少了CPU缓存的使用，减轻了CPU缓存的压力，让CPU缓存能更多地用于应用程序的数据缓存，也能够在整体上提升系统的性能。</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p> 
-<p>&nbsp;</p>
-                </div><div data-report-view="{&quot;mod&quot;:&quot;1585297308_001&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6548&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_35462323/article/details/111355107&quot;,&quot;extend1&quot;:&quot;pc&quot;,&quot;ab&quot;:&quot;new&quot;}"><div></div></div>
-        </div>
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35462323/article/details/111355107">https://blog.csdn.net/qq_35462323/article/details/111355107</a></p>
+
                 
               </div>
             
