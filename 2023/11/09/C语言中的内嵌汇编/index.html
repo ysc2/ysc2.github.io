@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/OsfFKJ0.jpg">
 <meta property="article:published_time" content="2023-11-09T05:15:04.000Z">
-<meta property="article:modified_time" content="2023-11-16T15:25:53.727Z">
+<meta property="article:modified_time" content="2024-01-07T15:07:37.185Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          2.8k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          23 分钟
+          24 分钟
         
       </span>
     
@@ -298,7 +298,7 @@
  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;daddu %0,%1,%2\n\t&quot;</span><br>    :<span class="hljs-string">&quot;=r&quot;</span>(ret)         <span class="hljs-comment">/* 输出操作数，也是第0个操作数%0 */</span><br>    :<span class="hljs-string">&quot;r&quot;</span>(a),<span class="hljs-string">&quot;r&quot;</span>(b)     <span class="hljs-comment">/* 输入操作数，也是第1个操作数和第2个操作数 %1,%2 */</span><br>);<br></code></pre></td></tr></table></figure>
 
 
-<h2 id="破坏描述部分"><a href="#破坏描述部分" class="headerlink" title="破坏描述部分"></a>破坏描述部分</h2><p> 所谓的破坏描述就是告诉gcc，哪些寄存器是会在这个内联汇编中被改变。gcc以此做好防护，防止出现导致程序出错或致命异常。一般是寄存器的名字或者是<code>memory</code></p>
+<h2 id="破坏描述部分"><a href="#破坏描述部分" class="headerlink" title="破坏描述部分"></a>破坏描述部分</h2><p> 所谓的破坏描述就是告诉gcc，哪些寄存器是会在这个内联汇编中被改变。gcc以此做好防护，防止出现导致程序出错或致命异常。一般是寄存器的名字或者是<code>memory</code>和<code>cc</code>. <code>cc</code>的作用是表示汇编代码修改标致寄存器. </p>
 <p><strong>其实就是告诉编译器我们在内联汇编中使用了哪些寄存器或内存</strong></p>
  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;dadd %0,%1,%2\n\t&quot;</span><br>    <span class="hljs-string">&quot;move $31,%0\n\t&quot;</span><br>    :<span class="hljs-string">&quot;=g&quot;</span>(ret)<br>    :<span class="hljs-string">&quot;r&quot;</span>(a),<span class="hljs-string">&quot;r&quot;</span>(b)<br>    :<span class="hljs-string">&quot;$31&quot;</span><br>);<br></code></pre></td></tr></table></figure>
 
@@ -310,7 +310,8 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">asm</span>(<span class="hljs-string">&quot;daddu %[out],%1,%2\n\t&quot;</span><br>    :[out]<span class="hljs-string">&quot;=g&quot;</span>(ret)<br>    :<span class="hljs-string">&quot;r&quot;</span>(a),<span class="hljs-string">&quot;r&quot;</span>(b)<br>);<br></code></pre></td></tr></table></figure>
 
 <h2 id="内联汇编的奇特用法"><a href="#内联汇编的奇特用法" class="headerlink" title="内联汇编的奇特用法"></a>内联汇编的奇特用法</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> sys_id <span class="hljs-title function_">asm</span><span class="hljs-params">(<span class="hljs-string">&quot;$RAX&quot;</span>)</span> = <span class="hljs-number">5001</span>;<br><span class="hljs-comment">//将RAX寄存器中的值设置为5001</span><br></code></pre></td></tr></table></figure>
-<h2 id="约束描述符"><a href="#约束描述符" class="headerlink" title="约束描述符"></a>约束描述符</h2><p>前面我们提到了<code>=r</code> <code>+r</code>。这些 <code>=</code> <code>+</code> 都是约束描述符。 约束字符就是输入操作数和输出操作数前面的修饰符。约束字符可以说明操作数是否可以在寄存器中，以及哪种寄存器；操作数是否可以是内存引用，以及哪种地址；操作数是否可以是立即常数，以及它可能具有的值。本节介绍常用的约束字符信息。</p>
+<h2 id="约束描述符"><a href="#约束描述符" class="headerlink" title="约束描述符"></a>约束描述符</h2><p>输出约束必须以“ &#x3D; ”（覆盖现有值的变量）或“ + ”（读取和写入时）开头。</p>
+<p>前面我们提到了<code>=r</code> <code>+r</code>。这些 <code>=</code> <code>+</code> 都是约束描述符。 约束字符就是输入操作数和输出操作数前面的修饰符。约束字符可以说明操作数是否可以在寄存器中，以及哪种寄存器；操作数是否可以是内存引用，以及哪种地址；操作数是否可以是立即常数，以及它可能具有的值。本节介绍常用的约束字符信息。</p>
 <h3 id="常用的约束描述符"><a href="#常用的约束描述符" class="headerlink" title="常用的约束描述符"></a>常用的约束描述符</h3><ol>
 <li><p>“b” 将输入变量放入ebx   </p>
 </li>

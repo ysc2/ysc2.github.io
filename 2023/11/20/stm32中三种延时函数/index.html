@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
 <meta property="article:published_time" content="2023-11-20T00:57:18.000Z">
-<meta property="article:modified_time" content="2023-11-20T16:04:11.621Z">
+<meta property="article:modified_time" content="2024-01-10T05:51:47.783Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          879 字
+          1.2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          8 分钟
+          11 分钟
         
       </span>
     
@@ -295,10 +295,9 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">SysTick_Config(SystemCoreClock / <span class="hljs-number">1000</span>) <span class="hljs-comment">//这是1us的重加载数</span><br>SysTick_Config(SystemCoreClock / <span class="hljs-number">1</span>)    <span class="hljs-comment">//这是1s的重加载数</span><br></code></pre></td></tr></table></figure>
 
 <p>所以需要以x时间为长度，则 <strong>&#x2F;x</strong></p>
-<h1 id="使用汇编进行定时"><a href="#使用汇编进行定时" class="headerlink" title="使用汇编进行定时"></a>使用汇编进行定时</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><br></code></pre></td></tr></table></figure>
-
-
-
+<h1 id="使用汇编进行定时"><a href="#使用汇编进行定时" class="headerlink" title="使用汇编进行定时"></a>使用汇编进行定时</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*!</span><br><span class="hljs-comment"> *  @brief     软件延时</span><br><span class="hljs-comment"> *  @param    ulCount:延时时钟数</span><br><span class="hljs-comment"> *  @return none</span><br><span class="hljs-comment"> *    @note     ulCount每增加1，该函数增加3个时钟</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">SysCtlDelay</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> ulCount)</span><br>&#123;<br>    __asm(<span class="hljs-string">&quot;    subs    r0, #1\n&quot;</span><br>          <span class="hljs-string">&quot;    bne.n   SysCtlDelay\n&quot;</span><br>          <span class="hljs-string">&quot;    bx      lr&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这3个时钟指的是CPU时钟，也就是系统时钟。120MHZ，也就是说1s有120M的时钟，一个时钟也就是1&#x2F;120 us，也就是周期是1&#x2F;120 us。3个时钟，因为执行了3条指令。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/345804589">https://zhuanlan.zhihu.com/p/345804589</a></p>
 
                 
               </div>

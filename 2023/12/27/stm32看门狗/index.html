@@ -25,8 +25,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271730577.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271812813.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401091314844.png">
 <meta property="article:published_time" content="2023-12-27T09:20:26.000Z">
-<meta property="article:modified_time" content="2023-12-27T10:13:07.739Z">
+<meta property="article:modified_time" content="2024-01-09T06:08:52.057Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271730577.png">
@@ -222,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          3.6k 字
         
       </span>
     
@@ -233,7 +234,7 @@
         
         
         
-          10 分钟
+          31 分钟
         
       </span>
     
@@ -287,9 +288,32 @@
 <h2 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 使能 预分频寄存器PR和重装载寄存器RLR可写</span><br>IWDG_WriteAccessCmd( IWDG_WriteAccess_Enable );<br><br><span class="hljs-comment">// 设置预分频器值</span><br>IWDG_SetPrescaler( prv );<br><br><span class="hljs-comment">// 设置重装载寄存器值</span><br>IWDG_SetReload( rlv );<br><br><span class="hljs-comment">// 把重装载寄存器的值放到计数器中</span><br>IWDG_ReloadCounter();<br><br><span class="hljs-comment">// 使能 IWDG</span><br>IWDG_Enable();<br></code></pre></td></tr></table></figure>
 <p>查看是否喂狗了</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span>(RCC_GetFlagStatus(RCC_FLAG_IWDGRST) != RESET)&#123;<br>    <span class="hljs-comment">//没有喂狗</span><br>    ...<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>    IWDG_ReloadCounter();<span class="hljs-comment">//喂狗，重新加载值到计数器中</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<h1 id="窗口看门狗"><a href="#窗口看门狗" class="headerlink" title="窗口看门狗"></a>窗口看门狗</h1><p>可以设置一个时间段，而不单单是在某个时间之前。独立看门狗是当计数寄存器中的值减到0的话就会产生复位信号。但是窗口是变成<code>0x40</code>，而不是<code>0</code>，这被称之为窗口的下限，这个是固定的。上限是可以更改的，只要在上下限之间喂狗了就不会复位。这就是为什么称之为“窗口”。</p>
+
+<h1 id="窗口看门狗"><a href="#窗口看门狗" class="headerlink" title="窗口看门狗"></a>窗口看门狗</h1><p>可以设置一个时间段，而不单单是在某个时间之前。独立看门狗是当计数寄存器中的值减到0的话就会产生复位信号。但是窗口是变成<code>0x40</code>，而不是<code>0</code>，这被称之为窗口的下限，这个是固定的。上限是可以更改的，只要在上下限之间喂狗了就不会复位。这就是为什么称之为“窗口”。所以窗口看门狗需要在窗口中间将计数器的值进行刷新，就不会产生复位。</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271812813.png" srcset="/img/loading.gif" lazyload></p>
 <p>RLR是重装载寄存器，用来设置独立看门狗的计数器的值。TR是窗口看门狗的计数器的值，由用户独立设置，WR是窗口看门狗的上窗口值，由用户独立设置。</p>
+<h2 id="窗口看门狗时钟"><a href="#窗口看门狗时钟" class="headerlink" title="窗口看门狗时钟"></a>窗口看门狗时钟</h2><p>这个外设的时钟是由PCLK1提供的，PCLK1最大是36M，由RCC时钟控制器开启。</p>
+<h2 id="计数器时钟"><a href="#计数器时钟" class="headerlink" title="计数器时钟"></a>计数器时钟</h2><p>我们知道看门狗实际上就是一个计数器构成的，那么计数器改变一次需要多久的时间？</p>
+<p>计数器时钟由CK计时器时钟经过预分频器分频得到，分频系数由配置寄存器CFR的位8:7  WDGTB[1:0]配置，可以是[0,1,2,3]，其中CK计 时器时钟&#x3D;PCLK1&#x2F;4096，除以4096是手册规定的，没有为什么。所以计数器的时钟<code>CNT_CK=PCLK1/4096/(2^WDGTB)，</code><br>这就可以算出计数器减一个数的时间<code>T= 1/CNT_CK = PCLK1 * 4096 * (2^WDGTB)</code>。</p>
+<p>这个<code>WDGTB</code>是预分频数，可以是[0,1,2,3]，后面会讲到一个设置预分频数的函数<code>WWDG_SetPrescaler()</code>可以设置这个值，但是其参数是[1,2,4,8]这里我们将它们一一对应即可。</p>
+<h2 id="死前中断"><a href="#死前中断" class="headerlink" title="死前中断"></a>死前中断</h2><p>窗口看门狗的计数器是一个递减计数器，共有7位，其值存在控制寄存器CR的位6:0，即T[6:0]，当7个位全部为1时是0X7F，这个是最大值，当递减到T6位变成0时，即从0X40变为0X3F时候，会产生看门狗复位。这个值0X40是看门狗能够递减到的最小值，所以计数器的值只能是：0X40~0X7F之间，实际上真正用来计数的是T[5:0]。当递减计数器递减到0X40的时候，还不会马上产生复位，如果使能了提前唤醒中断：CFR位9 EWI 置1，则产生提前唤醒中断，如果真进入了这个中断的话，就说明程序肯定是出问题了。</p>
+<p>那么在中断服务程序里面我们就需要做最重要的工作，比如保存重要数据，或者报警等，这个中断我们也叫它死前中断。</p>
+<h2 id="具体使用"><a href="#具体使用" class="headerlink" title="具体使用"></a>具体使用</h2><p>上面我们知道，使用窗口看门狗的话必须要在窗口中间进行复位，不可以是窗口之前也不可以是窗口之后。</p>
+<p>所以我们需要知道程序的具体执行时间，才好设置上窗口的值。</p>
+<h3 id="窗口看门狗函数"><a href="#窗口看门狗函数" class="headerlink" title="窗口看门狗函数"></a>窗口看门狗函数</h3><p>在标准库中提供了以下函数, 我们具体来说明每一个函数的作用. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_DeInit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//重新初始化</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_SetPrescaler</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> WWDG_Prescaler)</span>;<span class="hljs-comment">//设置看门狗的使用分频值由1 2 4 8 四个选项</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_SetWindowValue</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> WindowValue)</span>;<span class="hljs-comment">//设置上窗口值</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_EnableIT</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//开启死前中断</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_SetCounter</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> Counter)</span>;<span class="hljs-comment">//设置号计数器的值</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_Enable</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> Counter)</span>;<span class="hljs-comment">//开启窗口看门狗</span><br>FlagStatus <span class="hljs-title function_">WWDG_GetFlagStatus</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//获取中断信息位</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_ClearFlag</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//去除中断信息位</span><br></code></pre></td></tr></table></figure>
+
+
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* WWDG 配置函数</span><br><span class="hljs-comment"> * tr ：递减计时器的值， 取值范围为：0x7f~0x40</span><br><span class="hljs-comment"> * wr ：窗口值，取值范围为：0x7f~0x40</span><br><span class="hljs-comment"> * prv：预分频器值，取值可以是</span><br><span class="hljs-comment"> *      @arg WWDG_Prescaler_1: WWDG counter clock = (PCLK1(36MHZ)/4096)/1</span><br><span class="hljs-comment"> *      @arg WWDG_Prescaler_2: WWDG counter clock = (PCLK1(36mhz)/4096)/2</span><br><span class="hljs-comment"> *      @arg WWDG_Prescaler_4: WWDG counter clock = (PCLK1(36mhz)/4096)/4</span><br><span class="hljs-comment"> *      @arg WWDG_Prescaler_8: WWDG counter clock = (PCLK1(36mhz)/4096)/8</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_Config</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> tr, <span class="hljs-type">uint8_t</span> wr, <span class="hljs-type">uint32_t</span> prv)</span><br>&#123;	<br>	<span class="hljs-comment">// 开启 WWDG 时钟</span><br>	RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE);<br>	<br>	<span class="hljs-comment">// 设置递减计数器的值</span><br>	WWDG_SetCounter( tr );<br>	<br>	<span class="hljs-comment">// 设置预分频器的值</span><br>	WWDG_SetPrescaler( prv );<br>	<br>	<span class="hljs-comment">// 设置上窗口值</span><br>	WWDG_SetWindowValue( wr );<br>	<br>	<span class="hljs-comment">// 设置计数器的值，使能WWDG</span><br>	WWDG_Enable(WWDG_CNT);	<br>	<br>	<span class="hljs-comment">// 清除提前唤醒中断标志位</span><br>	WWDG_ClearFlag();	<br>	<span class="hljs-comment">// 配置WWDG中断优先级</span><br>	WWDG_NVIC_Config();	<br>	<span class="hljs-comment">// 开WWDG 中断</span><br>	WWDG_EnableIT();<br>&#125;<br><br><span class="hljs-comment">// 喂狗</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_Feed</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-comment">// 喂狗，刷新递减计数器的值，设置成最大WDG_CNT=0X7F</span><br>	WWDG_SetCounter( WWDG_CNT );<br>&#125;<br><br><span class="hljs-comment">// WWDG 中断复服务程序，如果发生了此中断，表示程序已经出现了故障，</span><br><span class="hljs-comment">// 这是一个死前中断。在此中断服务程序中应该干最重要的事，</span><br><span class="hljs-comment">// 比如保存重要的数据等，这个时间具体有多长，要</span><br><span class="hljs-comment">// 由WDGTB的值决定：</span><br><span class="hljs-comment">// WDGTB:0   113us</span><br><span class="hljs-comment">// WDGTB:1   227us</span><br><span class="hljs-comment">// WDGTB:2   455us</span><br><span class="hljs-comment">// WDGTB:3   910us</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">WWDG_IRQHandler</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    WWDG_ClearFlag();<br>    <span class="hljs-comment">//死前中断, 在这里要做最重要的事情, 如保存好数据信息</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由上可以看到窗口看门狗在发生中断后可以留有一定的时间来让程序做好保存的工作，那么这个时间是多久这个是位<code>WDGTB</code>来决定的。</p>
+<p>具体的计算公式为；<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401091314844.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>Twwdg：WWDG超时时间（单位为ms）</li>
+<li>Fpclk1：APB1的时钟频率（单位为Khz）</li>
+<li>WDGTB：WWDG的预分频系数</li>
+<li>T[5:0]：窗口看门狗的计数器低6位</li>
+</ul>
 
                 
               </div>
