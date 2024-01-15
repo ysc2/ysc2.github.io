@@ -16,24 +16,21 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="主要是bash的main函数中的内容">
+    <meta name="description" content="队列FreeRTOS中队列也可以称之为消息队列。在FreeRTOS中长用来进行数据传输。队列提供了  从任务到任务 中断到任务 任务到中断三种消息的传递方向。  队列集有时我们需要多次接受数据，此时可以使用多个队列集来完成这个任务。 队列设置允许所有任务从多个队列接收数据，而无需任务依次轮询每个队列以确定哪个队列(如果有)包含数据。 与使用接收结构的单个队列实现相同功能的设计相比，使用队列集从多个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bash源码分析(1)--初始化">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/10/bash%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1-%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
+<meta property="og:title" content="FreeRTOS-3-消息队列">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/15/FreeRTOS-3-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="主要是bash的main函数中的内容">
+<meta property="og:description" content="队列FreeRTOS中队列也可以称之为消息队列。在FreeRTOS中长用来进行数据传输。队列提供了  从任务到任务 中断到任务 任务到中断三种消息的传递方向。  队列集有时我们需要多次接受数据，此时可以使用多个队列集来完成这个任务。 队列设置允许所有任务从多个队列接收数据，而无需任务依次轮询每个队列以确定哪个队列(如果有)包含数据。 与使用接收结构的单个队列实现相同功能的设计相比，使用队列集从多个">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6497).png">
-<meta property="article:published_time" content="2024-01-10T13:59:01.000Z">
-<meta property="article:modified_time" content="2024-01-12T17:41:05.731Z">
+<meta property="article:published_time" content="2024-01-14T16:28:34.000Z">
+<meta property="article:modified_time" content="2024-01-15T16:15:50.921Z">
 <meta property="article:author" content="Ysc">
-<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6497).png">
   
   
   
-  <title>bash源码分析(1)--初始化 - Ysc Web</title>
+  <title>FreeRTOS-3-消息队列 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +190,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6497).png') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="bash源码分析(1)--初始化"></span>
+            <span id="subtitle" data-typed-text="FreeRTOS-3-消息队列"></span>
           
         </div>
 
@@ -210,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-10 21:59" pubdate>
-          2024年1月10日 晚上
+        <time datetime="2024-01-15 00:28" pubdate>
+          2024年1月15日 凌晨
         </time>
       </span>
     
@@ -222,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          235 字
         
       </span>
     
@@ -233,7 +230,7 @@
         
         
         
-          9 分钟
+          2 分钟
         
       </span>
     
@@ -270,24 +267,21 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">bash源码分析(1)--初始化</h1>
+            <h1 id="seo-header">FreeRTOS-3-消息队列</h1>
             
             
               <div class="markdown-body">
                 
-                <p>主要是bash的main函数中的内容</p>
-<span id="more"></span>
+                <h1 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h1><p>FreeRTOS中队列也可以称之为消息队列。在FreeRTOS中长用来进行数据传输。队列提供了</p>
+<ul>
+<li>从任务到任务</li>
+<li>中断到任务</li>
+<li>任务到中断<br>三种消息的传递方向。</li>
+</ul>
+<h1 id="队列集"><a href="#队列集" class="headerlink" title="队列集"></a>队列集</h1><p>有时我们需要多次接受数据，此时可以使用多个队列集来完成这个任务。</p>
+<p><strong>队列设置允许所有任务从多个队列接收数据，而无需任务依次轮询每个队列以确定哪个队列(如果有)包含数据。</strong></p>
+<p>与使用接收结构的单个队列实现相同功能的设计相比，使用队列集从多个源接收数据的设计不那么整洁，效率也较低。因此，建议仅在设计约束绝对必要时才使用队列集。</p>
 
-<h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>马上毕业了, 想写一个类似于<code>bash</code>这样的<code>shell</code>.作为自己的一个项目. 但是又苦于没有现成的书籍和资料. 只好自己研究一下<code>bash</code>的源代码, 看看前辈是怎么写的. 我选择的bash版本是<code>bash-2.04</code>. 随便选的, 主要是太新的<code>bash</code>代码抽象度都很高,之后找到之前的版本来看看. </p>
-<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>我首先看的就是<code>shell.c</code>这个文件, 其中包含了<code>bash</code>的初始化操作, 也就是<code>main.c</code>函数. 下面总结一下<code>bash</code>是如何初始化的, 它的初始化的顺序是怎么样的, 代码架构是怎样的. </p>
-<p>由于<code>main</code>函数很长, 所以我将其进行划分描述. </p>
-<h2 id="第一部分-杂项设置"><a href="#第一部分-杂项设置" class="headerlink" title="第一部分 杂项设置"></a>第一部分 杂项设置</h2><p>这一部分是<code>main</code>函数的开头, 主要进行了一些<strong>需要使用的参数的定义,并且初始化</strong>、检查终端（tty）、根据当地的地理地址设置好相关内容、设置好<code>setjmp()</code>函数方便之后重新初始化的时候使用函数<code>longjmp()</code>跳回来.</p>
-<p>下面根据代码来详细讲讲每一部分</p>
-<h3 id="参数定义-初始化"><a href="#参数定义-初始化" class="headerlink" title="参数定义&amp;初始化"></a>参数定义&amp;初始化</h3><p><code>main</code>函数开头就定义了几个变量, 但是这些变量是给<code>main</code>函数使用的, 而不是<code>bash</code>的参数. 如:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> i;<br><span class="hljs-type">int</span> code, saverst, old_errexit_flag;<br><span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> locally_skip_execution;<br><span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> arg_index, top_level_arg_index;<br><span class="hljs-comment">//第一个参数是 i 是用来在main函数中的for循环中加减的参数</span><br><span class="hljs-comment">//code用来接受函数的返回值, 一般用作进行状态的判断</span><br><span class="hljs-comment">//saverst用来在后面的参数解析的时候短暂保存状态</span><br><span class="hljs-comment">//old_errexit_flag用来保存错误退出码</span><br><span class="hljs-comment">//arg_index是函数的argv的索引</span><br><span class="hljs-comment">//top_level_arg_index用来保存arg_index</span><br></code></pre></td></tr></table></figure>
-
-<p>下面主要是<code>bash</code>需要的一些参数的定义:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-comment">// arg_index: 参数索引</span><br><span class="hljs-comment">// local_pending_command: 本地将要执行的命令</span><br><span class="hljs-comment">// want_pending_command: 提供-c命令</span><br><span class="hljs-comment">// locally_skip_execution: </span><br><span class="hljs-comment">// read_from_stdin: 提供-s命令</span><br><span class="hljs-comment">// default_input: 默认输入文件流</span><br>arg_index = <span class="hljs-number">1</span>;<br>local_pending_command = (<span class="hljs-type">char</span> *)<span class="hljs-literal">NULL</span>;<br>want_pending_command = locally_skip_execution = read_from_stdin = <span class="hljs-number">0</span>;<br>default_input = <span class="hljs-built_in">stdin</span>;<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -295,34 +289,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
-      
-    </div>
   
 </div>
 
@@ -332,8 +298,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>bash源码分析(1)--初始化</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/01/10/bash源码分析-1-初始化/</div>
+      <div>FreeRTOS-3-消息队列</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/15/FreeRTOS-3-消息队列/</div>
     </div>
     <div class="license-meta">
       
@@ -345,7 +311,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月10日</div>
+          <div>2024年1月15日</div>
         </div>
       
       
@@ -377,18 +343,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/01/15/FreeRTOS-3-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="FreeRTOS-3-消息队列">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">FreeRTOS-3-消息队列</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/01/10/c%E5%AE%9E%E7%8E%B0%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="c实现热加载">
-                        <span class="hidden-mobile">c实现热加载</span>
+                      <a href="/2024/01/10/bash%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1-%E5%88%9D%E5%A7%8B%E5%8C%96/" title="bash源码分析(1)--初始化">
+                        <span class="hidden-mobile">bash源码分析(1)--初始化</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
