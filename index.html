@@ -224,6 +224,72 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2024/01/20/FreeRTOS-6-%E9%93%BE%E8%A1%A8/" target="_blank">
+          FreeRTOS-6-链表
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/20/FreeRTOS-6-%E9%93%BE%E8%A1%A8/" target="_blank">
+        <div>
+          FreeRTOS中链表不是一般的链表，而具有一下三种特点：  循环 从小到大 双向
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-20 00:30" pubdate>
+              2024-01-20
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/18/FreeRTOS-5-%E4%BF%A1%E5%8F%B7%E9%87%8F/" target="_blank">
+          FreeRTOS-5-信号量
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/18/FreeRTOS-5-%E4%BF%A1%E5%8F%B7%E9%87%8F/" target="_blank">
+        <div>
+          信号量的分类在FreeRTOS中有四种信号量：  二值信号量 互斥信号量 递归信号量 计数信号量  每一种信号量都有其使用的范围。 二值信号量其实就是Linux中的二元信号量，在FreeRTOS中又称之为二进制信号量。在概念上，可以将二进制信号量理解为一个长度为一的队列。该队列可以在任何时候都最多包含一个项，所以总是要么是空的，要么是满的（hence, binary）。 二值信号量和互斥信号量十分
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-18 21:04" pubdate>
+              2024-01-18
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2024/01/16/FreeRTOS-4-%E8%BD%AF%E4%BB%B6%E5%AE%9A%E6%97%B6%E5%99%A8%E7%AE%A1%E7%90%86/" target="_blank">
           FreeRTOS-4-软件定时器管理
         </a>
@@ -265,7 +331,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2024/01/15/FreeRTOS-3-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" target="_blank">
         <div>
-          队列FreeRTOS中队列也可以称之为消息队列。在FreeRTOS中长用来进行数据传输。队列提供了  从任务到任务 中断到任务 任务到中断三种消息的传递方向。  队列集有时我们需要多次接受数据，此时可以使用多个队列集来完成这个任务。 队列设置允许所有任务从多个队列接收数据，而无需任务依次轮询每个队列以确定哪个队列(如果有)包含数据。 与使用接收结构的单个队列实现相同功能的设计相比，使用队列集从多个
+          队列FreeRTOS中队列也可以称之为消息队列。在FreeRTOS中长用来进行数据传输。队列提供了  从任务到任务 中断到任务 任务到中断三种消息的传递方向。  任务能够从队列中读取消息，当队列中的消息为空时，读取消息的任务将被阻塞。用户还可以指定阻塞的任务时间xTicksToWait，在这段时间中，如果队列为空，该任务将保持阻塞状态以等待队列数据有效。当队列中有新消息时，被阻塞的任务会被唤醒并处
         </div>
       </a>
 
@@ -611,140 +677,6 @@
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6666).png" srcset="/img/loading.gif" lazyload alt="软件设计原则">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">
-          软件设计原则
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">
-        <div>
-          软件设计原则的总结
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-05 22:23" pubdate>
-              2024-01-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/01/05/linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-1/" target="_blank">
-          <img src="hhttps://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png" srcset="/img/loading.gif" lazyload alt="linux内存管理(1)">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/01/05/linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-1/" target="_blank">
-          linux内存管理(1)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/01/05/linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-1/" target="_blank">
-        <div>
-          Linux内存管理（1）
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-05 22:17" pubdate>
-              2024-01-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
             
           </div>
         
