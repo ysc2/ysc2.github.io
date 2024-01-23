@@ -16,21 +16,21 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="FreeRTOS中链表不是一般的链表，而具有一下三种特点：  循环 从小到大 双向">
+    <meta name="description" content="前置知识优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。 优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FreeRTOS-6-链表">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/20/FreeRTOS-6-%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:title" content="FreeRTOS-6-互斥量">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/22/FreeRTOS-6-%E4%BA%92%E6%96%A5%E9%87%8F/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="FreeRTOS中链表不是一般的链表，而具有一下三种特点：  循环 从小到大 双向">
+<meta property="og:description" content="前置知识优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。 优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-19T16:30:56.000Z">
-<meta property="article:modified_time" content="2024-01-19T16:35:31.265Z">
+<meta property="article:published_time" content="2024-01-22T09:17:23.000Z">
+<meta property="article:modified_time" content="2024-01-23T12:19:05.096Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>FreeRTOS-6-链表 - Ysc Web</title>
+  <title>FreeRTOS-6-互斥量 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -196,7 +196,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="FreeRTOS-6-链表"></span>
+            <span id="subtitle" data-typed-text="FreeRTOS-6-互斥量"></span>
           
         </div>
 
@@ -207,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-20 00:30" pubdate>
-          2024年1月20日 凌晨
+        <time datetime="2024-01-22 17:17" pubdate>
+          2024年1月22日 下午
         </time>
       </span>
     
@@ -219,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          37 字
+          2.3k 字
         
       </span>
     
@@ -230,7 +230,7 @@
         
         
         
-          1 分钟
+          20 分钟
         
       </span>
     
@@ -267,17 +267,51 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">FreeRTOS-6-链表</h1>
+            <h1 id="seo-header">FreeRTOS-6-互斥量</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>FreeRTOS中链表不是一般的链表，而具有一下三种特点：</p>
+                <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。</p>
+<p>优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机制来<strong>缓解</strong>这个问题。在出现高优先级在等待低优先级的任务执行完毕时，操作系统会临时将低优先级的任务的优先级调至和高优先级的任务一样高。这就防止了低优先级任务被中优先级任务抢占。</p>
+<p><strong>互斥量与二值信号量最大的不同之处在于，互斥量具有优先级继承机制，而信号量没有。</strong></p>
+<h1 id="互斥量控制块"><a href="#互斥量控制块" class="headerlink" title="互斥量控制块"></a>互斥量控制块</h1><p>和信号量等等一致，互斥量也通过控制块来进行控制。</p>
+<p>互斥量的API函数实际上也都是宏，使用现有的队列机制，这些宏定义在semphr.h文件中。如果使用互斥量，则需要包含semphr.h头文件。FreeRTOS的互斥量控制块结构体与消息队列结构体是一样的，只不过结构体中某些成员变量代表的含义不同。<strong>这个和信号量是一样的</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-number">1</span> <span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">QueueDefinition</span> &#123;</span><br> <span class="hljs-number">2</span> <span class="hljs-type">int8_t</span> *pcHead;<br> <span class="hljs-number">3</span> <span class="hljs-type">int8_t</span> *pcTail;<br> <span class="hljs-number">4</span> <span class="hljs-type">int8_t</span> *pcWriteTo;<br> <span class="hljs-number">5</span><br> <span class="hljs-number">6</span> <span class="hljs-class"><span class="hljs-keyword">union</span> &#123;</span><br> <span class="hljs-number">7</span> <span class="hljs-type">int8_t</span> *pcReadFrom;<br> <span class="hljs-number">8</span>         UBaseType_t uxRecursiveCallCount;(<span class="hljs-number">1</span>)<br> <span class="hljs-number">9</span>     &#125; u;<br><span class="hljs-number">10</span><br><span class="hljs-number">11</span>     List_t xTasksWaitingToSend;<br><span class="hljs-number">12</span>     List_t xTasksWaitingToReceive;<br><span class="hljs-number">13</span><br><span class="hljs-number">14</span>     <span class="hljs-keyword">volatile</span> UBaseType_t uxMessagesWaiting;(<span class="hljs-number">2</span>)<br><span class="hljs-number">15</span>     UBaseType_t uxLength;(<span class="hljs-number">3</span>)<br><span class="hljs-number">16</span>     UBaseType_t uxItemSize;(<span class="hljs-number">4</span>)<br><span class="hljs-number">17</span><br><span class="hljs-number">18</span>     <span class="hljs-type">volatileint8_t</span> cRxLock;<br><span class="hljs-number">19</span>     <span class="hljs-type">volatileint8_t</span> cTxLock;<br><span class="hljs-number">20</span><br><span class="hljs-number">21</span> <span class="hljs-meta">#<span class="hljs-keyword">if</span>( ( configSUPPORT_STATIC_ALLOCATION == 1 )</span><br><span class="hljs-number">22</span>     &amp;&amp; ( configSUPPORT_DYNAMIC_ALLOCATION == <span class="hljs-number">1</span> ) )<br><span class="hljs-number">23</span>     <span class="hljs-type">uint8_t</span> ucStaticallyAllocated;<br><span class="hljs-number">24</span> <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-number">25</span><br><span class="hljs-number">26</span> <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_QUEUE_SETS == 1 )</span><br><span class="hljs-number">27</span>     <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">QueueDefinition</span> *<span class="hljs-title">pxQueueSetContainer</span>;</span><br><span class="hljs-number">28</span> <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-number">29</span><br><span class="hljs-number">30</span> <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_TRACE_FACILITY == 1 )</span><br><span class="hljs-number">31</span>             UBaseType_t uxQueueNumber;<br><span class="hljs-number">32</span>             <span class="hljs-type">uint8_t</span> ucQueueType;<br><span class="hljs-number">33</span> <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-number">34</span><br><span class="hljs-number">35</span>         &#125; xQUEUE;<br><span class="hljs-number">36</span><br><span class="hljs-number">37</span> <span class="hljs-keyword">typedef</span> xQUEUE Queue_t;<br></code></pre></td></tr></table></figure>
+
+<p>（1）：pcReadFrom与uxRecursiveCallCount是一对互斥变量，使用联合体来确保两个互斥的结构体成员不会同时出现。</p>
 <ul>
-<li>循环</li>
-<li>从小到大</li>
-<li>双向</li>
+<li>如果结构体用于消息队列，则pcReadFrom指向出队消息空间的最后一个，即读取消息时是从pcReadFrom指向的空间读取消息内容；</li>
+<li>如果结构体用于互斥量，uxRecursiveCallCount用于计数，记录递归互斥量被“调用”的次数。</li>
 </ul>
+<p>（2）：</p>
+<ul>
+<li>如果控制块结构体用于消息队列，则uxMessagesWaiting用来记录当前消息队列的消息个数；</li>
+<li>如果控制块结构体用于互斥量时，这个值表示有效互斥量的个数。此值为1时表示互斥量有效，为0则表示互斥量无效。</li>
+</ul>
+<p>（3）：</p>
+<ul>
+<li>如果控制块结构体用于消息队列，则uxLength表示队列的长度，即能存放多少消息；</li>
+<li>如果控制块结构体用于互斥量时，uxLength表示最大的信号量可用个数。uxLength最大为1，因为信号量要么是有效的，要么是无效的。</li>
+</ul>
+<p>（4）：</p>
+<ul>
+<li>如果控制块结构体用于消息队列，则uxItemSize表示单个消息的大小；</li>
+<li>如果控制块结构体用于互斥量时，则无须分配存储空间，为0即可。</li>
+</ul>
+<h1 id="互斥量的相关函数"><a href="#互斥量的相关函数" class="headerlink" title="互斥量的相关函数"></a>互斥量的相关函数</h1><p>由于互斥量的优先级继承，所以一般将互斥量用作对资源的保护。</p>
+<p>主要函数包括：</p>
+<ul>
+<li>创建</li>
+<li>删除</li>
+<li>发送消息</li>
+<li>接受消息</li>
+</ul>
+<h2 id="创建函数"><a href="#创建函数" class="headerlink" title="创建函数"></a>创建函数</h2><p><code>xSemaphoreCreateMutex()</code>用于创建一个互斥量，并返回一个互斥量句柄。该句柄的原型是一个void型的指针，在使用之前必须先由用户定义一个互斥量句柄。要想使用该函数，必须在<code>FreeRTOSConfig.h</code>中把宏<code>configSUPPORT_DYNAMIC_ALLOCATION</code>定义为1，即开启动态内存分配。其实该宏在<code>FreeRTOS.h</code>中默认定义为1，即所有FreeRTOS的对象在创建时都默认使用动态内存分配方案。同时还需要在<code>FreeRTOSConfig.h</code>中把<code>configUSE_MUTEXES</code>宏定义打开，表示使用互斥量。</p>
+<p><code>xSemaphoreCreateMutex()</code>这个函数实际上是一个宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> xSemaphoreCreateMutex()    xQueueCreateMutex( queueQUEUE_TYPE_MUTEX )</span><br><br></code></pre></td></tr></table></figure>
+
+<p>可以看到互斥量和信号量一样，其实就是队列函数的包装、不同的参数上的使用。<code>xSemaphoreCreateMutex()</code>函数虽然没有直接调用<code>xQueueGenericCreate()</code>函数，但是在<code>xQueueCreateMutex()</code>中还是调用了函数<code>xQueueGenericCreate()</code>。</p>
 
                 
               </div>
@@ -295,8 +329,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>FreeRTOS-6-链表</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/01/20/FreeRTOS-6-链表/</div>
+      <div>FreeRTOS-6-互斥量</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/22/FreeRTOS-6-互斥量/</div>
     </div>
     <div class="license-meta">
       
@@ -308,7 +342,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月20日</div>
+          <div>2024年1月22日</div>
         </div>
       
       
@@ -340,9 +374,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/01/22/FreeRTOS-6-%E4%BA%92%E6%96%A5%E9%87%8F/" title="FreeRTOS-6-互斥量">
+                      <a href="/2024/01/22/%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0%E7%89%B9%E5%AE%9A%E8%AF%AD%E8%A8%80%E7%9A%84%E5%A5%BD%E7%9A%84%E9%A1%B9%E7%9B%AE/" title="如何找到特定语言的好的项目">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">FreeRTOS-6-互斥量</span>
+                        <span class="hidden-mobile">如何找到特定语言的好的项目</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -350,8 +384,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/01/18/FreeRTOS-5-%E4%BF%A1%E5%8F%B7%E9%87%8F/" title="FreeRTOS-5-信号量">
-                        <span class="hidden-mobile">FreeRTOS-5-信号量</span>
+                      <a href="/2024/01/20/FreeRTOS-6-%E9%93%BE%E8%A1%A8/" title="FreeRTOS-6-链表">
+                        <span class="hidden-mobile">FreeRTOS-6-链表</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

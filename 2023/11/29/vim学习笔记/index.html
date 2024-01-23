@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/930dfaf3b9e7c47cf06d007f47e28e3bf9098442.jpg">
 <meta property="article:published_time" content="2023-11-29T11:09:55.000Z">
-<meta property="article:modified_time" content="2024-01-20T17:56:15.357Z">
+<meta property="article:modified_time" content="2024-01-23T17:11:53.764Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.6k 字
+          6.9k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          47 分钟
+          58 分钟
         
       </span>
     
@@ -323,8 +323,8 @@ Ctrl+w+T                //把当前窗口移到一个新标签页
 </code></pre>
 <h1 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h1><h2 id="关于-命令"><a href="#关于-命令" class="headerlink" title="关于.命令"></a>关于<code>.</code>命令</h2><p>这个命令的作用是重复你上一次的操作</p>
 <h2 id="G和"><a href="#G和" class="headerlink" title="&gt;G和&lt;G"></a><code>&gt;G</code>和<code>&lt;G</code></h2><p>这两个命令前者是在行头添加一个<code>tab</code>，后者是删除一个<code>tab</code>。可以和命令<code>.</code>一起使用。</p>
-<h1 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h1><h2 id="窗口的创建"><a href="#窗口的创建" class="headerlink" title="窗口的创建"></a>窗口的创建</h2><p>：split    新建一个窗口，将当前窗口分割成两半，他们显示的是相同缓冲区的内容（同一个文件）。这样就可以在两个窗口中浏览相同的文件了。可以简写为 sp + 窗口名</p>
-<p>：vsplit   创建全新的垂直分割的窗口，同样是显示和当前窗口同一个文件内容。可以简写为 vsp + 窗口名</p>
+<h1 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h1><h2 id="窗口的创建"><a href="#窗口的创建" class="headerlink" title="窗口的创建"></a>窗口的创建</h2><p>：split    新建一个窗口，将当前窗口分割成两半，他们显示的是相同缓冲区的内容（同一个文件）。这样就可以在两个窗口中浏览相同的文件了。可以简写为 <code>sp + 窗口名</code></p>
+<p>：vsplit   创建全新的垂直分割的窗口，同样是显示和当前窗口同一个文件内容。可以简写为 <code>vsp + 窗口名</code></p>
 <h2 id="窗口的关闭"><a href="#窗口的关闭" class="headerlink" title="窗口的关闭"></a>窗口的关闭</h2><p>有4种关闭窗口的方式，分别是：离开（quit）、关闭（close）、隐藏（hide）、关闭其他窗口</p>
 <p>^代表Ctrl键<br>^Wq，离开当前窗口<br>^Wc，关闭当前的窗口<br>^Wo，关闭当前窗口以外的所有窗口</p>
 <h2 id="窗口切换"><a href="#窗口切换" class="headerlink" title="窗口切换"></a>窗口切换</h2><p>ctrl w + hjkl 光标在各个窗口之间切换</p>
@@ -387,17 +387,46 @@ Ctrl+w+T                //把当前窗口移到一个新标签页
 <li><code>g</code>和<code>z</code>是附加命令，也就是它们都需要和其他命令一起使用。</li>
 <li><code>^</code>的含义是移动到软行首，而<code>0</code>是移动到硬行首。区别是<code>^</code>只是移动到这行的第一个字符处，而<code>0</code>是移动到真正的行首。与<code>0</code>相对应的是<code>$</code>，而不是<code>^</code>。</li>
 </ul>
+<p><code>dd</code>和<code>cc</code>的关系是, 前者不会进入插入模式，但是后者会。两者都是删除的作用。</p>
+<h2 id="在vim中删除的键有："><a href="#在vim中删除的键有：" class="headerlink" title="在vim中删除的键有："></a>在vim中删除的键有：</h2><p>其实就是sdcx四个键的大小写, d和c一组都是需要组合的键(但是这个两个将的大写是可以直接使用的), s和x一组是不需要组合的键</p>
+<ol>
+<li><code>x</code>相当于删除键.<code>X</code>相当于<code>退格键</code></li>
+<li><code>cc</code>单个<code>c</code>键按了没有用必须要组合其他键. 使用这个可以删除一行并且不进入插入模式. </li>
+<li><code>dd</code>这个作用和上面是一样的, 但是<code>dd</code>不会进入插入模式</li>
+<li><code>s</code>删除光标处的字符, <code>S</code>是删除当前行然后进入插入模式</li>
+<li>需要注意的是<code>c</code>和<code>d</code>单按都是没有用的. 必须组合, 模式是c\d+动作键(就是图中绿色的)<ol>
+<li><code>cc</code></li>
+<li><code>dd</code></li>
+<li><code>cw</code> <code>c$</code></li>
+<li><code>dw</code> <code>d^</code></li>
+<li><code>c2h</code> 删除左侧的两个字符</li>
+<li><code>d2l</code> 删除右侧的两个字符</li>
+</ol>
+</li>
+<li><code>D</code>这个就是从当前光标删除到行尾, 不进入插入模式</li>
+<li><code>C</code>和上面一样, 但是进入插入模式</li>
+</ol>
+<h2 id="移动键"><a href="#移动键" class="headerlink" title="移动键"></a>移动键</h2><p>+或Enter: 把光标移至下一行第一个非空白字符。<br>-: 把光标移至上一行第一个非空白字符。<br>w: 前移一个单词，光标停在下一个单词开头；<br>W: 移动下一个单词开头，但<strong>忽略一些标点</strong>；<br>e: 前移一个单词，光标停在下一个单词末尾；<br>E: 移动到下一个单词末尾，如果词尾有标点，则<strong>移动到标点</strong>；<br>b: 后移一个单词，光标停在上一个单词开头；<br>B: 移动到上一个单词开头，<strong>忽略一些标点</strong>；   </p>
 <h1 id="vim中的跳转"><a href="#vim中的跳转" class="headerlink" title="vim中的跳转"></a>vim中的跳转</h1><p>一般，每次你执行一个会将光标移动到本行之外的命令，该移动即被称为一个 “跳转” 。这包括查找命令 “&#x2F;“ 和 “n” (无论跳转到多远的地方)。但不包括 “fx” 和 “tx” 这些行内查找命令或者 “w” 和 “e” 等词移动命令。另外 “j” 和 “k” 不会被当做是一次 “跳转”，即使你在前面加上计数前缀使之移动<br>到很远的地方也不例外。</p>
+<p>由于 <code>jump list</code> 保留了光标的移动记录，我们可以通过 <code>:jumps</code> 查看 <code>jump list</code>，vim 会显示近 <code>100</code> 条记录；我们也可以可以在 <code>jump list</code> 中选中记录进行对应位置的跳转。</p>
+<p>但是使用 <code>:jumps</code> 查看 <code>jump list</code> 来进行跳转的操作比较繁琐，而且很多时候我们并不关心之前这么多的跳转，我们只在乎跳转的顺序，因为只有顺着 <code>jump list</code> 的顺序，我们总会跳到想去的位置，这时我们可以使用以下命令：</p>
+<pre><code class="hljs">    ctrl + i：跳转到 jump list 的后一个记录    
+    ctrl + o：跳转到 jump list 的前一个记录
+</code></pre>
+<p><strong>需要注意的是，jump list的存储对象是跳转，诸如<code>hjkl</code>这些移动命令并不是跳转。</strong></p>
 <h2 id="类型跳转"><a href="#类型跳转" class="headerlink" title="类型跳转"></a>类型跳转</h2><p>使用<code>ctags filename</code>生成一个<code>tag</code>文件，然后就可以在目标文件中进行类型的跳转了使用<code>ctrl ]</code>使用<code>ctrl t</code>跳回来。</p>
 <h2 id="文件跳转"><a href="#文件跳转" class="headerlink" title="文件跳转"></a>文件跳转</h2><p>使用<code>gf</code>跳转到文件，使用<code>ctrl o</code>回来。</p>
 <h2 id="使用标记"><a href="#使用标记" class="headerlink" title="使用标记"></a>使用标记</h2><p>标号是全局的，只要使用vim创建的标号，不管在哪个文件使用命令<code>marks</code>都可以看到，并且可以直接使用<code>&#39;</code>来进行跳转。</p>
 <p><code>ma</code>使用<code>a</code>来表示这一行，跳转后可以使用<code>&#39;a</code>(注意是单引号)来跳转到这行，标号可以使用任意符号。</p>
+<p><code>m + [小写字母]</code>：只可在<strong>单个文件内</strong>跳转的标记；后面的为标记的标识符，用于跳转的指向；可以理解为当前标记的名字；下同<br><code>m + [大写字母]</code>：可在<strong>多个文件之间</strong>跳转的标记</p>
 <p>使用<code>:makes</code>查看所有的标号。注意这个</p>
 <p>vim设置的特殊的标号：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">&#x27;       跳转前的光标位置<br>&quot;       最后编辑的光标位置<br>[       最后修改的开始位置<br>]       最后修改的结束位置<br></code></pre></td></tr></table></figure>
 
 <p>删除标号：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">:delmarks name<br><br># 删除所有标号<br>:delmarks!<br></code></pre></td></tr></table></figure>
+
+<h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1><p>使用<code>@:</code>可以重复执行上一次的命令。</p>
 <h1 id="多文件操作"><a href="#多文件操作" class="headerlink" title="多文件操作"></a>多文件操作</h1><h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><p>修改了一个文件之后可以直接使用<code>:edit filename</code>修改下一个文件，但是这种方法会退出原本的文件。如果没有报错的话会报错，<code>:edit! filename</code>强制退出。</p>
 <h2 id="文件列表"><a href="#文件列表" class="headerlink" title="文件列表"></a>文件列表</h2><p>使用命令<code>args</code>可以查看vim的参数，实际就是<code>vim filename1 filename2</code>。<br>可以使用这个命令打开多个文件:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:args file1 file2 file3<br></code></pre></td></tr></table></figure>
@@ -405,14 +434,15 @@ Ctrl+w+T                //把当前窗口移到一个新标签页
 <h2 id="文件杂项操作"><a href="#文件杂项操作" class="headerlink" title="文件杂项操作"></a>文件杂项操作</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim -R filename <span class="hljs-comment"># 以只读打开文件，但是仍然可以使用:w!强制修改</span><br>vim -M filename <span class="hljs-comment"># 以只读模式打开文件，无法强制修改</span><br></code></pre></td></tr></table></figure>
 
 <h1 id="ctrl快捷键"><a href="#ctrl快捷键" class="headerlink" title="ctrl快捷键"></a>ctrl快捷键</h1><h2 id="插入模式"><a href="#插入模式" class="headerlink" title="插入模式"></a>插入模式</h2><p><code>ctrl + c/[</code><br><br>退出插入模式</p>
-<p>#ctrl + o<br><br>在去过的文件中移动。</p>
-<p>#ctrl + i <br><br>这个和上面的相反，实际上是在不同的文件中移动。</p>
+<p>#ctrl + i<br><br>跳转到 jump list 的后一个记录</p>
+<p>#ctrl + o<br><br>跳转到 jump list 的前一个记录</p>
+<p><strong>如 <code>j</code> <code>k</code> 一样， <code>i</code> <code>o</code> 的按键位置也是一样的规律：表示下一个在左，表示上一个的在右</strong></p>
 <p>#ctrl + r<br><br>后面跟寄存器名称，插入寄存器内容</p>
 <p>#ctrl + d<br><br>在当前行删除一个缩进，不论光标在哪</p>
 <p>#ctrl + t<br><br>在当前行插入一个缩进，不论光标在哪</p>
 <p>#ctrl + h<br><br>删除前一个字符</p>
 <p>#ctrl + w<br><br>删除光标前的单词</p>
-<p>#ctrl + u<br><br>删除光标前的所有输入字符</p>
+<p>#ctrl + u<br><br>删除至行尾</p>
 <p>#ctrl + m<br><br>回车</p>
 <p>#ctrl + e<br><br>插入光标下方的字符</p>
 <p>#ctrl + y<br><br>插入光标上方的字符</p>
@@ -438,13 +468,29 @@ Ctrl+w+T                //把当前窗口移到一个新标签页
 </li>
 <li><p><code>!</code>一般表示强制操作，大多数命令可以在后面加上它一表示强制操作</p>
 </li>
+<li><p><code>&lt;&lt;</code>和<code>&gt;&gt;</code> 前者是删除本行前的tab，后者是在本行添加一个tab。如果本行没有tab可供删除或者是已经有了tab则无法使用<code>&lt;&lt;</code>和<code>&gt;&gt;</code>。<code>&lt;</code>和<code>&gt;</code>可以在各个模式下使用，在可视模式下使用时可以快速添加tab。</p>
+</li>
+<li><p><code>cc</code>在普通模式下按这个可以进入插入模式并且会直接跳到和上下行一致的开头处。</p>
+</li>
+<li><p>先按<code>num+o</code>一个数字+<code>o</code>，然后输入文本可以将这个文本复制<code>num</code>遍，同样的使用<code>num+O</code>可以从上面开始插入<code>num</code>个</p>
+</li>
+<li><p><code>r</code>：替换当前光标下的字符，按下 <code>r</code>，然后输入一个字符，用来替换当前字符</p>
+</li>
+<li><p><code>A</code>：和<code>a</code>一样进入插入模式，但是是从句尾开始插入。</p>
+</li>
 </ul>
+<h1 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h1><ol>
+<li><code>vip</code>选中一个块</li>
+<li></li>
+</ol>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://vim.nauxscript.com/vim/day-8.html#%E8%A1%8C%E5%86%85%E6%90%9C%E7%B4%A2">https://vim.nauxscript.com/vim/day-8.html#%E8%A1%8C%E5%86%85%E6%90%9C%E7%B4%A2</a></p>
 <p><a target="_blank" rel="noopener" href="https://yianwillis.github.io/vimcdoc/doc/usr_03.html#03.7">https://yianwillis.github.io/vimcdoc/doc/usr_03.html#03.7</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/shuangde800/article/details/11430659">窗口操作</a></p>
 <p><a target="_blank" rel="noopener" href="https://yyq123.blogspot.com/">https://yyq123.blogspot.com/</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.easwy.com/archives/advanced-vim-skills-netrw-bufexplorer-winmanager-plugin/">vim使用技巧作者博客</a></p>
 <p><a target="_blank" rel="noopener" href="https://haicoder.net/vim/vim-edit-page-downup.html">大量快捷键操作</a></p>
+<p><a target="_blank" rel="noopener" href="https://tszv.vercel.app/pages/7e38ab/#ctrl-t">在不同的软件中使用vim模式的教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://vim.nauxscript.com/vim/day-11.html#%E4%BD%95%E4%B8%BA%E8%B7%B3%E8%BD%AC%EF%BC%88jump%EF%BC%89">和上面一致</a></p>
 
                 
               </div>
