@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(620).png">
 <meta property="article:published_time" content="2023-12-27T07:36:21.000Z">
-<meta property="article:modified_time" content="2023-12-27T08:12:25.464Z">
+<meta property="article:modified_time" content="2024-01-28T16:31:08.082Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          585 字
+          1.2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          5 分钟
+          11 分钟
         
       </span>
     
@@ -278,13 +278,37 @@
                 <p>总结stm32中的TIM外设</p>
 <span id="more"></span>
 
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在stm32f103中有三种TIM，普通TIM、基本TIM、高级TIM。具体如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271543993.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在stm32f103中有三种TIM，通用TIM、基本TIM、高级TIM。具体如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271543993.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="基本定时器"><a href="#基本定时器" class="headerlink" title="基本定时器"></a>基本定时器</h2><p>这种定时器是最简单的定时器，其结构简图如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312271545588.png" srcset="/img/loading.gif" lazyload></p>
+<p>在stm32F10x系列的芯片中基本定时器包括：</p>
+<ul>
+<li>TIM6</li>
+<li>TIM7</li>
+</ul>
+<p>基本定时器TIM6和TIM7各包含一个16位自动装载计数器，由各自的可编程预分频器驱动。</p>
+<p>它们可以作为通用定时器提供时间基准，特别地可以为数模转换器(DAC)提供时钟。实际上，它们在芯片内部直接连接到DAC并通过触发输出直接驱动DAC。</p>
 <p>如何计时的：<br>我们把定时器设置自动重装载寄存器 ARR 的值为 1000，设置时钟预分频器为 71， 则驱动计数器的时钟：CK_CNT &#x3D; CK_INT &#x2F; (71+1)&#x3D;1M， 则计数器计数一次的时间等于：1&#x2F;CK_CNT&#x3D;1us，当计数器计数到 ARR 的值 1000时， 产生一次中断，则中断一次的时间为：1&#x2F;CK_CNT*ARR&#x3D;1ms。</p>
 <h3 id="基本定时器编程"><a href="#基本定时器编程" class="headerlink" title="基本定时器编程"></a>基本定时器编程</h3><p>初始化结构体定义：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    TIM_Prescaler            <span class="hljs-comment">// 都有</span><br>    TIM_CounterMode          <span class="hljs-comment">// TIMx,x[6,7]没有，其他都有</span><br>    TIM_Period               <span class="hljs-comment">// 都有</span><br>    TIM_ClockDivision        <span class="hljs-comment">// TIMx,x[6,7]没有，其他都有</span><br>    TIM_RepetitionCounter    <span class="hljs-comment">// TIMx,x[1,8,15,16,17]才有</span><br>&#125; TIM_TimeBaseInitTypeDef;<br></code></pre></td></tr></table></figure>
 <p>其中 TIM15&#x2F;16&#x2F;17 只存在与互联型产品中，在 F1 大&#x2F;中&#x2F;小容量型号中没有。</p>
-<h1 id="高级定时器"><a href="#高级定时器" class="headerlink" title="高级定时器"></a>高级定时器</h1><h2 id="高级定时器称之为“高级”是因为添加了如下功能："><a href="#高级定时器称之为“高级”是因为添加了如下功能：" class="headerlink" title="高级定时器称之为“高级”是因为添加了如下功能：   "></a>高级定时器称之为“高级”是因为添加了如下功能：   </h2>
+<h1 id="高级定时器"><a href="#高级定时器" class="headerlink" title="高级定时器"></a>高级定时器</h1><p>**高级控制定时器(TIM1和TIM8)**和通用定时器在基本定时器的基础上引入了外部引脚，可以实现输入捕获和输出比较功能。 高级控制定时器比通用定时器增加了可编程死区互补输出、重复计数器、带刹车(断路)功能，这些功能都是针对工业电机控制方面。 </p>
+<p>高级控制定时器时基单元包含</p>
+<ul>
+<li>一个16位自动重装载寄存器ARR</li>
+<li>一个16位的计数器CNT，可向上&#x2F;下计数</li>
+<li>一个16位可编程预分频器PSC</li>
+</ul>
+<p>预分频器时钟源有多种可选，有内部的时钟、外部时钟。还有一个8位的重复计数器RCR，这样最高可实现40位的可编程定时。</p>
+<h2 id="高级定时器的时钟源"><a href="#高级定时器的时钟源" class="headerlink" title="高级定时器的时钟源"></a>高级定时器的时钟源</h2><p>高级定时器时钟来源有：</p>
+<ul>
+<li>内部时钟源<code>CK_INT</code></li>
+<li>内部触发输入<code>ITRx</code></li>
+<li>外部时钟输入一：外部输入引脚<code>TIx(x=1 2 3 4)</code></li>
+<li>外部时钟输入二：外部触发输入<code>ETR</code></li>
+</ul>
+<h3 id="内部时钟源"><a href="#内部时钟源" class="headerlink" title="内部时钟源"></a>内部时钟源</h3><p>内部时钟CK_INT即来自于芯片内部，等于72M，一般情况下，我们都是使用内部时钟。当从模式控制寄存器TIMx_SMCR的SMS位等于000时，则使用内部时钟。</p>
+<h4 id="内部触发输入"><a href="#内部触发输入" class="headerlink" title="内部触发输入"></a>内部触发输入</h4><p>内部触发输入是使用一个定时器作为另一个定时器的预分频器。硬件上高级控制定时器和通用定时器在内部连接在一起， 可以实现定时器同步或级联。主模式的定时器可以对从模式定时器执行复位、启动、停止或提供时钟。</p>
+
                 
               </div>
             
