@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401312124013.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401312125760.png">
 <meta property="article:published_time" content="2024-01-30T17:54:25.000Z">
-<meta property="article:modified_time" content="2024-01-31T16:51:23.639Z">
+<meta property="article:modified_time" content="2024-02-01T17:28:06.786Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401310159780.png">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.2k 字
+          5.3k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          44 分钟
+          45 分钟
         
       </span>
     
@@ -318,6 +318,10 @@
 <h2 id="停止模式"><a href="#停止模式" class="headerlink" title="停止模式"></a>停止模式</h2><p>这个模式下会关闭所有的时钟，但是内核、备份域中的寄存器中的值仍然会被保存下来。<strong>所以从停止模式退出来之后可以继续执行后面的代码。</strong></p>
 <p>停止模式可以由任意一个外部中断(EXTI)唤醒，在停止模式中可以选择电压调节器为开模式或低功耗模式。</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401312124013.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意点：</p>
+<ul>
+<li>在这个模式下，当退出状态的时候HSI会被自动选择为系统时钟。所以我们需要自己调回至HSE。在上图中的唤醒延迟中有写道</li>
+</ul>
 <h3 id="停止模式相关编程"><a href="#停止模式相关编程" class="headerlink" title="停止模式相关编程"></a>停止模式相关编程</h3><p>编程实例：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)<br>&#123;	<br><span class="hljs-comment">/*********执行任务***************************/</span><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n STM32正常运行，亮绿灯\r\n&quot;</span>);<br>	<br>LED_GREEN;	<br>Delay(<span class="hljs-number">0x3FFFFF</span>);<br><br><span class="hljs-comment">/*****任务执行完毕，进入停止降低功耗***********/</span>		<br><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n 进入停止模式，按KEY1或KEY2按键可唤醒\r\n&quot;</span>);<br><br><span class="hljs-comment">//使用红灯指示，进入停止状态</span><br>LED_RED;<br><br><span class="hljs-comment">/* 进入停止模式，设置电压调节器为低功耗模式，等待中断唤醒 */</span><br>PWR_EnterSTOPMode(PWR_Regulator_LowPower,PWR_STOPEntry_WFI);	<br><br>	<br><span class="hljs-comment">//等待中断唤醒  K1或K2按键中断	</span><br><br><span class="hljs-comment">/*********************被唤醒***********************/</span><br><br><span class="hljs-comment">//获取刚被唤醒时的时钟状态	</span><br><span class="hljs-comment">//时钟源</span><br>clock_source_wakeup = RCC_GetSYSCLKSource ();<br><span class="hljs-comment">//时钟频率</span><br>RCC_GetClocksFreq(&amp;clock_status_wakeup);<br><br><span class="hljs-comment">//从停止模式下被唤醒后使用的是HSI时钟，此处重启HSE时钟,使用PLLCLK</span><br>SYSCLKConfig_STOP();<br><br><span class="hljs-comment">//获取重新配置后的时钟状态	</span><br><span class="hljs-comment">//时钟源</span><br>clock_source_config = RCC_GetSYSCLKSource ();<br><span class="hljs-comment">//时钟频率</span><br>RCC_GetClocksFreq(&amp;clock_status_config);<br>	<br><span class="hljs-comment">//因为刚唤醒的时候使用的是HSI时钟，会影响串口波特率，输出不对，所以在重新配置时钟源后才使用串口输出。</span><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n重新配置后的时钟状态：\r\n&quot;</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; SYSCLK频率:%d,\r\n HCLK频率:%d,\r\n PCLK1频率:%d,\r\n PCLK2频率:%d,\r\n 时钟源:%d (0表示HSI，8表示PLLCLK)\n&quot;</span>, <br>	clock_status_config.SYSCLK_Frequency, <br>	clock_status_config.HCLK_Frequency, <br>	clock_status_config.PCLK1_Frequency, <br>	clock_status_config.PCLK2_Frequency, <br>	clock_source_config);<br>	<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n刚唤醒的时钟状态：\r\n&quot;</span>);	<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; SYSCLK频率:%d,\r\n HCLK频率:%d,\r\n PCLK1频率:%d,\r\n PCLK2频率:%d,\r\n 时钟源:%d (0表示HSI，8表示PLLCLK)\n&quot;</span>, <br>	clock_status_wakeup.SYSCLK_Frequency, <br>	clock_status_wakeup.HCLK_Frequency, <br>	clock_status_wakeup.PCLK1_Frequency, <br>	clock_status_wakeup.PCLK2_Frequency, <br>	clock_source_wakeup);<br><br><span class="hljs-comment">/*指示灯*/</span><br>LED_BLUE;	<br>Delay(<span class="hljs-number">0x1FFFFF</span>);		<br>	<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n 已退出停止模式\r\n&quot;</span>);<br><span class="hljs-comment">//继续执行while循环</span><br><br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -332,6 +336,10 @@
 </ul>
 <h2 id="待机模式"><a href="#待机模式" class="headerlink" title="待机模式"></a>待机模式</h2><p>这个模式下关闭所有的外设、时钟，还把1.8V区域的电源也完全关闭了。但是如果备份域的电源还有电的话，备份域内的RTC都可以正常运行，备份域内的寄存器的数据会被保存，不受功耗模式影响。<strong>所以从这个模式下退出时，就相当于复位，程序会从头开始执行。</strong></p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401312125760.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意点：</p>
+<ul>
+<li>待机模式下可以使用<code>WKUP</code>引脚来退出模式，但前提是需要使用函数<code>PWR_WakeUpPinCmd (ENABLE);</code>使能<code>WKUP</code>引脚。</li>
+</ul>
 <h3 id="待机模式相关编程"><a href="#待机模式相关编程" class="headerlink" title="待机模式相关编程"></a>待机模式相关编程</h3><p>代码示例：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//检测复位来源</span><br><span class="hljs-keyword">if</span>(PWR_GetFlagStatus(PWR_FLAG_WU) == SET)<br>&#123;<br>	LED_BLUE;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n 待机唤醒复位 \r\n&quot;</span>);<br>&#125;<br><span class="hljs-keyword">else</span><br>&#123;<br>	LED_GREEN;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n 非待机唤醒复位 \r\n&quot;</span>);<br>&#125;<br><br> <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)<br> &#123;			<br>	<span class="hljs-comment">// K2 按键长按进入待机模式</span><br>	<span class="hljs-keyword">if</span>(KEY2_LongPress())<br>	&#123;<br>		<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n 即将进入待机模式，进入待机模式后可按KEY1唤醒，唤醒后会进行复位，程序从头开始执行\r\n&quot;</span>);<br>		LED_RED;	<br>		Delay(<span class="hljs-number">0xFFFF</span>);<br>		<br>		<span class="hljs-comment">/*清除WU状态位*/</span><br>		PWR_ClearFlag (PWR_FLAG_WU);<br>		<br>		<span class="hljs-comment">/* 使能WKUP引脚的唤醒功能 ，使能PA0*/</span><br>		PWR_WakeUpPinCmd (ENABLE);<br>		<br>		<span class="hljs-comment">/* 进入待机模式 */</span><br>		PWR_EnterSTANDBYMode();<br>	&#125;<br><br> &#125;<br></code></pre></td></tr></table></figure>
 
