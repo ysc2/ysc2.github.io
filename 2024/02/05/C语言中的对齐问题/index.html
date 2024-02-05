@@ -16,15 +16,22 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="前言在C语言中对齐问题主要是结构体的对齐和联合体的对齐。这篇文章主要记载结构体的对齐问题 Intel的IA32架构的处理器则不管数据是否对齐都能正确工作，但是如果想提升性能，应该注意内存对齐方式。ANSI C标准并没有规定相邻声明的变量在内存中一定要相邻。为了程序的高效性，内存对齐问题由编译器自行灵活处理，这样会导致相邻的变量之间有一些填充字节。对于基本数据类型（如int、char等），它们占用的">
+<meta property="og:type" content="article">
 <meta property="og:title" content="C语言中的对齐问题">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/05/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="前言在C语言中对齐问题主要是结构体的对齐和联合体的对齐。这篇文章主要记载结构体的对齐问题 Intel的IA32架构的处理器则不管数据是否对齐都能正确工作，但是如果想提升性能，应该注意内存对齐方式。ANSI C标准并没有规定相邻声明的变量在内存中一定要相邻。为了程序的高效性，内存对齐问题由编译器自行灵活处理，这样会导致相邻的变量之间有一些填充字节。对于基本数据类型（如int、char等），它们占用的">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060133692.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060137657.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060141561.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060157778.png">
 <meta property="article:published_time" content="2024-02-04T16:00:01.000Z">
-<meta property="article:modified_time" content="2024-02-04T16:00:01.588Z">
+<meta property="article:modified_time" content="2024-02-05T17:58:03.324Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060133692.png">
   
   
   
@@ -217,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          3.5k 字
         
       </span>
     
@@ -228,7 +235,7 @@
         
         
         
-          1 分钟
+          30 分钟
         
       </span>
     
@@ -270,7 +277,70 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在C语言中对齐问题主要是结构体的对齐和联合体的对齐。这篇文章主要记载结构体的对齐问题</p>
+<p>Intel的IA32架构的处理器则不管数据是否对齐都能正确工作，但是如果想提升性能，应该注意内存对齐方式。ANSI C标准并没有规定相邻声明的变量在内存中一定要相邻。为了程序的高效性，内存对齐问题由编译器自行灵活处理，这样会导致相邻的变量之间有一些填充字节。对于基本数据类型（如int、char等），它们占用的内存空间在一个确定硬件系统下有确定的值。</p>
+<blockquote>
+<p>ANSI C规定一种结构类型的大小是它所有字段的大小及字段之间或字段尾部的填充区大小之和。（填充区就是为了使结构体字段满足内存对齐要求而额外分配给结构体的空间）。</p>
+</blockquote>
+<p>关于一个Linux内核中的宏，这个宏可以查看结构体中成员的偏移值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> OFFEST(t,s) ((size_t)&amp;((t*)0)-&gt;s)</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="内存对齐的必要性"><a href="#内存对齐的必要性" class="headerlink" title="内存对齐的必要性"></a>内存对齐的必要性</h2><p>内存对齐作为一种强制要求，一方面简化了处理器与内存之间传输系统的设计，另一方面可以提升读取数据的速度。<strong>各个硬件平台在对存储空间的处理上有很大的不同。</strong></p>
+<p>一些平台对某些特定类型的数据只能从某些特定地址开始存取。比如，有些架构的CPU在访问一个没有进行对齐的变量的时候会发生错误，那么在这种架构下编程必须保证字节对齐。<strong>比如说arm平台</strong></p>
+<p>其他平台可能没有这种情况，但是最常见的情况是：如果不按照适合其平台要求对数据存放进行对齐，会在存取效率上带来损失。比如在32位CPU上，一般要求变量地址都是基于4位的，这样可以保证CPU用一次的读写周期就可以读取变量。如果不按4位对齐，如果变量刚好跨4位编码，这样就需要CPU用两次读写周期。</p>
+<p>很显然，这样的效率自然低下。由此也可以简单看出，内存字节对齐是一种典型的“以空间换时间的策略”，在现代计算机拥有较大内存的情况下，这个策略是相当成功的。</p>
+<h1 id="结构体对齐"><a href="#结构体对齐" class="headerlink" title="结构体对齐"></a>结构体对齐</h1><p>实际上，许多计算机系统对基本类型数据在内存中存放的位置有限制，它们会要求这些数据的起始地址的值是某个数k的倍数，这就是所谓的内存对齐，而这个k被称为该数据类型的对齐模数（alignment modulus）。</p>
+<p>aaaa计算结构体的对齐的步骤如下：</p>
+<ol>
+<li>将结构体内所有数据成员的长度值相加，记为sum_a。<br><br></li>
+<li>将各数据成员内存对齐，按各自对齐模数而填充的字节数累加到和sum_a上，记为sum_b。对齐模数是#pragma pack指定的数值及该数据成员自身长度中数值较小者。<strong>该数据相对起始位置应该是对齐模式的整数倍。</strong><br><br></li>
+<li>将和sum_b向结构体模数对齐，该模数是#pragma pack指定的数值和结构体内部最大的基本数据类型成员长度中数值较小者，结构体的长度应该是该模数的整数倍。</li>
+</ol>
+<p>使用一个例子来说明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> a；<br>    <span class="hljs-type">char</span> b；<br>&#125;A；<br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    A c；<br>    <span class="hljs-type">double</span> d；<br>    <span class="hljs-type">int</span> e；<br>    <span class="hljs-type">char</span> f；<br>&#125;B；<br><br><span class="hljs-comment">//首先我们将结构体A直接展开</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> a；<br>    <span class="hljs-type">char</span> b；<br>    <span class="hljs-type">double</span> d；<br>    <span class="hljs-type">int</span> e；<br>    <span class="hljs-type">char</span> f；<br>&#125;B；<br></code></pre></td></tr></table></figure>
+
+<p>根据上面的步骤：</p>
+<p>对于结构体B而言：</p>
+<ol>
+<li>结构体内所有数据成员的长度值相加为：sum_a&#x3D;4（int为4个字节的长度）+1（char为1个字节的长度）+8（double为8个字节的长度）+4（int为4个字节的长度）+1（char为1个字节的长度）&#x3D;18。</li>
+<li>数据成员d为了内存对齐，根据“结构体大小的计算方法和步骤”中第2条原则，其对齐模数是8，所以之前需填充3个字节。这时候sum_b&#x3D;sum_a+3&#x3D;21。</li>
+<li>按照定义，结构体对齐模数是结构体内部最大数据成员长度和pragma pack中较小者，而这里前者和后者都为8，因此结构体对齐模数是8。sum_b应该是8的整数倍，所以要在结构体后填充3×8-21&#x3D;3个字节。</li>
+</ol>
+<p>内存空间如图所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060133692.png" srcset="/img/loading.gif" lazyload></p>
+<p>编写如下程序验证：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> main（<span class="hljs-type">void</span>）<br>&#123;<br>    <span class="hljs-built_in">printf</span>（<span class="hljs-string">&quot;\nsizeof（B）： %d\n&quot;</span>，<span class="hljs-keyword">sizeof</span>（B））；<br>    <span class="hljs-built_in">printf</span>（<span class="hljs-string">&quot;offsetof（B，c）： %d\n&quot;</span><br>            <span class="hljs-string">&quot;（offsetof（A，a）： %d offsetof（A，b）： %d）\n&quot;</span><br>            <span class="hljs-string">&quot;offsetof（B，d）： %d\noffsetof（B，e）： %d\n&quot;</span><br>            <span class="hljs-string">&quot;offsetof（B，f）： %d\n\n&quot;</span>，<br>            offsetof（B，c），offsetof（A，a），offsetof（A，b），<br>            offsetof（B，d），offsetof（B，e），offsetof（B，f））；<br>    B data；<br>    <span class="hljs-built_in">printf</span>（<span class="hljs-string">&quot;B-&gt;c： %u（B-&gt;c.a： %u B-&gt;c.b： %u）\n&quot;</span><br>            <span class="hljs-string">&quot;B-&gt;d： %u\nB-&gt;e： %u\nB-&gt;f： %u\n\n&quot;</span>，<br>            &amp;data.c，&amp;data.c.a， &amp;data.c.b，&amp;data.d，&amp;data.e，&amp;data.f）；<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>；<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>输出如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060137657.png" srcset="/img/loading.gif" lazyload></p>
+<p>需要注意的是这个输出和不同的系统有关，上面的输出系统是Red Hat Enterprise Linux 6（i386）&#x2F;GCC 4.4.4</p>
+<h2 id="使用指令-pragma-pack"><a href="#使用指令-pragma-pack" class="headerlink" title="使用指令#pragma pack"></a>使用指令#pragma pack</h2><p>除上面默认的内存对齐之外，我们也可以通过下面的方法改变默认的对齐模数。</p>
+<p>使用伪指令#pragma pack（n），n表示对齐模数，它可以是1、2、4、8等，编译器将按照n个字节对齐。</p>
+<p>使用伪指令#pragma pack（），取消自定义字节对齐方式，即将上一次#pragma pack（n）的设置取消，恢复为默认值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> pack（2）</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span> a；<br>    <span class="hljs-type">long</span> <span class="hljs-type">double</span> b；<br>&#125;TestStruct1；<br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> pack（）</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>结构体内所有数据成员的长度值相加为：sum_a&#x3D;1（char为1个字节的长度）+8（long double为8个字节的长度）&#x3D;9。</li>
+<li>将数据成员a放在相对偏移0处，之前不需要填充字节。数据成员b为了内存对齐，根据“结构体大小的计算方法和步骤”中第2条原则，其对齐模数是2，所以之前需要填充1个字节。这时候sum_b&#x3D;sum_a+1&#x3D;10。</li>
+<li>按照定义，结构体对齐模数是结构体内部最大数据成员长度和pragma pack中较小者，而这里前者为8，后者为2，所以结构体对齐模数是2。sum_b是2的5倍，因此不需要再次对齐。</li>
+</ol>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060141561.png" srcset="/img/loading.gif" lazyload></p>
+<p>特殊的，可以使用<code>#pragma pack(1)</code>来使得系统不进行结构体对齐 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> pack（1）</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span> a；<br>    <span class="hljs-type">long</span> <span class="hljs-type">double</span> b；<br>&#125;TestStruct1；<br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> pack（）</span><br></code></pre></td></tr></table></figure>
+
+<p>上面的结构体的大小为17，在gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04)上的输出</p>
+<p>如果没有这些预处理语句则结果为32</p>
+<h1 id="位域"><a href="#位域" class="headerlink" title="位域"></a>位域</h1><p>C语言提供了一个称之为位域语法，实际上就是可以结构体中的成员直接按照<code>bit</code>来存储，而不是按照<code>byte</code>来存储。</p>
+<p>注意：</p>
+<ul>
+<li>位域只可以对于整数类型使用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> one:<span class="hljs-number">1</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> two:<span class="hljs-number">3</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> three:<span class="hljs-number">10</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> four:<span class="hljs-number">5</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> :<span class="hljs-number">2</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> five:<span class="hljs-number">8</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> six:<span class="hljs-number">8</span>;<br>&#125; demo_type;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    demo_type s = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">513</span>, <span class="hljs-number">17</span>, <span class="hljs-number">129</span>, <span class="hljs-number">0x81</span> &#125;;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;sizeof demo_type=%u\n&quot;</span>,<span class="hljs-keyword">sizeof</span>(demo_type));<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;values: s=%u,%u,%u,%u,%u,%u\n&quot;</span>,<br>      s.one, s.two, s.three, s.four, s.five, s.six);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>结构体的布局如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060157778.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上面这个图可以知道位域的含义</p>
+
                 
               </div>
             
