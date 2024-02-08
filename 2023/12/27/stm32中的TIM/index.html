@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(620).png">
 <meta property="article:published_time" content="2023-12-27T07:36:21.000Z">
-<meta property="article:modified_time" content="2024-02-08T18:26:49.951Z">
+<meta property="article:modified_time" content="2024-02-08T19:26:14.581Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.3k 字
+          7.1k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          37 分钟
+          60 分钟
         
       </span>
     
@@ -321,15 +321,56 @@
 <li>强制输出模式</li>
 </ul>
 <p>下面我们详细讲一讲这些模式的电路图和使用方法，<strong>注意这些内容都在用户手册中有定义</strong></p>
-<h3 id="输出比较模式"><a href="#输出比较模式" class="headerlink" title="输出比较模式"></a>输出比较模式</h3><p>这个模式是TIM中最常用的模式之一，主要用来生成PWM波形，用以驱动电机。</p>
+<h3 id="输出比较模式"><a href="#输出比较模式" class="headerlink" title="输出比较模式"></a>输出比较模式</h3><p>输出比较模式的工作原理：</p>
+<p>即使根据<code>CNT</code>和<code>CCR</code>之间的大小关系来输出高低电平。通过配置<code>TIMx_CCMR1</code>寄存器。输出比较模式又可以选择八种模式，这个八种模式在下面的图中可以找到其中PWM模式1是输出比较模式中最常用的模式之一，主要用来生成PWM波形，用以驱动电机。</p>
+<p>首先我们来看看这个模式的框图：</p>
+<p>通用TIM框图<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090314245.png" srcset="/img/loading.gif" lazyload><br>高级TIM框图<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090314080.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到图中有一个输出模式控制器，我们可以通过<code>TIMx_CCMR1</code>这个寄存器来对其进行控制，可以选择的模式如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090316997.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们使用最多的就是PWM模式，实际上PWM模式1和2是一样的。</p>
+<p>输出PWM波形的数据计算公式：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090319756.png" srcset="/img/loading.gif" lazyload></p>
+<p>其中<code>CK_PSC</code>就是计数器时钟，一般是<code>72Mhz</code>。看你选的是哪个时钟作为其时钟源。TIMx_ARR寄存器确定频率、由TIMx_CCRx寄存器确定占空比的信号。</p>
 <h3 id="输入捕获模式"><a href="#输入捕获模式" class="headerlink" title="输入捕获模式"></a>输入捕获模式</h3><p>这个模式主要被用来测量PWM的各种参数–占空比、频率、分辨率等等参数</p>
-<h3 id="编码器接口模式"><a href="#编码器接口模式" class="headerlink" title="编码器接口模式"></a>编码器接口模式</h3><p>这个模式只有高级定时器和通用定时器才会有<strong>一个</strong>，所以普通定时器是没有这个模式的。</p>
-<p>其特点如下：</p>
+<h3 id="编码器接口模式"><a href="#编码器接口模式" class="headerlink" title="编码器接口模式"></a>编码器接口模式</h3><p><strong>编码器接口模式的工作原理</strong></p>
+<p>根据下图中的两个引脚的输入，自动控制CNT计数器的自增、自减。以此来判断编码器的位置、速度、旋转方向。如何根据引脚的输入来判断计数器是加还是减：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090239040.png" srcset="/img/loading.gif" lazyload><br>一般我们使用的有效边沿是在TI1和TI2计数。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090231718.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据上面的图，编码器接口处有两根线，受到了两个不同的引脚的控制。 为什么需要受控于两个不同的引脚，实际上这有利消除信号源的毛刺（噪声）：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090234065.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据表格，可以查出当出现了毛刺的时候，计数器中的值实际上是没有改变的。这个消除了由于毛刺带来的误差。</p>
+<p>并且编码器接口模式是使用了输入滤波器和边沿检测器（实际上这里是极性选择，而不是边沿检测）</p>
+<p>编码器接口模式特点如下：</p>
 <ul>
 <li>编码器接口可接收增量（正交）编码器的信号，根据编码器旋转产生的正交信号脉冲，自动控制CNT自增或自减，从而指示编码器的位置、旋转方向和旋转速度</li>
 <li>两个输入引脚借用了输入捕获的通道1和通道2</li>
+<li>这个模式只有高级定时器和通用定时器才会有<strong>一个</strong>，所以普通定时器是没有这个模式的。</li>
 </ul>
-<p>编码器接口模式基本上相当于使用了一个带有方向选择的外部时钟。这意味着计数器只在0到TIMx_ARR寄存器的自动装载值之间连续计数(根据方向，或是0到ARR计数，或是ARR到0计数)。所以在开始计数之前必须配置TIMx_ARR；同样，捕获器、比较器、预分频器、重复计数器、触发输出特性等仍工作如常。</p>
+<p>编码器接口模式基本上相当于使用了一个带有方向选择的外部时钟。这意味着计数器只在0到TIMx_ARR寄存器的自动装载值之间连续计数(根据方向，或是0到ARR计数，或是ARR到0计数)。所以在开始计数之前必须配置TIMx_ARR；同样，捕获器、比较器、预分频器、重复计数器、触发输出特性等仍工作如常。、</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>在手册中有一个列子。我们通过学习这个例子可以知道这个模式大致如何使用。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090302530.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据上图中的配置步骤，我们可以知道使用该模式需要做： </p>
+<ol>
+<li>GPIO配置</li>
+<li>选择两个通道的极性（即是否反向）</li>
+<li>配置有效边沿</li>
+<li>使能计数器</li>
+</ol>
+<p>下面，我们使用标准库来进行编程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">Encoder_Init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-comment">/*开启时钟*/</span><br>	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);			<span class="hljs-comment">//开启TIM3的时钟</span><br>	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);			<span class="hljs-comment">//开启GPIOA的时钟</span><br>	<br>	<span class="hljs-comment">/*GPIO初始化*/</span><br>	GPIO_InitTypeDef GPIO_InitStructure;<br>	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;<br>	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;<br>	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;<br>	GPIO_Init(GPIOA, &amp;GPIO_InitStructure);							<span class="hljs-comment">//将PA6和PA7引脚初始化为上拉输入</span><br>	<br>	<span class="hljs-comment">/*时基单元初始化*/</span><br>	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;				<span class="hljs-comment">//定义结构体变量</span><br>	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;     <span class="hljs-comment">//时钟分频，选择不分频，此参数用于配置滤波器时钟，不影响时基单元功能</span><br>	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up; <span class="hljs-comment">//计数器模式，选择向上计数</span><br>	TIM_TimeBaseInitStructure.TIM_Period = <span class="hljs-number">65536</span> - <span class="hljs-number">1</span>;               <span class="hljs-comment">//计数周期，即ARR的值</span><br>	TIM_TimeBaseInitStructure.TIM_Prescaler = <span class="hljs-number">1</span> - <span class="hljs-number">1</span>;                <span class="hljs-comment">//预分频器，即PSC的值</span><br>	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = <span class="hljs-number">0</span>;            <span class="hljs-comment">//重复计数器，高级定时器才会用到</span><br>	TIM_TimeBaseInit(TIM3, &amp;TIM_TimeBaseInitStructure);             <span class="hljs-comment">//将结构体变量交给TIM_TimeBaseInit，配置TIM3的时基单元</span><br>	<br>	<span class="hljs-comment">/*输入捕获初始化*/</span><br>	TIM_ICInitTypeDef TIM_ICInitStructure;							<span class="hljs-comment">//定义结构体变量</span><br>	TIM_ICStructInit(&amp;TIM_ICInitStructure);							<span class="hljs-comment">//结构体初始化，若结构体没有完整赋值</span><br>																	<span class="hljs-comment">//则最好执行此函数，给结构体所有成员都赋一个默认值</span><br>																	<span class="hljs-comment">//避免结构体初值不确定的问题</span><br>	TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;				<span class="hljs-comment">//选择配置定时器通道1</span><br>	TIM_ICInitStructure.TIM_ICFilter = <span class="hljs-number">0xF</span>;							<span class="hljs-comment">//输入滤波器参数，可以过滤信号抖动</span><br>	TIM_ICInit(TIM3, &amp;TIM_ICInitStructure);							<span class="hljs-comment">//将结构体变量交给TIM_ICInit，配置TIM3的输入捕获通道</span><br>	TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;				<span class="hljs-comment">//选择配置定时器通道2</span><br>	TIM_ICInitStructure.TIM_ICFilter = <span class="hljs-number">0xF</span>;							<span class="hljs-comment">//输入滤波器参数，可以过滤信号抖动</span><br>	TIM_ICInit(TIM3, &amp;TIM_ICInitStructure);							<span class="hljs-comment">//将结构体变量交给TIM_ICInit，配置TIM3的输入捕获通道</span><br>	<br>	<span class="hljs-comment">/*编码器接口配置*/</span><br>	TIM_EncoderInterfaceConfig(TIM3, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);<br>																	<span class="hljs-comment">//配置编码器模式以及两个输入通道是否反相</span><br>																	<span class="hljs-comment">//注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相</span><br>																	<span class="hljs-comment">//此函数必须在输入捕获初始化之后进行，否则输入捕获的配置会覆盖此函数的部分配置</span><br>	<br>	<span class="hljs-comment">/*TIM使能*/</span><br>	TIM_Cmd(TIM3, ENABLE);			<span class="hljs-comment">//使能TIM3，定时器开始运行</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中，最主要的函数<code>TIM_EncoderInterfaceConfig()</code>主要三个参数的含义是：</p>
+<ul>
+<li>第一个，选择是哪个TIM</li>
+<li>第二个，选择通道一的极性<ul>
+<li>@arg TIM_ICPolarity_Falling: IC Falling edge.选这个就是不反向，反之反向</li>
+<li>@arg TIM_ICPolarity_Rising: IC Rising edge.</li>
+</ul>
+</li>
+<li>第三个，选择通道二的极性</li>
+</ul>
+<p>其实这个函数的最后面的两个参数在配置<code>TIM_ICInitTypeDef</code>结构体的时候就可以初始化了。在这个函数中初始化也是一样的效果，这就是为什么没有在<code>TIM_ICInitTypeDef</code>中初始化它。</p>
+<p>对此我们可以总结编码器接口模式下的配置图：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402090325511.png" srcset="/img/loading.gif" lazyload></p>
 <h1 id="编程相关"><a href="#编程相关" class="headerlink" title="编程相关"></a>编程相关</h1><p>在标准库函数头文件stm32f10x_tim.h中对定时器外设建立了四个初始化结构体，分别为：</p>
 <ul>
 <li>时基初始化结构体<code>TIM_TimeBaseInitTypeDef</code></li>
