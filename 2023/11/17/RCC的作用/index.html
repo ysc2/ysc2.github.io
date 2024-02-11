@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-pok-rie-6823160-16-9-01.jpg">
 <meta property="article:published_time" content="2023-11-17T13:44:52.000Z">
-<meta property="article:modified_time" content="2024-01-31T14:11:49.623Z">
+<meta property="article:modified_time" content="2024-02-11T16:39:55.216Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          346 字
+          429 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -283,6 +283,9 @@
 <p>作用：设置系统时钟SYSCLK、设置AHB分频因子（决定HCLK等于多少）、设置APB2分频因子（决定PCLK2等于多少）、 设置APB1分频因子（决定PCLK1等于多少）、设置各个外设的分频因子；控制AHB、APB2和APB1这三条总线时钟的开启、 控制每个外设的时钟的开启。</p>
 <p>简而言之就是<strong>配置时钟树</strong></p>
 <p>对于SYSCLK、HCLK、PCLK2、PCLK1这四个时钟的配置一般是： PCLK2 &#x3D; HCLK &#x3D; SYSCLK&#x3D;PLLCLK &#x3D; 72M， PCLK1&#x3D;HCLK&#x2F;2 &#x3D; 36M。这个时钟配置也是库函数的标准配置，我们用的最多的就是这个。</p>
+<h1 id="RCC时钟树"><a href="#RCC时钟树" class="headerlink" title="RCC时钟树"></a>RCC时钟树</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120033988.png" srcset="/img/loading.gif" lazyload></p>
+<p>stm32有高速、低速、内部、外部时钟信号。一共有四种选择，<code>H</code>代表的是高，<code>I</code>代表的是内部。</p>
+<p>一般高速时钟是提供给外设和系统的，低速时钟给<code>RTC</code>、<code>看门狗</code>使用。</p>
 <h1 id="RCC的配置函数"><a href="#RCC的配置函数" class="headerlink" title="RCC的配置函数"></a>RCC的配置函数</h1>
                 
               </div>

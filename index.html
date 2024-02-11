@@ -224,6 +224,39 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2024/02/11/stm32%E4%B8%AD%E7%9A%84RTC%E5%92%8CBKP/" target="_blank">
+          stm32中的RTC和BKP
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/02/11/stm32%E4%B8%AD%E7%9A%84RTC%E5%92%8CBKP/" target="_blank">
+        <div>
+          RTC前置知识UNIX时间戳 两种标准时间 闰秒：从上图可以知道，在UTC设置的9192631770周所用的时间和GMT标准中的1970-1-1-0-0-0一致的。但是由于地球自转速度越来越慢，所以需要通过差一个闰秒来解决这个问题。 C语言中的时间库  BKP简介 这个BKP实际上就是一组寄存器，用于保存数据。其可以电源的来源有VDD引脚和VBAT引脚。当VDD没有电的时候就会换到VBAT引脚，有
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-02-11 22:14" pubdate>
+              2024-02-11
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2024/02/06/%E7%94%B5%E6%9C%BA%E4%B8%8E%E8%88%B5%E6%9C%BA/" target="_blank">
           电机与舵机
         </a>
@@ -505,39 +538,6 @@
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
             <time datetime="2024-01-22 20:16" pubdate>
-              2024-01-22
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/01/22/FreeRTOS-6-%E4%BA%92%E6%96%A5%E9%87%8F/" target="_blank">
-          FreeRTOS-7-互斥量
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/22/FreeRTOS-6-%E4%BA%92%E6%96%A5%E9%87%8F/" target="_blank">
-        <div>
-          前置知识优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。 优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-22 17:17" pubdate>
               2024-01-22
             </time>
           </div>
