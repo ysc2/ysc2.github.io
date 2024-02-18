@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/930dfaf3b9e7c47cf06d007f47e28e3bf9098442.jpg">
 <meta property="article:published_time" content="2023-11-29T11:09:55.000Z">
-<meta property="article:modified_time" content="2024-02-17T16:10:43.870Z">
+<meta property="article:modified_time" content="2024-02-18T17:31:06.121Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          8.9k 字
+          9k 字
         
       </span>
     
@@ -391,6 +391,7 @@ Ctrl+w+T                //把当前窗口移到一个新标签页
 <ul>
 <li><code>g</code>和<code>z</code>是附加命令，也就是它们都需要和其他命令一起使用。</li>
 <li><code>^</code>的含义是移动到软行首，而<code>0</code>是移动到硬行首。区别是<code>^</code>只是移动到这行的第一个字符处，而<code>0</code>是移动到真正的行首。与<code>0</code>相对应的是<code>$</code>，而不是<code>^</code>。</li>
+<li><code>o</code>和<code>O</code>的作用分别是：向下起一行和向上起一行</li>
 </ul>
 <p><code>dd</code>和<code>cc</code>的关系是, 前者不会进入插入模式，但是后者会。两者都是删除的作用。</p>
 <h2 id="操作符命令"><a href="#操作符命令" class="headerlink" title="操作符命令"></a>操作符命令</h2><p>上图中的橙色就是操作符命令。</p>
@@ -418,12 +419,14 @@ Ctrl+w+T                //把当前窗口移到一个新标签页
 <li><code>dw</code> <code>d^</code></li>
 <li><code>c2h</code> 删除左侧的两个字符</li>
 <li><code>d2l</code> 删除右侧的两个字符</li>
+<li><code>df;</code> 向右删除到一个<code>;</code></li>
 </ol>
 </li>
 <li><code>D</code>这个就是从当前光标删除到行尾, 不进入插入模式</li>
 <li><code>C</code>和上面一样, 但是进入插入模式</li>
 </ol>
-<h2 id="移动键"><a href="#移动键" class="headerlink" title="移动键"></a>移动键</h2><p>+或Enter: 把光标移至下一行第一个非空白字符。<br>-: 把光标移至上一行第一个非空白字符。<br>w: 前移一个单词，光标停在下一个单词开头；<br>W: 移动下一个单词开头，但<strong>忽略一些标点</strong>；<br>e: 前移一个单词，光标停在下一个单词末尾；<br>E: 移动到下一个单词末尾，如果词尾有标点，则<strong>移动到标点</strong>；<br>b: 后移一个单词，光标停在上一个单词开头；<br>B: 移动到上一个单词开头，<strong>忽略一些标点</strong>；   </p>
+<h2 id="移动键"><a href="#移动键" class="headerlink" title="移动键"></a>移动键</h2><p>+或Enter: 把光标移至下一行第一个非空白字符。   <br><br><br>-: 把光标移至上一行第一个非空白字符。   <br><br><br>w: 前移一个单词，光标停在下一个单词开头；   <br><br><br>W: 移动下一个单词开头，但<strong>忽略一些标点</strong>；   <br><br><br>e: 前移一个单词，光标停在下一个单词末尾；   <br><br><br>E: 移动到下一个单词末尾，如果词尾有标点，则<strong>移动到标点</strong>；   <br><br><br>b: 后移一个单词，光标停在上一个单词开头；   <br><br><br>B: 移动到上一个单词开头，<strong>忽略一些标点</strong>；   <br><br></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402180141585.png" srcset="/img/loading.gif" lazyload></p>
 <h1 id="vim中的跳转"><a href="#vim中的跳转" class="headerlink" title="vim中的跳转"></a>vim中的跳转</h1><p>一般，每次你执行一个会将光标移动到本行之外的命令，该移动即被称为一个 “跳转” 。这包括查找命令 “&#x2F;“ 和 “n” (无论跳转到多远的地方)。但不包括 “fx” 和 “tx” 这些行内查找命令或者 “w” 和 “e” 等词移动命令。另外 “j” 和 “k” 不会被当做是一次 “跳转”，即使你在前面加上计数前缀使之移动<br>到很远的地方也不例外。</p>
 <p>由于 <code>jump list</code> 保留了光标的移动记录，我们可以通过 <code>:jumps</code> 查看 <code>jump list</code>，vim 会显示近 <code>100</code> 条记录；我们也可以可以在 <code>jump list</code> 中选中记录进行对应位置的跳转。</p>
 <p>但是使用 <code>:jumps</code> 查看 <code>jump list</code> 来进行跳转的操作比较繁琐，而且很多时候我们并不关心之前这么多的跳转，我们只在乎跳转的顺序，因为只有顺着 <code>jump list</code> 的顺序，我们总会跳到想去的位置，这时我们可以使用以下命令：</p>

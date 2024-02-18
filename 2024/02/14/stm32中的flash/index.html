@@ -16,19 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言flash就是非易失性闪存，一般来说stm32需要外接flash芯片以扩大整个系统的内存大小。 这里的flash就是指stm32中的内部自带的flash存储，而不是额外的芯片。 stm32flash一般用来保存程序代码，或者是要求断电不丢失的数据 flash的模块组织在stm32中根据不同的产品容量，有着不同的flash大小。我们主要记载中容量大小的flash。 下图是中容量大小的flash模">
+    <meta name="description" content="前言flash就是非易失性闪存，一般来说stm32需要外接flash芯片以扩大整个系统的内存大小。 这里的flash就是指stm32中的内部自带的flash存储，而不是额外的芯片。 stm32flash一般用来保存程序代码，或者是要求断电不丢失的数据  flash的模块组织在stm32中根据不同的产品容量，有着不同的flash大小。我们主要记载中容量大小的flash。 下图是中容量大小的flash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stm32中的flash">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/14/stm32%E4%B8%AD%E7%9A%84flash/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言flash就是非易失性闪存，一般来说stm32需要外接flash芯片以扩大整个系统的内存大小。 这里的flash就是指stm32中的内部自带的flash存储，而不是额外的芯片。 stm32flash一般用来保存程序代码，或者是要求断电不丢失的数据 flash的模块组织在stm32中根据不同的产品容量，有着不同的flash大小。我们主要记载中容量大小的flash。 下图是中容量大小的flash模">
+<meta property="og:description" content="前言flash就是非易失性闪存，一般来说stm32需要外接flash芯片以扩大整个系统的内存大小。 这里的flash就是指stm32中的内部自带的flash存储，而不是额外的芯片。 stm32flash一般用来保存程序代码，或者是要求断电不丢失的数据  flash的模块组织在stm32中根据不同的产品容量，有着不同的flash大小。我们主要记载中容量大小的flash。 下图是中容量大小的flash">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182158675.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402150058261.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182151120.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182201649.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182202387.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182202196.png">
 <meta property="article:published_time" content="2024-02-14T15:09:09.000Z">
-<meta property="article:modified_time" content="2024-02-15T15:41:58.143Z">
+<meta property="article:modified_time" content="2024-02-18T14:14:05.533Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402150058261.png">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182158675.png">
   
   
   
@@ -221,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          374 字
+          1.3k 字
         
       </span>
     
@@ -232,7 +237,7 @@
         
         
         
-          4 分钟
+          11 分钟
         
       </span>
     
@@ -277,18 +282,65 @@
                 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>flash就是非易失性闪存，一般来说stm32需要外接flash芯片以扩大整个系统的内存大小。</p>
 <p>这里的flash就是指stm32中的内部自带的flash存储，而不是额外的芯片。</p>
 <p>stm32flash一般用来保存程序代码，或者是要求断电不丢失的数据</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182158675.png" srcset="/img/loading.gif" lazyload></p>
 <h1 id="flash的模块组织"><a href="#flash的模块组织" class="headerlink" title="flash的模块组织"></a>flash的模块组织</h1><p>在stm32中根据不同的产品容量，有着不同的flash大小。我们主要记载中容量大小的flash。</p>
-<p>下图是中容量大小的flash模块组织</p>
+<p>下图是中容量大小的flash模块组织，<strong>这个flash的内存组织是需要牢记的</strong></p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402150058261.png" srcset="/img/loading.gif" lazyload></p>
 <p>我们可以知道：</p>
 <ul>
 <li>主存储器就是 <strong>程序存储器</strong></li>
 <li>信息块中的启动程序代码就是 <strong>stm32官方写的bootloader程序，就是系统存储器 和 stm32芯片的id号</strong></li>
 <li>信息块中的用户选择字节就是 <strong>选项字节 或者说选择字节</strong></li>
-<li>闪存存储器接口寄存器就是 flash的管理者，我们通过控制整个东西来控制整个flash</li>
+<li>闪存存储器接口寄存器就是 flash的管理者，我们通过控制整个东西来控制整个flash，在手册中称之为<strong>闪存编程和擦除控制器(FPEC)</strong></li>
 </ul>
 <p>可以知道flash中可以修改的是 程序存储器、选项字节 <strong>系统存储器是无法修改的</strong></p>
-
+<h1 id="FPEC模块"><a href="#FPEC模块" class="headerlink" title="FPEC模块"></a>FPEC模块</h1><p>处理闪存的编程和擦除操作，它包括7个32位的寄存器：</p>
+<ul>
+<li><p>FPEC键寄存器(FLASH_KEYR) </p>
+</li>
+<li><p>选择字节键寄存器(FLASH_OPTKEYR) </p>
+</li>
+<li><p>闪存控制寄存器(FLASH_CR) </p>
+</li>
+<li><p>闪存状态寄存器(FLASH_SR) </p>
+</li>
+<li><p>闪存地址寄存器(FLASH_AR) </p>
+</li>
+<li><p>选择字节寄存器(FLASH_OBR) </p>
+</li>
+<li><p>写保护寄存器(FLASH_WRPR)</p>
+</li>
+</ul>
+<p>只要CPU不访问闪存，闪存操作不会延缓CPU的执行。</p>
+<h1 id="选项字节"><a href="#选项字节" class="headerlink" title="选项字节"></a>选项字节</h1><p>选择字节共有8个字节，由用户根据应用的需要配置；例如：可以选择使用硬件模式的看门狗或软件的看门狗。</p>
+<p>在选择字节中每个32位的字被划分为下述格式：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182151120.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="flash编程"><a href="#flash编程" class="headerlink" title="flash编程"></a>flash编程</h1><p>flash上的操作包括：</p>
+<ul>
+<li>页擦除、全擦除</li>
+<li>写数据</li>
+<li>加锁、解锁</li>
+</ul>
+<h2 id="擦除"><a href="#擦除" class="headerlink" title="擦除"></a>擦除</h2><p>flash中有两种方式来擦除，在flash的编程手册中提供了这两种擦除方式的程序过程图：</p>
+<p>页擦除：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182201649.png" srcset="/img/loading.gif" lazyload></p>
+<p>全擦除：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182202387.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="读、写数据（主闪存编程）"><a href="#读、写数据（主闪存编程）" class="headerlink" title="读、写数据（主闪存编程）"></a>读、写数据（主闪存编程）</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402182202196.png" srcset="/img/loading.gif" lazyload></p>
+<p>需要注意：</p>
+<ul>
+<li>对主闪存编程每次可以写入16位，每次非16位的编程都会导致FPEC产生总线错误。</li>
+<li>在写数据之前必须要先解锁falsh</li>
+<li>在读写flash时，任何读写flash的操作都会导致cpu暂停，直至此次闪存结束</li>
+</ul>
+<h2 id="加锁、解锁"><a href="#加锁、解锁" class="headerlink" title="加锁、解锁"></a>加锁、解锁</h2><p><strong>复位后，FPEC模块是被保护的，不能写入FLASH_CR寄存器</strong>；通过写入特定的序列到FLASH_KEYR寄存器可以打开FPEC模块，这个特定的序列是在FLASH_KEYR写入两个键值(KEY1和KEY2，下面的<strong>键值</strong>)；错误的操作序列都会在下次复位前锁死FPEC模块和FLASH_CR寄存器。</p>
+<p>写入错误的键序列还会产生总线错误；</p>
+<p>总线错误发生在第一次写入的不是KEY1，或第一次写入的是KEY1但第二次写入的不是KEY2时；FPEC模块和FLASH_CR寄存器可以由程序设置FLASH_CR寄存器中的LOCK位锁住，这时可以通过在FLASH_KEYR中写入正确的键值对FPEC解锁。</p>
+<h3 id="键值"><a href="#键值" class="headerlink" title="键值"></a>键值</h3><p>共有三个键值：</p>
+<p> RDPRT键 &#x3D; 0x000000A5 </p>
+<p> KEY1 &#x3D; 0x45670123 </p>
+<p> KEY2 &#x3D; 0xCDEF89AB</p>
+<h1 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><br></code></pre></td></tr></table></figure>
                 
               </div>
             
