@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>自制电子相机（1）硬件基础</title>
+    <link href="/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/"/>
+    <url>/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/</url>
+    
+    <content type="html"><![CDATA[<h1 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h1><p>我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？</p><p>通过下面可以看到，这个芯片包含了5组。</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220019874.png"></p><p>之所以这样设置的原因有：</p><ol><li>如果只设置一组的话会导致电流在芯片内部的路径过长：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220102241.png"><br>对于频率高的电路，VDD电流会在高频突变（因为频率越高，需要的电流越大），这时候路径上产生的感抗会阻碍电流的变化，<strong>路径越长感抗越大，从而对电流的阻碍作用就会更明显，</strong>进而导致芯片网络中的电压变化，这样就会影响MCU系统的正常工作。</li></ol><p>对于低频或者直流电路，路径长其影响不大。所以早期的低频MCU，只有一个VDD。<strong>多组VDD可以减少电感效应（电感并联总电感变小，路径变短电感也越小）。</strong></p><ol start="2"><li><p>MCU的模拟外设比如ADC通常是独立的电源VDDA，这是因为ADC需要尽可能干净的电源以保证转换结果的准确性，独立一路可以避免受到其他电源噪声的干扰。</p></li><li><p>多种电压要求。有时，芯片的不同部分会以不同的电压运行。一个典型的例子是低压内核和高压 I&#x2F;O。内核使用较低的电压来降低功耗而 I&#x2F;O 以更高的电压运行，以便更好地与外部电路连接。这时也需要分出来多组供电，常见的是复杂的SOC芯片。</p></li><li><p>多组VDD相比单个VDD，一个VDD引脚上经过的电流会减小，这样引脚不必承受过高的电流，增强可靠性。</p></li></ol><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg">https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg</a></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>在vscode中使用vim</title>
     <link href="/2024/02/17/%E5%9C%A8vscode%E4%B8%AD%E4%BD%BF%E7%94%A8vim/"/>
     <url>/2024/02/17/%E5%9C%A8vscode%E4%B8%AD%E4%BD%BF%E7%94%A8vim/</url>
