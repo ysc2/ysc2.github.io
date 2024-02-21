@@ -16,17 +16,19 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="硬件基础我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？ 通过下面可以看到，这个芯片包含了5组。  之所以这样设置的原因有：  如果只设置一组的话会导致电流在芯片内部的路径过长：对于频率高的电路，VDD电流会在高频突变（因为频率越高，需要的电流越大），这时候路径上产生的感抗会阻碍电流的变化，路径越长感">
+    <meta name="description" content="硬件基础为什么需要分多组电源引脚我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？ 通过下面可以看到，这个芯片包含了5组。  之所以这样设置的原因有：  如果只设置一组的话会导致电流在芯片内部的路径过长：对于频率高的电路，VDD电流会在高频突变（因为频率越高，需要的电流越大），这时候路径上产生的感抗会阻">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自制电子相机（1）硬件基础">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="硬件基础我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？ 通过下面可以看到，这个芯片包含了5组。  之所以这样设置的原因有：  如果只设置一组的话会导致电流在芯片内部的路径过长：对于频率高的电路，VDD电流会在高频突变（因为频率越高，需要的电流越大），这时候路径上产生的感抗会阻碍电流的变化，路径越长感">
+<meta property="og:description" content="硬件基础为什么需要分多组电源引脚我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？ 通过下面可以看到，这个芯片包含了5组。  之所以这样设置的原因有：  如果只设置一组的话会导致电流在芯片内部的路径过长：对于频率高的电路，VDD电流会在高频突变（因为频率越高，需要的电流越大），这时候路径上产生的感抗会阻">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220019874.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220102241.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220236286.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220252764.png">
 <meta property="article:published_time" content="2024-02-21T15:54:14.000Z">
-<meta property="article:modified_time" content="2024-02-21T17:12:18.712Z">
+<meta property="article:modified_time" content="2024-02-21T18:52:27.549Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220019874.png">
@@ -222,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          621 字
+          1.6k 字
         
       </span>
     
@@ -233,7 +235,7 @@
         
         
         
-          6 分钟
+          14 分钟
         
       </span>
     
@@ -275,7 +277,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h1><p>我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？</p>
+                <h1 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h1><h2 id="为什么需要分多组电源引脚"><a href="#为什么需要分多组电源引脚" class="headerlink" title="为什么需要分多组电源引脚"></a>为什么需要分多组电源引脚</h2><p>我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？</p>
 <p>通过下面可以看到，这个芯片包含了5组。</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220019874.png" srcset="/img/loading.gif" lazyload></p>
 <p>之所以这样设置的原因有：</p>
@@ -291,7 +293,39 @@
 <li><p>多组VDD相比单个VDD，一个VDD引脚上经过的电流会减小，这样引脚不必承受过高的电流，增强可靠性。</p>
 </li>
 </ol>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg">https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg</a></p>
+<h2 id="各种“地”之间有何区别"><a href="#各种“地”之间有何区别" class="headerlink" title="各种“地”之间有何区别"></a>各种“地”之间有何区别</h2><p>在电子电路中，“地”是一个重要的概念。其被作为是相应种类的器件电路的零电平参考点。</p>
+<p>主要的“地”有：</p>
+<ol>
+<li><p>直流地：直流电路“地”，零电位参考点。</p>
+</li>
+<li><p>交流地：交流电的零线。应与地线区别开。</p>
+</li>
+<li><p>功率地：大电流网络器件、功放器件的零电位参考点。</p>
+</li>
+<li><p>模拟地：放大器、采样保持器、A&#x2F;D转换器和比较器的零电位参考点。</p>
+</li>
+<li><p>数字地：也叫逻辑地，是数字电路的零电位参考点。</p>
+</li>
+<li><p>“热地”：开关电源无需使用工频变压器，其开关电路的“地”和市电电网有关，即所谓的“热地”，它是带电的。</p>
+</li>
+<li><p>“冷地”：由于开关电源的高频变压器将输入、输出端隔离;又由于其反馈电路常用光电耦合器，既能传送反馈信号，又将双方的“地”隔离;所以输出端的地称之为“冷地”，它不带电。</p>
+</li>
+</ol>
+<p>信号接地：设备的信号接地，可能是以设备中的一点或一块金属来作为信号的接地参考点，它为设备中的所有信号提供了一个公共参考电位。</p>
+<p>有单点接地，多点接地，浮地和混合接地。</p>
+<ul>
+<li>单点接地是指整个电路系统中只有一个物理点被定义为接地参考点，其他各个需要接地的点都直接接到这一点上。在低频电路中，布线和元件之间不会产生太大影响。通常频率小于1MHz的电路，采用一点接地。</li>
+<li>多点接地是指电子设备中各个接地点都直接接到距它最近的接地平面上(即设备的金属底板)。</li>
+</ul>
+<p>在高频电路中，寄生电容和电感的影响较大。通常频率大于10MHz的电路，常采用 多点接地。浮地，即该电路的地与大地无导体连接。『 虚地:没有接地，却和地等电位的点。』其优点是该电路不受大地电性能的影响。</p>
+<p>浮地可使功率地(强电地)和信号地(弱电地)之间的隔离电阻很大，所以能阻止共地阻抗电路性耦合产生的电磁干扰。其缺点是该电路易受寄生电容的影响，而使该电路的地电位变动和增加了对模拟电路的感应干扰。</p>
+<p>一个折衷方案是在浮地与公共地之间跨接一个阻值很大的泄放电阻，用以释放所积累的电荷。注意控制释放电阻的阻抗，太低的电阻会影响设备泄漏电流的合格性。</p>
+<p>下图总结了为什么要划分数字地和模拟地：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220236286.png" srcset="/img/loading.gif" lazyload></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/400824869">https://zhuanlan.zhihu.com/p/400824869</a></p>
+<p>总的来说就是：<strong>减少数字电路和模拟电路之间的干扰，提高电路的可靠性</strong>。</p>
+<h2 id="电源引脚有哪些"><a href="#电源引脚有哪些" class="headerlink" title="电源引脚有哪些"></a>电源引脚有哪些</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220252764.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg">https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg</a><br><a target="_blank" rel="noopener" href="https://murata.eetrend.com/article/2019-09/1003054.html">https://murata.eetrend.com/article/2019-09/1003054.html</a></p>
 
                 
               </div>
