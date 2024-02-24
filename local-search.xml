@@ -8,7 +8,7 @@
     <link href="/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/"/>
     <url>/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/</url>
     
-    <content type="html"><![CDATA[<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p><p>如图：</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png"></p><p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边哪个<code>GND</code>的接地符号。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p><p>如图：</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png"></p><p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边排针上接的那个<code>GND</code>的接地符号。</p>]]></content>
     
     
     
