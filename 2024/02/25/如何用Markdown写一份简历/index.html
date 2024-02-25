@@ -16,17 +16,19 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="如何读写单个 bit12345#define BitVal(data,y) ( (data&gt;&gt;y) &amp; 1)             &#x2F;&#x2F; Return Data.Y value#define SetBit(data,y)    data |&#x3D; (1 &lt;&lt; y)          &#x2F;&#x2F; Set Data.Y to 1#define ClearBit(data,y)">
+    <meta name="description" content="如何用 Markdown 写一份简历 用 Markdown 写一份可在线预览，也可导出 PDF 的简历。 预览网址：cv-template.wiki-power.com 如何导出 PDF：在网页上使用快捷键 Ctrl + P 唤出打印界面，目标打印机选择 Microsoft Print to PDF，即可导出 PDF 版本的简历。 使用方法打开项目 linyuxuanlin&#x2F;Markdo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ysc Web">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/25/%E5%A6%82%E4%BD%95%E8%AF%BB%E5%86%99%E5%8D%95%E4%B8%AAbit/index.html">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/25/%E5%A6%82%E4%BD%95%E7%94%A8Markdown%E5%86%99%E4%B8%80%E4%BB%BD%E7%AE%80%E5%8E%86/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="如何读写单个 bit12345#define BitVal(data,y) ( (data&gt;&gt;y) &amp; 1)             &#x2F;&#x2F; Return Data.Y value#define SetBit(data,y)    data |&#x3D; (1 &lt;&lt; y)          &#x2F;&#x2F; Set Data.Y to 1#define ClearBit(data,y)">
+<meta property="og:description" content="如何用 Markdown 写一份简历 用 Markdown 写一份可在线预览，也可导出 PDF 的简历。 预览网址：cv-template.wiki-power.com 如何导出 PDF：在网页上使用快捷键 Ctrl + P 唤出打印界面，目标打印机选择 Microsoft Print to PDF，即可导出 PDF 版本的简历。 使用方法打开项目 linyuxuanlin&#x2F;Markdo">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-02-25T09:29:08.602Z">
-<meta property="article:modified_time" content="2024-02-25T09:29:12.477Z">
+<meta property="og:image" content="https://img.wiki-power.com/d/wiki-media/img/20210318220041.png">
+<meta property="article:published_time" content="2024-02-25T09:45:37.911Z">
+<meta property="article:modified_time" content="2024-02-25T09:45:41.163Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.wiki-power.com/d/wiki-media/img/20210318220041.png">
   
   
   
@@ -207,7 +209,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-25 17:29" pubdate>
+        <time datetime="2024-02-25 17:45" pubdate>
           2024年2月25日 下午
         </time>
       </span>
@@ -219,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          405 字
+          572 字
         
       </span>
     
@@ -230,7 +232,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -272,10 +274,22 @@
             
               <div class="markdown-body">
                 
-                <h1 id="如何读写单个-bit"><a href="#如何读写单个-bit" class="headerlink" title="如何读写单个 bit"></a>如何读写单个 bit</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BitVal(data,y) ( (data&gt;&gt;y) &amp; 1)             <span class="hljs-comment">// Return Data.Y value</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SetBit(data,y)    data |= (1 &lt;&lt; y)          <span class="hljs-comment">// Set Data.Y to 1</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ClearBit(data,y)  data &amp;= ~(1 &lt;&lt; y)         <span class="hljs-comment">// Clear Data.Y to 0</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> TogleBit(data,y)     (data ^=BitVal(y))     <span class="hljs-comment">// Togle Data.Y value</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> Togle(data)   (data =~data )                <span class="hljs-comment">// Togle Data value</span></span><br></code></pre></td></tr></table></figure>
-
-<h2 id="参考与致谢"><a href="#参考与致谢" class="headerlink" title="参考与致谢"></a>参考与致谢</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/11815894/how-to-read-write-arbitrary-bits-in-c-c">How to read&#x2F;write arbitrary bits in C&#x2F;C++</a></li>
+                <h1 id="如何用-Markdown-写一份简历"><a href="#如何用-Markdown-写一份简历" class="headerlink" title="如何用 Markdown 写一份简历"></a>如何用 Markdown 写一份简历</h1><p><img src="https://img.wiki-power.com/d/wiki-media/img/20210318220041.png" srcset="/img/loading.gif" lazyload></p>
+<p>用 Markdown 写一份可在线预览，也可导出 PDF 的简历。</p>
+<p><strong>预览网址</strong>：<a target="_blank" rel="noopener" href="https://cv-template.wiki-power.com/"><strong>cv-template.wiki-power.com</strong></a></p>
+<p><strong>如何导出 PDF</strong>：在网页上使用快捷键 <code>Ctrl</code> + <code>P</code> 唤出打印界面，目标打印机选择 <code>Microsoft Print to PDF</code>，即可导出 PDF 版本的简历。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>打开项目 <a target="_blank" rel="noopener" href="https://github.com/linyuxuanlin/Markdown-CV-Site"><strong>linyuxuanlin&#x2F;Markdown-CV-Site</strong></a>，点击绿色的按钮 <code>Use this template</code> 初始化为自己的仓库。</p>
+<p>打开 <a target="_blank" rel="noopener" href="https://vercel.com/"><strong>Vercel</strong></a>，点击 <code>New Project</code>，导入刚刚初始化的 GitHub 仓库，设置下列参数：</p>
+<ul>
+<li><code>FRAMEWORK PRESET</code>：选择 <code>Other</code></li>
+<li><code>BUILD COMMAND</code>：填入 <code>npm run build</code></li>
+<li><code>OUTPUT DIRECTORY</code>：填入 <code>dist</code></li>
+</ul>
+<p>点击下一步，等待几十秒，网站就生成了。</p>
+<p>如需修改简历的内容，请编辑根目录下的 <code>_config.yml</code> 和 <code>markdown/resume-template.md</code> 文件，推送到 GitHub 仓库后，可自动触发 Vercel 构建。</p>
+<h2 id="参考与致谢"><a href="#参考与致谢" class="headerlink" title="参考与致谢"></a>参考与致谢</h2><p>本项目基于 <a target="_blank" rel="noopener" href="https://github.com/BigLiao/markCV"><strong>BigLiao&#x2F;markCV</strong></a>，做了一些 UI 的简化和改善。简历模板使用的是 <a target="_blank" rel="noopener" href="https://cv.ftqq.com/"><strong>冷熊简历</strong></a> 的默认内容。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/P64bm-SBYXyQymfHAR1rqA">聊聊简历怎么写？</a></li>
 </ul>
 <blockquote>
 <p>原文地址：<a target="_blank" rel="noopener" href="https://wiki-power.com/">https://wiki-power.com/</a><br>本篇文章受 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议保护，转载请注明出处。</p>
@@ -298,7 +312,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div></div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/02/25/如何读写单个bit/</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/02/25/如何用Markdown写一份简历/</div>
     </div>
     <div class="license-meta">
       
@@ -342,7 +356,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/25/%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E9%85%8D%E7%BD%AE%E4%B8%AA%E4%BA%BA%E8%B5%84%E4%BA%A7/" title="">
+                      <a href="/2024/02/25/Doxygen%E6%B3%A8%E9%87%8A%E8%A7%84%E8%8C%83/" title="">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">上一篇</span>
@@ -352,7 +366,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/25/%E5%A6%82%E4%BD%95%E9%85%8D%E4%B8%80%E5%8F%B0%E7%94%B5%E8%84%91/" title="">
+                      <a href="/2024/02/25/%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E9%85%8D%E7%BD%AE%E4%B8%AA%E4%BA%BA%E8%B5%84%E4%BA%A7/" title="">
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
