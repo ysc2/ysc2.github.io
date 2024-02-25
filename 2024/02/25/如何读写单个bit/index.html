@@ -16,24 +16,21 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的数据手册中的引脚图来进行选择配置了  上图是stm32的数据手册的引脚图的图注。 根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。 所以我们进行硬件设计的重要的是明确需求，根据需求来选择合适的硬件进行设计 需求由于我想制作一个电子摄像机，主要">
+    <meta name="description" content="如何读写单个 bit12345#define BitVal(data,y) ( (data&gt;&gt;y) &amp; 1)             &#x2F;&#x2F; Return Data.Y value#define SetBit(data,y)    data |&#x3D; (1 &lt;&lt; y)          &#x2F;&#x2F; Set Data.Y to 1#define ClearBit(data,y)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="硬件设计">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:title" content="Ysc Web">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/25/%E5%A6%82%E4%BD%95%E8%AF%BB%E5%86%99%E5%8D%95%E4%B8%AAbit/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的数据手册中的引脚图来进行选择配置了  上图是stm32的数据手册的引脚图的图注。 根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。 所以我们进行硬件设计的重要的是明确需求，根据需求来选择合适的硬件进行设计 需求由于我想制作一个电子摄像机，主要">
+<meta property="og:description" content="如何读写单个 bit12345#define BitVal(data,y) ( (data&gt;&gt;y) &amp; 1)             &#x2F;&#x2F; Return Data.Y value#define SetBit(data,y)    data |&#x3D; (1 &lt;&lt; y)          &#x2F;&#x2F; Set Data.Y to 1#define ClearBit(data,y)">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png">
-<meta property="article:published_time" content="2024-02-24T17:06:38.000Z">
-<meta property="article:modified_time" content="2024-02-25T07:46:05.270Z">
+<meta property="article:published_time" content="2024-02-25T09:29:08.602Z">
+<meta property="article:modified_time" content="2024-02-25T09:29:12.477Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png">
   
   
   
-  <title>硬件设计 - Ysc Web</title>
+  <title>Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +196,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="硬件设计"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -210,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-25 01:06" pubdate>
-          2024年2月25日 凌晨
+        <time datetime="2024-02-25 17:29" pubdate>
+          2024年2月25日 下午
         </time>
       </span>
     
@@ -222,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          380 字
+          405 字
         
       </span>
     
@@ -270,29 +267,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">硬件设计</h1>
+            <h1 id="seo-header"></h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的<strong>数据手册中的引脚图来进行选择配置了</strong></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png" srcset="/img/loading.gif" lazyload></p>
-<p>上图是stm32的数据手册的引脚图的图注。</p>
-<p>根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。</p>
-<p>所以我们进行硬件设计的重要的是<strong>明确需求，根据需求来选择合适的硬件进行设计</strong></p>
-<h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>由于我想制作一个电子摄像机，主要功能就是可以进行拍摄照片、录制视频；然后可以在显示器中显示，并且自带一个锂电池方便出行。</p>
-<p>根据上面分析的需求，我需要一下模块：</p>
-<ul>
-<li>主芯片</li>
-<li>镜头模块</li>
-<li>电池模块</li>
-<li>显示器模块</li>
-<li>其他芯片必须外部电路</li>
+                <h1 id="如何读写单个-bit"><a href="#如何读写单个-bit" class="headerlink" title="如何读写单个 bit"></a>如何读写单个 bit</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BitVal(data,y) ( (data&gt;&gt;y) &amp; 1)             <span class="hljs-comment">// Return Data.Y value</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SetBit(data,y)    data |= (1 &lt;&lt; y)          <span class="hljs-comment">// Set Data.Y to 1</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ClearBit(data,y)  data &amp;= ~(1 &lt;&lt; y)         <span class="hljs-comment">// Clear Data.Y to 0</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> TogleBit(data,y)     (data ^=BitVal(y))     <span class="hljs-comment">// Togle Data.Y value</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> Togle(data)   (data =~data )                <span class="hljs-comment">// Togle Data value</span></span><br></code></pre></td></tr></table></figure>
+
+<h2 id="参考与致谢"><a href="#参考与致谢" class="headerlink" title="参考与致谢"></a>参考与致谢</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/11815894/how-to-read-write-arbitrary-bits-in-c-c">How to read&#x2F;write arbitrary bits in C&#x2F;C++</a></li>
 </ul>
-<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p>
-<p>如图：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png" srcset="/img/loading.gif" lazyload></p>
-<p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边排针上接的那个<code>GND</code>的接地符号。</p>
+<blockquote>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://wiki-power.com/">https://wiki-power.com/</a><br>本篇文章受 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议保护，转载请注明出处。</p>
+</blockquote>
 
                 
               </div>
@@ -310,8 +297,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>硬件设计</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/02/25/自制电子相机（2）- 硬件设计/</div>
+      <div></div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/02/25/如何读写单个bit/</div>
     </div>
     <div class="license-meta">
       
@@ -355,18 +342,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/25/%E5%A6%82%E4%BD%95%E9%85%8D%E4%B8%80%E5%8F%B0%E7%94%B5%E8%84%91/" title="">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/" title="自制电子相机（1）硬件基础">
-                        <span class="hidden-mobile">自制电子相机（1）硬件基础</span>
+                      <a href="/2024/02/25/%E5%A6%82%E4%BD%95%E9%85%8D%E4%B8%80%E5%8F%B0%E7%94%B5%E8%84%91/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
