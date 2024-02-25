@@ -24,9 +24,10 @@
 <meta property="og:description" content="前言我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的数据手册中的引脚图来进行选择配置了  上图是stm32的数据手册的引脚图的图注。 根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。 所以我们进行硬件设计的重要的是明确需求，根据需求来选择合适的硬件进行设计 需求由于我想制作一个电子摄像机，主要">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png">
 <meta property="article:published_time" content="2024-02-24T17:06:38.000Z">
-<meta property="article:modified_time" content="2024-02-25T07:46:05.270Z">
+<meta property="article:modified_time" content="2024-02-25T16:59:23.750Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png">
@@ -222,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          380 字
+          434 字
         
       </span>
     
@@ -288,6 +289,11 @@
 <li>电池模块</li>
 <li>显示器模块</li>
 <li>其他芯片必须外部电路</li>
+</ul>
+<h1 id="电源引脚的设置"><a href="#电源引脚的设置" class="headerlink" title="电源引脚的设置"></a>电源引脚的设置</h1><p>在stm32中有很多不同种类的电源，如何处理这些电源成为原理图绘制的一个问题。</p>
+<ul>
+<li>VDD</li>
+<li>VDDA：<br><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png" srcset="/img/loading.gif" lazyload></li>
 </ul>
 <h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p>
 <p>如图：</p>
