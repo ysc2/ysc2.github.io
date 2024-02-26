@@ -16,19 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言如何在vscode中使用vim模式进行输入，这是我在学习了vim之后就在想的问题。现在我了解到了vscode中的vim插件可以实现这个功能，但是需要对于vscode原有的快捷键进行大改，因为原来的快捷键和vim自带的快捷键是冲突的。所以我在网络上收集了一些vim模式下的快捷键的设置。记录如下。 安装直接在vscode商店中搜索vim，第一个插件便是需要的插件。 配置首先，我们需要在vscode">
+    <meta name="description" content="如何vscode中使用vim插件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在vscode中使用vim">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/17/%E5%9C%A8vscode%E4%B8%AD%E4%BD%BF%E7%94%A8vim/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言如何在vscode中使用vim模式进行输入，这是我在学习了vim之后就在想的问题。现在我了解到了vscode中的vim插件可以实现这个功能，但是需要对于vscode原有的快捷键进行大改，因为原来的快捷键和vim自带的快捷键是冲突的。所以我在网络上收集了一些vim模式下的快捷键的设置。记录如下。 安装直接在vscode商店中搜索vim，第一个插件便是需要的插件。 配置首先，我们需要在vscode">
+<meta property="og:description" content="如何vscode中使用vim插件">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402172320844.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-w85rqx.jpg">
 <meta property="article:published_time" content="2024-02-17T15:06:35.000Z">
-<meta property="article:modified_time" content="2024-02-18T17:36:44.845Z">
+<meta property="article:modified_time" content="2024-02-26T16:44:42.419Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402172320844.png">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-w85rqx.jpg">
   
   
   
@@ -192,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-w85rqx.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -232,7 +233,7 @@
         
         
         
-          35 分钟
+          36 分钟
         
       </span>
     
@@ -274,7 +275,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如何在vscode中使用vim模式进行输入，这是我在学习了vim之后就在想的问题。现在我了解到了vscode中的vim插件可以实现这个功能，但是需要对于vscode原有的快捷键进行大改，因为原来的快捷键和vim自带的快捷键是冲突的。所以我在网络上收集了一些vim模式下的快捷键的设置。记录如下。</p>
+                <p>如何<code>vscode</code>中使用<code>vim</code>插件</p>
+<span id="more"></span> 
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如何在vscode中使用vim模式进行输入，这是我在学习了vim之后就在想的问题。现在我了解到了vscode中的vim插件可以实现这个功能，但是需要对于vscode原有的快捷键进行大改，因为原来的快捷键和vim自带的快捷键是冲突的。所以我在网络上收集了一些vim模式下的快捷键的设置。记录如下。</p>
 <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>直接在vscode商店中搜索<code>vim</code>，第一个插件便是需要的插件。</p>
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>首先，我们需要在vscode中配置<code>settings.json</code>文件：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>   <span class="hljs-comment">// 绑定vim前导键</span><br>   <span class="hljs-attr">&quot;vim.leader&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;space&gt;&quot;</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 启用easymotion插件</span><br>   <span class="hljs-attr">&quot;vim.easymotion&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 启用系统粘贴板作为vim寄存器</span><br>   <span class="hljs-attr">&quot;vim.useSystemClipboard&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 由vim接管ctrl+any的按键，而不是vscode</span><br>   <span class="hljs-attr">&quot;vim.useCtrlKeys&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 突出显示与当前搜索匹配的所有文本</span><br>   <span class="hljs-attr">&quot;vim.hlsearch&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-comment">// 普通模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.normalModeKeyBindingsNonRecursive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-comment">// 插入模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.insertModeKeyBindings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 命令模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.commandLineModeKeyBindingsNonRecursive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 可视模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.operatorPendingModeKeyBindings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 下面定义的按键将交由vscode进行处理，而不是vscode-vim插件</span><br>   <span class="hljs-attr">&quot;vim.handleKeys&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>     <span class="hljs-attr">&quot;&lt;C-a&gt;&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>     <span class="hljs-attr">&quot;&lt;C-f&gt;&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><br>   <span class="hljs-punctuation">&#125;</span><br> <span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
@@ -335,6 +339,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 
