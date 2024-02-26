@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>个人PCB设置规范</title>
+    <link href="/2024/02/27/%E4%B8%AA%E4%BA%BAPCB%E8%AE%BE%E7%BD%AE%E8%A7%84%E8%8C%83/"/>
+    <url>/2024/02/27/%E4%B8%AA%E4%BA%BAPCB%E8%AE%BE%E7%BD%AE%E8%A7%84%E8%8C%83/</url>
+    
+    <content type="html"><![CDATA[<p>个人PCB设计规范</p><span id="more"></span><h1 id="个人-PCB-设计规范"><a href="#个人-PCB-设计规范" class="headerlink" title="个人 PCB 设计规范"></a>个人 PCB 设计规范</h1><h2 id="PCB-布局规范"><a href="#PCB-布局规范" class="headerlink" title="PCB 布局规范"></a>PCB 布局规范</h2><h3 id="分模块布局"><a href="#分模块布局" class="headerlink" title="分模块布局"></a>分模块布局</h3><p><strong>按功能模块</strong>：完成同一功能的电路（指由分立元件组成，实现特定功能的模块），应尽量靠近放置。</p><p><strong>按电气性能</strong>：</p><ul><li>数字电路区：<strong>即怕干扰、又产生干扰</strong></li><li>模拟电路区：<strong>怕干扰</strong></li><li>功率驱动区：<strong>产生干扰</strong></li></ul><h3 id="布局原则"><a href="#布局原则" class="headerlink" title="布局原则"></a>布局原则</h3><ul><li>较大的元器件优先排布</li><li>元器件全部放置于顶层（焊接方便）</li><li>时钟产生器 （晶振等） ：尽量靠近用到该时钟的器件</li><li>在每个模块的电源输入端 <strong>增加去耦电容</strong>：滤除电源上的干扰信号。注意尽量靠近取电模块。</li><li>继电器线圈处加上放电二极管（如 1N4148 ）</li></ul><h2 id="PCB-布线规范"><a href="#PCB-布线规范" class="headerlink" title="PCB 布线规范"></a>PCB 布线规范</h2><h3 id="布线原则"><a href="#布线原则" class="headerlink" title="布线原则"></a>布线原则</h3><ul><li>线之间 <strong>避免平行</strong></li><li>勿出现一端浮空（可能产生天线效应）</li><li>走线总长度能短就短</li><li>走线拐弯角度应大于 90°</li><li><strong>3W</strong> 规则：当线中心间距不少于 3 倍线宽时，则可保持 70% 的电场不互相干扰</li><li>环路最小规则，走线 <strong>尽量不要形成环路</strong></li><li>关键信号处可预留测试点</li><li>元件焊盘两边的引线宽度要一致（用泪滴功能）</li><li>布线完成后开启 <strong>泪滴</strong> 功能（增加美观度，增强 EMC）</li><li><strong>不在元件焊盘上打过孔</strong>（SMT 容易引起漏锡虚焊）</li><li>单片机芯片下面尽量不走线 &#x2F; 不铺铜</li></ul><h3 id="布线顺序"><a href="#布线顺序" class="headerlink" title="布线顺序"></a>布线顺序</h3><ol><li>电源线</li><li>一般走线</li><li>地线（铺铜）</li></ol><p>在为 PCB 布线时，我们一般先布电源线，在绝大多数情况下，电源线要求 <strong>短、粗、直、较少过孔</strong> ，所以布线优先权最高。</p><p>在完成一般信号线的布线之后，最终我们要铺铜。对于普通双层板，铺铜属性一般设置为 <strong>地</strong>。</p><h3 id="规则设置"><a href="#规则设置" class="headerlink" title="规则设置"></a>规则设置</h3><p><strong>走线宽度</strong>：</p><ul><li>电源线：<strong>30~50</strong> mil</li><li>信号线：<strong>12</strong> mil</li></ul><p><strong>过孔大小</strong>：</p><ul><li>内径：<strong>0.45</strong> mm</li><li>外径：<strong>0.75</strong> mm</li></ul><p><strong>铺铜连接</strong>：</p><p>用 Direct 的方式</p><p>（有点解释不清，待有空补充说明</p><ul><li>铺铜安全间距：<strong>10</strong> mil</li><li>属性：<strong>GND</strong></li><li>铺铜选择：Pour Over All Same Net Objectc,</li><li>去除死铜：Remove Dead Copper</li></ul><p><strong>字符大小</strong>：</p><ul><li>最小线宽：<strong>6</strong> mil</li><li>最小字符高：<strong>32</strong> mil</li></ul><p>小于以上值，印制在板子上的字符可能会不清晰。</p><p><strong>PCB 线宽与电流的关系</strong>：</p><table><thead><tr><th align="center">线宽&#x2F;铜箔厚度</th><th align="center">70µm（2 oz）</th><th align="center">50µm（1.5 oz）</th><th align="center">35µm（1 oz）</th></tr></thead><tbody><tr><td align="center">2.50mm（98mil）</td><td align="center">6.00A</td><td align="center">5.10A</td><td align="center">4.50A</td></tr><tr><td align="center">2.00mm（78mil）</td><td align="center">5.10A</td><td align="center">4.30A</td><td align="center">4.00A</td></tr><tr><td align="center">1.50mm（59mil）</td><td align="center">4.20A</td><td align="center">3.50A</td><td align="center">3.20A</td></tr><tr><td align="center">1.20mm（47mil）</td><td align="center">3.60A</td><td align="center">3.00A</td><td align="center">2.70A</td></tr><tr><td align="center">1.00mm（40mil）</td><td align="center">3.20A</td><td align="center">2.60A</td><td align="center">2.30A</td></tr><tr><td align="center">0.80mm（32mil）</td><td align="center">2.80A</td><td align="center">2.40A</td><td align="center">2.00A</td></tr><tr><td align="center">0.60mm（24mil）</td><td align="center">2.30A</td><td align="center">1.90A</td><td align="center">1.60A</td></tr><tr><td align="center">0.50mm（20mil）</td><td align="center">2.00A</td><td align="center">1.70A</td><td align="center">1.35A</td></tr><tr><td align="center">0.40mm（16mil）</td><td align="center">1.70A</td><td align="center">1.35A</td><td align="center">1.10A</td></tr><tr><td align="center">0.30mm（12mil）</td><td align="center">1.30A</td><td align="center">1.10A</td><td align="center">0.80A</td></tr><tr><td align="center">0.20mm（8mil）</td><td align="center">0.90A</td><td align="center">0.70A</td><td align="center">0.55A</td></tr><tr><td align="center">0.15mm（6mil）</td><td align="center">0.70A</td><td align="center">0.50A</td><td align="center">0.20A</td></tr></tbody></table><p>一般需多预留 15% 的余量。</p><h2 id="参考与致谢"><a href="#参考与致谢" class="headerlink" title="参考与致谢"></a>参考与致谢</h2><ul><li><a href="https://www.sz-jlc.com/portal/vtechnology.html">嘉立创 PCB 工艺加工能力范围说明</a></li><li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NDAwOTgzMw==&mid=2650625562&idx=1&sn=29d145ed112c23464ac74bfeeb212aa1&chksm=f388021cc4ff8b0a2e1701726340afb0b60738f8ae448e8f8d0c3b0dee0758a89fe954433011&scene=126&sessionid=1607139114&key=f9ff6c6605e545f8046d3325f95411b620e846faa9864c6589c1a6b69f1ce0d00f26f595bea2995ab23bf54727f1c9f219239f6d2c840605db0dac7f884190fcd2134daa54c87cbf6f249bfa9c29f8ddd39b20d50744335451d3acb3466ebcc44d8918dba7d35a22569e0b7a780088439cf35fe0ff5ea9bddbafef36c64bfd3f&ascene=1&uin=MTk5MDUwOTA0Mg==&devicetype=Windows+10+x64&version=6300002f&lang=zh_CN&exportkey=A1GQK2ccX+vsjA6n1+OfSNU=&pass_ticket=kq2QkQn3wCfkzXnTBMjx4zRHCHr2TH9lX0mMASdXW7ugPzIdfcJaNdCq2VwvOmMs&wx_header=0">PCB 在走线时线宽为多大才合适？已经帮你整理好了！</a></li></ul><blockquote><p>原文地址：<a href="https://wiki-power.com/">https://wiki-power.com/</a><br>本篇文章受 <a href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议保护，转载请注明出处。</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>硬件</category>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>转载</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>如何使用Markdown写一份简历</title>
     <link href="/2024/02/26/%E5%A6%82%E4%BD%95%E7%94%A8Markdown%E5%86%99%E4%B8%80%E4%BB%BD%E7%AE%80%E5%8E%86/"/>
     <url>/2024/02/26/%E5%A6%82%E4%BD%95%E7%94%A8Markdown%E5%86%99%E4%B8%80%E4%BB%BD%E7%AE%80%E5%8E%86/</url>
