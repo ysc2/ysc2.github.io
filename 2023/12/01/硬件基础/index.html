@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
 <meta property="article:published_time" content="2023-12-01T09:51:46.000Z">
-<meta property="article:modified_time" content="2024-02-28T07:59:06.263Z">
+<meta property="article:modified_time" content="2024-02-28T11:44:13.414Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -233,7 +233,7 @@
         
         
         
-          173 分钟
+          174 分钟
         
       </span>
     
@@ -607,6 +607,9 @@
 <h2 id="磁珠"><a href="#磁珠" class="headerlink" title="磁珠"></a>磁珠</h2><p>磁珠是一种电感型 EMI 静噪滤波器，实物和电感很像，其等效模型可以简化为一个电感和一个电阻串联。磁珠的单位是欧姆，根据型号的不同，可以抑制几 MHz-GHz 的噪声，经常被用在信号线和电源线上（串联使用）。</p>
 <p>磁珠的单位是欧姆（Ω），电感单位是亨（H）。磁珠由氧磁体组成，电感由磁芯和线圈组成，磁珠把交流信号转化为热能，电感把交流存储起来，缓慢的释放出去，所以说电感是储能，而磁珠是能量转换（消耗）器件。</p>
 <p>磁珠主要解决辐射干扰问题，信号线上多用磁珠，某一些高频电路如 RF、振荡电路、DDR SDRAM 等都需要在电源输入部分加磁珠；电感主要解决传导干扰问题，高频电感主要用于中低频滤波电路、RF 匹配等，功率电感主要用于 DC-DC 电路中。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281936827.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上图可以看出，通过一个磁珠来将数字电源和模拟电源隔离开来。有时候需要使用0欧姆电阻来替代磁珠，这是因为：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281943122.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="磁珠的主要参数"><a href="#磁珠的主要参数" class="headerlink" title="磁珠的主要参数"></a>磁珠的主要参数</h3><ul>
 <li><strong>阻抗 Z</strong>：阻抗越大，抑制噪声的效果越好。（一般测试条件为 100 MHz）</li>
 <li><strong>直流电阻 DCR</strong>：指直流电流通过磁珠时，磁珠呈现的电阻值。DCR 一般越小越好，对有用信号的衰减越小。</li>
