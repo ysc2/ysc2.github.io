@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>stm32中常用的调试接口</title>
+    <link href="/2024/02/28/stm32%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E6%8E%A5%E5%8F%A3/"/>
+    <url>/2024/02/28/stm32%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B0%83%E8%AF%95%E6%8E%A5%E5%8F%A3/</url>
+    
+    <content type="html"><![CDATA[<p>记录stm32中常用的调试接口</p><span id="more"></span><h1 id="最长见的两个——JTAG-SWD"><a href="#最长见的两个——JTAG-SWD" class="headerlink" title="最长见的两个——JTAG&amp;SWD"></a>最长见的两个——JTAG&amp;SWD</h1><h2 id="JTAG"><a href="#JTAG" class="headerlink" title="JTAG"></a>JTAG</h2><p>JTAG（Joint Test Action Group，联合测试行动小组）是一种国际标准测试协议（IEEE 1149.1兼容），主要用于芯片内部测试。现在多数的高级器件都支持JTAG协议，如ARM、DSP、FPGA器件等。标准的JTAG接口是4线：TMS、 TCK、TDI、TDO，分别为模式选择、时钟、数据输入和数据输出线。 相关JTAG引脚的定义为：</p><ul><li>TMS：测试模式选择，TMS用来设置JTAG接口处于某种特定的测试模式；</li><li>TCK：测试时钟输入；</li><li>TDI：测试数据输入，数据通过TDI引脚输入JTAG接口；</li><li>TDO：测试数据输出，数据通过TDO引 脚从JTAG接口输出；</li></ul><h2 id="SWD"><a href="#SWD" class="headerlink" title="SWD"></a>SWD</h2><p>串行调试（Serial Wire Debug），应该可以算是一种和JTAG不同的调试模式，使用的调试协议也应该不一样，所以最直接的体现在调试接口上，与JTAG的20个引脚相比，SWD只需要4个（或者5个）引脚，结构简单，但是使用范围没有JTAG广泛，主流调试器上也是后来才加的SWD调试模式。</p><p>SWD接口的优势：</p><ul><li>在大家GPIO刚好缺一个的时候，可以使用SWD仿真，这种模式支持更少的引脚。<br>在大家板子的体积有限的时候推荐使用SWD模式，它需要的引脚少，当然需要的PCB空间就小啦！比如你可以选择一个很小的2.54间距的5芯端子做仿真接口。</li><li>SWD模式比JTAG在高速模式下面更加可靠。在大数据量的情况下面JTAG下载程序会失败，但是SWD发生的几率会小很多。基本使用JTAG仿真模式的情况下是可以直接使用SWD模式的，只要你的仿真器支持，所以推荐大家使用这个模式。</li></ul><h2 id="二者的调试器"><a href="#二者的调试器" class="headerlink" title="二者的调试器"></a>二者的调试器</h2><p><strong>JTAG使用的是<code>J-Link</code>是德国SEGGER公司推出基于JTAG的仿真器。</strong>简单地说，是给一个JTAG协议转换盒，即一个小型USB到JTAG的转换盒，其连接到计算机用的是USB接口，而到目标板内部用的还是JTAG协议。它完成了一个从软件到硬件转换的工作。</p><p>JLINK是一个通用的开发工具，可以用于KEIL、IAR、ADS 等平台。速度，效率，功能都很好，据说是众多仿真器里最强悍的。</p><p><strong>ULINK是ARM&#x2F;KEIL公司推出的仿真器，目前网上可找到的是其升级版本，ULINK2和ULINK Pro仿真器。</strong>ULINK&#x2F;ULINK2可以配合Keil软件实现仿真功能，并且仅可以在Keil软件上使用，增加了串行调试（SWD）支持，返回时钟支持和实时代理等功能。开发工程师通过结合使用RealView MDK的调试器和ULINK2，可以方便的在目标硬件上进行片上调试（使用on-chip JTAG，SWD和OCDS）、Flash编程。</p><p><strong>但是要注意的是，ULINK是KEIL公司开发的仿真器，专用于KEIL平台下使用，ADS、IAR下不能使用。</strong></p><h3 id="STLINK-V2调试器"><a href="#STLINK-V2调试器" class="headerlink" title="STLINK V2调试器"></a>STLINK V2调试器</h3><p>这个调试器是st官方制作用来调试<code>stm</code>单片机的调试器。</p><p>主要提供了一个用于 STM32 的JTAG与SWD&#x2F;SWV连接器和一个用于 STM8 的SWIM连接器两种连接方式。</p><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/LEON1741/article/details/72846434">https://blog.csdn.net/LEON1741/article/details/72846434</a></p><p><a href="https://zhuanlan.zhihu.com/p/75312614">https://zhuanlan.zhihu.com/p/75312614</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>stm32</category>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>自制电子相机(3)-软件设计</title>
     <link href="/2024/02/28/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA-3-%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/"/>
     <url>/2024/02/28/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA-3-%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/</url>
@@ -139,7 +166,7 @@
     <link href="/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/"/>
     <url>/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/</url>
     
-    <content type="html"><![CDATA[<p>记录该项目的硬件设计过程</p><span id="more"></span><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的<strong>数据手册中的引脚图来进行选择配置了</strong></p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png"></p><p>上图是stm32的数据手册的引脚图的图注。</p><p>根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。</p><p>所以我们进行硬件设计的重要的是<strong>明确需求，根据需求来选择合适的硬件进行设计</strong></p><h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>由于我想制作一个电子摄像机，主要功能就是可以进行拍摄照片、录制视频；然后可以在显示器中显示，并且自带一个锂电池方便出行。</p><p>根据上面分析的需求，我需要一下模块：</p><ul><li>主芯片</li><li>镜头模块</li><li>电池模块</li><li>显示器模块</li><li>其他芯片必须外部电路</li></ul><h1 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h1><p>这一步主要是进行系统的设计，提出一个系统的设计方案。由于我需要制作一个相机，所以一定<strong>不可以是一块PCB板就可以的，我的打算是做三块PCB板</strong>：</p><ul><li>中间层：芯片核心板以及主要的外设电路</li><li>上层：显示板以及按钮电路</li><li>下层：镜头板</li></ul><p>各个PCB之间使用连接器或者是排插来连接。</p><h1 id="电源引脚的设置"><a href="#电源引脚的设置" class="headerlink" title="电源引脚的设置"></a>电源引脚的设置</h1><p>在stm32中有很多不同种类的电源，如何处理这些电源成为原理图绘制的一个问题。</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220252764.png"></p><p>其中一般只有一下引脚需要特殊的连接：</p><ul><li>VDD：整个引脚的作用一般是当作某个芯片的供电引脚</li><li>VDDA：stm32中的数据手册规定，整个引脚必须连接在VDD上，其作用一般是给某个芯片正电压（模拟）<br><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png"></li><li>VCC：这个引脚的作用一般是当作整个电路的输入电压</li><li>VSS：整个引脚就是数字信号的GND</li><li>VSSD：整个引脚就是芯片的负电压（数字），这个引脚必须连接VSS，这是数据手册中规定的。</li><li>VBAT：VBAT &#x3D; 1.8～3.6V：当关闭VDD时，(通过内部电源切换器)为RTC、外部32kHz振荡器和后备寄存器供电。</li></ul><h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p><p>如图：</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png"></p><p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边排针上接的那个<code>GND</code>的接地符号。</p>]]></content>
+    <content type="html"><![CDATA[<p>记录该项目的硬件设计过程</p><span id="more"></span><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的<strong>数据手册中的引脚图来进行选择配置了</strong></p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png"></p><p>上图是stm32的数据手册的引脚图的图注。</p><p>根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。</p><p>所以我们进行硬件设计的重要的是<strong>明确需求，根据需求来选择合适的硬件进行设计</strong></p><h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>由于我想制作一个电子摄像机，主要功能就是可以进行拍摄照片、录制视频；然后可以在显示器中显示，并且自带一个锂电池方便出行。</p><p>根据上面分析的需求，我需要一下模块：</p><ul><li>主芯片</li><li>镜头模块</li><li>电池模块</li><li>显示器模块</li><li>JTAG调试接口</li><li>其他芯片必须外部电路</li></ul><h1 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h1><p>这一步主要是进行系统的设计，提出一个系统的设计方案。由于我需要制作一个相机，所以一定<strong>不可以是一块PCB板就可以的，我的打算是做三块PCB板</strong>：</p><ul><li>中间层：芯片核心板以及主要的外设电路</li><li>上层：显示板以及按钮电路</li><li>下层：镜头板</li></ul><p>各个PCB之间使用连接器或者是排插来连接。</p><p>3张<code>PCB</code>板中放置的电路以及<code>PCB</code>之间的联系：</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281327612.png"></p><h1 id="外设选型"><a href="#外设选型" class="headerlink" title="外设选型"></a>外设选型</h1><h1 id="外设控制"><a href="#外设控制" class="headerlink" title="外设控制"></a>外设控制</h1><p>下面记录各个外设所需要使用的<code>stm32</code>中的哪些外设。</p><h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="电源引脚的设置"><a href="#电源引脚的设置" class="headerlink" title="电源引脚的设置"></a>电源引脚的设置</h1><p>在stm32中有很多不同种类的电源，如何处理这些电源成为原理图绘制的一个问题。</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220252764.png"></p><p>其中一般只有一下引脚需要特殊的连接：</p><ul><li>VDD：整个引脚的作用一般是当作某个芯片的供电引脚</li><li>VDDA：stm32中的数据手册规定，整个引脚必须连接在VDD上，其作用一般是给某个芯片正电压（模拟）<br><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png"></li><li>VCC：这个引脚的作用一般是当作整个电路的输入电压</li><li>VSS：整个引脚就是数字信号的GND</li><li>VSSD：整个引脚就是芯片的负电压（数字），这个引脚必须连接VSS，这是数据手册中规定的。</li><li>VBAT：VBAT &#x3D; 1.8～3.6V：当关闭VDD时，(通过内部电源切换器)为RTC、外部32kHz振荡器和后备寄存器供电。</li></ul><h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p><p>如图：</p><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png"></p><p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边排针上接的那个<code>GND</code>的接地符号。</p>]]></content>
     
     
     <categories>
