@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>自制电子相机(3)-软件设计</title>
+    <link href="/2024/02/28/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA-3-%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/"/>
+    <url>/2024/02/28/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA-3-%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/</url>
+    
+    <content type="html"><![CDATA[<p>记录该项目的软件设计过程</p><span id="more"></span><h1 id="使用的库"><a href="#使用的库" class="headerlink" title="使用的库"></a>使用的库</h1><p>根据前面所分析的需求，我使用了一下软件库：</p><ul><li>FreeRTOS：实时操作系统，用以更好的管理程序</li><li>FatFS：文件系统，用以更好的管理图片、视频</li><li>LibJPEG：JPEG转换库，用以将其他图片文件格式转换为JPEG，方便和上位机的交互</li><li>st系统编程库：用以控制stm32芯片及其外设电路</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>硬件</category>
+      
+      <category>项目</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>IAR和MDK</title>
     <link href="/2024/02/27/IAR%E5%92%8CMDK/"/>
     <url>/2024/02/27/IAR%E5%92%8CMDK/</url>
