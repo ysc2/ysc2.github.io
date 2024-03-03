@@ -16,16 +16,16 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="总结硬件设计中的知识点">
+    <meta name="description" content="虚拟机安装Arch-Linux记录">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虚拟机安装Arch-Linux记录">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/03/01/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Arch-Linux%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="总结硬件设计中的知识点">
+<meta property="og:description" content="虚拟机安装Arch-Linux记录">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg">
 <meta property="article:published_time" content="2024-02-29T19:56:02.000Z">
-<meta property="article:modified_time" content="2024-03-03T03:39:16.748Z">
+<meta property="article:modified_time" content="2024-03-03T07:40:39.390Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.6k 字
+          6.7k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          47 分钟
+          56 分钟
         
       </span>
     
@@ -275,7 +275,7 @@
             
               <div class="markdown-body">
                 
-                <p>总结硬件设计中的知识点</p>
+                <p>虚拟机安装Arch-Linux记录</p>
 <span id="more"></span>
 
 
@@ -424,8 +424,32 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs zsh"># 安装grub和efibootmgr<br>pacman -S grub efibootmgr<br># 部署efi引导<br>grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB<br># 生成grub配置文件<br>grub-mkconfig -o /boot/grub/grub.cfg<br></code></pre></td></tr></table></figure>
 
 <h2 id="安装微码"><a href="#安装微码" class="headerlink" title="安装微码"></a>安装微码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs zsh">pacman -S intel-ucode   #Intel<br>pacman -S amd-ucode     #AMD<br></code></pre></td></tr></table></figure>
-<h1 id="重启系统"><a href="#重启系统" class="headerlink" title="重启系统"></a>重启系统</h1><p>这是最后一步</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs zsh">exit<br>umount -R /mnt<br>reboot<br></code></pre></td></tr></table></figure>
+
+<h1 id="中文本地化"><a href="#中文本地化" class="headerlink" title="中文本地化"></a>中文本地化</h1><p>要正确显示中文，必需设置正确的 locale 并安装合适的中文字体。</p>
+<h2 id="locale-设置"><a href="#locale-设置" class="headerlink" title="locale 设置"></a>locale 设置</h2><h3 id="安装中文-locale"><a href="#安装中文-locale" class="headerlink" title="安装中文 locale"></a>安装中文 locale</h3><p>Linux 中通过 locale 来设置程序运行的本地化环境。根据地区和字符编码的不同，常用的中文 locale 有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs zsh">zh_CN.GB18030<br>zh_CN.UTF-8<br>zh_HK.UTF-8<br>zh_SG.UTF-8<br>zh_TW.BIG-5<br>zh_TW.UTF-8<br></code></pre></td></tr></table></figure>
+<p>推荐使用 UTF-8 的 locale 而非老旧的各地区编码。需要修改 &#x2F;etc&#x2F;locale.gen 文件来设定系统中可以使用的 locale（取消对应项前的注释符号“#”即可）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs zsh">en_US.UTF-8 UTF-8<br>zh_CN.UTF-8 UTF-8<br>zh_SG.UTF-8 UTF-8<br></code></pre></td></tr></table></figure>
+
+<p>然后执行 locale-gen 命令，便可以在系统中使用这些 locale。可以通过 locale 命令来查看当前使用的 locale：亦可通过 locale -a 命令来查看目前可以使用的 locale。</p>
+<h2 id="配置中文-locale"><a href="#配置中文-locale" class="headerlink" title="配置中文 locale"></a>配置中文 locale</h2><p><strong>首先设置一个英文的全局 locale。这并不是必须的，只是为了防止 TTY 中出现豆腐块（见下方注意）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs zsh">$ cat /etc/locale.conf<br>LANG=en_US.UTF-8<br></code></pre></td></tr></table></figure>
+
+<p>LANG 这个环境变量代表默认的区域设置，具体的含义见 Locale#LANG：默认的区域设置</p>
+<div class="note note-warning">
+            <p>注意： 不推荐在 &#x2F;etc&#x2F;locale.conf 里把全局的 LANG locale 设置成中文 LANG&#x3D;zh_CN.UTF-8，因为 TTY 下没有 CJK 字体，这样设置会导致 TTY 中显示豆腐块（除非你使用的内核打了 cjktty 补丁能绘制中文字体，比如linux-lilyCNRepo）。</p>
+          </div>
+
+<div class="note note-info">
+            <p>每个用户单独的 locale 可以在 <del>&#x2F;.bashrc、</del>&#x2F;.xinitrc 或 ~&#x2F;.xprofile 中设置：</p><p><code>.bashrc</code>：每次使用终端时会应用此处的设置。<br><code>.xinitrc</code>：每次使用 startx 或 SLiM 来启动 X 窗口系统时会应用此处的设置。<br><code>.xprofile</code>：每次使用 GDM 等显示管理器时会应用此处的设置。<br>为图形界面配置中文 locale<br>不推荐 <code>/etc/locale.conf</code> 使用全局中文 locale，会导致 TTY 中显示出豆腐块。</p>
+          </div>
+
+
+<p>如前所述，建议在 <code>~/.xinitrc</code> 或 <code>~/.xprofile</code> 里单独设置中文 locale，即添加下面两行到文件的最开头（如果不确定使用哪个文件，都添加）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs zsh">export LANG=zh_CN.UTF-8<br>export LANGUAGE=zh_CN:en_US<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="重启系统"><a href="#重启系统" class="headerlink" title="重启系统"></a>重启系统</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs zsh">exit<br>umount -R /mnt<br>reboot<br></code></pre></td></tr></table></figure>
 
 <p>重启后可使用刚才添加的用户和密码进行登录。</p>
 <p><strong>安装完进入系统以后以后可能会出现网络无法访问的情况，即当ping百度出现下面错误</strong></p>
@@ -439,6 +463,7 @@
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/takashi77/article/details/118927109">https://blog.csdn.net/takashi77/article/details/118927109</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/songpeiying/article/details/135013651">lsblk</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_57459724/article/details/121706567">https://blog.csdn.net/m0_57459724/article/details/121706567</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.archlinuxcn.org/wiki/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E6%9C%AC%E5%9C%B0%E5%8C%96">简体中文本地化</a></p>
 
                 
               </div>
