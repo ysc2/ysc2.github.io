@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wevrpx.jpg">
 <meta property="article:published_time" content="2024-02-21T15:54:14.000Z">
-<meta property="article:modified_time" content="2024-02-29T08:21:02.492Z">
+<meta property="article:modified_time" content="2024-03-06T09:50:31.078Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.2k 字
+          6.3k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          52 分钟
+          53 分钟
         
       </span>
     
@@ -396,7 +396,7 @@
 <ul>
 <li><p>VDD：整个引脚的作用一般是当作某个芯片的供电引脚</p>
 </li>
-<li><p>VDDA：stm32中的数据手册规定，整个引脚必须连接在VDD上，其作用一般是给某个芯片正电压（模拟）。**并且必须使用一个电感或者磁珠来将二者隔离开，这是因为VDD是数字电源，而VDDA是模拟电源。<br><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png" srcset="/img/loading.gif" lazyload></p>
+<li><p>VDDA：stm32中的数据手册规定，整个引脚必须连接在VDD上，其作用一般是给某个芯片正电压（模拟）。<strong>并且必须使用一个电感或者磁珠来将二者隔离开，这是因为VDD是数字电源，而VDDA是模拟电源。</strong><br><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 <li><p>VCC：这个引脚的作用一般是当作整个电路的输入电压</p>
 </li>
@@ -430,7 +430,7 @@
 </li>
 </ul>
 </li>
-<li><p>VREF-：这个引脚是ADC基准参考电压（负），注意，只有在封装为<code>UFBGA176</code>是才会有。如果有这个引脚，直接将其接到<code>GDN</code>上，同<code>VSSA</code>一起。</p>
+<li><p>VREF-：这个引脚是ADC基准参考电压（负），注意，只有在封装为<code>UFBGA176</code>是才会有。如果有这个引脚，直接将其接到<code>GND</code>上，同<code>VSSA</code>一起。</p>
 </li>
 <li><p>VCAP_1和VCAP_2这两个引脚直接连上电容后接地。一般接法如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402290254685.png" srcset="/img/loading.gif" lazyload></p>
 </li>
@@ -458,7 +458,7 @@
 <li><strong>PLL</strong>：锁相环倍频输出，其时钟输入源可选择为 HSI&#x2F;2，HSE 或 HSE&#x2F;2. 倍频可为 2~16 倍，但是输出频率最大不得超过 72MHz</li>
 </ol>
 <p>从稳定性上考虑，我们在设计的时候一般使用外部晶振作为时钟源。<strong>一般选取 8MHz 晶振作为 HSE</strong>，便于倍频（一般倍频到 72MHz）；<strong>选取 32.768kHz 晶振作为 LSE</strong>，RTC 使用便于分频（32768 是 2 的 15 次方，可以得到精准的时间）。</p>
-<p>至于晶振的选用，有源的精度高，无源的成本低，一般无源就足够了。<br>如果选用无源晶振，则需要在两端要加上起振电容，滤除晶振波形中的高频杂波。容值可选 10 ～ 40pF.</p>
+<p>至于晶振的选用，有源的精度高，无源的成本低，一般无源就足够了。<br>如果选用无源晶振，则需要在两端要加上起振电容，滤除晶振波形中的高频杂波。容值可选 10 ～ 40pF。这个容值手册中没有明确规定，具体多少可以看晶振的手册。</p>
 <p>晶振输入输出引脚之间可加一个 1M 的电阻，产生负反馈，保证放大器工作在高增益的线性区。同时还起到限流作用，防止反相器驱动过载损坏晶振。</p>
 <p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605171011.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="https://img.wiki-power.com/d/wiki-media/img/20200612130149.jpg" srcset="/img/loading.gif" lazyload></p>
@@ -466,9 +466,10 @@
 <p>如果需要模式切换，也可以参照以下的设计：</p>
 <p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605163537.png" srcset="/img/loading.gif" lazyload></p>
 <p>启动模式详见 <a target="_blank" rel="noopener" href="https://wiki-power.com/STM32%E7%9A%84%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F"><strong>STM32 的启动模式</strong></a></p>
-<h2 id="下载调试接口"><a href="#下载调试接口" class="headerlink" title="下载调试接口"></a>下载调试接口</h2><p>一般我们用 SWD 接口（接线少，方便），<strong>直接引出 SWDIO，SWCLK，VCC，GND 即可</strong>。<br>不需要添加外部上拉／下拉电阻，因为 STM32 内部已经有集成了。</p>
+<h2 id="下载调试接口"><a href="#下载调试接口" class="headerlink" title="下载调试接口"></a>下载调试接口</h2><p>调试接口一般使用<code>SWD</code>或者是<code>JTAG</code>，前者的优势是需要的引脚少，后者优势为下载速度更快，更加稳定。</p>
+<h3 id="使用SWD接口的原理图"><a href="#使用SWD接口的原理图" class="headerlink" title="使用SWD接口的原理图"></a>使用SWD接口的原理图</h3><p>一般我们用 SWD 接口（接线少，方便），<strong>直接引出 SWDIO，SWCLK，VCC，GND 即可</strong>。<br>不需要添加外部上拉／下拉电阻，因为 STM32 内部已经有集成了。</p>
 <p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605170741.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是 STM32（F1 系列）最小系统的电路设计。更加详细的内容，可以跳转下面的官方文档和相关文章。</p>
+<h3 id="使用JTAG接口的原理图"><a href="#使用JTAG接口的原理图" class="headerlink" title="使用JTAG接口的原理图"></a>使用JTAG接口的原理图</h3><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是 STM32（F1 系列）最小系统的电路设计。更加详细的内容，可以跳转下面的官方文档和相关文章。</p>
 <h1 id="PCB板之间的连接"><a href="#PCB板之间的连接" class="headerlink" title="PCB板之间的连接"></a>PCB板之间的连接</h1><ol>
 <li>焊接方式： 该方式优点是简单、成本低、可靠性高，可以避免因接触不良而造成的故障;缺点是互换、维修不方便。<ol>
 <li>PCB导线焊接该方式不需任何接插件，只要用导线将PCB板上的对外连接点与板外的元器件直接焊牢即可。</li>
