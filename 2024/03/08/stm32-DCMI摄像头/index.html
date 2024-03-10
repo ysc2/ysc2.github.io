@@ -28,8 +28,9 @@
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403081644771.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403081655665.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403081655276.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403091707392.png">
 <meta property="article:published_time" content="2024-03-07T16:55:03.000Z">
-<meta property="article:modified_time" content="2024-03-09T07:54:44.846Z">
+<meta property="article:modified_time" content="2024-03-09T09:07:14.294Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403081639874.png">
@@ -225,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          2.5k 字
         
       </span>
     
@@ -236,7 +237,7 @@
         
         
         
-          11 分钟
+          22 分钟
         
       </span>
     
@@ -320,10 +321,21 @@
 <p><strong>其实就是接收图像数据</strong></p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403081655665.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403081655276.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">uint16_t</span> DCMI_CaptureMode;      <span class="hljs-comment">/*选择连续模式或拍照模式 */</span><br>    <span class="hljs-type">uint16_t</span> DCMI_SynchroMode;      <span class="hljs-comment">/*选择硬件同步模式还是内嵌码模式 */</span><br>    <span class="hljs-type">uint16_t</span> DCMI_PCKPolarity;      <span class="hljs-comment">/*设置像素时钟的有效边沿*/</span><br>    <span class="hljs-type">uint16_t</span> DCMI_VSPolarity;       <span class="hljs-comment">/*设置VSYNC的有效电平*/</span><br>    <span class="hljs-type">uint16_t</span> DCMI_HSPolarity;       <span class="hljs-comment">/*设置HSYNC的有效边沿*/</span><br>    <span class="hljs-type">uint16_t</span> DCMI_CaptureRate;      <span class="hljs-comment">/*设置图像的采集间隔 */</span><br>    <span class="hljs-type">uint16_t</span> DCMI_ExtendedDataMode; <span class="hljs-comment">/*设置数据线的宽度 */</span><br>&#125; DCMI_InitTypeDef;<br></code></pre></td></tr></table></figure>
+<h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">uint16_t</span> DCMI_CaptureMode;      <span class="hljs-comment">/*选择连续模式或拍照模式 */</span><br>    <span class="hljs-type">uint16_t</span> DCMI_SynchroMode;      <span class="hljs-comment">/*选择硬件同步模式还是内嵌码模式 */</span><br>    <span class="hljs-type">uint16_t</span> DCMI_PCKPolarity;      <span class="hljs-comment">/*设置像素时钟的有效电平*/</span><br>    <span class="hljs-type">uint16_t</span> DCMI_VSPolarity;       <span class="hljs-comment">/*设置VSYNC的有效电平*/</span><br>    <span class="hljs-type">uint16_t</span> DCMI_HSPolarity;       <span class="hljs-comment">/*设置HSYNC的有效电平*/</span><br>    <span class="hljs-type">uint16_t</span> DCMI_CaptureRate;      <span class="hljs-comment">/*设置图像的采集间隔 */</span><br>    <span class="hljs-type">uint16_t</span> DCMI_ExtendedDataMode; <span class="hljs-comment">/*设置数据线的宽度 */</span><br>&#125; DCMI_InitTypeDef;<br></code></pre></td></tr></table></figure>
 
 <p>极性：极性就是初始电平是高还是低</p>
 <p>相位: 相位就是从第一个跳变沿可以检测还是从第二个跳变沿开始检测</p>
+<h2 id="参数解释"><a href="#参数解释" class="headerlink" title="参数解释"></a>参数解释</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs txt">(1) DCMI_CaptureMode<br><br>本成员设置DCMI的捕获模式， 可以选择为连续摄像(DCMI_CaptureMode_Continuous)或单张拍照DCMI_CaptureMode_SnapShot。<br><br>(2) DCMI_SynchroMode<br><br>本成员设置DCMI数据的同步模式， 可以选择为硬件同步方式(DCMI_SynchroMode_Hardware)或内嵌码方式(DCMI_SynchroMode_Embedded)。<br><br>(3) DCMI_PCKPolarity<br><br>本成员用于配置DCMI接口像素时钟的有效边沿，即在该时钟边沿时，DCMI会对数据线上的信号进行采样， 它可以被设置为上升沿有效(DCMI_PCKPolarity_Rising)或下降沿有效(DCMI_PCKPolarity_Falling)。<br><br>(4) DCMI_VSPolarity<br><br>本成员用于设置VSYNC的有效电平，当VSYNC信号线表示为有效电平时，表示新的一帧数据传输完成， 它可以被设置为高电平有效(DCMI_VSPolarity_High)或低电平有效(DCMI_VSPolarity_Low)。<br><br>(5) DCMI_HSPolarity<br><br>类似地，本成员用于设置HSYNC的有效电平，当HSYNC信号线表示为有效电平时，表示新的一行数据传输完成， 它可以被设置为高电平有效(DCMI_HSPolarity_High)或低电平有效(DCMI_HSPolarity_Low)。<br><br>(6) DCMI_CaptureRate<br><br>本成员可以用于设置DCMI捕获数据的频率，可以设置为全采集、半采集或1/4采集(DCMI_CaptureRate_All_Frame/ 1of2_Frame/ 1of4_Frame)， 在间隔采集的情况下，STM32的DCMI外设会直接按间隔丢弃数据。<br><br>(7) DCMI_ExtendedDataMode<br><br>本成员用于设置DCMI的数据线宽度，可配置为8/10/12及14位数据线宽(DCMI_ExtendedDataMode_8b/10b/12b/14b)。<br></code></pre></td></tr></table></figure>
+
+<h3 id="捕获模式"><a href="#捕获模式" class="headerlink" title="捕获模式"></a>捕获模式</h3><p>其中的捕获模式含义为：<strong>分别为快照模式和连续采集模式。快照模式时只采集一帧的图像数据，连续采集模式会一直采集多个帧的数据， 并且可以通过配置捕获率来控制采集多少数据，如可配置为采集所有数据或隔1帧采集一次数据或隔3帧采集一次数据。</strong></p>
+<h3 id="同步模式"><a href="#同步模式" class="headerlink" title="同步模式"></a>同步模式</h3><p><strong>参数解释中的同步模式</strong>：</p>
+<ul>
+<li>硬件同步</li>
+<li>内嵌码同步</li>
+</ul>
+<p>硬件同步就是使用<code>HSYNC</code>和<code>VSYNC</code>两种模式进行同步。</p>
+<p>内嵌码同步：<br>而内嵌码同步的方式是使用数据信号线传输中的特定编码来表示同步信息，由于需要用0x00和0xFF来表示编码， 所以表示图像的数据中不能包含有这两个值。利用这两个值，它扩展到4个字节，定义出了2种模式的同步码，每种模式包含4个编码， 编码格式为0xFF0000XY，其中XY的值可通过寄存器设置。当DCMI接收到这样的编码时，它不会把这些当成图像数据， 而是按照表 两种模式的内嵌码 中的编码来解释，作为同步信号。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403091707392.png" srcset="/img/loading.gif" lazyload></p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://doc.embedfire.com/mcu/stm32/f407batianhu/std/zh/latest/book/DCMI_OV5640.html">https://doc.embedfire.com/mcu/stm32/f407batianhu/std/zh/latest/book/DCMI_OV5640.html</a></p>
 
                 
