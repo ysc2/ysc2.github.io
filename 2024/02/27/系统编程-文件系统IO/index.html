@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-zm36wg.jpg">
 <meta property="article:published_time" content="2024-02-26T16:30:56.000Z">
-<meta property="article:modified_time" content="2024-03-01T18:14:07.624Z">
+<meta property="article:modified_time" content="2024-03-14T10:17:22.846Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          402 字
+          1.5k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          4 分钟
+          13 分钟
         
       </span>
     
@@ -281,11 +281,28 @@
 
 <h1 id="通过的文件IO接口"><a href="#通过的文件IO接口" class="headerlink" title="通过的文件IO接口"></a>通过的文件IO接口</h1><p>在Linux中的文件结构都是通用的，<strong>这意味这使用几个函数就可以控制系统中的所有文件类型，包括终端</strong>。</p>
 <p>这些通用接口主要是：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">open();<br>write();<br>read();<br>lseek();<br>close();<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c">open();<br>write();<br>read();<br>lseek();<br>close();<br>creat();<span class="hljs-comment">//由于可以使用open()来打开、创建一个文件，所以这个函数用的少。</span><br></code></pre></td></tr></table></figure>
 
 <p>还包括一个通用接口以外的函数：<code>ioctl()</code>，ioctl()系统调用又为执行文件和设备操作提供了一种多用途机制。</p>
+<h2 id="open-函数"><a href="#open-函数" class="headerlink" title="open()函数"></a>open()函数</h2><p>这个函数就是打开一个文件，返回所打开文件的文件描述符。可以使用各种标志位来打开文件。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">open()<span class="hljs-comment">//第一个参数是文件位置，第二个是如何打开文件，第三个是权限。</span><br><br><span class="hljs-type">int</span> dst_fd = open(destination, O_CREAT | O_WRONLY | O_TRUNC, <span class="hljs-number">0644</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="read-函数"><a href="#read-函数" class="headerlink" title="read()函数"></a>read()函数</h2><p>从指定的文件中读取数据到<code>buffer</code>中，返回所读取的字符个数。</p>
+<p>如果 <code>read()</code>调用成功，将返回实际读取的字节数，如果遇到文件结束（EOF）则返回 <code>0</code>，<br>如果出现错误则返回<code>-1</code>。<code>ssize_t</code> 数据类型属于有符号的整数类型，用来存放（读取的）字节数或<code>-1</code>（表示错误）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">read()<span class="hljs-comment">//第一个参数是从哪个文件中读取，第二个是存到哪里去，第三个是一个读取字符的数量。</span><br><br><span class="hljs-keyword">while</span>((readed = read(STDIN_FILENO, buf, BUF_SIZE)) &gt; <span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
+
+<p>一次 read()调用所读取的字节数可以小于请求的字节数。对于普通文件而言，这有可能是因为当前读取位置靠近文件尾部。当 read()应用于其他文件类型时，比如管道、FIFO、socket 或者终端，在不同环境下也会出现 read()调用读取的字节数小于请求字节数的情况。例如，默认情况下从终端读取字符，一遇到换行符（\n），read()调用就会结束。</p>
+<h2 id="write-函数"><a href="#write-函数" class="headerlink" title="write()函数"></a>write()函数</h2><p>这个函数参数含义和<code>read()</code>函数意义一致。返回的是读取到的字符个数，<strong>注意如果 write()调用成功，将返回实际写入文件的字节数，该返回值可能小于 count 参数值。这被称为“部分写”。对磁盘文件来说，造成“部分写”的原因可能是由于磁盘已满，或是因为进程资源对文件大小的限制。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span>((w = write(fd, buf + wrote, readed - wrote)) ==<span class="hljs-number">-1</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="close-函数"><a href="#close-函数" class="headerlink" title="close()函数"></a>close()函数</h2><p>关闭文件，成功返回<code>0</code>，反之<code>-1</code>。</p>
+<h2 id="lseek-函数"><a href="#lseek-函数" class="headerlink" title="lseek()函数"></a>lseek()函数</h2><p>改变、获取文件的偏移量。返回现在文件偏移量位置。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">lseek()<span class="hljs-comment">//第一个参数指定文件，第三个参数是指定位置，第二个参数是指定偏移量</span><br><span class="hljs-type">off_t</span> src_size = lseek(src_fd, <span class="hljs-number">0</span>, SEEK_END);<br></code></pre></td></tr></table></figure>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141816452.png" srcset="/img/loading.gif" lazyload></p>
+<p>lseek()并不适用于所有类型的文件。不允许将 lseek()应用于管道、FIFO、socket 或者终端。一旦如此，调用将会失败，并将 errno 置为 ESPIPE。另一方面，只要合情合理，也可以将 lseek()应用于设备。例如，在磁盘或者磁带上查找一处具体位置</p>
 <h1 id="文件空洞"><a href="#文件空洞" class="headerlink" title="文件空洞"></a>文件空洞</h1><p>如果程序的文件偏移量已然跨越了文件结尾，然后再执行 I&#x2F;O 操作，将会发生什么情况？read()调用将返回 0，表示文件结尾。有点令人惊讶的是，write()函数可以在文件结尾后的任意位置写入数据。</p>
 <p>在没有向其中写入数据的时候，文件空洞是不占内存的。但是一旦向其中写入一些数据，则操作系统会为这些数据分配存储空间。<strong>但是文件的大小并不会变</strong>。</p>
+<p><strong>所谓的文件空洞就是会占用名义存储空间，但是不会占用实际存储空间。</strong>但是对于不支持的文件空洞的文件系统来说，就会直接将数据直接存储到存储空间里。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li>《Linux-Unix系统编程手册》</li>
 </ul>

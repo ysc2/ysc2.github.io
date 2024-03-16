@@ -16,24 +16,26 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录该项目的硬件设计过程">
+    <meta name="description" content="前言SD卡(Secure Digital Memory Card)在我们生活中已经非常普遍了，控制器对SD卡进行读写通信操作一般有两种通信接口可选：  一种是SPI接口 另外一种就是SDIO接口。SDIO全称是安全数字输入&#x2F;输出接口，多媒体卡(MMC)、SD卡、SD I&#x2F;O卡都有SDIO接口。 stm32f4xx系列控制器有一个SDIO主机接口，它可以与MMC卡、SD卡、SD">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自制电子相机（2）- 硬件设计">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:title" content="SD卡">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/03/14/SD%E5%8D%A1/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="记录该项目的硬件设计过程">
+<meta property="og:description" content="前言SD卡(Secure Digital Memory Card)在我们生活中已经非常普遍了，控制器对SD卡进行读写通信操作一般有两种通信接口可选：  一种是SPI接口 另外一种就是SDIO接口。SDIO全称是安全数字输入&#x2F;输出接口，多媒体卡(MMC)、SD卡、SD I&#x2F;O卡都有SDIO接口。 stm32f4xx系列控制器有一个SDIO主机接口，它可以与MMC卡、SD卡、SD">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg">
-<meta property="article:published_time" content="2024-02-24T17:06:38.000Z">
-<meta property="article:modified_time" content="2024-03-16T08:05:19.126Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142034645.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142036190.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142038135.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142204724.png">
+<meta property="article:published_time" content="2024-03-14T12:00:06.000Z">
+<meta property="article:modified_time" content="2024-03-14T14:05:59.812Z">
 <meta property="article:author" content="Ysc">
-<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142034645.png">
   
   
   
-  <title>自制电子相机（2）- 硬件设计 - Ysc Web</title>
+  <title>SD卡 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +195,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="自制电子相机（2）- 硬件设计"></span>
+            <span id="subtitle" data-typed-text="SD卡"></span>
           
         </div>
 
@@ -210,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-25 01:06" pubdate>
-          2024年2月25日 凌晨
+        <time datetime="2024-03-14 20:00" pubdate>
+          2024年3月14日 晚上
         </time>
       </span>
     
@@ -222,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          993 字
         
       </span>
     
@@ -233,7 +235,7 @@
         
         
         
-          10 分钟
+          9 分钟
         
       </span>
     
@@ -270,70 +272,51 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">自制电子相机（2）- 硬件设计</h1>
+            <h1 id="seo-header">SD卡</h1>
             
             
               <div class="markdown-body">
                 
-                <p>记录该项目的硬件设计过程</p>
-<span id="more"></span>
-
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的<strong>数据手册中的引脚图来进行选择配置了</strong></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png" srcset="/img/loading.gif" lazyload></p>
-<p>上图是stm32的数据手册的引脚图的图注。</p>
-<p>根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。</p>
-<p>所以我们进行硬件设计的重要的是<strong>明确需求，根据需求来选择合适的硬件进行设计</strong></p>
-<h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>由于我想制作一个电子摄像机，主要功能就是可以进行拍摄照片、录制视频；然后可以在显示器中显示，并且自带一个锂电池方便出行。</p>
-<p>根据上面分析的需求，我需要一下模块：</p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>SD卡(Secure Digital Memory Card)在我们生活中已经非常普遍了，控制器对SD卡进行读写通信操作一般有两种通信接口可选：</p>
+<ol>
+<li>一种是SPI接口</li>
+<li>另外一种就是SDIO接口。SDIO全称是安全数字输入&#x2F;输出接口，多媒体卡(MMC)、SD卡、SD I&#x2F;O卡都有SDIO接口。 stm32f4xx系列控制器有一个SDIO主机接口，它可以与MMC卡、SD卡、SD I&#x2F;O卡以及CE-ATA设备进行数据传输。</li>
+</ol>
 <ul>
-<li>主芯片</li>
-<li>镜头模块</li>
-<li>电池模块</li>
-<li>显示器模块</li>
-<li>JTAG调试接口</li>
-<li>其他芯片必须外部电路</li>
+<li>MMC卡可以说是SD卡的前身， 现阶段已经用得很少。</li>
+<li>SD I&#x2F;O卡本身不是用于存储的卡，它是指利用SDIO传输协议的一种外设。<ul>
+<li>比如Wi-Fi Card， 它主要是提供Wi-Fi功能，有些Wi-Fi模块是使用串口或者SPI接口进行通信的，但Wi-Fi SDIO Card是使用SDIO接口进行通信的。 并且一般设计SD I&#x2F;O卡是可以插入到SD的插槽。</li>
 </ul>
-<p>其中提供三种模式：</p>
+</li>
+<li>CE-ATA是专为轻薄笔记本硬盘设计的硬盘高速通讯接口。</li>
+</ul>
+<p><strong>在stm32中可以使用片上外设<code>SPI</code>和<code>SDIO</code>来对这些卡进行控制</strong>：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142034645.png" srcset="/img/loading.gif" lazyload></p>
+<p>即使目前SD协议提供的SD卡规范版本最新是4.01版本，但stm32f4xx系列控制器只支持SD卡规范版本2.0， <strong>即只支持标准容量SD和高容量SDHC标准卡，不支持超大容量SDXC标准卡，所以可以支持的最高卡容量是32GB。</strong></p>
+<h1 id="SD卡的物理结构"><a href="#SD卡的物理结构" class="headerlink" title="SD卡的物理结构"></a>SD卡的物理结构</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142036190.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上图来看，SD卡主要由五个部分组成，并且其有<code>8</code>个寄存器，这些寄存器是用来设置SD卡的信息的。<strong>这些寄存器只能通过对应的命令访问， 对SD卡进行控制操作并不是像操作控制器GPIO相关寄存器那样一次读写一个寄存器的，它是通过命令来控制， SDIO定义了64个命令，每个命令都有特殊意义，可以实现某一特定功能，SD卡接收到命令后， 根据命令要求对SD卡内部寄存器进行修改，程序控制中只需要发送组合命令就可以实现SD卡的控制以及读写操作。</strong></p>
+<p>各个寄存器的作用：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142038135.png" srcset="/img/loading.gif" lazyload></p>
+<p>SD的引脚是<strong>9</strong>根：</p>
 <ul>
-<li>实时模式</li>
-<li>视频模式</li>
-<li>拍照模式</li>
+<li><p>CLK：时钟线，由SDIO主机产生，即由STM32控制器输出；</p>
+</li>
+<li><p>CMD：命令控制线，SDIO主机通过该线发送命令控制SD卡，如果命令要求SD卡提供应答(响应)，SD卡也是通过该线传输应答信息；</p>
+</li>
+<li><p>D0-3：数据线，传输读写数据；SD卡可将D0拉低表示忙状态；</p>
+</li>
+<li><p>VDD、VSS1、VSS2：电源和地信号。</p>
+</li>
 </ul>
-<p>以上三种模式要有不同的硬、软件要求。</p>
-<h1 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h1><p>这一步主要是进行系统的设计，提出一个系统的设计方案。由于我需要制作一个相机，所以一定<strong>不可以是一块PCB板就可以的，我的打算是做三块PCB板</strong>：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403142204724.png" srcset="/img/loading.gif" lazyload></p>
+<p>注：</p>
 <ul>
-<li>中间层：芯片核心板以及主要的外设电路</li>
-<li>上层：显示板以及按钮电路</li>
-<li>下层：镜头板</li>
+<li>S：电源供给</li>
+<li>I：输入</li>
+<li>O：采用推拉驱动的输出</li>
+<li>PP：采用推拉驱动的输入输出</li>
 </ul>
-<p>各个PCB之间使用连接器或者是排插来连接。</p>
-<p>3张<code>PCB</code>板中放置的电路以及<code>PCB</code>之间的联系：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281729087.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="摄像模块的设计"><a href="#摄像模块的设计" class="headerlink" title="摄像模块的设计"></a>摄像模块的设计</h2><h3 id="实时模式"><a href="#实时模式" class="headerlink" title="实时模式"></a>实时模式</h3><p>在这个模式下，摄像头所拍摄到的数据直接显示到显示器上。所以其对于实行性有着更高的要求。</p>
-<p>所以可以<strong>有摄像头读取到数据之后直接通过<code>DMA</code>将数据从<code>DCMA</code>直接传输到<code>FSMC</code>再到显示器中。</strong>以此来提高速度。</p>
-<h3 id="拍照模式"><a href="#拍照模式" class="headerlink" title="拍照模式"></a>拍照模式</h3><p>将拍下的数据直接存进<code>sd</code>中，之后去查看的时候就可以直接从<code>sd</code>卡中读取数据。</p>
-<h3 id="视频模式"><a href="#视频模式" class="headerlink" title="视频模式"></a>视频模式</h3><h1 id="外设选型"><a href="#外设选型" class="headerlink" title="外设选型"></a>外设选型</h1><h2 id="摄像头"><a href="#摄像头" class="headerlink" title="摄像头"></a>摄像头</h2><p>我选用的是微雪的<code>ov5640</code>模组，主要的参数如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141545529.png" srcset="/img/loading.gif" lazyload></p>
-<p>TODO<br><strong>更多的信息可以参考<a href="">这篇文章</a></strong></p>
-<h3 id="引脚定义"><a href="#引脚定义" class="headerlink" title="引脚定义"></a>引脚定义</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141547740.png" srcset="/img/loading.gif" lazyload></p>
-<p>以上的数据都是在微雪的<code>ov5640</code>模组的数据手册中获取的。</p>
-<h2 id="FLASH存储"><a href="#FLASH存储" class="headerlink" title="FLASH存储"></a>FLASH存储</h2><p><code>flash</code>存储在单片机中担任外存的角色。由于预算有效，我使用的是华邦的<code>W25Q256JVEIQ</code> NOR FLASH。单片价格是14左右，相比于瑞萨等等公司动则3、40的nor flash芯片还是便宜不少的。</p>
-<p>关于这个芯片的数据手册可以去其官网，或者是嘉立创上下载。</p>
-<p><strong>其与单片机之间的通信主要是通过SPI</strong></p>
-<h3 id="引脚定义-1"><a href="#引脚定义-1" class="headerlink" title="引脚定义"></a>引脚定义</h3><p>其一共有<code>8</code>个引脚，其定义如下：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403161407118.png" srcset="/img/loading.gif" lazyload></p>
-<p>更加详细的定义可以在数据手册中的第四章找到。</p>
-<h3 id="电路图连接"><a href="#电路图连接" class="headerlink" title="电路图连接"></a>电路图连接</h3><p>由于其主要通过<code>SPI</code>来和单片机通信，所以：</p>
-<h2 id="EEPROM存储"><a href="#EEPROM存储" class="headerlink" title="EEPROM存储"></a>EEPROM存储</h2><p><strong>其与单片机之间的通信主要是通过IIC</strong></p>
-<h2 id="扩展外部SRAM"><a href="#扩展外部SRAM" class="headerlink" title="扩展外部SRAM"></a>扩展外部SRAM</h2><p><strong>其与单片机之间的通信主要是通过FSMC</strong></p>
-<h1 id="外设"><a href="#外设" class="headerlink" title="外设"></a>外设</h1><p>在使用的<code>stm32f4x</code>的数据手册中有一副图显示了所有可以使用的外设所需要的接线口：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141528030.png" srcset="/img/loading.gif" lazyload></p>
-<p><strong>该图的位置<code>stm32f4x</code>数据手册的<code>19</code>页</strong>。</p>
-<p>下面记录各个外设所需要使用的<code>stm32</code>中的哪些外设。</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p>
-<p>如图：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png" srcset="/img/loading.gif" lazyload></p>
-<p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边排针上接的那个<code>GND</code>的接地符号。</p>
-
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1>
                 
               </div>
             
@@ -341,41 +324,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%A1%AC%E4%BB%B6/" class="category-chain-item">硬件</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
-      
-    </div>
   
 </div>
 
@@ -385,8 +333,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>自制电子相机（2）- 硬件设计</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/02/25/自制电子相机（2）- 硬件设计/</div>
+      <div>SD卡</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/03/14/SD卡/</div>
     </div>
     <div class="license-meta">
       
@@ -398,7 +346,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月25日</div>
+          <div>2024年3月14日</div>
         </div>
       
       
@@ -430,18 +378,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/26/%E5%A6%82%E4%BD%95%E7%94%A8Markdown%E5%86%99%E4%B8%80%E4%BB%BD%E7%AE%80%E5%8E%86/" title="如何使用Markdown写一份简历">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">如何使用Markdown写一份简历</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/23/%E5%A6%82%E4%BD%95%E9%85%8D%E4%B8%80%E5%8F%B0%E7%94%B5%E8%84%91/" title="如何配一台电脑">
-                        <span class="hidden-mobile">如何配一台电脑</span>
+                      <a href="/2024/03/10/OTG%E7%BA%BF%E5%92%8CUSB%E7%BA%BF/" title="OTG线和USB线">
+                        <span class="hidden-mobile">OTG线和USB线</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

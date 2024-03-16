@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wevrpx.jpg">
 <meta property="article:published_time" content="2024-02-21T15:54:14.000Z">
-<meta property="article:modified_time" content="2024-03-14T07:19:36.183Z">
+<meta property="article:modified_time" content="2024-03-16T05:59:39.537Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7k 字
+          7.1k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          59 分钟
+          60 分钟
         
       </span>
     
@@ -278,7 +278,8 @@
                 <p>对于自制相机的硬件知识点的记录</p>
 <span id="more"></span>
 
-<h1 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h1><h2 id="为什么需要分多组电源引脚"><a href="#为什么需要分多组电源引脚" class="headerlink" title="为什么需要分多组电源引脚"></a>为什么需要分多组电源引脚</h2><p>我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？</p>
+<h1 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h1><p>这篇文章主要是记录一下硬件方面的基础知识点。</p>
+<h2 id="为什么需要分多组电源引脚"><a href="#为什么需要分多组电源引脚" class="headerlink" title="为什么需要分多组电源引脚"></a>为什么需要分多组电源引脚</h2><p>我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？</p>
 <p>通过下面可以看到，这个芯片包含了5组。</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220019874.png" srcset="/img/loading.gif" lazyload></p>
 <p>之所以这样设置的原因有：</p>
@@ -375,7 +376,8 @@
 <li>时钟电路（晶振）</li>
 <li>复位电路（启动模式）</li>
 <li>自动下载电路</li>
-<li>存储电路</li>
+<li>存储电路（在最小电路中这个是不需要的，但是一般都不是最小电路。这个部分的信息可以去<a href=""></a>这里找到</li>
+<li>TODO</li>
 <li>调试电路</li>
 </ul>
 <p>下面将基于 STM32 单片机（F1 系列）展开讲解。</p>
