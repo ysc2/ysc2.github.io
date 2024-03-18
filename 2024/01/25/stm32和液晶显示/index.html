@@ -27,10 +27,12 @@
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403171701032.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172227396.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172227179.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172229005.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172231696.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401260031849.png">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401260031361.png">
 <meta property="article:published_time" content="2024-01-25T14:11:25.000Z">
-<meta property="article:modified_time" content="2024-03-17T14:28:00.028Z">
+<meta property="article:modified_time" content="2024-03-17T14:31:36.329Z">
 <meta property="article:author" content="Ysc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403171659904.png">
@@ -237,7 +239,7 @@
         
         
         
-          18 分钟
+          19 分钟
         
       </span>
     
@@ -315,6 +317,13 @@
 <p><strong>用来连接上述类型的连接器被称之为FFC&#x2F;FPC连接器</strong>，形状如下所示：</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172227396.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172227179.png" srcset="/img/loading.gif" lazyload></p>
+<p>一般的显示模块都是使用两种连接器：</p>
+<ul>
+<li>一个就是上述的FFC&#x2F;FPC连接器</li>
+<li>第二个就是一般的插座</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172229005.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403172231696.png" srcset="/img/loading.gif" lazyload></p>
 <h1 id="stm32和液晶显示器的共同使用"><a href="#stm32和液晶显示器的共同使用" class="headerlink" title="stm32和液晶显示器的共同使用"></a>stm32和液晶显示器的共同使用</h1><p>实际上市面上的液晶显示器都需要芯片来进行管理和控制。在野火平台上则是使用<code>ILI9806G</code>液晶控制器来进行控制。我们通过控制stm32和液晶控制器进行通信来达到控制显示器的目的。</p>
 <p><code>ILI9806G</code>在这个液晶控制器中, 默认使用8080时序来通信, stm32可以通过FSMC中的不同的模式来模仿8080时序，以达到通信的目的。</p>
 <h1 id="编程相关"><a href="#编程相关" class="headerlink" title="编程相关"></a>编程相关</h1><p>首先我们需要通过<strong>FSMC</strong>来模仿<code>ILI9806G</code>芯片的时序。stm32中的FSMC时序结构体如下：</p>
