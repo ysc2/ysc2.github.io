@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>小米手机折腾日记</title>
+    <link href="/2024/06/22/%E5%B0%8F%E7%B1%B3%E6%89%8B%E6%9C%BA%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/"/>
+    <url>/2024/06/22/%E5%B0%8F%E7%B1%B3%E6%89%8B%E6%9C%BA%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/</url>
+    
+    <content type="html"><![CDATA[<p>记载一下小米手机折腾的过程，希望对大家有所帮助。</p><span id="more"></span><h2 id="小米手机折腾记录"><a href="#小米手机折腾记录" class="headerlink" title="小米手机折腾记录"></a>小米手机折腾记录</h2><p>最近买了一部极具性价比的手机，红米 Note 12 Turbo，又回到了 Android 的大阵营，在这儿记录一下折腾的过程。</p><h2 id="刷欧版-MIUI"><a href="#刷欧版-MIUI" class="headerlink" title="刷欧版 MIUI"></a>刷欧版 MIUI</h2><p>放弃国行版 MIUI 的原因是，从 MIUI 13 开始，有传闻内置了系统级的反诈，我并不希望自己的手机成为监控的工具。并且在国行版 ROM 中，不少系统 App 带牛皮藓广告，就算关掉了，下回更新系统还是会加回来。相比之下，国外版本的 ROM 会相对更遵守 Android 的规范，也没了广告，系统相对干净。</p><p>小米手机在刷机前，需要先解锁 Bootloader（俗称解 BL 锁）。一般需要插 SIM 卡并登小米账号，等上 7 天（等过 7 天无理由退货期），下载小米官方的 <a href="https://www.miui.com/unlock/index.html"><strong>手机解锁工具</strong></a> 即可解锁。</p><p>为了方便且能够在手机上持续 OTA 更新，我选择的是线刷欧版 EEA（官方版）的 ROM，可以在 <a href="https://xiaomirom.com/"><strong>XiaomiROM.com</strong></a> 上找到你的机型对应的 ROM 的官方下载链接。如果不想系统里有内置不可卸载的谷歌全家桶，可以尝试欧版 EU（民间版），在 <a href="https://sourceforge.net/projects/xiaomi-eu-multilang-miui-roms/files/xiaomi.eu/"><strong>SourceForge</strong></a> 上可以找到。</p><p>刷机一般用线刷的方式（即连数据线到电脑，用刷机工具把 ROM 刷到手机上）。首先需要下载小米官方的 <a href="https://miuiver.com/miflash/"><strong>线刷工具 MiFlash</strong></a>。需要注意的是，MiFlash 仅支持小米官方 ROM 固件。</p><p>线刷的具体步骤，可参考 <a href="https://miuiver.com/how-to-flash-xiaomi-phone/"><strong>小米手机线刷方式刷机指南</strong></a>。如果在刷机过程中遇到错误信息，可参考 <a href="https://miuiver.com/miflash-problem-list/"><strong>小米线刷报错问题及解决方法</strong></a>。刷机前注意先备份，参考 <a href="https://miuiver.com/mi-phone-data-backup/"><strong>小米手机数据备份和还原方法</strong></a>；刷机的时候，尽量用原装数据线，连接电脑 USB2.0 的接口，ROM 的路径也不要带中文。</p><h2 id="使用-Magisk-获取-Root-权限"><a href="#使用-Magisk-获取-Root-权限" class="headerlink" title="使用 Magisk 获取 Root 权限"></a>使用 Magisk 获取 Root 权限</h2><p>Magisk 是一个强大的 Android 底层自定义工具，可以用来获取 Root 权限，并授权给各种功能模块，也有隐藏自身 Root 状态的功能，防止一些 App 提示系统不安全。</p><p>安装 Magisk 的具体教程可参考 <a href="https://magiskcn.com/"><strong>小米手机安装面具教程（Xiaomi 手机获取 root 权限）</strong></a>。</p><p>刷入 Magisk 并获取 Root 权限后，有以下的玩法可以尝试：</p><ul><li><a href="https://magiskcn.com/lsposed-install">LSPosed 安装教程（LSP 框架安装教程）</a></li><li><a href="https://yzddmr6.com/posts/save-my-miui-system/">MIUI 系统拯救计划</a></li><li><a href="https://miuiver.com/magisk-installation-shamiko/">Magisk 安装 Shamiko 模块对软件隐藏 Root</a></li><li><a href="https://miuiver.com/remove-built-in-software/">小米手机卸载谷歌全家桶软件方法</a></li></ul><h2 id="参考与致谢"><a href="#参考与致谢" class="headerlink" title="参考与致谢"></a>参考与致谢</h2><ul><li><a href="https://www.miui.com/unlock/index.html">解锁小米手机</a></li><li><a href="https://xiaomirom.com/">XiaomiROM.com</a></li><li><a href="https://sourceforge.net/projects/xiaomi-eu-multilang-miui-roms/files/xiaomi.eu/">Xiaomi.eu Multilang MIUI ROMs Files</a></li><li><a href="https://xiaomirom.com/download-xiaomi-flash-tool-miflash/">下载官方小米刷机工具 MiFlash，含小米刷机教程步骤</a></li><li><a href="https://miuiver.com/miflash/">MiFlash 线刷工具下载合集</a></li><li><a href="https://miuiver.com/add-fastboot-and-adb-environment-variables/">Windows 配置 fastboot 和 adb 命令环境变量</a></li></ul><blockquote><p>原文地址：<a href="https://wiki-power.com/">https://wiki-power.com/</a><br>本篇文章受 <a href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议保护，转载请注明出处。</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>杂项</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>转载</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>搭建自己的HomeLab</title>
     <link href="/2024/06/22/%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84HomeLab/"/>
     <url>/2024/06/22/%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84HomeLab/</url>
