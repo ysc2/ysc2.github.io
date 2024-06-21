@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言在FreeRTOS中，信号量是使用队列来实现的。我们后面会看到所有的信号量的相关函数都是对于队列函数的封装。 信号量的分类在FreeRTOS中有四种信号量：  二值信号量 互斥信号量 递归信号量 计数信号量  每一种信号量都有其使用的范围。 二值信号量其实就是Linux中的二元信号量，在FreeRTOS中又称之为二进制信号量。在概念上，可以将二进制信号量理解为一个长度为一的队列。该队列可以在任">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FreeRTOS-5-信号量">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/18/FreeRTOS-5-%E4%BF%A1%E5%8F%B7%E9%87%8F/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="前言在FreeRTOS中，信号量是使用队列来实现的。我们后面会看到所有的信号量的相关函数都是对于队列函数的封装。 信号量的分类在FreeRTOS中有四种信号量：  二值信号量 互斥信号量 递归信号量 计数信号量  每一种信号量都有其使用的范围。 二值信号量其实就是Linux中的二元信号量，在FreeRTOS中又称之为二进制信号量。在概念上，可以将二进制信号量理解为一个长度为一的队列。该队列可以在任">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401190043654.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230106515.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230106317.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230142097.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230141347.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230144902.png">
+<meta property="article:published_time" content="2024-01-18T13:04:45.000Z">
+<meta property="article:modified_time" content="2024-02-18T17:30:08.581Z">
+<meta property="article:author" content="Ysc">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401190043654.png">
+  
+  
+  
+  <title>FreeRTOS-5-信号量 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="FreeRTOS-5-信号量"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-18 21:04" pubdate>
+          2024年1月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">FreeRTOS-5-信号量</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在FreeRTOS中，信号量是使用队列来实现的。我们后面会看到所有的信号量的相关函数都是对于队列函数的封装。</p>
+<h1 id="信号量的分类"><a href="#信号量的分类" class="headerlink" title="信号量的分类"></a>信号量的分类</h1><p>在FreeRTOS中有四种信号量：</p>
+<ul>
+<li>二值信号量</li>
+<li>互斥信号量</li>
+<li>递归信号量</li>
+<li>计数信号量</li>
+</ul>
+<p>每一种信号量都有其使用的范围。</p>
+<h2 id="二值信号量"><a href="#二值信号量" class="headerlink" title="二值信号量"></a>二值信号量</h2><p>其实就是Linux中的二元信号量，在FreeRTOS中又称之为二进制信号量。在概念上，可以将二进制信号量理解为一个长度为一的队列。该队列可以在任何时候都最多包含一个项，所以总是要么是空的，要么是满的（hence, binary）。</p>
+<p><strong>二值信号量和互斥信号量十分相似，但是二值信号量具有优先级的继承功能，而互斥信号量没有。</strong>所以二值信号量常常用于任务于任务或者是任务与中断之间的同步；而互斥信号量则用作对临界区访问的保护。</p>
+<h2 id="计数信号量"><a href="#计数信号量" class="headerlink" title="计数信号量"></a>计数信号量</h2><p>二进制信号量可以看作长度为1的队列，而计数信号量则可以看作长度大于1的队列，信号量使用者依然不必关心存储在队列中的消息，只需要关心队列中是否有消息即可。</p>
+<p>在实际使用中，我们常将计数信号量用于<strong>事件计数与资源管理</strong>。每当某个事件发生时，任务或者中断将释放一个信号量（信号量计数值加1），当事件被处理时（一般在任务中处理），处理任务会取走该信号量（信号量计数值减1）。信号量的计数值表示还有多少个事件未被处理。此外，系统中还有很多资源，我们也可以使用计数信号量进行资源管理。信号量的计数值表示系统中可用的资源数目，任务必须先获取到信号量才能获取资源访问权，当信号量的计数值为0时，表示系统没有可用的资源，但是要注意，在使用完资源时必须归还信号量，否则当计数值为0时，任务就无法访问该资源了。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401190043654.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="递归信号量"><a href="#递归信号量" class="headerlink" title="递归信号量"></a>递归信号量</h2><p>这个信号量的不同在于，其他信号量都是只能够读或者不读二选一。但是递归信号量可以多次读取。</p>
+<p>按照信号量的特性，每获取一次，可用信号量个数就会减少一个，但是递归则不然，已经获取递归互斥量的任务可以重复获取该递归互斥量，该任务拥有递归信号量的所有权。<strong>任务成功获取几次递归互斥量，就要返还几次</strong>，在此之前，递归互斥量都处于无效状态，其他任务无法获取，只有持有递归信号量的任务才能获取与释放。</p>
+<h2 id="互斥信号量"><a href="#互斥信号量" class="headerlink" title="互斥信号量"></a>互斥信号量</h2><p><strong>互斥信号量无法在中断中使用</strong>。其他几个都可以。</p>
+<p>互斥信号量其实是特殊的二值信号量，其特有的优先级继承机制使它更适用于简单互锁，也就是保护临界资源（关于优先级继承将在后文中详细讲解）。用作互斥时，信号量创建后可用信号量个数应该是满的，任务在需要使用临界资源（临界资源是指任何时刻只能被一个任务访问的资源）时，先获取互斥信号量，使其为空，这样其他任务需要使用临界资源时就会因为无法获取信号量而进入阻塞，从而保证了临界资源的安全。</p>
+<h1 id="信号控制块"><a href="#信号控制块" class="headerlink" title="信号控制块"></a>信号控制块</h1><p>信号量的API函数实际上都是宏，使用现有的队列机制，这些宏在semphr.h文件中定义，如果使用信号量或者互斥量，则需要包含semphr.h头文件，所以<strong>FreeRTOS的信号量控制块结构体与消息队列结构体是一样的，只不过结构体中某些成员变量代表的含义不同。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-number">1</span> typedefstruct QueueDefinition &#123;<br> <span class="hljs-number">2</span>     <span class="hljs-type">int8_t</span> *pcHead;<br> <span class="hljs-number">3</span>     <span class="hljs-type">int8_t</span> *pcTail;<br> <span class="hljs-number">4</span>     <span class="hljs-type">int8_t</span> *pcWriteTo;<br> <span class="hljs-number">5</span><br> <span class="hljs-number">6</span>     <span class="hljs-class"><span class="hljs-keyword">union</span> &#123;</span><br> <span class="hljs-number">7</span>         <span class="hljs-type">int8_t</span> *pcReadFrom;<br> <span class="hljs-number">8</span>         UBaseType_t uxRecursiveCallCount;<br> <span class="hljs-number">9</span>     &#125; u;<br><span class="hljs-number">10</span><br><span class="hljs-number">11</span>     List_t xTasksWaitingToSend;<br><span class="hljs-number">12</span>     List_t xTasksWaitingToReceive;<br><span class="hljs-number">13</span><br><span class="hljs-number">14</span>     <span class="hljs-keyword">volatile</span> UBaseType_t uxMessagesWaiting;(<span class="hljs-number">1</span>)<br><span class="hljs-number">15</span>     UBaseType_t uxLength;(<span class="hljs-number">2</span>)<br><span class="hljs-number">16</span>     UBaseType_t uxItemSize;(<span class="hljs-number">3</span>)<br><span class="hljs-number">17</span><br><span class="hljs-number">18</span>     <span class="hljs-keyword">volatile</span> <span class="hljs-type">int8_t</span> cRxLock;<br><span class="hljs-number">19</span>     <span class="hljs-keyword">volatile</span> <span class="hljs-type">int8_t</span> cTxLock;<br><span class="hljs-number">20</span><br><span class="hljs-number">21</span> <span class="hljs-meta">#<span class="hljs-keyword">if</span>( ( configSUPPORT_STATIC_ALLOCATION == 1 )</span><br><span class="hljs-number">22</span>     &amp;&amp; ( configSUPPORT_DYNAMIC_ALLOCATION == <span class="hljs-number">1</span> ) )<br><span class="hljs-number">23</span>     <span class="hljs-type">uint8_t</span> ucStaticallyAllocated;<br><span class="hljs-number">24</span> <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-number">25</span><br><span class="hljs-number">26</span> <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_QUEUE_SETS == 1 )</span><br><span class="hljs-number">27</span>     <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">QueueDefinition</span> *<span class="hljs-title">pxQueueSetContainer</span>;</span><br><span class="hljs-number">28</span> <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-number">29</span><br><span class="hljs-number">30</span> <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_TRACE_FACILITY == 1 )</span><br><span class="hljs-number">31</span>             UBaseType_t uxQueueNumber;<br><span class="hljs-number">32</span>             <span class="hljs-type">uint8_t</span> ucQueueType;<br><span class="hljs-number">33</span> <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-number">34</span><br><span class="hljs-number">35</span>         &#125; xQUEUE;<br><span class="hljs-number">36</span><br><span class="hljs-number">37</span> <span class="hljs-keyword">typedef</span> xQUEUE Queue_t;<br></code></pre></td></tr></table></figure>
+
+<p>（1）：如果控制块结构体是用于<strong>消息队列</strong>，则<code>uxMessagesWaiting</code>用来记录当前消息队列的消息个数；</p>
+<p>如果控制块结构体被用于<strong>信号量</strong>时，则这个值表示有效信号量个数，有以下两种情况：   </p>
+<ul>
+<li>如果信号量是二值信号量、互斥信号量，这个值为1则表示有可用信号量，为0则表示没有可用信号量。</li>
+<li>如果是计数信号量，这个值表示可用的信号量个数，在创建计数信号量时会被初始化一个可用信号量个数<code>uxInitialCount</code>，最大不允许超过创建信号量的初始值<code>uxMaxCount</code>。</li>
+</ul>
+<p>（2）：如果控制块结构体是用于消息队列，则uxLength表示队列的长度，也就是能存放多少消息；</p>
+<p>如果控制块结构体被用于信号量时，则uxLength表示最大的信号量可用个数，会有以下两种情况：   </p>
+<ul>
+<li>如果信号量是二值信号量、互斥信号量，uxLength最大为1，因为信号量要么是有效的，要么是无效的。</li>
+<li>如果是计数信号量，这个值表示最大的信号量个数，在创建计数信号量时将由用户指定uxMaxCount。</li>
+</ul>
+<p>（3）：如果控制块结构体是用于消息队列，则uxItemSize表示单个消息的大小；</p>
+<p>如果控制块结构体被用于信号量时，则无须分配存储空间，为0即可。</p>
+<h1 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h1><p>创建、删除、发送数据（任务和中断两种）、接受数据（任务和中断两种）</p>
+<p>其中创建又有</p>
+<ul>
+<li>创建一个二元信号量</li>
+<li>创建一个计数信号量</li>
+<li>创建一个递归信号量</li>
+<li>创建一个</li>
+</ul>
+<h2 id="创建一个二元信号量"><a href="#创建一个二元信号量" class="headerlink" title="创建一个二元信号量"></a>创建一个二元信号量</h2><p>函数<code>xSemaphoreCreateBinary()</code>可以完成。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> xSemaphoreCreateBinary()    xQueueGenericCreate( ( UBaseType_t ) 1, semSEMAPHORE_QUEUE_ITEM_LENGTH, queueQUEUE_TYPE_BINARY_SEMAPHORE )</span><br><br></code></pre></td></tr></table></figure>
+<p>这个函数实际上是对于<code>xQueueGenericCreate()</code>函数封装，我们后面的创建信号量的函数都差不多。</p>
+<p>下面是创建的二元信号量<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230106515.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="创建一个计数信号量"><a href="#创建一个计数信号量" class="headerlink" title="创建一个计数信号量"></a>创建一个计数信号量</h2><p>创建计数信号量<code>xSemaphoreCreateCounting()</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> xSemaphoreCreateCounting( uxMaxCount, uxInitialCount )    xQueueCreateCountingSemaphore( ( uxMaxCount ), ( uxInitialCount ) )</span><br><br></code></pre></td></tr></table></figure>
+<p>这个函数也是对与其他队列函数的封装。在<code>xQueueCreateCountingSemaphore()</code>这个函数中也使用到了函数<code>xQueueGenericCreate()</code>。</p>
+<p>下面是创建的计数信号量<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230106317.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="其他两个信号量"><a href="#其他两个信号量" class="headerlink" title="其他两个信号量"></a>其他两个信号量</h2><p>互斥信号量（互斥量）和递归信号量会在下一篇文章中进行总结。</p>
+<h1 id="删除函数"><a href="#删除函数" class="headerlink" title="删除函数"></a>删除函数</h1><p><code>vSemaphoreDelete()</code>用于删除一个信号量，<strong>包括二值信号量、计数信号量、互斥量和递归互斥量。如果有任务阻塞在该信号量上，那么不要删除该信号量。</strong></p>
+<p>创建信号量需要多个不同的函数，但是删除信号量都是同一个函数。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230142097.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> vSemaphoreDelete( xSemaphore )    vQueueDelete( ( QueueHandle_t ) ( xSemaphore ) )</span><br></code></pre></td></tr></table></figure>
+
+<p>对于队列删除函数的封装。</p>
+<h1 id="信号量的释放"><a href="#信号量的释放" class="headerlink" title="信号量的释放"></a>信号量的释放</h1><p>这个信号量的释放实际上就是<strong>队列入队</strong>。所以这个函数应该要先于获取函数。</p>
+<p>与消息队列的操作一样，信号量的释放可以在任务、中断中使用，所以需要有不一样的API函数在不一样的上下文环境中调用。</p>
+<p>FreeRTOS提供了信号量释放函数，每调用一次该函数就释放一个信号量。但是有一个问题，能不能一直释放？很显然是不能的，无论是二值信号量还是计数信号量，都要注意可用信号量的范围，当用作二值信号量时，必须确保其可用值在0～1范围内；而如果用作计数信号量，其范围是由用户在创建时指定uxMaxCount，其最大可用信号量不允许超出uxMaxCount，这说明我们不能一直调用信号量释放函数来释放信号量，其实一直调用也是无法释放成功的，在写代码时要注意代码的严谨性。</p>
+<h2 id="在任务中使用的释放函数"><a href="#在任务中使用的释放函数" class="headerlink" title="在任务中使用的释放函数"></a>在任务中使用的释放函数</h2><p><code>xSemaphoreGive()</code>是一个用于释放信号量的宏，真正的实现过程是调用消息队列通用发送函数。<strong>就是入队</strong>。</p>
+<p>通过消息队列入队过程分析，我们可以将释放一个信号量的过程简化：如果信号量未满，控制块结构体成员uxMessageWaiting就会加1，然后判断是否有阻塞的任务，如果有就会恢复阻塞的任务，然后返回成功信息（pdPASS）；如果信号量已满，则返回错误代码（err_QUEUE_FULL）</p>
+<p>这个函数是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> xSemaphoreGive( xSemaphore )    xQueueGenericSend( ( QueueHandle_t ) ( xSemaphore ), NULL, semGIVE_BLOCK_TIME, queueSEND_TO_BACK )</span><br></code></pre></td></tr></table></figure>
+<p>对于队列发送函数的封装。</p>
+<h3 id="适用范围："><a href="#适用范围：" class="headerlink" title="适用范围："></a>适用范围：</h3><p>释放的信号量对象必须是已经被创建的，可以用于二值信号量、计数信号量、互斥量的释放，<strong>但不能释放由函数<code>xSemaphoreCreateRecursiveMutex()</code>创建的递归互斥量</strong>。此外，该函数不能在中断中使用。</p>
+<h2 id="在中断中使用释放函数"><a href="#在中断中使用释放函数" class="headerlink" title="在中断中使用释放函数"></a>在中断中使用释放函数</h2><p>适用于中断处理函数中。这个函数也是对于队列相关函数的包装：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> xSemaphoreGiveFromISR( xSemaphore, pxHigherPriorityTaskWoken )    xQueueGiveFromISR( ( QueueHandle_t ) ( xSemaphore ), ( pxHigherPriorityTaskWoken ) )</span><br></code></pre></td></tr></table></figure>
+<h3 id="使用范围"><a href="#使用范围" class="headerlink" title="使用范围"></a>使用范围</h3><p><code>xSemaphoreGiveFromISR()</code>用于释放一个信号量，带中断保护。被释放的信号量可以是<strong>二元信号量和计数信号量</strong>。和普通版本的释放信号量API函数有些许不同，<code>xSemaphoreGiveFromISR()</code>不能释放互斥量，这是因为互斥量不可以在中断中使用。互斥量的优先级继承机制只能在任务中起作用，而在中断中毫无意义。</p>
+<h1 id="信号量的获取函数"><a href="#信号量的获取函数" class="headerlink" title="信号量的获取函数"></a>信号量的获取函数</h1><p>同样的也是分为适用于任务中的和中断中的。其实就是出队列。</p>
+<h2 id="在任务中使用获取函数"><a href="#在任务中使用获取函数" class="headerlink" title="在任务中使用获取函数"></a>在任务中使用获取函数</h2><p>这个函数的定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> xSemaphoreTake( xSemaphore, xBlockTime )    xQueueSemaphoreTake( ( xSemaphore ), ( xBlockTime ) )</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230141347.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果有可用信号量，控制块结构体成员uxMessageWaiting就会减1，然后返回获取成功信息（pdPASS）；如果信号量无效并且阻塞时间为0，则返回错误代码（errQUEUE_EMPTY）；如果信号量无效并且用户指定了阻塞时间，则任务会因为等待信号量而进入阻塞状态，并被挂接到延时列表中。</p>
+<h3 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h3><p><code>xSemaphoreTake()</code>函数用于获取信号量，不带中断保护。获取的信号量对象可以是二值信号量、计数信号量和互斥量，但是递归互斥量并不能使用这个API函数获取。</p>
+<h2 id="在中断中使用获取函数"><a href="#在中断中使用获取函数" class="headerlink" title="在中断中使用获取函数"></a>在中断中使用获取函数</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401230144902.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="适用范围-1"><a href="#适用范围-1" class="headerlink" title="适用范围"></a>适用范围</h3><p>xSemaphoreTakeFromISR()是函数xSemaphoreTake()的中断版本，用于获取信号量，是一个不带阻塞机制获取信号量的函数，获取对象必须是已经创建的信号量，信号量类型可以是二值信号量和计数信号量。xSemaphoreTakeFromISR()与xSemaphoreTake()函数不同，它不能用于获取互斥量，因为互斥量不可以在中断中使用，并且互斥量特有的优先级继承机制只能在任务中起作用，而在中断中毫无意义。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>FreeRTOS-5-信号量</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/18/FreeRTOS-5-信号量/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/20/FreeRTOS-7-%E9%93%BE%E8%A1%A8/" title="FreeRTOS-7-链表">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">FreeRTOS-7-链表</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/16/FreeRTOS-4-%E8%BD%AF%E4%BB%B6%E5%AE%9A%E6%97%B6%E5%99%A8%E7%AE%A1%E7%90%86/" title="FreeRTOS-4-软件定时器管理">
+                        <span class="hidden-mobile">FreeRTOS-4-软件定时器管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

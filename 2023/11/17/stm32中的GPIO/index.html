@@ -1,0 +1,710 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="stm32中的八种输入、输出模式总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32中的GPIO">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/17/stm32%E4%B8%AD%E7%9A%84GPIO/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="stm32中的八种输入、输出模式总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/13cm_10_8.jpg">
+<meta property="article:published_time" content="2023-11-17T15:01:57.000Z">
+<meta property="article:modified_time" content="2024-03-16T08:59:26.182Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/13cm_10_8.jpg">
+  
+  
+  
+  <title>stm32中的GPIO - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/13cm_10_8.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="stm32中的GPIO"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-17 23:01" pubdate>
+          2023年11月17日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">stm32中的GPIO</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>stm32中的八种输入、输出模式总结</p>
+<span id="more"></span> 
+
+<h1 id="各GPIO输入输入模式"><a href="#各GPIO输入输入模式" class="headerlink" title="各GPIO输入输入模式"></a>各GPIO输入输入模式</h1><ol>
+<li>模拟输入：GPIO_Mode_AIN</li>
+<li>浮空输入：GPIO_Mode_IN_FLOATING</li>
+<li>上拉输入：GPIO_Mode_IPU</li>
+<li>下拉输入：GPIO_Mode_IPD</li>
+<li>推挽输出：GPIO_Mode_Out_PP</li>
+<li>开漏输出：GPIO_Mode_Out_OD</li>
+<li>复用推挽输出：GPIO_Mode_AF_OD</li>
+<li>复用开漏输出：GPIO_Mode_AF_OD</li>
+</ol>
+<hr>
+<h2 id="各个模式适用的情况："><a href="#各个模式适用的情况：" class="headerlink" title="各个模式适用的情况："></a>各个模式适用的情况：</h2><p><strong>模拟输入</strong>：关闭施密特触发器，将电压信号传送到片上外设模块（不接上下拉电阻）。<strong>应用ADC模拟输入，或者低功耗下省电。</strong></p>
+<p><strong>浮空输入</strong>：浮空输入状态下，IO的电平状态是不确定的，完全由外部输入决定，如果在该引脚悬空的情况下，读取该端口的电平是不确定的。<strong>可以做KEY识别，RX1。</strong></p>
+<p><strong>上拉输入、下拉输入</strong>：当GPIO引脚无输入时，上拉输入在默认状态下为高电平，下拉输入在默认状态下为低电平。电阻的作用：防止输入端悬空，减少外部电流对芯片的干扰，限流，增加高电平输出时的驱动能力。<strong>IO内部上拉电阻输入。</strong> <strong>IO内部下拉电阻输入。</strong> 当接在这个引脚的外部模块的默认输出高电平的话就是选择上拉输出，否则选择下拉输入。如果不确定外部模块默认是高电平还是低电平则选择<strong>浮空输入</strong>。一般选择上拉电平</p>
+<p><strong>推挽输出</strong>：想要输出高电平就输出高电平，想要输出低电平就输出低电平。<br>一般都是使用这个</p>
+<p><strong>开漏输出</strong>：输出端相当于三极管的集电极。要得到高电平状态需要上拉电阻才行。适合于做电流型的驱动，其<strong>吸收电流的能力相对较强</strong>，一般20mA以内。开漏输出是没有能力输出高电平驱动负载的。一般情况下开漏输出只可以输出低电平，要输出高电平则需要接上拉电阻。</p>
+<p><strong>复用开漏输出推挽输出模式</strong>：可以理解为GPIO口被用作第二功能时的配置情况，即并非作为通用IO口使用。片内外设功能，<strong>复用推挽输出：I2C的SCL、SDA。</strong>，<strong>复用开漏输出：片内外设功能，TX1，MOSI，MISO.SCK.SS。</strong><br>给片上外设使用的，其他情况下如GPIO则不需要使用这种复用模式。</p>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>在野火霸道中需要注意的是，当你直接配置好led灯的gpio后，这个led灯就会亮。这是因为，霸道的原理图中的led灯是低位点亮。而刚刚复位的gpio的数据输出寄存器的默认值就是0。所以会被点亮，想要关闭我们应该在led的配置函数中使用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_SetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//关闭led灯</span><br>GPIO_ResetBits(GPIOA,GPIO_Pin); <span class="hljs-comment">//开启led灯</span><br></code></pre></td></tr></table></figure>
+
+<p>关于<code>GPIO_SetBits()</code>这个函数是写<code>BSRR</code>这个寄存器，通过写1，对应的数据输出寄存器会被写为1</p>
+<p>关于<code>GPIO_ResetBits()</code>这个函数是写<code>BRR</code>寄存器，通过写1，对应的数据寄存器会被写为0。</p>
+<p>所以我们可以知道，在霸道V2中如果想要打开led灯，则需要使用<code>GPIO_ResetBits</code>函数。想要关闭则使用另一个函数。当然我们也可以使用<code>GPIO_WriteBit()</code>来写<code>BRR</code>和<code>BSRR</code>两个寄存器。</p>
+<h1 id="stm32f4xx系列中的GPIO编程"><a href="#stm32f4xx系列中的GPIO编程" class="headerlink" title="stm32f4xx系列中的GPIO编程"></a>stm32f4xx系列中的GPIO编程</h1><p><code>f4</code>系列的GPIO编程将原来的GPIO口给拆开了，提高了灵活性。</p>
+<p><strong>GP &#x3D; 通用、PP &#x3D; 推挽、PU &#x3D; 上拉、PD &#x3D; 下拉、OD &#x3D; 开漏、AF &#x3D; 复用功能。</strong></p>
+<p><strong>推挽输出和开漏输出的区别就是，前者可以输出高电平和低电平；但是后者只可以输出低电平，如果想要输出高电平的话需要外接一个上拉电阻。其中模拟接口是对于ADC或者是DAC来使用的</strong></p>
+<p>可配置多达 16 个 I&#x2F;O。GPIOx_MODER 寄存器用于选择 I&#x2F;O 方向（输入、输出、AF(就是复用)、模拟）。GPIOx_OTYPER 和 GPIOx_OSPEEDR 寄存器分别用于选择输出类型（推挽或开漏）和速度 (无论采用哪种 I&#x2F;O 方向，都会直接将 I&#x2F;O 速度引脚连接到相应的 GPIOx_OSPEEDR 寄存器位)。无论采用哪种 I&#x2F;O 方向，GPIOx_PUPDR 寄存器都用于选择上拉&#x2F;下拉。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">uint16_t</span> GPIO_Pin;    <span class="hljs-comment">/* 选择要配置的GPIO引脚 */</span><br>    <span class="hljs-type">uint8_t</span>  GPIO_Mode;   <span class="hljs-comment">/* 选择GPIO引脚的工作模式 */</span><br>    <span class="hljs-type">uint8_t</span>  GPIO_Speed;   <span class="hljs-comment">/* 选择GPIO引脚的速率 */</span><br>    <span class="hljs-type">uint8_t</span>  GPIO_OType;  <span class="hljs-comment">/* 选择GPIO引脚输出类型 */</span><br>    <span class="hljs-type">uint8_t</span>  GPIO_PuPd;   <span class="hljs-comment">/* &lt;选择GPIO引脚的上/下拉模式 */</span><br>&#125; GPIO_InitTypeDef;<br><br><span class="hljs-comment">//其中：</span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* GPIO端口配置模式的枚举定义</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>    GPIO_Mode_IN   = <span class="hljs-number">0x00</span>, <span class="hljs-comment">/*!&lt; 输入模式 */</span><br>    GPIO_Mode_OUT  = <span class="hljs-number">0x01</span>, <span class="hljs-comment">/*!&lt; 输出模式 */</span><br>    GPIO_Mode_AF   = <span class="hljs-number">0x02</span>, <span class="hljs-comment">/*!&lt; 复用模式 */</span><br>    GPIO_Mode_AN   = <span class="hljs-number">0x03</span>  <span class="hljs-comment">/*!&lt; 模拟模式 */</span><br>&#125; GPIOMode_TypeDef;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* GPIO输出类型枚举定义</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>    GPIO_OType_PP = <span class="hljs-number">0x00</span>,   <span class="hljs-comment">/*!&lt; 推挽模式 */</span><br>    GPIO_OType_OD = <span class="hljs-number">0x01</span>    <span class="hljs-comment">/*!&lt; 开漏模式 */</span><br>&#125; GPIOOType_TypeDef;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* GPIO输出速率枚举定义</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>    GPIO_Speed_2MHz   = <span class="hljs-number">0x00</span>, <span class="hljs-comment">/*!&lt; 2MHz   */</span><br>    GPIO_Speed_25MHz  = <span class="hljs-number">0x01</span>, <span class="hljs-comment">/*!&lt; 25MHz  */</span><br>    GPIO_Speed_50MHz  = <span class="hljs-number">0x02</span>, <span class="hljs-comment">/*!&lt; 50MHz  */</span><br>    GPIO_Speed_100MHz = <span class="hljs-number">0x03</span>  <span class="hljs-comment">/*!&lt;100MHz  */</span><br>&#125; GPIOSpeed_TypeDef;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">*GPIO上/下拉配置枚举定义</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>    GPIO_PuPd_NOPULL = <span class="hljs-number">0x00</span>,<span class="hljs-comment">/*浮空*/</span><br>    GPIO_PuPd_UP     = <span class="hljs-number">0x01</span>, <span class="hljs-comment">/*上拉*/</span><br>    GPIO_PuPd_DOWN   = <span class="hljs-number">0x02</span>  <span class="hljs-comment">/*下拉*/</span><br>&#125; GPIOPuPd_TypeDef;<br></code></pre></td></tr></table></figure>
+
+<h1 id="映射和复用的关系"><a href="#映射和复用的关系" class="headerlink" title="映射和复用的关系"></a>映射和复用的关系</h1><p>在<code>stm32f1</code>系列中，有复用和重新映射的区别：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403161657937.png" srcset="/img/loading.gif" lazyload></p>
+<p>在<code>stm32f4</code>系列中，有复用和附加功能的区别：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403102254811.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>Additionalfunctions</code>：附加，辅助功能，引脚被连接到其他模块使用，使用时直接普通配置即可，例如ADC的采用输入通道，配置为模拟输入。</p>
+<p><code>Alternate functions</code>:复用功能，即将IO口用作普通输入输出以外的功能，例如串口输入输出，使用时需要配置复用模式。</p>
+<h2 id="在编程上的区别"><a href="#在编程上的区别" class="headerlink" title="在编程上的区别"></a>在编程上的区别</h2><p>实际上，在<code>f1</code>系列芯片中有重映射，但是在<code>f4</code>系列中是没有重映射的，取而代之的是<strong>附加功能</strong>。</p>
+<p>与<code>f1</code>系列在GPIO中最大的不同就是这个复用功能。F1系列有默认复用，F4没有默认复用，所以F4在配置复用功能时需要给Alternate变量赋值，F1没有这个变量。</p>
+<p>在<code>f4</code>中，每组I&#x2F;O口都对应着一个<strong>复用器</strong>，如GPIOA对应着一个复用器、GPIOB对应着一个复用器……每个复用器分为两部分，如GPIOA对应的复用器分为GPIOA_AFRL、GPIOA_AFRH两部分，其中GPIOx_AFRL负责低8位引脚，即PA0 ~ PA7；而GPIOx_AFRH负责高8位引脚，即PA8 ~ PA15。<strong>不是所有的PA引脚都有复用功能，具体的可以去数据手册中查看。</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403161646849.png" srcset="/img/loading.gif" lazyload></p>
+<p>上面这个图就是GPIOA所连接的复用器，这个图标需要和标准库中的函数<code>void GPIO_PinAFConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinSource, uint8_t GPIO_AF)</code>有关系：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">GPIO_PinAFConfig</span><span class="hljs-params">(GPIO_TypeDef* GPIOx, <span class="hljs-type">uint16_t</span> GPIO_PinSource, <span class="hljs-type">uint8_t</span> GPIO_AF)</span><br><br><span class="hljs-comment">//引脚复用函数，将前两个参数提供的引脚复用至GPIO_AF，这个GPIO_AF的选择就是通过上面这个表来的。</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403161639032.png" srcset="/img/loading.gif" lazyload></p>
+<p>复用上：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-number">1.</span> 打开GPIO外设的时钟，如 <br>RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);<br><span class="hljs-number">2.</span> 打开复用外设的时钟，如<br>RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);<br><span class="hljs-number">3.</span> 使用复用器函数，如<br><span class="hljs-type">void</span> <span class="hljs-title function_">GPIO_PinAFConfig</span><span class="hljs-params">(GPIO_TypeDef* GPIOx, <span class="hljs-type">uint16_t</span> GPIO_PinSource, <span class="hljs-type">uint8_t</span> GPIO_AF)</span><br><br></code></pre></td></tr></table></figure>
+
+<p>附加功能上（就是f1系列的重映射）：</p>
+<p>附加功能配置，可以从手册中看到，附加功能几乎是ADC或是DAC，在使用对应引脚时只需要将引脚模式设置为GPIO_MODE_ANALOG模拟即可，不需要设置Alternate复用变量，还有对应外设的初始化即可。</p>
+<p><strong>也就是说，f4系列的附加功能的使用就是将<code>GPIO</code>的方向改为模拟</strong>。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15315240/3229581">https://blog.51cto.com/u_15315240/3229581</a></p>
+<p><a target="_blank" rel="noopener" href="http://news.eeworld.com.cn/mcu/ic557652.html?ipcity__1865=CqfxR7D=PxuDlxGgx+Oewnq0KDtGCb98eD&alichlgref=http://news.eeworld.com.cn/mcu/ic557652.html">http://news.eeworld.com.cn/mcu/ic557652.html?ipcity__1865=CqfxR7D%3DPxuDlxGgx%2BOewnq0KDtGCb98eD&amp;alichlgref=http%3A%2F%2Fnews.eeworld.com.cn%2Fmcu%2Fic557652.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/plmm__/article/details/132045377?spm=1001.2014.3001.5502">https://blog.csdn.net/plmm__/article/details/132045377?spm=1001.2014.3001.5502</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/plmm__/article/details/132045377?spm=1001.2014.3001.5502">https://blog.csdn.net/plmm__/article/details/132045377?spm=1001.2014.3001.5502</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/stm32/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>stm32中的GPIO</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/17/stm32中的GPIO/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/20/stm32%E4%B8%AD%E4%B8%89%E7%A7%8D%E5%BB%B6%E6%97%B6%E5%87%BD%E6%95%B0/" title="stm32中三种延时函数">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">stm32中三种延时函数</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/17/RCC%E7%9A%84%E4%BD%9C%E7%94%A8/" title="RCC片上外设">
+                        <span class="hidden-mobile">RCC片上外设</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

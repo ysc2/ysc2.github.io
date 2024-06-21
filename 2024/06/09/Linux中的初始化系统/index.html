@@ -1,0 +1,1237 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结常见的 Linux 系统的初始化系统，包括 sysvinit、UpStart、systemd。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中的初始化系统">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/06/09/Linux%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="总结常见的 Linux 系统的初始化系统，包括 sysvinit、UpStart、systemd。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wekvmp.jpg">
+<meta property="article:published_time" content="2024-06-09T15:29:36.000Z">
+<meta property="article:modified_time" content="2024-06-16T15:31:03.335Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wekvmp.jpg">
+  
+  
+  
+  <title>Linux中的初始化系统 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wekvmp.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux中的初始化系统"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-09 23:29" pubdate>
+          2024年6月9日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          27k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          222 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux中的初始化系统</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结常见的 Linux 系统的初始化系统，包括 sysvinit、UpStart、systemd。</p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 Linux 系统中，具有多种多样的初始化系统(init system)，它们的主要作用是在 Linux 系统初始化的时候进行工作。本文将介绍三个主要的Init系统：sysvinit、UpStart、systemd。</p>
+<p>首先，我们需要知道 Linux 系统的启动过程。</p>
+<h1 id="Linux系统启动过程"><a href="#Linux系统启动过程" class="headerlink" title="Linux系统启动过程"></a>Linux系统启动过程</h1><p>什么是Init(initial:原始，初始，开始)系统，init系统的历史和现状</p>
+<p>Linux操作系统的启动首先从<code>BIOS</code>开始，接下来进入<code>boot loader</code>，由<code>boot loader</code>载入系统内核，进行内核的初始化。内核初始化的最后一步就是启动<code>pid</code>为1 的<code>init</code>进程。这个进程是系统的第一个进程，它负责产生其它所有用户进程。</p>
+<p><code>init</code>进程以守护进程方式存在，是所有其它进程的祖先，<code>init</code>进程非常独特，能够完成其它进程无法完成的任务。<code>Init</code>系统能够定义、管理和控制<code>init</code>进程的行为，它负载组织和运行许多独立的或相关的初始化工作(因此被称为init系统)，从而让计算机系统进入某种用户预定的运行模式。</p>
+<p>仅仅将内核运行起来是毫无实际用途的，必须由init系统将系统带入可以操作状态。比如启动壳shell之后，便有了人机交互的可能，这样就可以让计算机执行一些预定程序完成有实际意义的任务，或者启动X图形系统以便提供更佳的人机界面，更加高效的完成任务，这里字符界面的shell 或者 X系统都是一种预设的运行模式。</p>
+<h1 id="Sysvinit"><a href="#Sysvinit" class="headerlink" title="Sysvinit"></a>Sysvinit</h1><p>大多数<code>Linux</code>发行版的<code>init</code>系统是和<code>System V</code>相兼容的，被称为<code>sysvinit</code>。这是人们最熟悉的init系统。一些发行版如<code>Slackware</code>采用的是<code>BSD</code>风格的<code>Init</code>系统,这种风格使用较少，本文不涉及，其它的发行版如果Gentoo是自己定制的。<code>Ubuntu</code> 和 <code>RHEL</code> 采用<code>upstart</code>替代了传统的<code>sysvinit</code>。而<code>Fedora</code>从版本15开始使用了一个被称为<code>systemd</code>的新<code>init</code>系统.</p>
+<p>可以看到不同的发行版采用了不同的init实现，本系列文章打算讲述三个主要的Init系统： sysvinit、UpStart、systemd。了解他们各自的涉及特定，并简要介绍它们的使用。</p>
+<p>sysvinit 就是system V风格的init系统，顾名思义，它源于System V系列UNIX。它提供了比BSD风格init系统更搞高的灵活性，是已经风行了几十年的UNIX init系统，一直被各类Linux发行版所采用。</p>
+<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a><strong>运行级别</strong></h2><p>Sysvinit 用术语 runlevel 来定义“预定的运行模式”。Sysvinit 检查<code>/etc/inittab</code> 文件中是否含有<code>initdefault</code>项。这告诉init系统是否有一个默认运行模式。如果没有默认的运行模式，那么用户将进入系统控制台，手动决定进入何种运行模式。sysvinit中运行模式描述了系统各种预定的运行模式，通常会有8中运行模式，即运行模式0到6和S或者 s。</p>
+<p>每种Linux发行版对运行模式的定义都不太一样，但是 0，1，6却得到了大家的一直赞同：</p>
+<ul>
+<li>0 关机</li>
+<li>1 单用户模式</li>
+<li>6 重启</li>
+</ul>
+<p>通常在 <code>/etc/inittab</code> 文件中定义了各种运行模式的工作范围。比如 <code>RedHat</code> 定义了 <code>runlevel 3</code> 和5。运行模式3 将系统初始化为字符界面的shell模式；运行模式5将系统初始化为GUI模式。无论是 命令行界面 还是 GUI ，运行模式3和5相对于其它运行模式而言都是完整的正式的运行状态，计算机可以完成用户需要的任务。而模式1，S等往往用于系统故障之后的排错和恢复。</p>
+<p>很显然，这些不同的运行模式下系统需要初始化运行的进程和需要进行的初始化准备都是不同的。比如 运行模式3 不需要启动X系统。用户只需要指定需要进入哪中模式，sysvinit将负责执行所有该模式所必须的初始化工作。</p>
+<h2 id="sysvinit运行顺序"><a href="#sysvinit运行顺序" class="headerlink" title="sysvinit运行顺序"></a><strong>sysvinit运行顺序</strong></h2><p>Sysvinit 巧妙的用脚本，文件命名规则和软连接来实现不同的runlevel。首先，sysvinit需要读取&#x2F;etc&#x2F;inittab文件。分析这个文件的内容，它获得一下一些配置信息：</p>
+<ul>
+<li>系统需要进入的runlevel</li>
+<li>捕获组合键的定义</li>
+<li>定义电源 fail&#x2F;restore脚本</li>
+<li>启动getty和虚拟控制台</li>
+</ul>
+<p>得到配置信息后，sysvinit顺序执行一下这些步骤，从而将系统初始化为预定的runlevel X。</p>
+<ul>
+<li>&#x2F;etc&#x2F;rc.d&#x2F;rc.sysinit</li>
+<li>&#x2F;etc&#x2F;rc.d&#x2F;rc和&#x2F;etc&#x2F;rc.d&#x2F;rcX.d (X 代表运行级别0-6)</li>
+<li>&#x2F;etc&#x2F;rc.d&#x2F;rc.local</li>
+<li>X Display Manger(如果需要的话)</li>
+</ul>
+<p>首先，运行rc.sysinit 以便执行一些重要的系统初始任务。在RedHat公司的RHEL5中(RHEL6 已经开始使用upstart了)，rc.sysinit主要完成一下这些工作。</p>
+<ul>
+<li>激活udev和selinux</li>
+<li>设置定义在&#x2F;etc&#x2F;sysctl.conf中的内核参数</li>
+<li>设置系统时钟</li>
+<li>加载keymaps</li>
+<li>使能交换分区</li>
+<li>设置主机名(hostname)</li>
+<li>根分区检查和remount</li>
+<li>激活RAID和LVM设备</li>
+<li>开启磁盘配额</li>
+<li>检查并挂载所有文件系统</li>
+<li>清楚过期的locks和PID文件</li>
+</ul>
+<p>完成以上这些工作之后，sysvinit开始运行&#x2F;etc&#x2F;rc.d&#x2F;rc脚本。根据不同的runlevel，rc脚本将打开对应该runlevel的rcX.d目录(X 就是runlevel),找到并运行存放在该目录下的所有启动脚本。每个runlevel X都有一个这样的目录，目录名为&#x2F;etc&#x2F;rc.d&#x2F;rcX.d。</p>
+<p>这些目录下存放着很多不同的脚本。文件名以S开头的脚本就是启动时应该运行的脚本，S后面跟的数字定义了这些脚本的执行顺序。在&#x2F;etc&#x2F;rc.d&#x2F;rcX.d 目录下的脚本其实就是一些软链接文件，真实的脚本文件存放在&#x2F;etc&#x2F;init.d目录下。如下所示:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@li1556-65 rc.d]<span class="hljs-comment"># ls</span><br>init.d  rc  rc0.d  rc1.d  rc2.d  rc3.d  rc4.d  rc5.d  rc6.d  rc.local  rc.sysinit<br>[root@li1556-65 rc.d]<span class="hljs-comment"># cd rc3.d/</span><br>[root@li1556-65 rc3.d]<span class="hljs-comment"># ls</span><br>K10saslauthd   K75ntpdate      K89rdisc     S08ip6tables  S11auditd   S25netfs      S55sshd  S80sendmail  S99local<br>K50netconsole  K87restorecond  K92iptables  S10network    S12rsyslog  S26udev-post  S58ntpd  S90crond<br>[root@li1556-65 rc3.d]<span class="hljs-comment"># ll</span><br>total 0<br>lrwxrwxrwx 1 root root 19 Mar  9  2014 K10saslauthd -&gt; ../init.d/saslauthd<br>lrwxrwxrwx 1 root root 20 Mar  9  2014 K50netconsole -&gt; ../init.d/netconsole<br>lrwxrwxrwx 1 root root 17 Apr 14  2017 K75ntpdate -&gt; ../init.d/ntpdate<br>lrwxrwxrwx 1 root root 21 Mar  9  2014 K87restorecond -&gt; ../init.d/restorecond<br>lrwxrwxrwx 1 root root 15 Mar  9  2014 K89rdisc -&gt; ../init.d/rdisc<br>lrwxrwxrwx 1 root root 18 Dec  9  2016 K92iptables -&gt; ../init.d/iptables<br>lrwxrwxrwx 1 root root 19 Mar  9  2014 S08ip6tables -&gt; ../init.d/ip6tables<br>lrwxrwxrwx 1 root root 17 Mar  9  2014 S10network -&gt; ../init.d/network<br>lrwxrwxrwx 1 root root 16 Mar  9  2014 S11auditd -&gt; ../init.d/auditd<br>lrwxrwxrwx 1 root root 17 Mar  9  2014 S12rsyslog -&gt; ../init.d/rsyslog<br>lrwxrwxrwx 1 root root 15 Mar  9  2014 S25netfs -&gt; ../init.d/netfs<br>lrwxrwxrwx 1 root root 19 Mar  9  2014 S26udev-post -&gt; ../init.d/udev-post<br>lrwxrwxrwx 1 root root 14 Mar  9  2014 S55sshd -&gt; ../init.d/sshd<br>lrwxrwxrwx 1 root root 14 Apr 14  2017 S58ntpd -&gt; ../init.d/ntpd<br>lrwxrwxrwx 1 root root 18 Apr 14  2017 S80sendmail -&gt; ../init.d/sendmail<br>lrwxrwxrwx 1 root root 15 Mar  9  2014 S90crond -&gt; ../init.d/crond<br>lrwxrwxrwx 1 root root 11 Mar  9  2014 S99local -&gt; ../rc.local<br></code></pre></td></tr></table></figure>
+
+<p>当所有的初始化脚本执行完毕，Sysvinit运行&#x2F;etc&#x2F;rc.d&#x2F;rc.local脚本。</p>
+<p>rc.local是Linux留给用户进行个性化设置的地方。您可以把你自己想设置和启动的东西放到这里来，一台Linux server的用户一般不止一个，所以才有这样的考虑。</p>
+<h2 id="Sysvinit-和系统关闭"><a href="#Sysvinit-和系统关闭" class="headerlink" title="Sysvinit 和系统关闭"></a><strong>Sysvinit 和系统关闭</strong></h2><p>Sysvinit 不仅需要负载初始化系统，还需要负责关闭系统，在系统关闭时，为了保证数据的一致性，需要小心地按照顺序进行结束和清理工作。</p>
+<p>比如应该先停止对文件系统有读写操作的服务，然后再umonut文件系统，否则数据就会丢失。</p>
+<p>这种顺序的控制也是依靠&#x2F;etc&#x2F;rc.d&#x2F;rcX.d&#x2F;目录下所有脚本的命名规则来控制的，在该目录下所有以K开头的脚本都将在关闭系统时调用，字母K之后的数字定义了它们的执行顺序。</p>
+<p>这些脚本负责安全地停止服务或者其它的关闭工作。</p>
+<h2 id="Sysvinit-的管理和控制功能"><a href="#Sysvinit-的管理和控制功能" class="headerlink" title="Sysvinit 的管理和控制功能"></a><strong>Sysvinit 的管理和控制功能</strong></h2><p>此外，在系统启动之后，管理员还需要对已经启动的进程进行管理和控制。原始的sysvinit软件包含了一系列的控制启动，运行和关闭所有其它程序的工具。</p>
+<blockquote>
+<ul>
+<li>halt:<ul>
+<li>停止系统</li>
+</ul>
+</li>
+<li>init<ul>
+<li>这个就是sysvinit本身的init进程实体，以PID1身份运行，是所有用户进程的父进程。最主要的作用是在启动过程中使用&#x2F;etc&#x2F;inittab文件创建进程。</li>
+</ul>
+</li>
+<li>killall5<ul>
+<li>就是 SystemV 的killall 命令，向除自己的会话(session)进程之外的其它进程发出信号，所以不能杀死当前使用的shell</li>
+</ul>
+</li>
+<li>last<ul>
+<li>回溯&#x2F;var&#x2F;log&#x2F;wtmp 文件（或者-f 选项指定的文件），显示自从这个文件建立以来，所有用户的登录情况。</li>
+</ul>
+</li>
+<li>lastb<ul>
+<li>作用和last差不多，默认情况下使用&#x2F;var&#x2F;log&#x2F;btmp文件，显示所有失败登录企图。</li>
+</ul>
+</li>
+<li>mesg<ul>
+<li>控制其它用户对用户终端的访问</li>
+</ul>
+</li>
+<li>pidof<ul>
+<li>找出程序的进程识别号(pid)，输出到标准输出设备</li>
+</ul>
+</li>
+<li>poweroff<ul>
+<li>等于shutdown -h -p ,或者telinit 0.关闭系统并切断电源</li>
+</ul>
+</li>
+<li>reboot<ul>
+<li>等于shutdown -r 或者 telinit 6。重启系统。</li>
+</ul>
+</li>
+<li>runlevel<ul>
+<li>读取系统的登录文件（一般是&#x2F;var&#x2F;run&#x2F;utmp）把以前和当前的系统运行级输出到标准输出设备。</li>
+</ul>
+</li>
+<li>shutdown<ul>
+<li>以一种安全的方式终止系统，所有正在登录的用户都会收到系统将要终止通知，并且不准新的登录</li>
+</ul>
+</li>
+<li>sulogin<ul>
+<li>当系统进入单用户模式时，被init调用。当接收到启动加载程序传递的-b选项时，init也会调用sulogin。</li>
+</ul>
+</li>
+<li>telinit<ul>
+<li>实际是init的一个连接，用来向init传递单字符参数和信号</li>
+</ul>
+</li>
+<li>utmpdump<ul>
+<li>以一种用户友好的格式想标准输出设备显示&#x2F;var&#x2F;run&#x2F;utmp文件的内容。</li>
+</ul>
+</li>
+<li>wall<ul>
+<li>向所有有信息权限的登录用户发送消息</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>不同的Linux发行版在这些sysvinit的基本工具基础上又开发了一些辅助工具用来简化init系统的管理工作。比如RedHat的RHEL在sysvinit的基础上开发了initscripts软件包，包含了大量的启动脚本（如：rc.sysinit），还提供了service,checonfig等命令行工具，甚至一套图形化界面来管理init系统。其它的Linux发行版也各有各自的initscripts或其他名字的init软件包来简化sysvinit管理。</p>
+<p>只要您理解了sysvinit机制，在一个最简的仅有sysvinit的系统下，您也可以直接调用脚本启动和停止服务，手动创建inittab和创建软连接来完成这些任务，因此理解sysvinit的基本原理和命令是最重要的。您甚至可以开发一套自己的管理工具。</p>
+<h2 id="Sysvinit的小结"><a href="#Sysvinit的小结" class="headerlink" title="Sysvinit的小结"></a><strong>Sysvinit的小结</strong></h2><p>Sysvinit 的优点是概念简单。Service 开发人员只需要编写启动和停止脚本，概念非常清楚；将 service 添加&#x2F;删除到某个 runlevel 时，只需要执行一些创建&#x2F;删除软连接文件的基本操作；这些都不需要学习额外的知识或特殊的定义语法(UpStart 和 Systemd 都需要用户学习新的定义系统初始化行为的语言)。</p>
+<p>其次，sysvinit 的另一个重要优点是确定的执行顺序：脚本严格按照启动数字的大小顺序执行，一个执行完毕再执行下一个，这非常有益于错误排查。UpStart 和 systemd 支持并发启动，导致没有人可以确定地了解具体的启动顺序，排错不易。</p>
+<p>但是串行地执行脚本导致 sysvinit 运行效率较慢，在新的 IT 环境下，启动快慢成为一个重要问题。此外动态设备加载等 Linux 新特性也暴露出 sysvinit 设计的一些问题。针对这些问题，人们开始想办法改进 sysvinit，以便加快启动时间，并解决 sysvinit 自身的设计问题。</p>
+<p>Upstart 是第一个被广泛应用的新一代 init 系统。我们在接下来的第二部分介绍 UpStart。</p>
+<h1 id="UpStart"><a href="#UpStart" class="headerlink" title="UpStart"></a>UpStart</h1><p>假如您使用的 Linux 发行版是 Ubuntu，很可能会发现在您的计算机上找不到&#x2F;etc&#x2F;inittab 文件了，这是因为 Ubuntu 使用了一种被称为 upstart 的新型 init 系统。</p>
+<p>Upstart 是第一个被广泛应用的新一代 init 系统。</p>
+<h2 id="开发Upstart的缘由"><a href="#开发Upstart的缘由" class="headerlink" title="开发Upstart的缘由"></a>开发Upstart的缘由</h2><p>大约在 2006 年或者更早的时候， Ubuntu 开发人员试图将 Linux 安装在笔记本电脑上。在这期间技术人员发现经典的 sysvinit 存在一些问题：它不适合笔记本环境。这促使程序员 Scott James Remnant 着手开发 upstart。</p>
+<p>当 Linux 内核进入 2.6 时代时，内核功能有了很多新的更新。新特性使得 Linux 不仅是一款优秀的服务器操作系统，也可以被用于桌面系统，甚至嵌入式设备。桌面系统或便携式设备的一个特点是经常重启，而且要频繁地使用硬件热插拔技术。在现代计算机系统中，硬件繁多、接口有限，人们并非将所有设备都始终连接在计算机上，比如 U 盘平时并不连接电脑，使用时才插入 USB 插口。因此，当系统上电启动时，一些外设可能并没有连接。而是在启动后当需要的时候才连接这些设备。在 2.6 内核支持下，一旦新外设连接到系统，内核便可以自动实时地发现它们，并初始化这些设备，进而使用它们。这为便携式设备用户提供了很大的灵活性。</p>
+<p>可是这些特性为 sysvinit 带来了一些挑战。当系统初始化时，需要被初始化的设备并没有连接到系统上；比如打印机。为了管理打印任务，系统需要启动 CUPS 等服务，而如果打印机没有接入系统的情况下，启动这些服务就是一种浪费。Sysvinit 没有办法处理这类需求，它必须一次性把所有可能用到的服务都启动起来，即使打印机并没有连接到系统，CUPS 服务也必须启动。</p>
+<p>还有网络共享盘的挂载问题。在&#x2F;etc&#x2F;fstab 中，可以指定系统自动挂载一个网络盘，比如 NFS，或者 iSCSI 设备。在本文的第一部分 sysvinit 的简介中可以看到，sysvinit 分析&#x2F;etc&#x2F;fstab 挂载文件系统这个步骤是在网络启动之前。可是如果网络没有启动，NFS 或者 iSCSI 都不可访问，当然也无法进行挂载操作。Sysvinit 采用 netdev 的方式来解决这个问题，即&#x2F;etc&#x2F;fstab 发现 netdev 属性挂载点的时候，不尝试挂载它，在网络初始化并使能之后，还有一个专门的 netfs 服务来挂载所有这些网络盘。这是一个不得已的补救方法，给管理员带来不便。部分新手管理员甚至从来也没有听说过 netdev 选项，因此经常成为系统管理的一个陷阱。</p>
+<p>针对以上种种情况，Ubuntu 开发人员在评估了当时的几个可选 init 系统之后，决定重新设计和开发一个全新的 init 系统，即 UpStart。UpStart 基于事件机制，比如 U 盘插入 USB 接口后，udev 得到内核通知，发现该设备，这就是一个新的事件。UpStart 在感知到该事件之后触发相应的等待任务，比如处理&#x2F;etc&#x2F;fstab 中存在的挂载点。采用这种事件驱动的模式，upstart 完美地解决了即插即用设备带来的新问题。</p>
+<p>此外，采用事件驱动机制也带来了一些其它有益的变化，比如加快了系统启动时间。sysvinit 运行时是同步阻塞的。一个脚本运行的时候，后续脚本必须等待。这意味着所有的初始化步骤都是串行执行的，而实际上很多服务彼此并不相关，完全可以并行启动，从而减小系统的启动时间。在 Linux 大量应用于服务器的时代，系统启动时间也许还不那么重要；然而对于桌面系统和便携式设备，启动时间的长短对用户体验影响很大。此外云计算等新的 Server 端技术也往往需要单个设备可以更加快速地启动。</p>
+<p>UpStart 满足了这些需求，目前不仅桌面系统 Ubuntu 采用了 UpStart，甚至企业级服务器级的 RHEL 也默认采用 UpStart 来替换 sysvinit 作为 init 系统。</p>
+<h2 id="Upstart的特点"><a href="#Upstart的特点" class="headerlink" title="Upstart的特点"></a>Upstart的特点</h2><p>UpStart解决了之前提到的sysvinit的缺点。采用时间驱动模型，UpStart可以：</p>
+<ul>
+<li>更快地启动系统</li>
+<li>当新硬件被发现时动态启动服务</li>
+<li>硬件被拔出时动态停止服务</li>
+</ul>
+<p>这些特点使得 UpStart 可以很好地应用在桌面或者便携式系统中，处理这些系统中的动态硬件插拔特性。</p>
+<h2 id="Upstart概念和术语"><a href="#Upstart概念和术语" class="headerlink" title="Upstart概念和术语"></a>Upstart概念和术语</h2><p>Upstart 的基本概念和设计清晰明确。UpStart 主要的概念是 job 和 event。Job 就是一个工作单元，用来完成一件工作，比如启动一个后台服务，或者运行一个配置命令。每个 Job 都等待一个或多个事件，一旦事件发生，upstart 就触发该 job 完成相应的工作。</p>
+<h3 id="Job"><a href="#Job" class="headerlink" title="Job"></a><strong>Job</strong></h3><p>Job 就是一个工作的单元，一个任务或者一个服务。可以理解为 sysvinit 中的一个服务脚本。有三种类型的工作：</p>
+<ul>
+<li>task job;</li>
+<li>service job;</li>
+<li>abstract job;</li>
+</ul>
+<p>task job 代表在一定时间内会执行完毕的任务，比如删除一个文件；</p>
+<p>service job 代表后台服务进程，比如 apache httpd。这里进程一般不会退出，一旦开始运行就成为一个后台精灵进程，由 init 进程管理，如果这类进程退出，由 init 进程重新启动，它们只能由 init 进程发送信号停止。它们的停止一般也是由于所依赖的停止事件而触发的，不过 upstart 也提供命令行工具，让管理人员手动停止某个服务；</p>
+<p>Abstract job 仅由 upstart 内部使用，仅对理解 upstart 内部机理有所帮助。我们不用关心它。</p>
+<p>除了以上的分类之外，还有另一种工作（Job）分类方法。Upstart 不仅可以用来为整个系统的初始化服务，也可以为每个用户会话（session）的初始化服务。系统的初始化任务就叫做 system job，比如挂载文件系统的任务就是一个 system job；用户会话的初始化服务就叫做 session job。</p>
+<h3 id="Job生命周期"><a href="#Job生命周期" class="headerlink" title="Job生命周期"></a><strong>Job生命周期</strong></h3><p>Upstart 为每个工作都维护一个生命周期。一般来说，工作有开始，运行和结束这几种状态。为了更精细地描述工作的变化，Upstart 还引入了一些其它的状态。比如开始就有开始之前(pre-start)，即将开始(starting)和已经开始了(started)几种不同的状态，这样可以更加精确地描述工作的当前状态。</p>
+<p>工作从某种初始状态开始，逐渐变化，或许要经历其它几种不同的状态，最终进入另外一种状态，形成一个状态机。在这个过程中，当工作的状态即将发生变化的时候，init 进程会发出相应的事件（event）。</p>
+<p>Upstart中Job的可能状态</p>
+<table>
+<thead>
+<tr>
+<th>状态名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Waiting</td>
+<td>初始状态</td>
+</tr>
+<tr>
+<td>Starting</td>
+<td>Job即将开始</td>
+</tr>
+<tr>
+<td>pre-start</td>
+<td>执行pre-start段，即任务开始前应该完成的工作</td>
+</tr>
+<tr>
+<td>Spawned</td>
+<td>准备执行script或者exec段</td>
+</tr>
+<tr>
+<td>post-start</td>
+<td>执行post-start动作</td>
+</tr>
+<tr>
+<td>Running</td>
+<td>interim state set after post-start section processed denoting job is running (But it may have no associated PID!)</td>
+</tr>
+<tr>
+<td>pre-stop</td>
+<td>执行pre-stop段</td>
+</tr>
+<tr>
+<td>Stopping</td>
+<td>interim state set after pre-stop section processed</td>
+</tr>
+<tr>
+<td>Killed</td>
+<td>任务即将被停止</td>
+</tr>
+<tr>
+<td>post-stop</td>
+<td>执行post-stop段</td>
+</tr>
+</tbody></table>
+<p>展示了 Job 的状态机</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406092343582.png" srcset="/img/loading.gif" lazyload></p>
+<p>其中有四个状态会引起 init 进程发送相应的事件，表明该工作的相应变化：</p>
+<ul>
+<li>Starting</li>
+<li>Started</li>
+<li>Stopping</li>
+<li>Stopped</li>
+</ul>
+<p><strong>事件 Event</strong></p>
+<p>顾名思义，Event 就是一个事件。事件在 upstart 中以通知消息的形式具体存在。一旦某个事件发生了，Upstart 就向整个系统发送一个消息。没有任何手段阻止事件消息被 upstart 的其它部分知晓，也就是说，事件一旦发生，整个 upstart 系统中所有工作和其它的事件都会得到通知。</p>
+<p>Event 可以分为三类: signal，methods 或者 hooks。</p>
+<ul>
+<li>Signals:<ul>
+<li>Signal 事件是非阻塞的，异步的。发送一个信号之后控制权立即返回。</li>
+</ul>
+</li>
+<li>Methods:<ul>
+<li>Methods事件是阻塞的、同步的</li>
+</ul>
+</li>
+<li>Hooks:<ul>
+<li>Hooks 事件是阻塞的，同步的。它介于 Signals 和 Methods 之间，调用发出 Hooks 事件的进程必须等待事件完成才可以得到控制权，但不检查事件是否成功</li>
+</ul>
+</li>
+</ul>
+<p>事件是个非常抽象的概念，下面我罗列出一些常见的事件，希望可以帮助您进一步了解事件的含义：</p>
+<ul>
+<li>系统上电启动，init 进程会发送”start”事件</li>
+<li>根文件系统可写时，相应 job 会发送文件系统就绪的事件</li>
+<li>一个块设备被发现并初始化完成，发送相应的事件</li>
+<li>某个文件系统被挂载，发送相应的事件</li>
+<li>类似 atd 和 cron，可以在某个时间点，或者周期的时间点发送事件</li>
+<li>另外一个 job 开始或结束时，发送相应的事件</li>
+<li>一个磁盘文件被修改时，可以发出相应的事件</li>
+<li>一个网络设备被发现时，可以发出相应的事件</li>
+<li>缺省路由被添加或删除时，可以发出相应的事件</li>
+</ul>
+<p>不同的 Linux 发行版对 upstart 有不同的定制和实现，实现和支持的事件也有所不同，可以用<code>man 7 upstart-events</code>来查看事件列表。</p>
+<p><strong>Upstart在机器启动时的执行过程</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406092343138.png" srcset="/img/loading.gif" lazyload></p>
+<p>在机器做完那些<a target="_blank" rel="noopener" href="http://www.yunweipai.com/archives/782.html">加载内核，挂载跟目录等工作</a>后，操作系统会调用 &#x2F;sbin&#x2F;init 来接管后续的服务启动过程。</p>
+<ul>
+<li><p>init 启动后马上发出第一个事件 startup</p>
+</li>
+<li><p>hostname，mountall 会被 startup 事件触发（在 &#x2F;etc&#x2F;init 目录下 grep startup * 就可以看到了！)，也就是一启动就开始分别设置 hostname 和 挂载硬盘。</p>
+<p>在 mountall.conf 里可以看到它主要运行了 <a target="_blank" rel="noopener" href="http://manpages.ubuntu.com/manpages/vivid/man8/mountall.8.html">mountall</a> 程序，这个程序会读取 &#x2F;lib&#x2F;init&#x2F;fstab 和 &#x2F;etc&#x2F;fstab 里的配置，按顺序挂载。其中 &#x2F;lib&#x2F;init&#x2F;fstab 里的都是像 &#x2F;proc &#x2F;sys 这样的虚拟磁盘。</p>
+<p>mountall 会发出很多可以触发 Upstart 的事件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">emits virtual-filesystems<br>emits local-filesystems<br>emits remote-filesystems<br>emits all-swaps<br>emits filesystem<br>emits mounting<br>emits mounted<br></code></pre></td></tr></table></figure>
+
+<p>每挂载好一个磁盘都会发出一个 mounted 事件，当挂载完 &#x2F;lib&#x2F;init&#x2F;fstab 里的虚拟磁盘后会发出 virtual-filesystems 事件，mountall 继续处理 &#x2F;etc&#x2F;fstab 里的配置，期间会发出 remote-filesystems, all-swaps等事件，全部处理完后会发送 local-filesystems 和 filesystem 事件。</p>
+<p>也就是说，当 Upstart 接收到 filesystem 事件时，配置文件中的磁盘已经挂载好了。</p>
+<p>mountall 发出的很多事件，有些是以<a target="_blank" rel="noopener" href="http://upstart.ubuntu.com/cookbook/#event-types">阻塞的方式</a>发出的，也就是在 mountall 过程中有些别的任务已经被触发并且可能已经完成了。</p>
+</li>
+<li><p>udev.conf 在接收到 virtual-filesystem 时出发，这是一个管理 &#x2F;dev 下的设备描述的程序。</p>
+<ul>
+<li>udev 导致 upstart-udev-bridge 任务执行，这个任务会设置好 127.0.0.0 这个网络回路地址。</li>
+<li>udev 和 filesystem 事件还是开始网络设置的前提。</li>
+</ul>
+</li>
+<li><p>在设置网络之前，ufw 的配置也会准备就绪。</p>
+</li>
+<li><p>网络和文件系统都准备好后出发 rc-sysinit.conf 里的脚本执行，里面其实就是打开 telinit 程序并传入一个2作为参数，这个程序发出 runlevel 事件。</p>
+<ul>
+<li>rc.conf 会被 runlevel 事件触发，它会调用 &#x2F;etc&#x2F;init.d&#x2F;rc 2 ， 这是兼容传统 init 的关键步骤。</li>
+<li>其他 job 也会被 runlevel 事件触发，例如 cron、ssh、irqbalance 等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Upstart小结"><a href="#Upstart小结" class="headerlink" title="Upstart小结"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-UpStart/#Upstart%E5%B0%8F%E7%BB%93" title="Upstart小结"></a>Upstart小结</h3><p>可以看到，UpStart 的设计比 SysVInit 更加先进。多数 Linux 发行版上已经不再使用 SysVInit，一部分发行版采用了 UpStart，比如 Ubuntu；而另外一些比如 Fedora，采用了一种被称为 systemd 的 init 系统。Systemd 出现的比 UpStart 更晚，但发展迅速，虽然 UpStart 也还在积极开发并被越来越多地应用，但 systemd 似乎发展更快，我将在下一篇文章中再介绍 systemd。</p>
+<h1 id="Systemd"><a href="#Systemd" class="headerlink" title="Systemd"></a>Systemd</h1><p>Systemd 是 Linux 系统中最新的初始化系统（init），它主要的设计目标是克服 sysvinit 固有的缺点，提高系统的启动速度。Ubuntu 系统原本使用的是 UpStart ，但是在后来 Ubuntu 还是使用了 Systemd 作为 init 系统。</p>
+<p>Systemd 的很多概念来源于苹果 Mac OS 操作系统上的 launchd，不过 launchd 专用于苹果系统，因此长期未能获得应有的广泛关注。Systemd 借鉴了很多 launchd 的思想，它的重要特性如下：</p>
+<p> <strong>在 Linux 系统中，<code>d</code> 的含义是守护进程的意思，所以 Systemd 这个名字的含义，就是它要守护整个系统。</strong></p>
+<p>Systemd 的优点是功能强大，使用方便，缺点是体系庞大，非常复杂。事实上，现在还有很多人反对使用 Systemd，理由就是它过于复杂，与操作系统的其他部分强耦合，违反”keep simple, keep stupid”的 Unix 哲学。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406151550451.png" srcset="/img/loading.gif" lazyload></p>
+<p>上面是 Systmed 的架构图，可以看到实际上 Systemd 不是一个命令组成的，而是有一组命令组成的。</p>
+<p><strong>实际上，Systemd 就是一个系统管家。帮助我们管理 Linux 系统中的各种资源，我们可以使用这个系统管家进行管理。在 Systemd 中每一个被管理的资源都被称为一个 Unit 。在 Systemd 中一共有 12 中 Unit 类型，包括如下：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">-</span> Service unit：系统服务<br><span class="hljs-bullet">-</span> Target unit：多个 Unit 构成的一个组<br><span class="hljs-bullet">-</span> Device Unit：硬件设备<br><span class="hljs-bullet">-</span> Mount Unit：文件系统的挂载点<br><span class="hljs-bullet">-</span> Automount Unit：自动挂载点<br><span class="hljs-bullet">-</span> Path Unit：文件或路径<br><span class="hljs-bullet">-</span> Scope Unit：不是由 Systemd 启动的外部进程<br><span class="hljs-bullet">-</span> Slice Unit：进程组<br><span class="hljs-bullet">-</span> Snapshot Unit：Systemd 快照，可以切回某个快照<br><span class="hljs-bullet">-</span> Socket Unit：进程间通信的 socket<br><span class="hljs-bullet">-</span> Swap Unit：swap 文件<br><span class="hljs-bullet">-</span> Timer Unit：定时器<br></code></pre></td></tr></table></figure>
+
+<h2 id="同-SysVinit-和-LSB-init-scripts-兼容"><a href="#同-SysVinit-和-LSB-init-scripts-兼容" class="headerlink" title="同 SysVinit 和 LSB init scripts 兼容"></a>同 SysVinit 和 LSB init scripts 兼容</h2><p>Systemd 是一个”新来的”，Linux 上的很多应用程序并没有来得及为它做相应的改变。和 UpStart 一样，systemd 引入了新的配置方式，对应用程序的开发也有一些新的要求。如果 systemd 想替代目前正在运行的初始化系统，就必须和现有程序兼容。任何一个 Linux 发行版都很难为了采用 systemd 而在短时间内将所有的服务代码都修改一遍。</p>
+<p>Systemd 提供了和 Sysvinit 以及 LSB initscripts 兼容的特性。系统中已经存在的服务和进程无需修改。这降低了系统向 systemd 迁移的成本，使得 systemd 替换现有初始化系统成为可能。</p>
+<h2 id="更快的启动速度"><a href="#更快的启动速度" class="headerlink" title="更快的启动速度"></a>更快的启动速度</h2><p>Systemd 提供了比 UpStart 更激进的并行启动能力，采用了 socket &#x2F; D-Bus activation 等技术启动服务。一个显而易见的结果就是：更快的启动速度。</p>
+<p>为了减少系统启动时间，systemd 的目标是：</p>
+<ul>
+<li>尽可能启动更少的进程</li>
+<li>尽可能将更多进程并行启动</li>
+</ul>
+<p>同样地，UpStart 也试图实现这两个目标。UpStart 采用事件驱动机制，服务可以暂不启动，当需要的时候才通过事件触发其启动，这符合第一个设计目标；此外，不相干的服务可以并行启动，这也实现了第二个目标。</p>
+<p>下面的图形演示了 UpStart 相对于 SysVInit 在并发启动这个方面的改进：</p>
+<h3 id="图-1-UpStart-对-SysVinit-的改进"><a href="#图-1-UpStart-对-SysVinit-的改进" class="headerlink" title="图 1. UpStart 对 SysVinit 的改进"></a>图 1. UpStart 对 SysVinit 的改进</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406092346047.png" srcset="/img/loading.gif" lazyload></p>
+<p>假设有 7 个不同的启动项目， 比如 JobA、Job B 等等。在 SysVInit 中，每一个启动项目都由一个独立的脚本负责，它们由 sysVinit 顺序地，串行地调用。因此总的启动时间为 T1+T2+T3+T4+T5+T6+T7。其中一些任务有依赖关系，比如 A,B,C,D。</p>
+<p>而 Job E 和 F 却和 A,B,C,D 无关。这种情况下，UpStart 能够并发地运行任务{E，F，(A,B,C,D)}，使得总的启动时间减少为 T1+T2+T3。</p>
+<p>这无疑增加了系统启动的并行性，从而提高了系统启动速度。但是在 UpStart 中，有依赖关系的服务还是必须先后启动。比如任务 A,B,(C,D)因为存在依赖关系，所以在这个局部，还是串行执行。</p>
+<p>让我们例举一些例子， Avahi 服务需要 D-Bus 提供的功能，因此 Avahi 的启动依赖于 D-Bus，UpStart 中，Avahi 必须等到 D-Bus 启动就绪之后才开始启动。类似的，livirtd 和 X11 都需要 HAL 服务先启动，而所有这些服务都需要 syslog 服务记录日志，因此它们都必须等待 syslog 服务先启动起来。然而 httpd 和他们都没有关系，因此 httpd 可以和 Avahi 等服务并发启动。</p>
+<p>Systemd 能够更进一步提高并发性，即便对于那些 UpStart 认为存在相互依赖而必须串行的服务，比如 Avahi 和 D-Bus 也可以并发启动。从而实现如下图所示的并发启动过程：</p>
+<h3 id="图-2-systemd-的并发启动"><a href="#图-2-systemd-的并发启动" class="headerlink" title="图 2. systemd 的并发启动"></a>图 2. systemd 的并发启动</h3><p><img src="https://cntsp.github.io/medias/contents/81.png" srcset="/img/loading.gif" lazyload></p>
+<p>所有的任务都同时并发执行，总的启动时间被进一步降低为 T1。</p>
+<p>可见 systemd 比 UpStart 更进一步提高了并行启动能力，极大地加速了系统启动时间。</p>
+<h2 id="systemd-提供按需启动能力"><a href="#systemd-提供按需启动能力" class="headerlink" title="systemd 提供按需启动能力"></a>systemd 提供按需启动能力</h2><p>当 sysvinit 系统初始化的时候，它会将所有可能用到的后台服务进程全部启动运行。并且系统必须等待所有的服务都启动就绪之后，才允许用户登录。这种做法有两个缺点：首先是启动时间过长；其次是系统资源浪费。</p>
+<p>某些服务很可能在很长一段时间内，甚至整个服务器运行期间都没有被使用过。比如 CUPS，打印服务在多数服务器上很少被真正使用到。您可能没有想到，在很多服务器上 SSHD 也是很少被真正访问到的。花费在启动这些服务上的时间是不必要的；同样，花费在这些服务上的系统资源也是一种浪费。</p>
+<p>Systemd 可以提供按需启动的能力，只有在某个服务被真正请求的时候才启动它。当该服务结束，systemd 可以关闭它，等待下次需要时再次启动它。</p>
+<p>所以在很多时候我可以是使用 <code>Systemd</code> 来代替很多其他的命令。比如说可以替换的用来实现定时命令的 <code>at</code> 、<code>cron</code> 命令等等。</p>
+<h2 id="Systemd-采用-Linux-的-Cgroup-特性跟踪和管理进程的生命周期"><a href="#Systemd-采用-Linux-的-Cgroup-特性跟踪和管理进程的生命周期" class="headerlink" title="Systemd 采用 Linux 的 Cgroup 特性跟踪和管理进程的生命周期"></a>Systemd 采用 Linux 的 Cgroup 特性跟踪和管理进程的生命周期</h2><p>init 系统的一个重要职责就是负责跟踪和管理服务进程的生命周期。它不仅可以启动一个服务，也必须也能够停止服务。这看上去没有什么特别的，然而在真正用代码实现的时候，您或许会发现停止服务比一开始想的要困难。</p>
+<p>服务进程一般都会作为精灵进程（daemon）在后台运行，为此服务程序有时候会派生(fork)两次。在 UpStart 中，需要在配置文件中正确地配置 expect 小节。这样 UpStart 通过对 fork 系统调用进行计数，从而获知真正的精灵进程的 PID 号。比如图 3 所示的例子：</p>
+<h3 id="图-3-找到正确-pid"><a href="#图-3-找到正确-pid" class="headerlink" title="图 3. 找到正确 pid"></a>图 3. 找到正确 pid</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406092347814.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果 UpStart 找错了，将 p1<code>作为服务进程的 Pid，那么停止服务的时候，UpStart 会试图杀死 p1</code>进程，而真正的 p1``进程则继续执行。换句话说该服务就失去控制了。</p>
+<p>还有更加特殊的情况。比如，一个 CGI 程序会派生两次，从而脱离了和 Apache 的父子关系。当 Apache 进程被停止后，该 CGI 程序还在继续运行。而我们希望服务停止后，所有由它所启动的相关进程也被停止。</p>
+<p>为了处理这类问题，UpStart 通过 strace 来跟踪 fork、exit 等系统调用，但是这种方法很笨拙，且缺乏可扩展性。systemd 则利用了 Linux 内核的特性即 CGroup 来完成跟踪的任务。当停止服务时，通过查询 CGroup，systemd 可以确保找到所有的相关进程，从而干净地停止服务。</p>
+<p>CGroup 已经出现了很久，它主要用来实现系统资源配额管理。CGroup 提供了类似文件系统的接口，使用方便。当进程创建子进程时，子进程会继承父进程的 CGroup。因此无论服务如何启动新的子进程，所有的这些相关进程都会属于同一个 CGroup，systemd 只需要简单地遍历指定的 CGroup 即可正确地找到所有的相关进程，将它们一一停止即可。</p>
+<h3 id="启动挂载点和自动挂载的管理"><a href="#启动挂载点和自动挂载的管理" class="headerlink" title="启动挂载点和自动挂载的管理"></a>启动挂载点和自动挂载的管理</h3><p>传统的 Linux 系统中，用户可以用&#x2F;etc&#x2F;fstab 文件来维护固定的文件系统挂载点。这些挂载点在系统启动过程中被自动挂载，一旦启动过程结束，这些挂载点就会确保存在。这些挂载点都是对系统运行至关重要的文件系统，比如 HOME 目录。和 sysvinit 一样，Systemd 管理这些挂载点，以便能够在系统启动时自动挂载它们。Systemd 还兼容&#x2F;etc&#x2F;fstab 文件，您可以继续使用该文件管理挂载点。</p>
+<p>有时候用户还需要动态挂载点，比如打算访问 DVD 内容时，才临时执行挂载以便访问其中的内容，而不访问光盘时该挂载点被取消(umount)，以便节约资源。传统地，人们依赖 autofs 服务来实现这种功能。</p>
+<p>Systemd 内建了自动挂载服务，无需另外安装 autofs 服务，可以直接使用 Systemd 提供的自动挂载管理能力来实现 autofs 的功能。</p>
+<h3 id="实现事务性依赖关系管理"><a href="#实现事务性依赖关系管理" class="headerlink" title="实现事务性依赖关系管理"></a>实现事务性依赖关系管理</h3><p>系统启动过程是由很多的独立工作共同组成的，这些工作之间可能存在依赖关系，比如挂载一个 NFS 文件系统必须依赖网络能够正常工作。Systemd 虽然能够最大限度地并发执行很多有依赖关系的工作，但是类似”挂载 NFS”和”启动网络”这样的工作还是存在天生的先后依赖关系，无法并发执行。对于这些任务，systemd 维护一个”事务一致性”的概念，保证所有相关的服务都可以正常启动而不会出现互相依赖，以至于死锁的情况。</p>
+<h3 id="能够对系统进行快照和恢复"><a href="#能够对系统进行快照和恢复" class="headerlink" title="能够对系统进行快照和恢复"></a>能够对系统进行快照和恢复</h3><p>systemd 支持按需启动，因此系统的运行状态是动态变化的，人们无法准确地知道系统当前运行了哪些服务。Systemd 快照提供了一种将当前系统运行状态保存并恢复的能力。</p>
+<p>比如系统当前正运行服务 A 和 B，可以用 systemd 命令行对当前系统运行状况创建快照。然后将进程 A 停止，或者做其他的任意的对系统的改变，比如启动新的进程 C。在这些改变之后，运行 systemd 的快照恢复命令，就可立即将系统恢复到快照时刻的状态，即只有服务 A，B 在运行。一个可能的应用场景是调试：比如服务器出现一些异常，为了调试用户将当前状态保存为快照，然后可以进行任意的操作，比如停止服务等等。等调试结束，恢复快照即可。</p>
+<p>这个快照功能目前在 systemd 中并不完善，似乎开发人员也没有特别关注它，因此有报告指出它还存在一些使用上的问题，使用时尚需慎重。</p>
+<h3 id="日志服务"><a href="#日志服务" class="headerlink" title="日志服务"></a>日志服务</h3><p>systemd 自带日志服务 journald，该日志服务的设计初衷是克服现有的 syslog 服务的缺点。比如：</p>
+<ul>
+<li>syslog 不安全，消息的内容无法验证。每一个本地进程都可以声称自己是 Apache PID 4711，而 syslog 也就相信并保存到磁盘上。</li>
+<li>数据没有严格的格式，非常随意。自动化的日志分析器需要分析人类语言字符串来识别消息。一方面此类分析困难低效；此外日志格式的变化会导致分析代码需要更新甚至重写。</li>
+</ul>
+<p>Systemd Journal 用二进制格式保存所有日志信息，用户使用 journalctl 命令来查看日志信息。无需自己编写复杂脆弱的字符串分析处理程序。</p>
+<p>Systemd Journal 的优点如下：</p>
+<ul>
+<li>简单性：代码少，依赖少，抽象开销最小。</li>
+<li>零维护：日志是除错和监控系统的核心功能，因此它自己不能再产生问题。举例说，自动管理磁盘空间，避免由于日志的不断产生而将磁盘空间耗尽。</li>
+<li>移植性：日志 文件应该在所有类型的 Linux 系统上可用，无论它使用的何种 CPU 或者字节序。</li>
+<li>性能：添加和浏览 日志 非常快。</li>
+<li>最小资源占用：日志 数据文件需要较小。</li>
+<li>统一化：各种不同的日志存储技术应该统一起来，将所有的可记录事件保存在同一个数据存储中。所以日志内容的全局上下文都会被保存并且可供日后查询。例如一条固件记录后通常会跟随一条内核记录，最终还会有一条用户态记录。重要的是当保存到硬盘上时这三者之间的关系不会丢失。Syslog 将不同的信息保存到不同的文件中，分析的时候很难确定哪些条目是相关的。</li>
+<li>扩展性：日志的适用范围很广，从嵌入式设备到超级计算机集群都可以满足需求。</li>
+<li>安全性：日志 文件是可以验证的，让无法检测的修改不再可能。</li>
+</ul>
+<h2 id="Systemd-的基本概念"><a href="#Systemd-的基本概念" class="headerlink" title="Systemd 的基本概念"></a>Systemd 的基本概念</h2><h3 id="单元的概念"><a href="#单元的概念" class="headerlink" title="单元的概念"></a>单元的概念</h3><p>系统初始化需要做的事情非常多。需要启动后台服务，比如启动 SSHD 服务；需要做配置工作，比如挂载文件系统。这个过程中的每一步都被 systemd 抽象为一个配置单元，即 unit。可以认为一个服务是一个配置单元；一个挂载点是一个配置单元；一个交换分区的配置是一个配置单元；等等。systemd 将配置单元归纳为以下一些不同的类型。然而，systemd 正在快速发展，新功能不断增加。所以配置单元类型可能在不久的将来继续增加。</p>
+<ul>
+<li>service ：代表一个后台服务进程，比如 mysqld。这是最常用的一类。</li>
+<li>socket ：此类配置单元封装系统和互联网中的一个 套接字 。当下，systemd 支持流式、数据报和连续包的 AF_INET、AF_INET6、AF_UNIX socket 。每一个套接字配置单元都有一个相应的服务配置单元 。相应的服务在第一个”连接”进入套接字时就会启动(例如：nscd.socket 在有新连接后便启动 nscd.service)。</li>
+<li>device ：此类配置单元封装一个存在于 Linux 设备树中的设备。每一个使用 udev 规则标记的设备都将会在 systemd 中作为一个设备配置单元出现。</li>
+<li>mount ：此类配置单元封装文件系统结构层次中的一个挂载点。Systemd 将对这个挂载点进行监控和管理。比如可以在启动时自动将其挂载；可以在某些条件下自动卸载。Systemd 会将&#x2F;etc&#x2F;fstab 中的条目都转换为挂载点，并在开机时处理。</li>
+<li>automount ：此类配置单元封装系统结构层次中的一个自挂载点。每一个自挂载配置单元对应一个挂载配置单元 ，当该自动挂载点被访问时，systemd 执行挂载点中定义的挂载行为。</li>
+<li>swap: 和挂载配置单元类似，交换配置单元用来管理交换分区。用户可以用交换配置单元来定义系统中的交换分区，可以让这些交换分区在启动时被激活。</li>
+<li>target ：此类配置单元为其他配置单元进行逻辑分组。它们本身实际上并不做什么，只是引用其他配置单元而已。这样便可以对配置单元做一个统一的控制。这样就可以实现大家都已经非常熟悉的运行级别概念。比如想让系统进入图形化模式，需要运行许多服务和配置命令，这些操作都由一个个的配置单元表示，将所有这些配置单元组合为一个目标(target)，就表示需要将这些配置单元全部执行一遍以便进入目标所代表的系统运行状态。 (例如：multi-user.target 相当于在传统使用 SysV 的系统中运行级别 5)，这个 target 实际上就是</li>
+<li>timer：定时器配置单元用来定时触发用户定义的操作，这类配置单元取代了 atd、crond 等传统的定时服务。</li>
+<li>snapshot ：与 target 配置单元相似，快照是一组配置单元。它保存了系统当前的运行状态。</li>
+</ul>
+<p>每个配置单元都有一个对应的配置文件，系统管理员的任务就是编写和维护这些不同的配置文件，比如一个 MySQL 服务对应一个 mysql.service 文件。这种配置文件的语法非常简单，用户不需要再编写和维护复杂的系统 5 脚本了。</p>
+<h3 id="依赖关系"><a href="#依赖关系" class="headerlink" title="依赖关系"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB" title="依赖关系"></a>依赖关系</h3><p>虽然 systemd 将大量的启动工作解除了依赖，使得它们可以并发启动。但还是存在有些任务，它们之间存在天生的依赖，不能用”套接字激活”(socket activation)、D-Bus activation 和 autofs 三大方法来解除依赖（三大方法详情见后续描述）。比如：挂载必须等待挂载点在文件系统中被创建；挂载也必须等待相应的物理设备就绪。为了解决这类依赖问题，systemd 的配置单元之间可以彼此定义依赖关系。</p>
+<p>Systemd 用配置单元定义文件中的关键字来描述配置单元之间的依赖关系。比如：unit A 依赖 unit B，可以在 unit B 的定义中用”require A”来表示。这样 systemd 就会保证先启动 A 再启动 B。</p>
+<h3 id="Systemd-事务"><a href="#Systemd-事务" class="headerlink" title="Systemd 事务"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#Systemd-%E4%BA%8B%E5%8A%A1" title="Systemd 事务"></a>Systemd 事务</h3><p>Systemd 能保证事务完整性。Systemd 的事务概念和数据库中的有所不同，主要是为了保证多个依赖的配置单元之间没有环形引用。比如 unit A、B、C，假如它们的依赖关系为:</p>
+<h5 id="图-4-Unit-的循环依赖"><a href="#图-4-Unit-的循环依赖" class="headerlink" title="图 4, Unit 的循环依赖"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E5%9B%BE-4-Unit-%E7%9A%84%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96" title="图 4, Unit 的循环依赖"></a>图 4, Unit 的循环依赖</h5><p><img src="https://cntsp.github.io/medias/contents/84.png" srcset="/img/loading.gif" lazyload></p>
+<p>存在循环依赖，那么 systemd 将无法启动任意一个服务。此时 systemd 将会尝试解决这个问题，因为配置单元之间的依赖关系有两种：required 是强依赖；want 则是弱依赖，systemd 将去掉 wants 关键字指定的依赖看看是否能打破循环。如果无法修复，systemd 会报错。</p>
+<p>Systemd 能够自动检测和修复这类配置错误，极大地减轻了管理员的排错负担。</p>
+<h3 id="Target-和运行级别"><a href="#Target-和运行级别" class="headerlink" title="Target 和运行级别"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#Target-%E5%92%8C%E8%BF%90%E8%A1%8C%E7%BA%A7%E5%88%AB" title="Target 和运行级别"></a>Target 和运行级别</h3><p>systemd 用目标（target）替代了运行级别的概念，提供了更大的灵活性，如您可以继承一个已有的目标，并添加其它服务，来创建自己的目标。下表列举了 systemd 下的目标和常见 runlevel 的对应关系：</p>
+<h5 id="表-1-Sysvinit-运行级别和-systemd-目标的对应表"><a href="#表-1-Sysvinit-运行级别和-systemd-目标的对应表" class="headerlink" title="表 1. Sysvinit 运行级别和 systemd 目标的对应表"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E8%A1%A8-1-Sysvinit-%E8%BF%90%E8%A1%8C%E7%BA%A7%E5%88%AB%E5%92%8C-systemd-%E7%9B%AE%E6%A0%87%E7%9A%84%E5%AF%B9%E5%BA%94%E8%A1%A8" title="表 1. Sysvinit 运行级别和 systemd 目标的对应表"></a>表 1. Sysvinit 运行级别和 systemd 目标的对应表</h5><table>
+<thead>
+<tr>
+<th>Sysvinit 运行级别</th>
+<th>Systemd 目标</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>runlevel0.target, poweroff.target</td>
+<td>关闭系统。</td>
+</tr>
+<tr>
+<td>1, s, single</td>
+<td>runlevel1.target, rescue.target</td>
+<td>单用户模式。</td>
+</tr>
+<tr>
+<td>2, 4</td>
+<td>runlevel2.target, runlevel4.target, multi-user.target</td>
+<td>用户定义&#x2F;域特定运行级别。默认等同于 3。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>runlevel3.target, multi-user.target</td>
+<td>多用户，非图形化。用户可以通过多个控制台或网络登录。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>runlevel5.target, graphical.target</td>
+<td>多用户，图形化。通常为所有运行级别 3 的服务外加图形化登录。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>runlevel6.target, reboot.target</td>
+<td>重启</td>
+</tr>
+<tr>
+<td>emergency</td>
+<td>emergency.target</td>
+<td>紧急 Shell</td>
+</tr>
+</tbody></table>
+<h2 id="Systemd-的并发启动原理"><a href="#Systemd-的并发启动原理" class="headerlink" title="Systemd 的并发启动原理"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#Systemd-%E7%9A%84%E5%B9%B6%E5%8F%91%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86" title="Systemd 的并发启动原理"></a>Systemd 的并发启动原理</h2><p>如前所述，在 Systemd 中，所有的服务都并发启动，比如 Avahi、D-Bus、livirtd、X11、HAL 可以同时启动。乍一看，这似乎有点儿问题，比如 Avahi 需要 syslog 的服务，Avahi 和 syslog 同时启动，假设 Avahi 的启动比较快，所以 syslog 还没有准备好，可是 Avahi 又需要记录日志，这岂不是会出现问题？</p>
+<p>Systemd 的开发人员仔细研究了服务之间相互依赖的本质问题，发现所谓依赖可以分为三个具体的类型，而每一个类型实际上都可以通过相应的技术解除依赖关系。</p>
+<h3 id="并发启动原理之一：解决-socket-依赖"><a href="#并发启动原理之一：解决-socket-依赖" class="headerlink" title="并发启动原理之一：解决 socket 依赖"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E5%B9%B6%E5%8F%91%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86%E4%B9%8B%E4%B8%80%EF%BC%9A%E8%A7%A3%E5%86%B3-socket-%E4%BE%9D%E8%B5%96" title="并发启动原理之一：解决 socket 依赖"></a>并发启动原理之一：解决 socket 依赖</h3><p>绝大多数的服务依赖是套接字依赖。比如服务 A 通过一个套接字端口 S1 提供自己的服务，其他的服务如果需要服务 A，则需要连接 S1。因此如果服务 A 尚未启动，S1 就不存在，其他的服务就会得到启动错误。所以传统地，人们需要先启动服务 A，等待它进入就绪状态，再启动其他需要它的服务。Systemd 认为，只要我们预先把 S1 建立好，那么其他所有的服务就可以同时启动而无需等待服务 A 来创建 S1 了。如果服务 A 尚未启动，那么其他进程向 S1 发送的服务请求实际上会被 Linux 操作系统缓存，其他进程会在这个请求的地方等待。一旦服务 A 启动就绪，就可以立即处理缓存的请求，一切都开始正常运行。</p>
+<p>那么服务如何使用由 init 进程创建的套接字呢？</p>
+<p>Linux 操作系统有一个特性，当进程调用 fork 或者 exec 创建子进程之后，所有在父进程中被打开的文件句柄 (file descriptor) 都被子进程所继承。套接字也是一种文件句柄，进程 A 可以创建一个套接字，此后当进程 A 调用 exec 启动一个新的子进程时，只要确保该套接字的 close_on_exec 标志位被清空，那么新的子进程就可以继承这个套接字。子进程看到的套接字和父进程创建的套接字是同一个系统套接字，就仿佛这个套接字是子进程自己创建的一样，没有任何区别。</p>
+<p>这个特性以前被一个叫做 inetd 的系统服务所利用。Inetd 进程会负责监控一些常用套接字端口，比如 Telnet，当该端口有连接请求时，inetd 才启动 telnetd 进程，并把有连接的套接字传递给新的 telnetd 进程进行处理。这样，当系统没有 telnet 客户端连接时，就不需要启动 telnetd 进程。Inetd 可以代理很多的网络服务，这样就可以节约很多的系统负载和内存资源，只有当有真正的连接请求时才启动相应服务，并把套接字传递给相应的服务进程。</p>
+<p>和 inetd 类似，systemd 是所有其他进程的父进程，它可以先建立所有需要的套接字，然后在调用 exec 的时候将该套接字传递给新的服务进程，而新进程直接使用该套接字进行服务即可。</p>
+<h3 id="并发启动原理之二：解决-D-Bus-依赖"><a href="#并发启动原理之二：解决-D-Bus-依赖" class="headerlink" title="并发启动原理之二：解决 D-Bus 依赖"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E5%B9%B6%E5%8F%91%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86%E4%B9%8B%E4%BA%8C%EF%BC%9A%E8%A7%A3%E5%86%B3-D-Bus-%E4%BE%9D%E8%B5%96" title="并发启动原理之二：解决 D-Bus 依赖"></a>并发启动原理之二：解决 D-Bus 依赖</h3><p>D-Bus 是 desktop-bus 的简称，是一个低延迟、低开销、高可用性的进程间通信机制。它越来越多地用于应用程序之间通信，也用于应用程序和操作系统内核之间的通信。很多现代的服务进程都使用D-Bus 取代套接字作为进程间通信机制，对外提供服务。比如简化 Linux 网络配置的 NetworkManager 服务就使用 D-Bus 和其他的应用程序或者服务进行交互：邮件客户端软件 evolution 可以通过 D-Bus 从 NetworkManager 服务获取网络状态的改变，以便做出相应的处理。</p>
+<p>D-Bus 支持所谓”bus activation”功能。如果服务 A 需要使用服务 B 的 D-Bus 服务，而服务 B 并没有运行，则 D-Bus 可以在服务 A 请求服务 B 的 D-Bus 时自动启动服务 B。而服务 A 发出的请求会被 D-Bus 缓存，服务 A 会等待服务 B 启动就绪。利用这个特性，依赖 D-Bus 的服务就可以实现并行启动。</p>
+<h3 id="并发启动原理之三：解决文件系统依赖"><a href="#并发启动原理之三：解决文件系统依赖" class="headerlink" title="并发启动原理之三：解决文件系统依赖"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E5%B9%B6%E5%8F%91%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86%E4%B9%8B%E4%B8%89%EF%BC%9A%E8%A7%A3%E5%86%B3%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%BE%9D%E8%B5%96" title="并发启动原理之三：解决文件系统依赖"></a>并发启动原理之三：解决文件系统依赖</h3><p>系统启动过程中，文件系统相关的活动是最耗时的，比如挂载文件系统，对文件系统进行磁盘检查（fsck），磁盘配额检查等都是非常耗时的操作。在等待这些工作完成的同时，系统处于空闲状态。那些想使用文件系统的服务似乎必须等待文件系统初始化完成才可以启动。但是 systemd 发现这种依赖也是可以避免的。</p>
+<p>Systemd 参考了 autofs 的设计思路，使得依赖文件系统的服务和文件系统本身初始化两者可以并发工作。autofs 可以监测到某个文件系统挂载点真正被访问到的时候才触发挂载操作，这是通过内核 automounter 模块的支持而实现的。比如一个 open()系统调用作用在”&#x2F;misc&#x2F;cd&#x2F;file1”的时候，&#x2F;misc&#x2F;cd 尚未执行挂载操作，此时 open()调用被挂起等待，Linux 内核通知 autofs，autofs 执行挂载。这时候，控制权返回给 open()系统调用，并正常打开文件。</p>
+<p>Systemd 集成了 autofs 的实现，对于系统中的挂载点，比如&#x2F;home，当系统启动的时候，systemd 为其创建一个临时的自动挂载点。在这个时刻&#x2F;home 真正的挂载设备尚未启动好，真正的挂载操作还没有执行，文件系统检测也还没有完成。可是那些依赖该目录的进程已经可以并发启动，他们的 open()操作被内建在 systemd 中的 autofs 捕获，将该 open()调用挂起（可中断睡眠状态）。然后等待真正的挂载操作完成，文件系统检测也完成后，systemd 将该自动挂载点替换为真正的挂载点，并让 open()调用返回。由此，实现了那些依赖于文件系统的服务和文件系统本身同时并发启动。</p>
+<p>当然对于”&#x2F;“根目录的依赖实际上一定还是要串行执行，因为 systemd 自己也存放在&#x2F;之下，必须等待系统根目录挂载检查好。</p>
+<p>不过对于类似&#x2F;home 等挂载点，这种并发可以提高系统的启动速度，尤其是当&#x2F;home 是远程的 NFS 节点，或者是加密盘等，需要耗费较长的时间才可以准备就绪的情况下，因为并发启动，这段时间内，系统并不是完全无事可做，而是可以利用这段空余时间做更多的启动进程的事情，总的来说就缩短了系统启动时间。</p>
+<h2 id="Systemd-的使用"><a href="#Systemd-的使用" class="headerlink" title="Systemd 的使用"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#Systemd-%E7%9A%84%E4%BD%BF%E7%94%A8" title="Systemd 的使用"></a>Systemd 的使用</h2><p>下面针对技术人员的不同角色来简单地介绍一下 systemd 的使用。本文只打算给出简单的描述，让您对 systemd 的使用有一个大概的理解。具体的细节内容太多，即无法在一篇短文内写全，本人也没有那么强大的能力。还需要读者自己去进一步查阅 systemd 的文档。</p>
+<h3 id="系统软件开发人员"><a href="#系统软件开发人员" class="headerlink" title="系统软件开发人员"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E7%B3%BB%E7%BB%9F%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98" title="系统软件开发人员"></a>系统软件开发人员</h3><p>开发人员需要了解 systemd 的更多细节。比如您打算开发一个新的系统服务，就必须了解如何让这个服务能够被 systemd 管理。这需要您注意以下这些要点：</p>
+<ul>
+<li>后台服务进程代码不需要执行两次派生来实现后台精灵进程，只需要实现服务本身的主循环即可。</li>
+<li>不要调用 setsid()，交给 systemd 处理</li>
+<li>不再需要维护 pid 文件。</li>
+<li>Systemd 提供了日志功能，服务进程只需要输出到 stderr 即可，无需使用 syslog。</li>
+<li>处理信号 SIGTERM，这个信号的唯一正确作用就是停止当前服务，不要做其他的事情。</li>
+<li>SIGHUP 信号的作用是重启服务。</li>
+<li>需要套接字的服务，不要自己创建套接字，让 systemd 传入套接字。</li>
+<li>使用 sd_notify()函数通知 systemd 服务自己的状态改变。一般地，当服务初始化结束，进入服务就绪状态时，可以调用它。</li>
+</ul>
+<p><strong>Unit 文件的编写</strong></p>
+<p>对于开发者来说，工作量最大的部分应该是编写配置单元文件，定义所需要的单元。</p>
+<p>举例来说，开发人员开发了一个新的服务程序，比如 httpd，就需要为其编写一个配置单元文件以便该服务可以被 systemd 管理，类似 UpStart 的工作配置文件。在该文件中定义服务启动的命令行语法，以及和其他服务的依赖关系等。</p>
+<p>此外我们之前已经了解到，systemd 的功能繁多，不仅用来管理服务，还可以管理挂载点，定义定时任务等。这些工作都是由编辑相应的配置单元文件完成的。我在这里给出几个配置单元文件的例子。</p>
+<p>下面是 SSH 服务的配置单元文件，服务配置单元文件以.service 为文件名后缀。</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs julia"><span class="hljs-string">`#cat /etc/system/system/sshd.service`</span><span class="hljs-string">`[Unit]`</span><span class="hljs-string">`Description=OpenSSH server daemon`</span><span class="hljs-string">`[Service]`</span><span class="hljs-string">`EnvironmentFile=/etc/sysconfig/sshd`</span><span class="hljs-string">`ExecStartPre=/usr/sbin/sshd-keygen`</span><span class="hljs-string">`ExecStart=/usrsbin/sshd –D <span class="hljs-variable">$OPTIONS</span>`</span><span class="hljs-string">`ExecReload=/bin/kill –HUP <span class="hljs-variable">$MAINPID</span>`</span><span class="hljs-string">`KillMode=process`</span><span class="hljs-string">`Restart=on-failure`</span><span class="hljs-string">`RestartSec=42s`</span><span class="hljs-string">`[Install]`</span><span class="hljs-string">`WantedBy=multi-user.target`</span><br></code></pre></td></tr></table></figure>
+
+<p>文件分为三个小节。第一个是[Unit]部分，这里仅仅有一个描述信息。第二部分是 Service 定义，其中，ExecStartPre 定义启动服务之前应该运行的命令；ExecStart 定义启动服务的具体命令行语法。第三部分是[Install]，WangtedBy 表明这个服务是在多用户模式下所需要的。</p>
+<p>那我们就来看下 multi-user.target 吧：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">`#cat multi-user.target``[Unit]``<span class="hljs-attribute">Description</span>=Multi-User System``<span class="hljs-attribute">Documentation</span>=man.systemd.special(7)``Requires=basic.target``Conflicts=rescue.service rescure.target``<span class="hljs-attribute">After</span>=basic.target rescue.service rescue.target``<span class="hljs-attribute">AllowIsolate</span>=<span class="hljs-literal">yes</span>``[Install]``<span class="hljs-attribute">Alias</span>=default.target`<br></code></pre></td></tr></table></figure>
+
+<p>第一部分中的 Requires 定义表明 multi-user.target 启动的时候 basic.target 也必须被启动；另外 basic.target 停止的时候，multi-user.target 也必须停止。如果您接着查看 basic.target 文件，会发现它又指定了 sysinit.target 等其他的单元必须随之启动。同样 sysinit.target 也会包含其他的单元。采用这样的层层链接的结构，最终所有需要支持多用户模式的组件服务都会被初始化启动好。</p>
+<p>在[Install]小节中有 Alias 定义，即定义本单元的别名，这样在运行 systemctl 的时候就可以使用这个别名来引用本单元。这里的别名是 default.target，比 multi-user.target 要简单一些。。。</p>
+<p>此外在&#x2F;etc&#x2F;systemd&#x2F;system 目录下还可以看到诸如*.wants 的目录，放在该目录下的配置单元文件等同于在[Unit]小节中的 wants 关键字，即本单元启动时，还需要启动这些单元。比如您可以简单地把您自己写的 foo.service 文件放入 multi-user.target.wants 目录下，这样每次都会被默认启动了。</p>
+<p>最后，让我们来看看 sys-kernel-debug.mout 文件，这个文件定义了一个文件挂载点：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-string">`#cat sys-kernel-debug.mount`</span><span class="hljs-string">`[Unit]`</span><span class="hljs-string">`Description=Debug File Syste`</span><span class="hljs-string">`DefaultDependencies=no`</span><span class="hljs-string">`ConditionPathExists=/sys/kernel/debug`</span><span class="hljs-string">`Before=sysinit.target`</span><span class="hljs-string">`[Mount]`</span><span class="hljs-string">`What=debugfs`</span><span class="hljs-string">`Where=/sys/kernel/debug`</span><span class="hljs-string">`Type=debugfs`</span><br></code></pre></td></tr></table></figure>
+
+<p>这个配置单元文件定义了一个挂载点。挂载配置单元文件有一个[Mount]配置小节，里面配置了 What，Where 和 Type 三个数据项。这都是挂载命令所必须的，例子中的配置等同于下面这个挂载命令：</p>
+<p>mount –t debugfs &#x2F;sys&#x2F;kernel&#x2F;debug debugfs</p>
+<p>配置单元文件的编写需要很多的学习，必须参考 systemd 附带的 man 等文档进行深入学习。希望通过上面几个小例子，大家已经了解配置单元文件的作用和一般写法了。</p>
+<h3 id="系统管理员"><a href="#系统管理员" class="headerlink" title="系统管理员"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%91%98" title="系统管理员"></a>系统管理员</h3><p>systemd 的主要命令行工具是 systemctl。</p>
+<p>多数管理员应该都已经非常熟悉系统服务和 init 系统的管理，比如 service、chkconfig 以及 telinit 命令的使用。systemd 也完成同样的管理任务，只是命令工具 systemctl 的语法有所不同而已，因此用表格来对比 systemctl 和传统的系统管理命令会非常清晰。</p>
+<h5 id="表-2-Systemd-命令和-sysvinit-命令的对照表"><a href="#表-2-Systemd-命令和-sysvinit-命令的对照表" class="headerlink" title="表 2. Systemd 命令和 sysvinit 命令的对照表"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E8%A1%A8-2-Systemd-%E5%91%BD%E4%BB%A4%E5%92%8C-sysvinit-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%AF%B9%E7%85%A7%E8%A1%A8" title="表 2. Systemd 命令和 sysvinit 命令的对照表"></a>表 2. Systemd 命令和 sysvinit 命令的对照表</h5><table>
+<thead>
+<tr>
+<th>Sysvinit 命令</th>
+<th>Systemd 命令</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>service foo start</td>
+<td>systemctl start foo.service</td>
+<td>用来启动一个服务 (并不会重启现有的)</td>
+</tr>
+<tr>
+<td>service foo stop</td>
+<td>systemctl stop foo.service</td>
+<td>用来停止一个服务 (并不会重启现有的)。</td>
+</tr>
+<tr>
+<td>service foo restart</td>
+<td>systemctl restart foo.service</td>
+<td>用来停止并启动一个服务。</td>
+</tr>
+<tr>
+<td>service foo reload</td>
+<td>systemctl reload foo.service</td>
+<td>当支持时，重新装载配置文件而不中断等待操作。</td>
+</tr>
+<tr>
+<td>service foo condrestart</td>
+<td>systemctl condrestart foo.service</td>
+<td>如果服务正在运行那么重启它。</td>
+</tr>
+<tr>
+<td>service foo status</td>
+<td>systemctl status foo.service</td>
+<td>汇报服务是否正在运行。</td>
+</tr>
+<tr>
+<td>ls &#x2F;etc&#x2F;rc.d&#x2F;init.d&#x2F;</td>
+<td>systemctl list-unit-files –type&#x3D;service</td>
+<td>用来列出可以启动或停止的服务列表。</td>
+</tr>
+<tr>
+<td>chkconfig foo on</td>
+<td>systemctl enable foo.service</td>
+<td>在下次启动时或满足其他触发条件时设置服务为启用</td>
+</tr>
+<tr>
+<td>chkconfig foo off</td>
+<td>systemctl disable foo.service</td>
+<td>在下次启动时或满足其他触发条件时设置服务为禁用</td>
+</tr>
+<tr>
+<td>chkconfig foo</td>
+<td>systemctl is-enabled foo.service</td>
+<td>用来检查一个服务在当前环境下被配置为启用还是禁用。</td>
+</tr>
+<tr>
+<td>chkconfig –list</td>
+<td>systemctl list-unit-files –type&#x3D;service</td>
+<td>输出在各个运行级别下服务的启用和禁用情况</td>
+</tr>
+<tr>
+<td>chkconfig foo –list</td>
+<td>ls &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;*.wants&#x2F;foo.service</td>
+<td>用来列出该服务在哪些运行级别下启用和禁用。</td>
+</tr>
+<tr>
+<td>chkconfig foo –add</td>
+<td>systemctl daemon-reload</td>
+<td>当您创建新服务文件或者变更设置时使用。</td>
+</tr>
+<tr>
+<td>telinit 3</td>
+<td>systemctl isolate multi-user.target (OR systemctl isolate runlevel3.target OR telinit 3)</td>
+<td>改变至多用户运行级别。</td>
+</tr>
+</tbody></table>
+<p>除了表 2 列出的常见用法，系统管理员还需要了解其他一些系统配置和管理任务的改变。</p>
+<p>首先我们了解 systemd 如何处理电源管理，命令如下表所示：</p>
+<h5 id="表-3，systemd-电源管理命令"><a href="#表-3，systemd-电源管理命令" class="headerlink" title="表 3，systemd 电源管理命令"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#%E8%A1%A8-3%EF%BC%8Csystemd-%E7%94%B5%E6%BA%90%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4" title="表 3，systemd 电源管理命令"></a>表 3，systemd 电源管理命令</h5><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>systemctl reboot</td>
+<td>重启机器</td>
+</tr>
+<tr>
+<td>systemctl poweroff</td>
+<td>关机</td>
+</tr>
+<tr>
+<td>systemctl suspend</td>
+<td>待机</td>
+</tr>
+<tr>
+<td>systemctl hibernate</td>
+<td>休眠</td>
+</tr>
+<tr>
+<td>systemctl hybrid-sleep</td>
+<td>混合休眠模式（同时休眠到硬盘并待机）</td>
+</tr>
+</tbody></table>
+<p>关机不是每个登录用户在任何情况下都可以执行的，一般只有管理员才可以关机。正常情况下系统不应该允许 SSH 远程登录的用户执行关机命令。否则其他用户正在工作，一个用户把系统关了就不好了。为了解决这个问题，传统的 Linux 系统使用 ConsoleKit 跟踪用户登录情况，并决定是否赋予其关机的权限。现在 ConsoleKit 已经被 systemd 的 logind 所替代。</p>
+<p>logind 不是 pid-1 的 init 进程。它的作用和 UpStart 的 session init 类似，但功能要丰富很多，它能够管理几乎所有用户会话(session)相关的事情。logind 不仅是 ConsoleKit 的替代，它可以：</p>
+<ul>
+<li>维护，跟踪会话和用户登录情况。如上所述，为了决定关机命令是否可行，系统需要了解当前用户登录情况，如果用户从 SSH 登录，不允许其执行关机命令；如果普通用户从本地登录，且该用户是系统中的唯一会话，则允许其执行关机命令；这些判断都需要 logind 维护所有的用户会话和登录情况。</li>
+<li>Logind 也负责统计用户会话是否长时间没有操作，可以执行休眠&#x2F;关机等相应操作。</li>
+<li>为用户会话的所有进程创建 CGroup。这不仅方便统计所有用户会话的相关进程，也可以实现会话级别的系统资源控制。</li>
+<li>负责电源管理的组合键处理，比如用户按下电源键，将系统切换至睡眠状态。</li>
+<li>多席位(multi-seat) 管理。如今的电脑，即便一台笔记本电脑，也完全可以提供多人同时使用的计算能力。多席位就是一台电脑主机管理多个外设，比如两个屏幕和两个鼠标&#x2F;键盘。席位一使用屏幕 1 和键盘 1；席位二使用屏幕 2 和键盘 2，但他们都共享一台主机。用户会话可以自由在多个席位之间切换。或者当插入新的键盘，屏幕等物理外设时，自动启动 gdm 用户登录界面等。所有这些都是多席位管理的内容。ConsoleKit 始终没有实现这个功能，systemd 的 logind 能够支持多席位。</li>
+</ul>
+<p>以上描述的这些管理功能仅仅是 systemd 的部分功能，除此之外，systemd 还负责系统其他的管理配置，比如配置网络，Locale 管理，管理系统内核模块加载等，完整地描述它们已经超出了本人的能力。</p>
+<h2 id="systemd-小结"><a href="#systemd-小结" class="headerlink" title="systemd 小结"></a><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#systemd-%E5%B0%8F%E7%BB%93" title="systemd 小结"></a>systemd 小结</h2><p>在不才作者看来，作为系统初始化系统，systemd 的最大特点有两个：</p>
+<ul>
+<li>令人惊奇的激进的并发启动能力，极大地提高了系统启动速度；</li>
+<li>用 CGroup 统计跟踪子进程，干净可靠。</li>
+</ul>
+<p>此外，和其前任不同的地方在于，systemd 已经不仅仅是一个初始化系统了。</p>
+<p>Systemd 出色地替代了 sysvinit 的所有功能，但它并未就此自满。因为 init 进程是系统所有进程的父进程这样的特殊性，systemd 非常适合提供曾经由其他服务提供的功能，比如定时任务 (以前由 crond 完成) ；会话管理 (以前由 ConsoleKit&#x2F;PolKit 等管理) 。仅仅从本文皮毛一样的介绍来看，Systemd 已经管得很多了，可它还在不断发展。它将逐渐成为一个多功能的系统环境，能够处理非常多的系统管理任务，有人甚至将它看作一个操作系统。</p>
+<p>好的一点是，这非常有助于标准化 Linux 的管理！从前，不同的 Linux 发行版各行其事，使用不同方法管理系统，从来也不会互相妥协。比如如何将系统进入休眠状态，不同的系统有不同的解决方案，即便是同一个 Linux 系统，也存在不同的方法，比如一个有趣的讨论：<a target="_blank" rel="noopener" href="http://askubuntu.com/questions/1792/how-can-i-suspend-hibernate-from-command-line">如何让 ubuntu 系</a><a target="_blank" rel="noopener" href="http://askubuntu.com/questions/1792/how-can-i-suspend-hibernate-from-command-line">统休眠</a>，可以使用底层的&#x2F;sys&#x2F;power&#x2F;state 接口，也可以使用诸如 pm-utility 等高层接口。存在这么多种不同的方法做一件事情对像我这样的普通用户而言可不是件有趣的事情。systemd 提供统一的电源管理命令接口，这件事情的意义就类似全世界的人都说统一的语言，我们再也不需要学习外语了，多么美好！</p>
+<p>如果所有的 Linux 发行版都采纳了 systemd，那么系统管理任务便可以很大程度上实现标准化。此外 systemd 有个很棒的承诺：接口保持稳定，不会再轻易改动。对于软件开发人员来说，这是多么体贴又让人感动的承诺啊！</p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html?ca=drs-">本文转载自：</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-sysvinit/">原文一</a></li>
+<li><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-UpStart/">原文二</a></li>
+<li><a target="_blank" rel="noopener" href="https://cntsp.github.io/2019/12/16/%E6%B5%85%E6%9E%90Linux%E5%88%9D%E5%A7%8B%E5%8C%96init%E7%B3%BB%E7%BB%9F-Systemd/#toc-heading-22">原文三</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">阮一峰的网络日志——Systmed基础篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html">阮一峰的网络日志——Systmed实战篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://linux.cn/article-6888-1.html">Linux.cn的关于Systmed的文章</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux中的初始化系统</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/06/09/Linux中的初始化系统/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年6月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/09/shell%E8%84%9A%E6%9C%AC%E4%B8%ADecho%E6%98%BE%E7%A4%BA%E5%B8%A6%E9%A2%9C%E8%89%B2%E7%9A%84%E5%86%85%E5%AE%B9/" title="shell脚本中echo显示带颜色的内容">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">shell脚本中echo显示带颜色的内容</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/28/rcS%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90/" title="rcS文件的分析">
+                        <span class="hidden-mobile">rcS文件的分析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

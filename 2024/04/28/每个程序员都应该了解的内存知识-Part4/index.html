@@ -1,0 +1,713 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="关于NUMA的支持">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每个程序员都应该了解的内存知识-Part4">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/28/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part4/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="关于NUMA的支持">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339956.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282340239.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282342606.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282344325.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282345787.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339099.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339904.png">
+<meta property="article:published_time" content="2024-04-28T15:28:48.000Z">
+<meta property="article:modified_time" content="2024-04-29T16:52:51.855Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339956.png">
+  
+  
+  
+  <title>每个程序员都应该了解的内存知识-Part4 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-856v22.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="每个程序员都应该了解的内存知识-Part4"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-28 23:28" pubdate>
+          2024年4月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          51 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">每个程序员都应该了解的内存知识-Part4</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>关于NUMA的支持</p>
+<span id="more"></span>
+
+<h1 id="5-NUMA-支持"><a href="#5-NUMA-支持" class="headerlink" title="5 NUMA 支持"></a>5 NUMA 支持</h1><p>在第2节中，我们看到，在一些机器上，访问特定物理内存区域的开销因访问来源的不同而不同。这类硬件需要操作系统和应用程序特别小心。我们将从NUMA硬件的一些细节开始，然后我们将介绍Linux内核为NUMA提供的一些支持。</p>
+<h2 id="5-1-NUMA-硬件"><a href="#5-1-NUMA-硬件" class="headerlink" title="5.1 NUMA 硬件"></a>5.1 NUMA 硬件</h2><p>非统一存储体系结构(non-uniform memory architectures)正变得越来越普遍。在最简单的NUMA形式中，处理器访问本地内存（见图2.3）比访问其他处理器的内存的开销更低。</p>
+<p>NUMA还特别适用于大型机器。我们已经描述过了让多个处理器访问同一个内存的问题。对于商业硬件，所有处理器都将共享同一个北桥（暂时忽略AMD Opteron NUMA节点，它们有自己的问题）。这使得北桥成为一个严重的瓶颈，因为所有内存访问都是通过它路由的。当然，大型机器可以使用定制硬件代替北桥，但是，除非使用的内存芯片有多个端口，即它们可以从多个总线使用，否则仍然存在瓶颈。多端口RAM的构建和支持既复杂又昂贵，因此几乎从未使用过。</p>
+<p>复杂性的下一步是AMD使用的模型，其中互连机制为未直接连接到RAM的处理器提供访问。除非想要任意增加直径（即任意两个节点之间的最大距离），否则以这种方式形成的结构的尺寸是有限的。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339956.png" srcset="/img/loading.gif" lazyload><br>图 5.1: Hypercubes</p>
+<p>一种有效的节点拓扑结构是超立方体，它将节点数量限制在2<sup>C</sup>，其中C是每个节点的互连接口数量。对于所有具有2<sup>n</sup>CPU的系统，超立方体的直径最小。图5.1显示了前三个超立方体。每个超立方体的直径为C，绝对最小值。AMD的第一代Opteron处理器每个处理器有三个超级传输链路。至少有一个处理器必须在一条链路上连接一个南桥，这意味着，目前可以直接高效地实现C&#x3D;2的超立方体。下一代被宣布有四个链接，在这一点上C&#x3D;3超立方体是可能的。</p>
+<p>然而，这并不意味着无法支持更大的处理器堆积。有一些公司已经开发了横杆，允许使用更大的处理器集合（例如，Newisys的Horus）。但这些交叉链接增加了NUMA因子，但是在一定数量以上的处理器上不再高效。</p>
+<p>下一步是连接多组CPU，并为它们实现共享内存。这样的设计存在多层复杂性。IBM x445和类似的机器仍然是一个非常接近商业级机器的系统。它们被设计成有x86和x86-64处理器的普通4U、8路机器。这些机器中的两台（有时多达四台）可以连接起来，作为一台具有共享内存的机器工作。所使用的互连引入了一个重要的NUMA因素，操作系统和应用程序都必须考虑到这一因素。</p>
+<p>另一方面，像SGI Altix这样的机器是专门为互联而设计的，SGI的NUMAlink互连结构速度非常快和延迟很低；这两项都是高性能计算（HPC）的要求，特别是在使用MPI时。当然，缺点是这种复杂和专业化设计有非常高的代价。它们使NUMA系数合理较低成为可能，但由于这些机器可以拥有的CPU数量（数千）和互连的容量有限，NUMA系数实际上是动态的，并且可以达到不可接受的水平，具体取决于工作负载。</p>
+<p>更常用的解决方案是使用高速网络连接商业机器集群。但这些不是NUMA机器；它们不实现共享地址空间，因此不属于本文讨论的任何类别。</p>
+<h2 id="5-2-支持NUMA的操作系统"><a href="#5-2-支持NUMA的操作系统" class="headerlink" title="5.2 支持NUMA的操作系统"></a>5.2 支持NUMA的操作系统</h2><p>为了支持NUMA机器，操作系统必须考虑内存的分布式特性。例如，如果一个进程在给定的处理器上运行，分配给该进程地址空间的物理RAM应该来自本地内存，否则，每条指令都必须访问远程内存以获取代码和数据。但是有一些情况需要在NUMA机器上特殊考虑。DSO的文本段通常在机器的物理RAM中只出现一次，但是，如果所有CPU上的进程和线程都使用该DSO（例如，基本的运行时库，如libc），这意味着除少数处理器外，所有处理器都必须具有远程访问。理想情况下，操作系统会将此类DSO“镜像”到每个处理器的物理RAM中，并使用本地副本。这是一种优化，不是一种要求，通常很难实现。</p>
+<p>为了避免让情况变得更糟，操作系统不应该将进程或线程从一个NUMA节点迁移到另一个NUMA节点。操作系统应该已经尝试避免在普通多处理器机器上迁移进程，因为从一个处理器迁移到另一个处理器意味着缓存内容丢失。如果负载分配需要迁移处理器的进程或线程，操作系统通常可以选择一个具有足够剩余容量的任意新处理器。在NUMA环境中，新处理器的选择有点限制。新选择的处理器对进程正在使用的内存的访问成本不应高于旧处理器；这限制了目标列表。如果没有符合该标准的可用处理器，操作系统就别无选择，只能迁移到内存访问代价更高的处理器。</p>
+<p>在这种情况下，有两种可能的方式进行(优化)。首先，我们可以希望这种情况是暂时的，并且可以将流程迁移回更适合的处理器。或者，操作系统也可以将进程的访问的内存迁移到最新访问它的处理器上。这是一个相当昂贵的操作。可能需要复制大量内存，尽管不一定是一步完成的。当这种情况发生时，必须停止该过程，至少是短暂地停止，以便正确迁移对旧页面的修改。要使页面迁移高效、快速，还有一系列其他要求。简而言之，除非真的有必要，否则操作系统应该避免它。</p>
+<p>通常，不能假设NUMA机器上的所有进程都使用相同数量的内存，(不能假设)随着进程在处理器之间的分布，内存使用也会均匀分布。事实上，除非机器上运行的应用程序非常具体（在HPC世界中很常见，但在其他不常见），否则内存使用将非常不平均。一些应用程序将使用大量内存，而其他应用程序几乎没有。如果总是将内存分配给发出请求的处理器，这迟早会导致问题。系统最终将耗尽NUMA节点的本地内存。</p>
+<p>作为对这些严重问题的响应，默认情况下，内存不是仅在本地节点上分配的。要利用系统的所有内存，默认策略是将内存条带化。这保证了系统所有内存的平等使用。作为一个副作用，可以在处理器之间自由迁移进程，因为平均而言，对所使用的所有内存的访问成本不会改变。对于较小的NUMA系数，条带化是可以接受的，但仍然不是最佳的（见第5.4节中的数据）。</p>
+<p>这是一种悲观情绪，有助于系统避免严重问题，并使其在正常运行时更具可预测性。但在某些情况下，它确实会显著降低系统的整体性能。这就是为什么Linux允许每个进程选择内存分配规则。一个进程可以为自己及其子进程选择不同的策略。我们将在第6节介绍可用于此目的的接口。</p>
+<h2 id="5-3-公开的信息"><a href="#5-3-公开的信息" class="headerlink" title="5.3 公开的信息"></a>5.3 公开的信息</h2><p>内核通过sys伪文件系统（sysfs）发布了以下关于处理器缓存的信息：</p>
+<pre><code class="hljs">/sys/devices/system/cpu/cpu*/cache
+</code></pre>
+<p>在第<code>6.2.1</code>节中，我们将看到可以用来查询各种缓存大小的接口。这里重要的是缓存的拓扑结构。上述目录包含子目录（命名为<code>index*</code>），这些子目录列出了CPU拥有的各种缓存的信息。就拓扑结构而言，在这些目录中重要的文件是<code>type</code>、<code>level</code>和<code>shared_cpu_map</code>。对于<code>Intel Core 2 QX6700</code>，信息看起来像表5.1所示。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282340239.png" srcset="/img/loading.gif" lazyload></p>
+<p>这些数据的含义如下：</p>
+<ul>
+<li>每个核心 {cpu0到cpu3是核心的知识来自稍后将解释的另一个地方。} 拥有三个缓存：L1i、L1d和L2。</li>
+<li>L1d和L1i缓存不与任何其他核心共享 — 每个核心都有自己的一组缓存。这通过shared_cpu_map中的位图只有一个设置位来表示。</li>
+<li>cpu0和cpu1上的L2缓存是共享的，cpu2和cpu3上的L2缓存也是如此。</li>
+</ul>
+<p>如果CPU有更多的缓存级别，就会有更多名为index*的目录。</p>
+<p>对于一台四插槽、双核心的Opteron机器，缓存信息看起来像表5.2：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282342606.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到，这些处理器也有三个缓存：L1i、L1d和L2。没有一个核心共享任何级别的缓存。对于这个系统来说，有趣的部分是处理器的拓扑结构。没有这些额外的信息，人们无法理解缓存数据。sys文件系统在以下文件中暴露了这些信息：</p>
+<pre><code class="hljs">/sys/devices/system/cpu/cpu*/topology
+</code></pre>
+<p>表5.3显示了对于SMP（对称多处理）Opteron机器，这个层级结构中有趣的文件。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282344325.png" srcset="/img/loading.gif" lazyload></p>
+<p>结合表5.2和表5.3，我们可以看到没有CPU拥有超线程（thread_siblings位图只有一个位设置），系统实际上有四个处理器（physical_package_id从0到3），每个处理器有两个核心，且没有任何核心共享缓存。这与早期的Opteron处理器完全相符。</p>
+<p>到目前为止提供的数据中完全缺失的是关于这台机器上NUMA（非统一内存访问）特性的信息。任何SMP（对称多处理）Opteron机器都是一台NUMA机器。要获取这些数据，我们需要查看sys文件系统的另一部分，这在NUMA机器上存在，即以下层级结构中：</p>
+<pre><code class="hljs">/sys/devices/system/node
+</code></pre>
+<p>这个目录为系统中的每个NUMA节点包含一个子目录。在特定于节点的目录中，有一些文件。对于前面两个表中描述的Opteron机器，这些重要文件及其内容在表5.4中显示。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282345787.png" srcset="/img/loading.gif" lazyload></p>
+<p>这些信息将所有其他信息整合在一起；现在我们对机器的架构有了完整的了解。我们已经知道这台机器有四个处理器。每个处理器都构成自己的节点，这可以通过查看node*目录中cpumap文件中的值设置的位来了解。这些目录中的距离文件包含一组值，每个节点一个，代表在相应节点上的内存访问成本。在这个例子中，所有本地内存访问的成本是10，所有对任何其他节点的远程访问的成本是20。{顺便说一下，这是错误的。ACPI信息显然是错误的，因为，尽管使用的处理器具有三个相干的HyperTransport链路，但至少有一个处理器必须连接到南桥。因此，至少有一对节点必须具有更大的距离。} 这意味着，尽管处理器被组织为一个二维超立方体（见图5.1），但非直接连接的处理器之间的访问并不更昂贵。成本的相对值应该可以用作访问时间实际差异的估计。所有这些信息的准确性是另一个问题。</p>
+<h2 id="5-4-访问非本节点内存的开销"><a href="#5-4-访问非本节点内存的开销" class="headerlink" title="5.4 访问非本节点内存的开销"></a>5.4 访问非本节点内存的开销</h2><p>不过，NUMA节点距离是相关的。在[amdccnuma]AMD文档记录了四插槽机器的NUMA开销。对于写操作，如图5.3所示。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339099.png" srcset="/img/loading.gif" lazyload><br>图 5.3: 多节点之上的读写性能</p>
+<p>写比读慢，这并不奇怪。有趣的是单跳和两跳的开销。其中两个单跳场景的开销实际上略有不同。有关详细信息，请参见[amdccnuma]。从这个图表中我们需要记住的事实是，两跳读取和写入分别比0跳读取慢30%和49%。两跳写入比0跳写入慢32%，比单跳写入慢17%。处理器和内存节点的相对位置会产生很大的差异。AMD的下一代处理器将为每个处理器提供四条连贯的超级传输链路。在这种情况下，四CPU插座机器的直径为1（C&#x3D;2）。对于八个CPU插座，同样的问题再次出现，因为有八个节点的超立方体的直径是3（C&#x3D;3）。</p>
+<p>所有这些信息都是可用的，但使用起来很麻烦。在第6.5节中，我们将看到一个接口，它有助于更轻松地访问和使用这些信息。</p>
+<p>最后一些系统能够提供的信息是进程本身的状态。这些信息可以确定内存映射文件、写时拷贝（COW）页面和匿名内存如何分布在系统中的节点上。每个进程都有一个文件<code>/proc/$&#123;PID&#125;/numa_maps</code>，其中PID是进程的ID，如图5.2所示。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs sh">00400000 default file=/bin/cat mapped=3 N3=3<br>00504000 default file=/bin/cat anon=1 dirty=1 mapped=2 N3=2<br>00506000 default heap anon=3 dirty=3 active=0 N3=3<br>38a9000000 default file=/lib64/ld-2.4.so mapped=22 mapmax=47 N1=22<br>38a9119000 default file=/lib64/ld-2.4.so anon=1 dirty=1 N3=1<br>38a911a000 default file=/lib64/ld-2.4.so anon=1 dirty=1 N3=1<br>38a9200000 default file=/lib64/libc-2.4.so mapped=53 mapmax=52 N1=51 N2=2<br>38a933f000 default file=/lib64/libc-2.4.so<br>38a943f000 default file=/lib64/libc-2.4.so anon=1 dirty=1 mapped=3 mapmax=32 N1=2 N3=1<br>38a9443000 default file=/lib64/libc-2.4.so anon=1 dirty=1 N3=1<br>38a9444000 default anon=4 dirty=4 active=0 N3=4<br>2b2bbcdce000 default anon=1 dirty=1 N3=1<br>2b2bbcde4000 default anon=2 dirty=2 N3=2<br>2b2bbcde6000 default file=/usr/lib/locale/locale-archive mapped=11 mapmax=8 N0=11<br>7fffedcc7000 default stack anon=2 dirty=2 N3=2<br></code></pre></td></tr></table></figure>
+<p>Figure 5.2: Content of &#x2F;proc&#x2F;PID&#x2F;numa_maps</p>
+<p>文件中的重要信息是N0到N3的值，它指示为节点0到3上的内存区域分配的内存页数。很可能该程序是在CPU核心被调度到节点3的上执行的。程序本身和脏页都分配在该NUMA节点上。只读映射，例如ld-2.4的第一个映射ld.so和libc-2.4.so。因此，共享文件区域设置归档文件也会分配到其他节点上。</p>
+<p>如图5.3所示，对于单跳和双跳的读取，节点间的读取性能分别下降9%和30%。对于执行时，如果如果二级缓存miss，则需要调用这样的读取操作，则每个缓存线都会产生这些额外的开销。如果内存距离处理器较远，则超出缓存大小的大型工作负载的所有成本都必须增加9%&#x2F;30%。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282339904.png" srcset="/img/loading.gif" lazyload></p>
+<p>Figure 5.4: Operating on Remote Memory</p>
+<p>要查看真实世界中的效果，我们可以按照第3.5.1节测量带宽，但这一次，内存位于远端NUMA节点上，单跳的距离。与使用本地内存的数据相比，该测试的结果如图5.4所示。这些数字在两个方向上都有一些大的尖峰，这是测量多线程代码问题的结果，可以忽略。此图中的重要信息是，读取操作总是慢20%。这比图5.3中的9%要慢得多，图5.3中的9%很可能不是<code>uninterrupted</code>读&#x2F;写操作的数字，可能指的是较旧的处理器版本。只有AMD知道。</p>
+<p>对于适合缓存的工作集大小，写入和复制操作的性能也会降低20%。对于超过缓存大小的工作集，写入性能不会明显低于本地节点上的操作。互连的速度足够快，可以跟上内存的速度。主要因素是等待主内存的时间。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span><a href="/images/posts/memory/What-Every-Programmer-Should-Know-About-Memory.pdf">What-Every-Programmer-Should-Know-About-Memory</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://lwn.net/Articles/253361/">Memory part 3: Virtual Memory</a>
+<a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%86%85%E5%AD%98/" class="category-chain-item">内存</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>每个程序员都应该了解的内存知识-Part4</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/04/28/每个程序员都应该了解的内存知识-Part4/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/29/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part5/" title="每个程序员都应该了解的内存知识-Part5">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">每个程序员都应该了解的内存知识-Part5</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/28/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part3/" title="每个程序员都应该了解的内存知识-Part3">
+                        <span class="hidden-mobile">每个程序员都应该了解的内存知识-Part3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

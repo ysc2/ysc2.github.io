@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这是FreeRTOS系列学习文章的第二节，主要是关于FreeRTOS的任务相关的知识点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FreeRTOS(2)-任务">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/07/FreeRTOS-2-%E4%BB%BB%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="这是FreeRTOS系列学习文章的第二节，主要是关于FreeRTOS的任务相关的知识点。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png">
+<meta property="article:published_time" content="2024-01-06T16:24:19.000Z">
+<meta property="article:modified_time" content="2024-01-15T15:18:22.029Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png">
+  
+  
+  
+  <title>FreeRTOS(2)-任务 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="FreeRTOS(2)-任务"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-07 00:24" pubdate>
+          2024年1月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          19k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          155 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">FreeRTOS(2)-任务</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>这是FreeRTOS系列学习文章的第二节，主要是关于FreeRTOS的任务相关的知识点。</p>
+<span id="more"></span>
+
+<h1 id="0-0-前言"><a href="#0-0-前言" class="headerlink" title="0.0 前言"></a>0.0 前言</h1><p><a href=""></a>中讲了任务的基础点这里就不再记载了. 但是我们要先知道在FreeRTOS中的任务在代码中是如何描述的:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tskTaskControlBlock</span>       /* <span class="hljs-title">The</span> <span class="hljs-title">old</span> <span class="hljs-title">naming</span> <span class="hljs-title">convention</span> <span class="hljs-title">is</span> <span class="hljs-title">used</span> <span class="hljs-title">to</span> <span class="hljs-title">prevent</span> <span class="hljs-title">breaking</span> <span class="hljs-title">kernel</span> <span class="hljs-title">aware</span> <span class="hljs-title">debuggers</span>. */</span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">volatile</span> StackType_t * pxTopOfStack; <span class="hljs-comment">/**&lt; Points to the location of the last item placed on the tasks stack.  THIS MUST BE THE FIRST MEMBER OF THE TCB STRUCT. */</span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( portUSING_MPU_WRAPPERS == 1 )</span><br>        xMPU_SETTINGS xMPUSettings; <span class="hljs-comment">/**&lt; The MPU settings are defined as part of the port layer.  THIS MUST BE THE SECOND MEMBER OF THE TCB STRUCT. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_CORE_AFFINITY == 1 ) &amp;&amp; ( configNUMBER_OF_CORES &gt; 1 )</span><br>        UBaseType_t uxCoreAffinityMask; <span class="hljs-comment">/**&lt; Used to link the task to certain cores.  UBaseType_t must have greater than or equal to the number of bits as configNUMBER_OF_CORES. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    ListItem_t xStateListItem;                  <span class="hljs-comment">/**&lt; 这个任务的状态(就绪 挂起 阻塞) The list that the state list item of a task is reference from denotes the state of that task (Ready, Blocked, Suspended ). */</span><br>    ListItem_t xEventListItem;                  <span class="hljs-comment">/**&lt; 事件列表中的位置Used to reference a task from an event list. */</span><br>    UBaseType_t uxPriority;                     <span class="hljs-comment">/**&lt; The priority of the task.  0 is the lowest priority. */</span><br>    StackType_t * pxStack;                      <span class="hljs-comment">/**&lt; 任务栈的起始位置Points to the start of the stack. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES &gt; 1 )</span><br>        <span class="hljs-keyword">volatile</span> BaseType_t xTaskRunState;      <span class="hljs-comment">/**&lt; Used to identify the core the task is running on, if the task is running. Otherwise, identifies the task&#x27;s state - not running or yielding. */</span><br>        UBaseType_t uxTaskAttributes;           <span class="hljs-comment">/**&lt; Task&#x27;s attributes - currently used to identify the idle tasks. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>    <span class="hljs-type">char</span> pcTaskName[ configMAX_TASK_NAME_LEN ]; <span class="hljs-comment">/**&lt; Descriptive name given to the task when created.  Facilitates debugging only. */</span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_TASK_PREEMPTION_DISABLE == 1 )</span><br>        BaseType_t xPreemptionDisable; <span class="hljs-comment">/**&lt; Used to prevent the task from being preempted. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( ( portSTACK_GROWTH &gt; 0 ) || ( configRECORD_STACK_HIGH_ADDRESS == 1 ) )</span><br>        StackType_t * pxEndOfStack; <span class="hljs-comment">/**&lt; Points to the highest valid address for the stack. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( portCRITICAL_NESTING_IN_TCB == 1 )</span><br>        UBaseType_t uxCriticalNesting; <span class="hljs-comment">/**&lt; Holds the critical section nesting depth for ports that do not maintain their own count in the port layer. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_TRACE_FACILITY == 1 )</span><br>        UBaseType_t uxTCBNumber;  <span class="hljs-comment">/**&lt; Stores a number that increments each time a TCB is created.  It allows debuggers to determine when a task has been deleted and then recreated. */</span><br>        UBaseType_t uxTaskNumber; <span class="hljs-comment">/**&lt; Stores a number specifically for use by third party trace code. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_MUTEXES == 1 )</span><br>        UBaseType_t uxBasePriority; <span class="hljs-comment">/**&lt; The priority last assigned to the task - used by the priority inheritance mechanism. */</span><br>        UBaseType_t uxMutexesHeld;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_APPLICATION_TASK_TAG == 1 )</span><br>        TaskHookFunction_t pxTaskTag;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUM_THREAD_LOCAL_STORAGE_POINTERS &gt; 0 )</span><br>        <span class="hljs-type">void</span> * pvThreadLocalStoragePointers[ configNUM_THREAD_LOCAL_STORAGE_POINTERS ];<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configGENERATE_RUN_TIME_STATS == 1 )</span><br>        configRUN_TIME_COUNTER_TYPE ulRunTimeCounter; <span class="hljs-comment">/**&lt; Stores the amount of time the task has spent in the Running state. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_C_RUNTIME_TLS_SUPPORT == 1 )</span><br>        configTLS_BLOCK_TYPE xTLSBlock; <span class="hljs-comment">/**&lt; Memory block used as Thread Local Storage (TLS) Block for the task. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_TASK_NOTIFICATIONS == 1 )<span class="hljs-comment">//每一个任务有一组任务通知</span></span><br>        <span class="hljs-keyword">volatile</span> <span class="hljs-type">uint32_t</span> ulNotifiedValue[ configTASK_NOTIFICATION_ARRAY_ENTRIES ];<span class="hljs-comment">//任务通知值</span><br>        <span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> ucNotifyState[ configTASK_NOTIFICATION_ARRAY_ENTRIES ];<span class="hljs-comment">//任务通知状态</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-comment">/* See the comments in FreeRTOS.h with the definition of</span><br><span class="hljs-comment">     * tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE != 0 )</span><br>        <span class="hljs-type">uint8_t</span> ucStaticallyAllocated; <span class="hljs-comment">/**&lt; Set to pdTRUE if the task is a statically allocated to ensure no attempt is made to free the memory. */</span><br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( INCLUDE_xTaskAbortDelay == 1 )</span><br>        <span class="hljs-type">uint8_t</span> ucDelayAborted;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_POSIX_ERRNO == 1 )</span><br>        <span class="hljs-type">int</span> iTaskErrno;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>&#125; tskTCB;<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="1-0-任务的状态"><a href="#1-0-任务的状态" class="headerlink" title="1.0 任务的状态"></a>1.0 任务的状态</h1><p>在该OS中任务主要有一下集中状态:</p>
+<p>运行<br>当任务实际执行时，它被称为处于运行状态。 任务当前正在使用处理器。 如果运行 RTOS 的处理器只有一个内核， 那么在任何给定时间内都只能有一个任务处于运行状态。</p>
+<p>准备就绪<br>准备就绪任务指那些能够执行（它们不处于阻塞或挂起状态）， 但目前没有执行的任务， 因为同等或更高优先级的不同任务已经处于运行状态。</p>
+<p>阻塞<br>如果任务当前正在等待时间或外部事件，则该任务被认为处于阻塞状态。 例如，如果一个任务调用vTaskDelay()，它将被阻塞（被置于阻塞状态）， 直到延迟结束-一个时间事件。 任务也可以通过阻塞来等待队列、信号量、事件组、通知或信号量 事件。 处于阻塞状态的任务通常有一个”超时”期， 超时后任务将被超时，并被解除阻塞， 即使该任务所等待的事件没有发生。<br>“阻塞”状态下的任务不使用任何处理时间，不能 被选择进入运行状态。</p>
+<p>挂起<br>与“阻塞”状态下的任务一样， “挂起”状态下的任务不能 被选择进入运行状态，但处于挂起状态的任务 没有超时。 相反，任务只有在分别通过 vTaskSuspend() 和 xTaskResume() API 调用明确命令时 才会进入或退出挂起状态。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401070027529.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="2-0-任务的优先级"><a href="#2-0-任务的优先级" class="headerlink" title="2.0 任务的优先级"></a>2.0 任务的优先级</h1><p>FreeRTOS使用优先级来安排任务的执行, 优先级数字越低则其优先级越低. 优先级的范围是  <code>0 到 ( configMAX_PRIORITIES - 1 ) </code>其中的 configMAX_PRIORITIES 在 FreeRTOSConfig.h 中定义。</p>
+<h2 id="2-1-相关函数"><a href="#2-1-相关函数" class="headerlink" title="2.1 相关函数"></a>2.1 相关函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">vTaskPrioritySet()<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="任务的创建"><a href="#任务的创建" class="headerlink" title="任务的创建"></a>任务的创建</h1><p>任务支持两种创建方式, 一是静态创建二是动态创建. </p>
+<p>在FreeRTOS中，任务的创建可采用两种方法，一种是使用动态创建，另一种是使用静态创建。动态创建时，任务控制块和栈的内存是创建任务时动态分配的，任务删除时，内存可以释放。静态创建时，任务控制块和栈的内存需要事先定义好，是静态的内存，任务删除时，内存不能释放。</p>
+<p>具体的函数如下</p>
+<h2 id="静态创建函数"><a href="#静态创建函数" class="headerlink" title="静态创建函数"></a>静态创建函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">TaskHandle_t <span class="hljs-title function_">xTaskCreateStatic</span><span class="hljs-params">( TaskFunction_t pxTaskCode,</span><br><span class="hljs-params">                                   <span class="hljs-type">const</span> <span class="hljs-type">char</span> * <span class="hljs-type">const</span> pcName,</span><br><span class="hljs-params">                                   <span class="hljs-type">const</span> <span class="hljs-type">uint32_t</span> ulStackDepth,</span><br><span class="hljs-params">                                   <span class="hljs-type">void</span> * <span class="hljs-type">const</span> pvParameters,</span><br><span class="hljs-params">                                   UBaseType_t uxPriority,</span><br><span class="hljs-params">                                   StackType_t * <span class="hljs-type">const</span> puxStackBuffer,</span><br><span class="hljs-params">                                   StaticTask_t * <span class="hljs-type">const</span> pxTaskBuffer )</span><br></code></pre></td></tr></table></figure>
+<p>其实这个函数只是对于函数<code>prvCreateStaticTask</code>的包装, 然后在加上一个<code>prvAddNewTaskToReadyList</code>函数, 这个函数将创建的任务添加到准备队列.</p>
+<p>静态创建函数和动态创建函数的主要区别就是, 静态需要用户自己提供<code>stackbuffer</code>和<code>taskbuffer</code>也就是任务的栈空间、存储任务的数据结构. 也就是该函数中最后两个参数, 而这些在动态创建任务的函数中都是动态分配的. </p>
+<p>所以静态分配的任务,在任务被删除之后是无法删掉对应的内存空间的, 但是动态分配可以. </p>
+<p>函数的调用关系:<br><code>xTaskCreateStatic()</code>-&gt;<code>prvCreateStaticTask()</code>-&gt;<code>prvInitialiseNewTask()</code>-&gt;<code>vListInitialiseItem()</code></p>
+<h2 id="动态分配函数"><a href="#动态分配函数" class="headerlink" title="动态分配函数"></a>动态分配函数</h2><h1 id="任务管理"><a href="#任务管理" class="headerlink" title="任务管理"></a>任务管理</h1><p>我们知道任务既具有四种状态, 所以我们学习如何进行状态的转换. </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401070027529.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="任务删除函数"><a href="#任务删除函数" class="headerlink" title="任务删除函数"></a>任务删除函数</h2><p>将一个任务删除</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">vTaskDelete</span><span class="hljs-params">( TaskHandle_t xTaskToDelete )</span><span class="hljs-comment">//任务删除函数</span><br>&#123;<br>    TCB_t * pxTCB;<br><br>    traceENTER_vTaskDelete( xTaskToDelete );<br><br>    taskENTER_CRITICAL(); <span class="hljs-comment">//进入临界区</span><br>    &#123;<br>        <span class="hljs-comment">/* If null is passed in here then it is the calling task that is</span><br><span class="hljs-comment">         * being deleted. */</span><br>        pxTCB = prvGetTCBFromHandle( xTaskToDelete );<span class="hljs-comment">//获取任务句柄xTaskToDelete所指向的具体的任务, 如果是NULL则代表自己</span><br><br>        <span class="hljs-comment">/* Remove task from the ready/delayed list. */</span><br>        <span class="hljs-keyword">if</span>( uxListRemove( &amp;( pxTCB-&gt;xStateListItem ) ) == ( UBaseType_t ) <span class="hljs-number">0</span> )<br>        &#123;<br>            taskRESET_READY_PRIORITY( pxTCB-&gt;uxPriority );<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        <span class="hljs-comment">/* Is the task waiting on an event also? */</span><br>        <span class="hljs-keyword">if</span>( listLIST_ITEM_CONTAINER( &amp;( pxTCB-&gt;xEventListItem ) ) != <span class="hljs-literal">NULL</span> )<br>        &#123;<br>            ( <span class="hljs-type">void</span> ) uxListRemove( &amp;( pxTCB-&gt;xEventListItem ) );<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        <span class="hljs-comment">/* Increment the uxTaskNumber also so kernel aware debuggers can</span><br><span class="hljs-comment">         * detect that the task lists need re-generating.  This is done before</span><br><span class="hljs-comment">         * portPRE_TASK_DELETE_HOOK() as in the Windows port that macro will</span><br><span class="hljs-comment">         * not return. */</span><br>        uxTaskNumber++;<span class="hljs-comment">//系统中任务数+1</span><br><br>        <span class="hljs-comment">/* If the task is running (or yielding), we must add it to the</span><br><span class="hljs-comment">         * termination list so that an idle task can delete it when it is</span><br><span class="hljs-comment">         * no longer running. */</span><br>        <span class="hljs-keyword">if</span>( taskTASK_IS_RUNNING_OR_SCHEDULED_TO_YIELD( pxTCB ) != pdFALSE )<span class="hljs-comment">//判断当前任务是否在运行, 其实就是判断pxTDB是否等于pxCurrentTCB</span><br>        &#123;<br>            <span class="hljs-comment">/* A running task or a task which is scheduled to yield is being</span><br><span class="hljs-comment">             * deleted. This cannot complete when the task is still running</span><br><span class="hljs-comment">             * on a core, as a context switch to another task is required.</span><br><span class="hljs-comment">             * Place the task in the termination list. The idle task will check</span><br><span class="hljs-comment">             * the termination list and free up any memory allocated by the</span><br><span class="hljs-comment">             * scheduler for the TCB and stack of the deleted task. */</span><br>            vListInsertEnd( &amp;xTasksWaitingTermination, &amp;( pxTCB-&gt;xStateListItem ) ); <span class="hljs-comment">//将任务添加到等待删除的队列, 空闲任务会去删除这些任务</span><br><br>            <span class="hljs-comment">/* Increment the ucTasksDeleted variable so the idle task knows</span><br><span class="hljs-comment">             * there is a task that has been deleted and that it should therefore</span><br><span class="hljs-comment">             * check the xTasksWaitingTermination list. */</span><br>            ++uxDeletedTasksWaitingCleanUp;<span class="hljs-comment">//等待删除的任务数</span><br><br>            <span class="hljs-comment">/* Call the delete hook before portPRE_TASK_DELETE_HOOK() as</span><br><span class="hljs-comment">             * portPRE_TASK_DELETE_HOOK() does not return in the Win32 port. */</span><br>            traceTASK_DELETE( pxTCB );<br><br>            <span class="hljs-comment">/* The pre-delete hook is primarily for the Windows simulator,</span><br><span class="hljs-comment">             * in which Windows specific clean up operations are performed,</span><br><span class="hljs-comment">             * after which it is not possible to yield away from this task -</span><br><span class="hljs-comment">             * hence xYieldPending is used to latch that a context switch is</span><br><span class="hljs-comment">             * required. */</span><br>            <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES == 1 )</span><br>                portPRE_TASK_DELETE_HOOK( pxTCB, &amp;( xYieldPendings[ <span class="hljs-number">0</span> ] ) );<br>            <span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br>                portPRE_TASK_DELETE_HOOK( pxTCB, &amp;( xYieldPendings[ pxTCB-&gt;xTaskRunState ] ) );<br>            <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>        &#125;<br>        <span class="hljs-keyword">else</span><span class="hljs-comment">//pxTCB指向的任务不是当前任务</span><br>        &#123;<br>            --uxCurrentNumberOfTasks;<br>            traceTASK_DELETE( pxTCB );<br><br>            <span class="hljs-comment">/* Reset the next expected unblock time in case it referred to</span><br><span class="hljs-comment">             * the task that has just been deleted. */</span><br>            prvResetNextTaskUnblockTime();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES == 1 )</span><br>    &#123;<br>        taskEXIT_CRITICAL();<br><br>        <span class="hljs-comment">/* If the task is not deleting itself, call prvDeleteTCB from outside of</span><br><span class="hljs-comment">         * critical section. If a task deletes itself, prvDeleteTCB is called</span><br><span class="hljs-comment">         * from prvCheckTasksWaitingTermination which is called from Idle task. */</span><br>        <span class="hljs-keyword">if</span>( pxTCB != pxCurrentTCB )<span class="hljs-comment">//不是当前任务,直接删除</span><br>        &#123;<br>            prvDeleteTCB( pxTCB );<br>        &#125;<br><br>        <span class="hljs-comment">/* Force a reschedule if it is the currently running task that has just</span><br><span class="hljs-comment">         * been deleted. */</span><br>        <span class="hljs-keyword">if</span>( xSchedulerRunning != pdFALSE )<span class="hljs-comment">//调度器在运行</span><br>        &#123;<br>            <span class="hljs-keyword">if</span>( pxTCB == pxCurrentTCB )<span class="hljs-comment">//指向的任务是当前执行的任务, 则切换任务</span><br>            &#123;<br>                configASSERT( uxSchedulerSuspended == <span class="hljs-number">0</span> );<br>                portYIELD_WITHIN_API();<br>            &#125;<br>            <span class="hljs-keyword">else</span><br>            &#123;<br>                mtCOVERAGE_TEST_MARKER();<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-meta">#<span class="hljs-keyword">else</span> <span class="hljs-comment">/* #if ( configNUMBER_OF_CORES == 1 ) */</span></span><br>    &#123;<br>        <span class="hljs-comment">/* If a running task is not deleting itself, call prvDeleteTCB. If a running</span><br><span class="hljs-comment">         * task deletes itself, prvDeleteTCB is called from prvCheckTasksWaitingTermination</span><br><span class="hljs-comment">         * which is called from Idle task. */</span><br>        <span class="hljs-keyword">if</span>( pxTCB-&gt;xTaskRunState == taskTASK_NOT_RUNNING )<br>        &#123;<br>            prvDeleteTCB( pxTCB );<br>        &#125;<br><br>        <span class="hljs-comment">/* Force a reschedule if the task that has just been deleted was running. */</span><br>        <span class="hljs-keyword">if</span>( ( xSchedulerRunning != pdFALSE ) &amp;&amp; ( taskTASK_IS_RUNNING( pxTCB ) == pdTRUE ) )<br>        &#123;<br>            <span class="hljs-keyword">if</span>( pxTCB-&gt;xTaskRunState == ( BaseType_t ) portGET_CORE_ID() )<br>            &#123;<br>                configASSERT( uxSchedulerSuspended == <span class="hljs-number">0</span> );<br>                vTaskYieldWithinAPI();<br>            &#125;<br>            <span class="hljs-keyword">else</span><br>            &#123;<br>                prvYieldCore( pxTCB-&gt;xTaskRunState );<br>            &#125;<br>        &#125;<br><br>        taskEXIT_CRITICAL();<br>    &#125;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* #if ( configNUMBER_OF_CORES == 1 ) */</span></span><br><br>    traceRETURN_vTaskDelete();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>vTaskDelete()</code>函数用于删除一个任务。当一个任务删除另一个任务时，形参为要删除的任务创建时返回的任务句柄。如果是删除自身，则形参为<code>NULL</code>。要想使用该函数，必须在<code>FreeRTOSConfig.h</code>中把<code>INCLUDE_vTaskDelete</code>定义为1，要删除的任务将从所有就绪、阻塞、挂起和事件列表中删除. </p>
+<h2 id="任务挂起函数"><a href="#任务挂起函数" class="headerlink" title="任务挂起函数"></a>任务挂起函数</h2><p>挂起函数不会禁用中断, 但是无法进行上下文切换, 也就是无法进行任务转换. </p>
+<p>通过<code>vTaskSuspend()</code>函数将任何的转换到挂起态. 我们来分析一下这个函数:<br>这个函数位于<code>task.c</code>中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">vTaskSuspend</span><span class="hljs-params">( TaskHandle_t xTaskToSuspend )</span><span class="hljs-comment">//哪个任务需要被挂起</span><br>&#123;<br>    TCB_t * pxTCB;<br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES &gt; 1 )</span><br>        BaseType_t xTaskRunningOnCore;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    traceENTER_vTaskSuspend( xTaskToSuspend );<br><br>    taskENTER_CRITICAL();<br>    &#123;<br>        <span class="hljs-comment">/* If null is passed in here then it is the running task that is</span><br><span class="hljs-comment">         * being suspended. */</span><br>        pxTCB = prvGetTCBFromHandle( xTaskToSuspend );<span class="hljs-comment">//简单进行检查, 看xTaskToSuspend是否是NULL</span><br><br>        traceTASK_SUSPEND( pxTCB );<br><br>        <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES &gt; 1 )</span><br>            xTaskRunningOnCore = pxTCB-&gt;xTaskRunState;<br>        <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>        <span class="hljs-comment">/* Remove task from the ready/delayed list and place in the</span><br><span class="hljs-comment">         * suspended list. */</span><br>        <span class="hljs-keyword">if</span>( uxListRemove( &amp;( pxTCB-&gt;xStateListItem ) ) == ( UBaseType_t ) <span class="hljs-number">0</span> )<span class="hljs-comment">//将这个任务从就绪或者是阻塞表中删除, 放入挂起列表</span><br>        &#123;<br>            taskRESET_READY_PRIORITY( pxTCB-&gt;uxPriority );<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        <span class="hljs-comment">/* Is the task waiting on an event also? */</span><br>        <span class="hljs-keyword">if</span>( listLIST_ITEM_CONTAINER( &amp;( pxTCB-&gt;xEventListItem ) ) != <span class="hljs-literal">NULL</span> )<br>        &#123;<br>            ( <span class="hljs-type">void</span> ) uxListRemove( &amp;( pxTCB-&gt;xEventListItem ) );<span class="hljs-comment">//删除在任务列表中的任务</span><br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        vListInsertEnd( &amp;xSuspendedTaskList, &amp;( pxTCB-&gt;xStateListItem ) );<span class="hljs-comment">//将任务状态添加到挂起队列</span><br><br>        <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configUSE_TASK_NOTIFICATIONS == 1 )</span><br>        &#123;<br>            BaseType_t x;<br><br>            <span class="hljs-keyword">for</span>( x = ( BaseType_t ) <span class="hljs-number">0</span>; x &lt; ( BaseType_t ) configTASK_NOTIFICATION_ARRAY_ENTRIES; x++ )<br>            &#123;<br>                <span class="hljs-keyword">if</span>( pxTCB-&gt;ucNotifyState[ x ] == taskWAITING_NOTIFICATION )<br>                &#123;<br>                    <span class="hljs-comment">/* The task was blocked to wait for a notification, but is</span><br><span class="hljs-comment">                     * now suspended, so no notification was received. */</span><br>                    pxTCB-&gt;ucNotifyState[ x ] = taskNOT_WAITING_NOTIFICATION;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* if ( configUSE_TASK_NOTIFICATIONS == 1 ) */</span></span><br>    &#125;<br><br>    <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES == 1 )<span class="hljs-comment">//只有一个内核</span></span><br>    &#123;<br>        taskEXIT_CRITICAL();<br>        <span class="hljs-comment">//非当前任务</span><br>        <span class="hljs-keyword">if</span>( xSchedulerRunning != pdFALSE )<span class="hljs-comment">//如果调度器正在运行的话</span><br>        &#123;<br>            <span class="hljs-comment">/* Reset the next expected unblock time in case it referred to the</span><br><span class="hljs-comment">             * task that is now in the Suspended state. */</span><br>            taskENTER_CRITICAL();<br>            &#123;<br>                prvResetNextTaskUnblockTime();<br>            &#125;<br>            taskEXIT_CRITICAL();<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        <span class="hljs-keyword">if</span>( pxTCB == pxCurrentTCB )<span class="hljs-comment">//pxTCB指向当前任务</span><br>        &#123;<br>            <span class="hljs-keyword">if</span>( xSchedulerRunning != pdFALSE )<span class="hljs-comment">//调度器正在执行</span><br>            &#123;<br>                <span class="hljs-comment">/* The current task has just been suspended. */</span><br>                configASSERT( uxSchedulerSuspended == <span class="hljs-number">0</span> );<span class="hljs-comment">//uxSchedulerSuspended==0表示调度器是否被挂起</span><br>                portYIELD_WITHIN_API();<span class="hljs-comment">//进行任务切换</span><br>            &#125;<br>            <span class="hljs-keyword">else</span><span class="hljs-comment">//如果没有调度器没有在执行</span><br>            &#123;<br>                <span class="hljs-comment">/*调度器没有运行, 但是pxCurrentTCB指向的任务正好被挂起了, 所以我们必须要更改pxCurrentTCB*/</span><br>                <span class="hljs-keyword">if</span>( listCURRENT_LIST_LENGTH( &amp;xSuspendedTaskList ) == uxCurrentNumberOfTasks )<span class="hljs-comment">//这里是使用通过将挂起任务队列中结点数量和当前系统中的任务数比较, 如果相同则表示所有的任务都被挂起了</span><br>                &#123;<br>                    <span class="hljs-comment">/* No other tasks are ready, so set pxCurrentTCB back to</span><br><span class="hljs-comment">                     * NULL so when the next task is created pxCurrentTCB will</span><br><span class="hljs-comment">                     * be set to point to it no matter what its relative priority</span><br><span class="hljs-comment">                     * is. */</span><br>                    pxCurrentTCB = <span class="hljs-literal">NULL</span>;<br>                &#125;<br>                <span class="hljs-keyword">else</span><br>                &#123;<br>                    vTaskSwitchContext();<span class="hljs-comment">//由于不是所有的任务都是挂起状态, 所以转换pxCurrentTCB, 切换上下文</span><br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">else</span><span class="hljs-comment">//pxTCB指向的不是当前任务</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br>    &#125;<br>    <span class="hljs-meta">#<span class="hljs-keyword">else</span> <span class="hljs-comment">/* #if ( configNUMBER_OF_CORES == 1 ) 不止一个内核时*/</span></span><br>    &#123;<br>        <span class="hljs-keyword">if</span>( xSchedulerRunning != pdFALSE )<br>        &#123;<br>            <span class="hljs-comment">/* Reset the next expected unblock time in case it referred to the</span><br><span class="hljs-comment">             * task that is now in the Suspended state. */</span><br>            prvResetNextTaskUnblockTime();<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        <span class="hljs-keyword">if</span>( taskTASK_IS_RUNNING( pxTCB ) == pdTRUE )<br>        &#123;<br>            <span class="hljs-keyword">if</span>( xSchedulerRunning != pdFALSE )<br>            &#123;<br>                <span class="hljs-keyword">if</span>( xTaskRunningOnCore == ( BaseType_t ) portGET_CORE_ID() )<br>                &#123;<br>                    <span class="hljs-comment">/* The current task has just been suspended. */</span><br>                    configASSERT( uxSchedulerSuspended == <span class="hljs-number">0</span> );<br>                    vTaskYieldWithinAPI();<br>                &#125;<br>                <span class="hljs-keyword">else</span><br>                &#123;<br>                    prvYieldCore( xTaskRunningOnCore );<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">else</span><br>            &#123;<br>                <span class="hljs-comment">/* This code path is not possible because only Idle tasks are</span><br><span class="hljs-comment">                 * assigned a core before the scheduler is started ( i.e.</span><br><span class="hljs-comment">                 * taskTASK_IS_RUNNING is only true for idle tasks before</span><br><span class="hljs-comment">                 * the scheduler is started ) and idle tasks cannot be</span><br><span class="hljs-comment">                 * suspended. */</span><br>                mtCOVERAGE_TEST_MARKER();<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            mtCOVERAGE_TEST_MARKER();<br>        &#125;<br><br>        taskEXIT_CRITICAL();<br>    &#125;<br>    <span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* #if ( configNUMBER_OF_CORES == 1 ) */</span></span><br><br>    traceRETURN_vTaskSuspend();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：<strong>任务可以调用vTaskSuspend()函数来挂起自身，但是在挂起自身时会进行一次任务上下文切换，需要挂起自身时就将xTaskToSuspend设置为NULL传递进来即可。</strong>无论任务是什么状态都可以被挂起，只要调用了vTaskSuspend()函数就会挂起成功，不论是挂起其他任务还是挂起任务自身。</p>
+<p>函数<code>vTaskSuspendAll()</code>这个函数是<strong>挂起所有的</strong>任务. 其原理就是直接将调度器锁上. 与之相反的函数是<code>xTaskResumeAll()</code>, 调用了多少次<code>vTaskSuspendAll()</code>就需要调用多少次<code>xTaskResumeAll()</code>来恢复. </p>
+<p><code>vTaskSuspendAll()</code>函数的源码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-number">1</span> <span class="hljs-type">void</span> <span class="hljs-title function_">vTaskSuspendAll</span><span class="hljs-params">( <span class="hljs-type">void</span> )</span><br>2 &#123;<br><span class="hljs-number">3</span>    ++uxSchedulerSuspended;(<span class="hljs-number">1</span>)<br><span class="hljs-number">4</span>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>uxSchedulerSuspended</code>用于记录调度器是否被挂起，该变量默认初始值为<code>pdFALSE</code>，表明调度器是未被挂起的，每调用一次<code>vTaskSuspendAll()</code>函数就将变量加1，用于记录调用了多少次<code>vTaskSuspendAll()</code>函数。</p>
+<h2 id="任务恢复函数"><a href="#任务恢复函数" class="headerlink" title="任务恢复函数"></a>任务恢复函数</h2><p>上面说到的函数<code>xTaskResumeAll()</code>也是一种恢复函数, 只是这个函数是和<code>vTaskSuspendAll()</code>对应的, 和函数<code>vTaskSuspendAll()</code>对应的是<code>vTaskResume()</code></p>
+<p>这个函数也位于<code>task.c</code> 中:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">vTaskResume</span><span class="hljs-params">( TaskHandle_t xTaskToResume )</span><br>   &#123;<br>       TCB_t * <span class="hljs-type">const</span> pxTCB = xTaskToResume;<br><br>       traceENTER_vTaskResume( xTaskToResume );<br><br>       <span class="hljs-comment">/* It does not make sense to resume the calling task. 恢复调用任务是没有意义的, 意思是xTaskToResume不要是自己*/</span><br>       configASSERT( xTaskToResume );<br><br>       <span class="hljs-meta">#<span class="hljs-keyword">if</span> ( configNUMBER_OF_CORES == 1 )<span class="hljs-comment">//一核心</span></span><br><br>           <span class="hljs-comment">/* The parameter cannot be NULL as it is impossible to resume the</span><br><span class="hljs-comment">            * currently executing task. */</span><br>           <span class="hljs-keyword">if</span>( ( pxTCB != pxCurrentTCB ) &amp;&amp; ( pxTCB != <span class="hljs-literal">NULL</span> ) )<span class="hljs-comment">//恢复调用任务是没有意义的, 意思是xTaskToResume不要是自己和NULL</span><br>       <span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><br>           <span class="hljs-comment">/* The parameter cannot be NULL as it is impossible to resume the</span><br><span class="hljs-comment">            * currently executing task. It is also impossible to resume a task</span><br><span class="hljs-comment">            * that is actively running on another core but it is not safe</span><br><span class="hljs-comment">            * to check their run state here. Therefore, we get into a critical</span><br><span class="hljs-comment">            * section and check if the task is actually suspended or not. */</span><br>           <span class="hljs-keyword">if</span>( pxTCB != <span class="hljs-literal">NULL</span> )<br>       <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>       &#123;<br>           taskENTER_CRITICAL();<span class="hljs-comment">//进入临界区</span><br>           &#123;<br>               <span class="hljs-keyword">if</span>( prvTaskIsTaskSuspended( pxTCB ) != pdFALSE )<span class="hljs-comment">//pxTCB是挂起状态</span><br>               &#123;<br>                   traceTASK_RESUME( pxTCB );<br><br>                   <span class="hljs-comment">/* The ready list can be accessed even if the scheduler is</span><br><span class="hljs-comment">                    * suspended because this is inside a critical section. */</span><br>                   ( <span class="hljs-type">void</span> ) uxListRemove( &amp;( pxTCB-&gt;xStateListItem ) );<span class="hljs-comment">//从挂起表中移除</span><br>                   prvAddTaskToReadyList( pxTCB );<span class="hljs-comment">//添加到就绪表</span><br><br>                   <span class="hljs-comment">/* This yield may not cause the task just resumed to run,</span><br><span class="hljs-comment">                    * but will leave the lists in the correct state for the</span><br><span class="hljs-comment">                    * next yield. */</span><br>                   taskYIELD_ANY_CORE_IF_USING_PREEMPTION( pxTCB );<span class="hljs-comment">//如果当前任务的优先级小于pxTCB指向的优先级则进行上下文切换(任务切换)</span><br>               &#125;<br>               <span class="hljs-keyword">else</span><span class="hljs-comment">//pxTCB不是挂起状态</span><br>               &#123;<br>                   mtCOVERAGE_TEST_MARKER();<br>               &#125;<br>           &#125;<br>           taskEXIT_CRITICAL();<span class="hljs-comment">//退出临界区</span><br>       &#125;<br>       <span class="hljs-keyword">else</span><br>       &#123;<br>           mtCOVERAGE_TEST_MARKER();<br>       &#125;<br><br>       traceRETURN_vTaskResume();<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这个函数和<code>vTaskSuspendAll()</code>那两个函数不同的是:<br>无论任务在挂起时调用过多少次<code>vTaskSuspend()</code>函数，只需要调用<strong>一次</strong><code>vTaskResume()</code>函数即可将任务恢复运行，当然，无论调用多少次<code>vTaskResume()</code>函数，也只在任务为挂起态时才进行恢复。</p>
+<p>前面提到了<code>xTaskResumeAll()</code>函数, 下面是其源码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><br></code></pre></td></tr></table></figure>
+
+<h2 id="任务延时函数"><a href="#任务延时函数" class="headerlink" title="任务延时函数"></a>任务延时函数</h2><p>我们知道任何形式的轮询有一下几个缺点，其中最重要的是它的效率低下。在轮询期间，该任务实际上没有任何工作要做，但它仍然使用最长的处理时间，因此浪费了处理器的资源。使用任务延时函数可以解决这个问题，这是因为FreeRTOS中的延时函数实际上是将这个任务状态转换为阻塞，直到设置的时间到达。所以这使得在“延时”的时候是可以通过调度程序来做其他事情的。</p>
+<p><strong>这个延时函数就是普通的延时，而绝对延时保证的是任务重复执行的时间间隔。</strong></p>
+<p>在FreeRTOS中两个延时函数，分别是：<br><code>vTaskDelay()</code>相对延时函数和<code>vTaskDelayUntil()</code>绝对延时函数。前者的时间精度要小于后者。</p>
+<h3 id="相对延时函数vTaskDelay"><a href="#相对延时函数vTaskDelay" class="headerlink" title="相对延时函数vTaskDelay()"></a>相对延时函数vTaskDelay()</h3><p>请注意，<code>vTaskDelay()</code> <code>API</code> 函数是仅当 <code>FreeRTOSConfig.h</code> 中的 <code>INCLUDE_vTaskDelay</code> 设置为 1 时才可用。</p>
+<p><code>vTaskDelay()</code> 将调用任务置于阻塞状态，以获得固定数量的滴答中断。任务在处于阻塞状态时不使用任何处理时间，因此任务仅在实际工作时使用处理时间。</p>
+<p>函数原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">vTaskDelay</span><span class="hljs-params">( TickType_txTicksToDelay )</span>;<br></code></pre></td></tr></table></figure>
+<p>参数：</p>
+<blockquote>
+<p>调用任务在转换回就绪状态之前将保持在阻塞状态的滴答中断数。例如，如果一个名为 vTaskDelay(100) 的任务在滴答计数为 10,000 时立即进入阻塞状态，并保持阻塞状态，直到滴答计数达到 10,100。可以使用宏 pdMS_TO_TICKS() 将以毫秒为单位的时间转换为以 int 为单位的时间。例如，调用 vTaskDelay(pdMS_TO_TICKS(100)) 将导致调用任务保持阻塞状态 100 毫秒。</p>
+</blockquote>
+<p>下面是一个例子</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">vTaskFunction</span><span class="hljs-params">( <span class="hljs-type">void</span> *pvParameters )</span> <br>&#123; <br><span class="hljs-type">char</span> *pcTaskName; <br><span class="hljs-type">const</span> TickType_t xDelay250ms = pdMS_TO_TICKS( <span class="hljs-number">250</span> );<br><br>    <span class="hljs-comment">/* 要打印的字符串通过参数传入。将此转换为字符指针。 */</span><br>    pcTaskName = ( <span class="hljs-type">char</span> * ) pvParameters;<br><br>    <span class="hljs-comment">/* 对于大多数任务，都是在一个无限循环中实现的。 */</span><br>    <span class="hljs-keyword">for</span>( ;; )<br>    &#123;<br>        <span class="hljs-comment">/* 打印出此任务的名称。 */</span><br>        vPrintString( pcTaskName );<br><br>        <span class="hljs-comment">/* 延迟一段时间。 这次调用 vTaskDelay() 会将任务置于阻塞状态，直到延迟时间结束。</span><br><span class="hljs-comment">        参数需要 &#x27;ticks&#x27; 中指定的时间，并使用 pdMS_TO_TICKS() 宏（声明 xDelay250ms </span><br><span class="hljs-comment">        常量）将 250 毫秒转换为滴答的等效时间。*/</span><br>        vTaskDelay( xDelay250ms );<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="绝对延时函数-vTaskDelayUntil"><a href="#绝对延时函数-vTaskDelayUntil" class="headerlink" title="绝对延时函数 vTaskDelayUntil()"></a>绝对延时函数 vTaskDelayUntil()</h3><p>绝对延时常用于较精确的周期运行任务，比如希望某个任务以固定频率定期执行，而不受外部的影响，任务从上一次运行开始到下一次运行开始的时间间隔是绝对的，而不是相对的。</p>
+<p>要想使用该函数，必须在FreeRTOSConfig.h中把INCLUDE_vTaskDelayUntil定义为1。</p>
+<p>vTaskDelayUntil()与vTaskDelay()一样，都用来实现任务的周期性延时，但vTaskDelay()的延时是相对的，是不确定的，它的延时是等vTaskDelay()调用完毕后开始计算的，并且vTaskDelay()延时的时间到了之后，如果有高优先级的任务或者中断正在执行，被延时阻塞的任务并不会马上解除阻塞，所以每次执行任务的周期并不完全确定。而vTaskDelayUntil()延时是绝对的，适用于周期性执行的任务。当*pxPreviousWakeTime+xTimeIncrement时间到达后，vTaskDelayUntil()函数立刻返回，如果任务是最高优先级的，那么任务会立刻解除阻塞，所以说vTaskDelayUntil()函数的延时是绝对性的。</p>
+<p><strong>所以这两个函数最大的区别在于前者是从调用这个函数就开始计时的，但是后者是直接确定了任务重复执行的时间间隔。</strong><br>具体可以看这个文件：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/475762149">https://zhuanlan.zhihu.com/p/475762149</a></p>
+<p>函数原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">vTaskDelayUntil</span><span class="hljs-params">( TickType_t* pxPreviousWakeTime, TickType_t xTimeIncrement )</span>;<br></code></pre></td></tr></table></figure>
+
+<p>参数：<br>pxPreviousWakeTime:</p>
+<blockquote>
+<p>此参数的命名是基于 vTaskDelayUntil() 用于实现定期执行且具有固定频率的任务。 在这种情况下，pxPreviousWakeTime 保持任务最后一次离开阻塞状态的时间（被 ‘唤醒’）。 此时间用作参考点，用于计算任务下次离开阻塞状态的时间。pxPreviousWakeTime 指向的变量在 vTaskDelayUntil()函数中自动更新；它通常不会被应用程序代码修改，但必须在第一次使用之前初始化为当前的滴答计数。 清单 25 演示了如何执行初始化。</p>
+</blockquote>
+<p>xTimeIncrement :</p>
+<blockquote>
+<p>此参数的命名也是基于 vTaskDelayUntil() 用于实现定期执行且具有固定频率的任务，频率由 xTimeIncrement 值设置。xTimeIncrement 在 ‘ticks’ 中指定。 pdMS_TO_TICKS()宏可用于将毫秒指定的时间转换为刻度中指定的时间。</p>
+</blockquote>
+<h1 id="任务通知"><a href="#任务通知" class="headerlink" title="任务通知"></a>任务通知</h1><p>FreeRTOS从V8.2.0版本开始提供任务通知功能，每个任务都有一个32位的通知值，在大多数情况下，任务通知可以替代二值信号量、计数信号量、事件组，也可以替代长度为1的队列（可以保存一个32位整数或指针值）。相对于以前使用FreeRTOS内核通信的资源时必须创建队列、二进制信号量、计数信号量或事件组的情况，使用任务通知显然更灵活。</p>
+<p>默认情况下，RTOS 任务通知功能为启用状态，并且可以 通过将 <code>FreeRTOSConfig.h</code> 中的 <code>configUSE_TASK_NOTIFICATIONS</code> 设置为 <code>0</code> 将其从构建中排除（每个数组索引的每个任务节省 8 字节）。</p>
+<p>FreeRTOS提供以下几种对于通知的处理：</p>
+<ul>
+<li>发送通知给任务，如果有通知未读，则不覆盖通知值。   </li>
+<li>发送通知给任务，直接覆盖通知值。   </li>
+<li>发送通知给任务，设置通知值的一个或者多个位，可以当作<strong>事件组</strong>来使用。   </li>
+<li>发送通知给任务，递增通知值，可以当作<strong>计数信号量</strong>使用。</li>
+</ul>
+<p>通过对以上任务通知方式的合理使用，可以在一定场合下替代FreeRTOS的信号量、队列、事件组等。</p>
+<h2 id="任务通知的优缺点"><a href="#任务通知的优缺点" class="headerlink" title="任务通知的优缺点"></a>任务通知的优缺点</h2><p>根据FreeRTOS官方文档指出, 使用任务通知比通过信号量等ICP通信方式解除阻塞的任务速度要快45%，并且更加省RAM内存空间（使用GCC编译器，-o2优化级别），任务通知的使用无须创建队列。</p>
+<p>更加少的RAM空间, 使得任务通知有以下缺点:</p>
+<ul>
+<li>只能有一个任务接收通知消息，因为必须指定接收通知的任务。</li>
+<li>只有等待通知的任务可以被阻塞，发送通知的任务在任何情况下都不会因为发送失败而进入阻塞态。</li>
+</ul>
+<h2 id="任务通知的运作机制"><a href="#任务通知的运作机制" class="headerlink" title="任务通知的运作机制"></a>任务通知的运作机制</h2><p>这个机制其实在<code>TCB</code>是包含了的: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">volatile</span> <span class="hljs-type">uint32_t</span> ulNotifiedValue[ configTASK_NOTIFICATION_ARRAY_ENTRIES ];<br><span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> ucNotifyState[ configTASK_NOTIFICATION_ARRAY_ENTRIES ];<br></code></pre></td></tr></table></figure>
+<p>这些成员其实就是任务通知机制的数据结构. </p>
+<h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h3>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/FreeRTOS/" class="category-chain-item">FreeRTOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>FreeRTOS(2)-任务</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/07/FreeRTOS-2-任务/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/07/%E8%A7%A6%E6%91%B8%E7%94%BB%E6%9D%BF/" title="触摸画板">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">触摸画板</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/06/FreeRtOs-1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="FreeRtOs(1)-基础知识">
+                        <span class="hidden-mobile">FreeRtOs(1)-基础知识</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

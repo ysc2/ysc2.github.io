@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="如何vscode中使用vim插件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在vscode中使用vim">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/17/%E5%9C%A8vscode%E4%B8%AD%E4%BD%BF%E7%94%A8vim/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="如何vscode中使用vim插件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-w85rqx.jpg">
+<meta property="article:published_time" content="2024-02-17T15:06:35.000Z">
+<meta property="article:modified_time" content="2024-03-08T10:19:56.299Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-w85rqx.jpg">
+  
+  
+  
+  <title>在vscode中使用vim - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-w85rqx.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="在vscode中使用vim"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-17 23:06" pubdate>
+          2024年2月17日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">在vscode中使用vim</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>如何<code>vscode</code>中使用<code>vim</code>插件</p>
+<span id="more"></span> 
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如何在vscode中使用vim模式进行输入，这是我在学习了vim之后就在想的问题。现在我了解到了vscode中的vim插件可以实现这个功能，但是需要对于vscode原有的快捷键进行大改，因为原来的快捷键和vim自带的快捷键是冲突的。所以我在网络上收集了一些vim模式下的快捷键的设置。记录如下。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>直接在vscode商店中搜索<code>vim</code>，第一个插件便是需要的插件。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>首先，我们需要在vscode中配置<code>settings.json</code>文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>   <span class="hljs-comment">// 绑定vim前导键</span><br>   <span class="hljs-attr">&quot;vim.leader&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;space&gt;&quot;</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 启用easymotion插件</span><br>   <span class="hljs-attr">&quot;vim.easymotion&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 启用系统粘贴板作为vim寄存器</span><br>   <span class="hljs-attr">&quot;vim.useSystemClipboard&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 由vim接管ctrl+any的按键，而不是vscode</span><br>   <span class="hljs-attr">&quot;vim.useCtrlKeys&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 突出显示与当前搜索匹配的所有文本</span><br>   <span class="hljs-attr">&quot;vim.hlsearch&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-comment">// 普通模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.normalModeKeyBindingsNonRecursive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-comment">// 插入模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.insertModeKeyBindings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 命令模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.commandLineModeKeyBindingsNonRecursive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 可视模式下的非递归按键绑定</span><br>   <span class="hljs-attr">&quot;vim.operatorPendingModeKeyBindings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>   <span class="hljs-comment">// 下面定义的按键将交由vscode进行处理，而不是vscode-vim插件</span><br>   <span class="hljs-attr">&quot;vim.handleKeys&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>     <span class="hljs-attr">&quot;&lt;C-a&gt;&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>     <span class="hljs-attr">&quot;&lt;C-f&gt;&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><br>   <span class="hljs-punctuation">&#125;</span><br> <span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>其中的<strong>普通模式下的非递归按键绑定</strong>，<strong>插入模式下的非递归按键绑定</strong>等等是什么含义？</p>
+<p>其实就是可以在这个模式下使用的快捷键映射，如下所示：</p>
+<p>一个简单的例子，在INSERT模式下使用jj退回到NORMAL模式：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;vim.insertModeKeyBindings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>  <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;before&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;j&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-string">&quot;j&quot;</span><br>    <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;after&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;&lt;Esc&gt;&quot;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+
+<p>下面的示例将演示如何在NORMAL模式下按下快捷键执行COMMAND的命令，如按下<C-n>后，取消高亮搜索：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;vim.normalModeKeyBindingsNonRecursive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>  <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;before&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;&lt;C-n&gt;&quot;</span><br>    <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;commands&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;:nohl&quot;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+
+<p>除此之外，你也可以定义在按下一些按键后，调用vscode下的命令API，比如在NORMAL模式下按下<leader>gc后，调用vscode的全局命令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;vim.normalModeKeyBindingsNonRecursive&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>  <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;before&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;&lt;leader&gt;&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-string">&quot;g&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-string">&quot;c&quot;</span><br>    <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;commands&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;workbench.action.showCommands&quot;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>注意！leader键只在代码编辑区域生效，它无法做到全vscode生效。</strong></p>
+<p>针对一些刚接触vscode不久的朋友，可能不知道怎么拿到vscode的热键映射命令，其实你可以从vsocde的键盘快捷键中复制命令ID获得。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402172320844.png" srcset="/img/loading.gif" lazyload></p>
+<p>复制所得的<code>Copy Command ID</code>就是上面的<code>workbench.action.showCommands</code>等等。</p>
+<p><strong>下面是网络上的快捷键设置方案</strong></p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs txt"> ctrl + g c ： 显示命令面板<br> ctrl + g s ： 打开设置页面<br> ctrl + g k ： 打开热键映射<br> ctrl + g m ： 打开一个目录<br> ctrl + g f ： 打开一个文件<br> ctrl + g h ： 打开最近记录<br> ctrl + g n ： 新建vscode实例<br> ctrl + g q ： 关闭vscode示例<br> ​<br> ctrl + f n ： 新建文件<br> ctrl + f o ： 打开文件<br> ctrl + f e ： 另存为文件<br> ctrl + f s ： 保存文件<br> ctrl + f w ： 保存所有文件<br> ctrl + f q ： 关闭文件<br> ctrl + f a ： 关闭所有文件<br> ​<br> ctrl + n [ ： 切换侧边栏显示状态<br> ctrl + n 1 ： 显示文件资源管理器<br> ctrl + n 2 ： 显示TODO Tree<br> ctrl + n 3 ： 显示全局搜索<br> ctrl + n 4 ： 显示debug<br> ctrl + n 5 ： 显示版本控制<br> ctrl + n 6 ： 显示SQL Tools<br> ctrl + n 7 ： 显示Docker<br> ctrl + n 8 ： 显示测试<br> ctrl + n 9 ： 显示插件商店<br> ​<br> ctrl + p ] ： 切换面板显示状态<br> ctrl + p 1 ： 显示问题<br> ctrl + p 2 ： 显示输出<br> ctrl + p 3 ： 显示终端<br> ctrl + p 4 ： 显示调试控制台<br> ctrl + p 5 ： 显示SQL CONSOLE<br>以下是编辑区域操作控制方案：<br><br> ctrl + q ：关闭当前选项卡或分屏<br> ctrl + e ：聚焦在第一个选项卡中<br> ctrl + , ：切换到上一个选项卡<br> ctrl + . ：切换到下一个选项卡<br> ​<br> ctrl + w s ：拆分一个上下分屏<br> ctrl + w v ：拆分一个左右分屏<br> ​<br> ctrl + w k ：将光标向上移动1屏<br> ctrl + w j ：将光标向下移动1屏<br> ​<br> ctrl + w h ：将光标向左移动1屏<br> ctrl + w l ：将光标向右移动1屏<br> <br>代码控制区域：<br><br> ctrl + h ： 触发帮助提示<br> ctrl + j ： 触发参数提示<br> ctrl + k ： 触发建议提示<br> ctrl + n ： 移动到下一个建议<br> ctrl + p ： 移动到上一个建议<br> tab ： 选择下一个建议<br> enter ： 选择当前建议<br> ​<br> ctrl + alt + l ： 格式化代码（个人习惯）<br> ​<br> ctrl + = ： 放大字体<br> ctrl + - ： 缩小字体<br></code></pre></td></tr></table></figure>
+
+<h2 id="常用的快捷键"><a href="#常用的快捷键" class="headerlink" title="常用的快捷键"></a>常用的快捷键</h2><p>之前我常用的vscode快捷键变化：</p>
+<p><code>ctrl p</code> &#x3D;&gt; <code>ctrl+g p</code></p>
+<p><code>ctrl b</code> &#x3D;&gt; <code>ctrl+n [</code></p>
+<p><code>ctrl f</code> &#x3D;&gt; <code>ctrl+f f</code></p>
+<p><code>ctrl shift p </code> &#x3D;&gt; <code>ctrl+g c</code></p>
+<p><code>ctrl w </code> &#x3D;&gt; <code>ctrl q</code></p>
+<p><code>ctrl shift e</code> 将光标切换至右边的文件栏</p>
+<p><code>ctrl n [ </code>打开右边的文件栏<br>此外该插件还提供了一些便捷热键：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">gd ： 跳转到函数定义或引用处，搭配<span class="hljs-keyword">cmd</span><span class="language-bash">+i/cmd+o查看源码很方便</span><br>gh ： 触发帮助提示<br>gb ： 开启多光标模式，选中和当前单词相同的单词gd ： 跳转到函数定义或引用处，搭配<span class="hljs-keyword">cmd</span><span class="language-bash">+i/cmd+o查看源码很方便</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="自带插件"><a href="#自带插件" class="headerlink" title="自带插件"></a>自带插件</h1><p>这个<code>vim</code>插件除开有vim模式还有一些其他的插件功能。</p>
+<h2 id="vim-esaymotion插件"><a href="#vim-esaymotion插件" class="headerlink" title="vim-esaymotion插件"></a>vim-esaymotion插件</h2><p><code>vim-esaymotion</code>插件使用它之前你必须在<code>settings.json</code>中加入下面这一行：</p>
+<p><code>&quot;vim.easymotion&quot;: true,</code>它的作用是通过以下的按键组合，你可以快速的定位到任何你想修改的行中：</p>
+<p><code>&lt;leader&gt;&lt;leader&gt;s&lt;char&gt;</code></p>
+<p><a target="_blank" rel="noopener" href="https://wklken.me/posts/2015/06/07/vim-plugin-easymotion.html">详细教程</a></p>
+<h2 id="vim-surround插件"><a href="#vim-surround插件" class="headerlink" title="vim-surround插件"></a>vim-surround插件</h2><p><code>vim-surround</code>插件，如果你想修改、或者删除单引号和双引号，它带给你的体验将是无与伦比的，以下是它的语法：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">ds</span><span class="hljs-symbol">&lt;existing&gt;</span><br><span class="hljs-keyword">cs</span><span class="hljs-symbol">&lt;existing&gt;</span><span class="hljs-symbol">&lt;desired&gt;</span><br></code></pre></td></tr></table></figure>
+<p>示例如下：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean"># 删除以下的[]<br>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] -&gt; ds[<br>​<br># 将以下的[]修改为()<br>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] -&gt; cs[(<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://yyq123.github.io/learn-vim/learn-vim-plugin-surround.html">详细教程</a></p>
+<h2 id="vim-commentary插件"><a href="#vim-commentary插件" class="headerlink" title="vim-commentary插件"></a>vim-commentary插件</h2><p><code>vim-commentary</code>插件，该插件能够快速的利用键盘进行行或者块的注释，它内部其实是调用了vscode的注释API：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">gcc</span> ：行注释<br>gCC ：块注释<br></code></pre></td></tr></table></figure>
+
+<h1 id="自动进行输入法转换"><a href="#自动进行输入法转换" class="headerlink" title="自动进行输入法转换"></a>自动进行输入法转换</h1><p>如果你在INSERT模式下使用中文输入法进行编辑，当ESC到NORMAL模式下后，它将依然保持中文输入法，这会使我们需要频繁的使用ctrl+shift或者cmd+space进行输入法切换，非常麻烦。</p>
+<p>我们可以下载一个<code>im-select</code>插件，其帮助我们自动转换。经过我的使用，只有这个页面下的<code>exe</code>可以用于Windows系统，另外一个<code>wim-mspy</code>无法使用。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>首先将输入法切换至纯英文模式，然后在powershell中执行<code>./im-select</code>得出英文模式下的句柄我的是<code>1033</code>。然后将下面的代码添加至<code>vim</code>插件的<code>settings.json</code>文件中。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><br><span class="hljs-attr">&quot;vim.autoSwitchInputMethod.enable&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;vim.autoSwitchInputMethod.defaultIM&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1033&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;vim.autoSwitchInputMethod.obtainIMCmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;F:\\app\\shurufa-switch\\im-select.exe&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;vim.autoSwitchInputMethod.switchIMCmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;F:\\app\\shurufa-switch\\im-select.exe &#123;im&#125;&quot;</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+
+<p>至此完成</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/430603620">https://zhuanlan.zhihu.com/p/430603620</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>在vscode中使用vim</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/02/17/在vscode中使用vim/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/" title="自制电子相机（1）硬件基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">自制电子相机（1）硬件基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/14/stm32%E4%B8%AD%E7%9A%84flash/" title="stm32中的flash">
+                        <span class="hidden-mobile">stm32中的flash</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

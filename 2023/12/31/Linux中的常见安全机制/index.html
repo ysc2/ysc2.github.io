@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结Linux中的栈缓冲区溢出漏洞的缓解方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中的栈缓冲区溢出">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/31/Linux%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="总结Linux中的栈缓冲区溢出漏洞的缓解方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1553).png">
+<meta property="article:published_time" content="2023-12-31T06:55:11.000Z">
+<meta property="article:modified_time" content="2024-06-21T18:04:38.983Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1553).png">
+  
+  
+  
+  <title>Linux中的栈缓冲区溢出 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1553).png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux中的栈缓冲区溢出"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-31 14:55" pubdate>
+          2023年12月31日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux中的栈缓冲区溢出</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结Linux中的栈缓冲区溢出漏洞的缓解方法</p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>缓冲区溢出漏洞是一种广泛存在且危害严重的漏洞，发现至今，关于此类漏洞的利用与防御技术不断发展.其中，栈缓冲区溢出漏洞的缓解机制主要有不可执行技术<code>(NX，on executable)</code>、地址随机化技术<code>(ASLR，address space layout randomization)</code>和栈保护机制<code>(SSP，stack smashing protector)</code>，相对应地也存在一些绕过手段，例如<code>return-to-libc</code>和<code>ROP</code>技术可以绕过<code>NX</code>；基于信息泄露的攻击使<code>ASLR</code>失效等.然而针对<code>SSP</code>防御机制，目前却没有有效的绕过技术</p>
+<h1 id="Stack-Canaries"><a href="#Stack-Canaries" class="headerlink" title="Stack Canaries"></a>Stack Canaries</h1><p>Canaries(金丝雀)，取名自地下煤矿的金丝雀，因为它能比矿工更早地发现煤气泄漏，有预警的作用。这是一种对抗栈溢出的技术，又称之SSP栈保护机制，或者Stack Cookies，目前有4种具体的实现技术：StackGuard、StackShield、ProPolice以及XOR技术。</p>
+<p>Canary的值是栈上的一个随机数，在程序启动时随机生成并保存在比函数返回地址更低的位置。由于栈溢出是从低地址向高地址进行覆盖，因此攻击者要想控制函数的返回指针，就一定要先覆盖到Canary。程序只需要在函数返回前检查Canary是否被篡改，就可以达到保护栈的目的。</p>
+<p><a target="_blank" rel="noopener" href="http://html.rhhz.net/buptjournal/html/2017s127.htm">那么这个随机值是如何产生的？</a></p>
+<p>Canaries通常可分为3类：terminator、random和random XOR，具体的实现有StackGuard、StackShield、ProPoliced等。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>我们通过一个例子来了解金丝雀机制是如何工作的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//test.c</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">char</span> arr [<span class="hljs-number">10</span>];<br>    sacnf(<span class="hljs-string">&quot;%s&quot;</span>,arr);<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ter">gcc -Wstack-protector -g ./test.c<br></code></pre></td></tr></table></figure>
+<p>通过<code>objdump -S ./a.out</code>查看反汇编。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs asm">#include &lt;stdio.h&gt;<br><br>int main (void)<br>&#123;<br>    1169:       f3 0f 1e fa             endbr64<br>    116d:       55                      push   %rbp<br>    116e:       48 89 e5                mov    %rsp,%rbp<br>    1171:       48 83 ec 20             sub    $0x20,%rsp<br>    1175:       64 48 8b 04 25 28 00    mov    %fs:0x28,%rax<br>    117c:       00 00<br>    117e:       48 89 45 f8             mov    %rax,-0x8(%rbp)<br>    1182:       31 c0                   xor    %eax,%eax<br>    char arry [10];<br>    scanf(&quot;%s&quot;,arry);<br>    1184:       48 8d 45 ee             lea    -0x12(%rbp),%rax<br>    1188:       48 89 c6                mov    %rax,%rsi<br>    118b:       48 8d 05 72 0e 00 00    lea    0xe72(%rip),%rax        # 2004 &lt;_IO_stdin_used+0x4&gt;<br>    1192:       48 89 c7                mov    %rax,%rdi<br>    1195:       b8 00 00 00 00          mov    $0x0,%eax<br>    119a:       e8 d1 fe ff ff          call   1070 &lt;__isoc99_scanf@plt&gt;<br><br>    return 0;<br>    119f:       b8 00 00 00 00          mov    $0x0,%eax<br>&#125;<br>    11a4:       48 8b 55 f8             mov    -0x8(%rbp),%rdx<br>    11a8:       64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx<br>    11af:       00 00<br>    11b1:       74 05                   je     11b8 &lt;main+0x4f&gt;<br>    11b3:       e8 a8 fe ff ff          call   1060 &lt;__stack_chk_fail@plt&gt;<br>    11b8:       c9                      leave<br>    11b9:       c3                      ret<br><br>Disassembly of section .fini:<br><br>00000000000011bc &lt;_fini&gt;:<br>    11bc:       f3 0f 1e fa             endbr64<br>    11c0:       48 83 ec 08             sub    $0x8,%rsp<br>    11c4:       48 83 c4 08             add    $0x8,%rsp<br>    11c8:       c3                      ret<br></code></pre></td></tr></table></figure>
+
+<p>在开启了栈保护之后，我们如果输入超过10字节的内容会发生什么？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ter">*** stack smashing detected ***: terminated<br></code></pre></td></tr></table></figure>
+<p>可以看到有东西阻止了错误。如果没有使用保护机制的话就会直接发生<strong>段错误</strong>。</p>
+<h2 id="分析二进制代码"><a href="#分析二进制代码" class="headerlink" title="分析二进制代码"></a>分析二进制代码</h2><p>现在我们查看<code>main</code>函数的二进制代码，可以看到<code>mov    %fs:0x28,%rax</code>这样一句话。在Linux中，fs寄存器被用于存放线程局部存储（Thread Local Storage, TLS），TLS主要是为了避免多个线程同时访存同一全局变量或者静态变量时所导致的冲突，尤其是多个线程同时需要修改这一变量时。TLS为每一个使用该全局变量的线程都提供一个变量值的副本，每一个线程均可以独立地改变自己的副本，而不会和其他线程的副本冲突。从线程的角度看，就好像每一个线程都完全拥有该变量。而从全局变量的角度看，就好像一个全局变量被克隆成了多份副本，每一份副本都可以被一个线程独立地改变。在glibc的实现里，TLS结构体tcbhead_t的定义如下所示，偏移0x28的地方正是stack_guard。</p>
+<p>Ⅰ. Glibc中</p>
+<p>1.内核提供的随机数生成器_dl_random产生随机数</p>
+<p>2.函数_dl_setup_stack_chk_guard根据系统是32位还是64位将随机数处理成4byte或8byte的canary，并赋给变量__stack_chk_guard</p>
+<p>3.宏THREAD_SET_STACK_GUARD通过处理将变量__stack_chk_guard放入结构体tcbhead_t的成员stack_guard中（即fs:28h）</p>
+<p>Ⅱ. GCC中</p>
+<p>4.选择canary的插入位置, 以及引入与canary有关的汇编代码</p>
+<p>Ⅲ. 程序运行中</p>
+<p>5.程序函数开头从 fs:28h 中取出8字节的值插入到栈中，同时清空rax中的副本</p>
+<p>6.函数结束时，程序会再次从 fs:28h 中将canary的值取出与栈上的canary进行比较</p>
+<p>7.如果canary不同则跳到函数 ___stack_chk_fail 直接终止程序，否则继续执行程序</p>
+<h1 id="gcc中的安全选项"><a href="#gcc中的安全选项" class="headerlink" title="gcc中的安全选项"></a>gcc中的安全选项</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">-Wstack-protector <span class="hljs-comment"># 对于alloca系列函数和内部缓冲区大于8字节的函数开启保护</span><br>-fstack-protector-strong <span class="hljs-comment"># 增强对包含局部数组定义和地址引用的函数的保护</span><br>-fstack-protector-all <span class="hljs-comment"># 对所有函数开启保护</span><br><br>-fstack-protector-explicit <span class="hljs-comment"># 对于包含stack_protect属性的函数开启保护</span><br>-fon-fstack-protector <span class="hljs-comment"># 关闭金丝雀保护，为默认情况</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="控制流保护"><a href="#控制流保护" class="headerlink" title="控制流保护"></a>控制流保护</h1><p>有时我们在反汇编的时候会看到<code>endbr64</code>这样一条指令，这条指令就是控制流保护指令，防止攻击者对于控制流的劫持。需要注意的是，<code>endbr64</code>指令通常是由编译器在生成代码时自动插入的，而不是由程序员直接编写的。这是因为它是与控制流保护相关的低级指令，通常不需要直接操作。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://zhakul.top/2019/03/19/Glibc%E4%B8%ADcanary%E7%9A%84%E5%AE%9E%E7%8E%B0/">https://zhakul.top/2019/03/19/Glibc%E4%B8%ADcanary%E7%9A%84%E5%AE%9E%E7%8E%B0/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://kiprey.github.io/2022/08/thread_canary/#4-TCB-%E4%BD%8D%E7%BD%AE">https://kiprey.github.io/2022/08/thread_canary/#4-TCB-%E4%BD%8D%E7%BD%AE</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://firmianay.gitbook.io/ctf-all-in-one/2_tools/dong-tai-fen-xi-gong-ju/2.3.1_gdb#gdb-peda">https://firmianay.gitbook.io/ctf-all-in-one/2_tools/dong-tai-fen-xi-gong-ju/2.3.1_gdb#gdb-peda</a></p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/linux/%E5%AE%89%E5%85%A8/" class="category-chain-item">安全</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux中的栈缓冲区溢出</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/31/Linux中的常见安全机制/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/12/31/%E5%B8%B8%E8%A7%81%E7%9A%84cpu%E6%9E%B6%E6%9E%84/" title="常见的cpu架构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">常见的cpu架构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/30/%E5%85%B3%E4%BA%8ELex%E5%92%8CYacc/" title="关于Lex和Yacc">
+                        <span class="hidden-mobile">关于Lex和Yacc</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

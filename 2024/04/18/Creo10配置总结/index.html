@@ -1,0 +1,799 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="记载Creo10的配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Creo10配置总结">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/18/Creo10%E9%85%8D%E7%BD%AE%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="记载Creo10的配置">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/l87vv2.jpg">
+<meta property="article:published_time" content="2024-04-18T03:20:42.000Z">
+<meta property="article:modified_time" content="2024-05-03T09:17:14.909Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/l87vv2.jpg">
+  
+  
+  
+  <title>Creo10配置总结 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/l87vv2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Creo10配置总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-18 11:20" pubdate>
+          2024年4月18日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          56k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          466 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Creo10配置总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>记载Creo10的配置</p>
+<span id="more"></span>:
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于Creo10的配置项较多，因此本文将对Creo10的配置进行总结。需要注意的是, <code>Creo10</code>的配置可以使用图形配置, 但是仍然可以将在<code>config.pro</code>文件中进行配置。</p>
+<p>在<code>config.pro</code>文件中, 主要是进行快捷键的映射配置. 总的来说, 你可以在<code>config.pro</code>文件中配置软件.</p>
+<h1 id="原本快捷键"><a href="#原本快捷键" class="headerlink" title="原本快捷键"></a>原本快捷键</h1><ul>
+<li>回到初始视角：<code>CTRL + D</code></li>
+</ul>
+<h1 id="我的Creo10配置"><a href="#我的Creo10配置" class="headerlink" title="我的Creo10配置"></a>我的Creo10配置</h1><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br><span class="line">724</span><br><span class="line">725</span><br><span class="line">726</span><br><span class="line">727</span><br><span class="line">728</span><br><span class="line">729</span><br><span class="line">730</span><br><span class="line">731</span><br><span class="line">732</span><br><span class="line">733</span><br><span class="line">734</span><br><span class="line">735</span><br><span class="line">736</span><br><span class="line">737</span><br><span class="line">738</span><br><span class="line">739</span><br><span class="line">740</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">drawing_setup_file $PRO_DIRECTORY\text\prodetail.dtl<br>format_setup_file $PRO_DIRECTORY\text\prodetail.dtl<br>pro_unit_length unit_mm<br>pro_unit_mass unit_gram<br>template_designasm $PRO_DIRECTORY\templates\inlbs_asm_design_abs.asm<br>template_new_ecadasm $PRO_DIRECTORY\templates\inlbs_ecad_asm_abs.asm<br>template_drawing $PRO_DIRECTORY\templates\c_drawing.drw<br>template_sheetmetalpart $PRO_DIRECTORY\templates\inlbs_part_sheetmetal_abs.prt<br>template_solidpart $PRO_DIRECTORY\templates\inlbs_part_solid_abs.prt<br>template_boardpart $PRO_DIRECTORY\templates\inlbs_ecad_board_abs.prt<br><span class="hljs-built_in">todays_date_note_format %</span>Mmm-%dd-%yy<br>tolerance_standard ansi<br>weld_ui_standard ansi<br>search_path_file $CREO_COMMON_FILES\ifx\parts\prolibrary\search.pro<br><span class="hljs-title">des_exp_folder C:</span>\Users\Public\Documents<br>sketcher_starts_in_2d yes<br>mapkey sk @MAPKEY_LABEL草绘<span class="hljs-comment">;~ Command `ProCmdDatumSketCurve` ;\</span><br>mapkey(continued) ~ Move `Odui_Dlg_00` `Odui_Dlg_00` <span class="hljs-number">2</span> <span class="hljs-number">19.652004</span> <span class="hljs-number">6.952102</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `Odui_Dlg_00` `t1.PlnMru` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">; ``;</span><br>mapkey ex @MAPKEY_LABEL拉伸<span class="hljs-comment">;~ Command `ProCmdFtExtrude` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.extrev_1_placement.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `extrev_1_placement.<span class="hljs-number">0.0</span>` `PH.section_select_list` `0`;\<br>mapkey(continued) ~ Trigger `extrev_1_placement.<span class="hljs-number">0.0</span>` `PH.section_select_list` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `extrev_1_placement.<span class="hljs-number">0.0</span>` `PH.Sketch`;\<br>mapkey(continued) ~ Move `Odui_Dlg_01` `Odui_Dlg_01` <span class="hljs-number">2</span> <span class="hljs-number">13.904203</span> <span class="hljs-number">7.280547</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `Odui_Dlg_01` `t1.PlnMru` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;` ``;</span><br>mapkey swbl @MAPKEY_LABEL扫描混合<span class="hljs-comment">;~ Command `ProCmdFtSweptBlend` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.swpbln_ref.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `swpbln_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `0` `Trajectories`;\<br>mapkey(continued) ~ Trigger `swpbln_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `swpbln_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `swpbln_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `0` `Trajectories`;\<br>mapkey(continued) ~ Trigger `swpbln_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.swpbln_sections_panel.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `swpbln_sections_panel.<span class="hljs-number">0.0</span>` `PH.SecTable` <span class="hljs-number">2</span> `0` `Sections`;\<br>mapkey(continued) ~ Trigger `swpbln_sections_panel.<span class="hljs-number">0.0</span>` `PH.SecTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `swpbln_sections_panel.<span class="hljs-number">0.0</span>` `PH.SecTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;</span><br>mapkey bl @MAPKEY_LABEL混合<span class="hljs-comment">;~ Command `ProCmdFtPBlend` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.blend_sectionspage.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `0` \<br>mapkey(continued) `BlendSections`;\<br>mapkey(continued) ~ Arm `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `0` `BlendSections`;\<br>mapkey(continued) ~ Disarm `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `0` `BlendSections`;\<br>mapkey(continued) ~ Select `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `0` `BlendSections`;\<br>mapkey(continued) ~ Trigger `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;` ``;</span><br>mapkey robl @MAPKEY_LABEL旋转混合<span class="hljs-comment">;~ Command `ProCmdFtRBlend` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.blend_sectionspage.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.blend_sec_table` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.sketch_repr_list` `0`;\<br>mapkey(continued) ~ Trigger `blend_sectionspage.<span class="hljs-number">0.0</span>` `PH.sketch_repr_list` ``<span class="hljs-comment">;pr_list` ``;</span><br>mapkey rec @MAPKEY_LABEL草绘矩形<span class="hljs-comment">;~ Command `ProCmdSketRectangle`  1;`  1;</span><br>mapkey cp @MAPKEY_LABEL中心圆<span class="hljs-comment">;~ Command `ProCmdSketCenterPoint`  1;oint`  1;</span><br>mapkey c3p @MAPKEY_LABEL三点画圆<span class="hljs-comment">;~ Command `ProCmdSketCir3Pnt`  1;ketCir3Pnt`  1;</span><br>mapkey c3t @MAPKEY_LABEL相切圆<span class="hljs-comment">;~ Command `ProCmdSketCir3Tng`  1;\</span><br>mapkey(continued) mdSketCir3Tng`  <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>mapkey co @MAPKEY_LABEL圆锥草绘<span class="hljs-comment">;~ Command `ProCmdSketConic`  1;;</span><br>mapkey pr @MAPKEY_LABEL草绘投影<span class="hljs-comment">;~ Command `ProCmdSketProject`  1; 1;</span><br>mapkey bobl @MAPKEY_LABEL边界混合<span class="hljs-comment">;~ Command `ProCmdFtBndBlend`;mdFtBndBlend`;</span><br>mapkey ec @MAPKEY_LABEL几何倒角<span class="hljs-comment">;~ Command `ProCmdChamferEdge` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.chamfer_setspg.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.rndchSets` `Set <span class="hljs-number">1</span>`;\<br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.rndchSets` `Set <span class="hljs-number">2</span>`;\<br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.rndchSets` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.rndchSets` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.References` `0`;\<br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.References` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.References` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `chamfer_setspg.<span class="hljs-number">0.0</span>` `PH.DimTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;2 `` ``;</span><br>mapkey rev @MAPKEY_LABEL旋转<span class="hljs-comment">;~ Command `ProCmdFtRevolve` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.revolve_1_placement.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `revolve_1_placement.<span class="hljs-number">0.0</span>` `PH.Sketch`;\<br>mapkey(continued) ~ Move `Odui_Dlg_01` `Odui_Dlg_01` <span class="hljs-number">2</span> <span class="hljs-number">21.814272</span> <span class="hljs-number">6.596285</span><span class="hljs-comment">;6285;</span><br>mapkey ribt @MAPKEY_LABEL轮廓筋<span class="hljs-comment">;~ Command `ProCmdPlrib` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.plrib_settings.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `plrib_settings.<span class="hljs-number">0.0</span>` `PH.sketchrepresentator_btn`;\<br>mapkey(continued) ~ Move `Odui_Dlg_01` `Odui_Dlg_01` <span class="hljs-number">2</span> <span class="hljs-number">11.167155</span> <span class="hljs-number">5.775171</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `Odui_Dlg_01` `t1.PlnMru` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;u` 2 `` ``;</span><br>mapkey ribp @MAPKEY_LABEL加强筋<span class="hljs-comment">;~ Command `ProCmdProfRib` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.rib_refs.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `rib_refs.<span class="hljs-number">0.0</span>` `PH.SketchName` `0`;\<br>mapkey(continued) ~ Trigger `rib_refs.<span class="hljs-number">0.0</span>` `PH.SketchName` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `rib_refs.<span class="hljs-number">0.0</span>` `PH.Sketch`;\<br>mapkey(continued) ~ Trigger `Odui_Dlg_01` `t1.PlnMru` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Move `Odui_Dlg_01` `Odui_Dlg_01` <span class="hljs-number">2</span> <span class="hljs-number">15.984360</span> <span class="hljs-number">6.979472</span><span class="hljs-comment">;.979472;</span><br>mapkey mi @MAPKEY_LABEL镜像几何<span class="hljs-comment">;~ Command `ProCmdFtMirror` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.mirror_feat_refer.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `mirror_feat_refer.<span class="hljs-number">0.0</span>` `PH.List2` `0`;\<br>mapkey(continued) ~ Trigger `mirror_feat_refer.<span class="hljs-number">0.0</span>` `PH.List2` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `mirror_feat_refer.<span class="hljs-number">0.0</span>` `PH.List2` `0`;\<br>mapkey(continued) ~ Focus `mirror_feat_refer.<span class="hljs-number">0.0</span>` `PH.List2`;\<br>mapkey(continued) ~ Select `mirror_feat_refer.<span class="hljs-number">0.0</span>` `PH.List2` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `mirror_feat_refer.<span class="hljs-number">0.0</span>` `PH.List2` ``<span class="hljs-comment">; ``;</span><br>mapkey th @MAPKEY_LABEL曲面加厚<span class="hljs-comment">;~ Command `ProCmdFtThicken`;</span><br>mapkey in @MAPKEY_LABEL曲面相交<span class="hljs-comment">;~ Command `ProCmdFtIntersect` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.ipcrv_refs.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` `0`;\<br>mapkey(continued) ~ Trigger `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` `1`;\<br>mapkey(continued) ~ Trigger `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` `1`;\<br>mapkey(continued) ~ Focus `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList`;\<br>mapkey(continued) ~ Select `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` <span class="hljs-number">1</span> `1`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `CollectorWdg_FocusTimer`;\<br>mapkey(continued) ~ Trigger `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `ipcrv_refs.<span class="hljs-number">0.0</span>` `PH.IpSelectList` ``<span class="hljs-comment">;pSelectList` ``;</span><br>mapkey so @MAPKEY_LABEL实体化<span class="hljs-comment">;~ Command `ProCmdFtPatch` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;uit`;<br>mapkey rem @MAPKEY_LABEL移除<span class="hljs-comment">;~ Command `ProCmdFtRemoveSrf` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;it`;<br>mapkey cup @MAPKEY_LABEL 通过点的曲线<span class="hljs-comment">;~ Command `ProCmdFtCrvTp` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.crv_tp_placement.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `crv_tp_placement.<span class="hljs-number">0.0</span>` `PH.pnts_tbl` <span class="hljs-number">2</span> `0` `pnts_tbl_coll`;\<br>mapkey(continued) ~ Trigger `crv_tp_placement.<span class="hljs-number">0.0</span>` `PH.pnts_tbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `crv_tp_placement.<span class="hljs-number">0.0</span>` `PH.pnts_tbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;bl` 2 `` ``;</span><br>mapkey cue @MAPKEY_LABEL方程曲线<span class="hljs-comment">;~ Command `ProCmdFtCrvEqn` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.crv_fr_eq_reference.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `crv_fr_eq_reference.<span class="hljs-number">0.0</span>` `PH.csysrep_list` `0`;\<br>mapkey(continued) ~ Focus `crv_fr_eq_reference.<span class="hljs-number">0.0</span>` `PH.csysrep_list`;\<br>mapkey(continued) ~ Select `crv_fr_eq_reference.<span class="hljs-number">0.0</span>` `PH.csysrep_list` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `crv_fr_eq_reference.<span class="hljs-number">0.0</span>` `PH.csysrep_list` ``<span class="hljs-comment">;\</span><br>mapkey(continued) @PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;~ Activate `main_dlg_cur` `maindashInst0.EquationPB`;\</span><br>mapkey(continued) t0.EquationPB`;<br>mapkey shw @MAPKEY_LABEL收缩包络<span class="hljs-comment">;~ Command `ProCmdOduiDsfShrinkwrap` ;\</span><br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.SWRef_Model` `0`;\<br>mapkey(continued) ~ Focus `main_dlg_cur` `maindashInst0.SWRef_Model`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `maindashInst0.SWRef_Model` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.SWRef_Model` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.Open_ref_model`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;open`;<br>mapkey swe @MAPKEY_LABEL扫描<span class="hljs-comment">;~ Command `ProCmdFtLoft` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.sweep_ref.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `sweep_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `DuMmY` `Trajectories`;\<br>mapkey(continued) ~ Trigger `sweep_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `DuMmY` `XTraj`;\<br>mapkey(continued) ~ Trigger `sweep_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `sweep_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `DuMmY` `Normal`;\<br>mapkey(continued) ~ Trigger `sweep_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `DuMmY` `XTraj`;\<br>mapkey(continued) ~ Trigger `sweep_ref.<span class="hljs-number">0.0</span>` `PH.TrjTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;t`;<br>mapkey rou @MAPKEY_LABEL倒圆角<span class="hljs-comment">;~ Command `ProCmdRound` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.round_setspg.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;1;</span><br>mapkey she @MAPKEY_LABEL抽壳<span class="hljs-comment">;~ Command `ProCmdShell` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.shell_ref.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `DuMmY` `surfaces`;\<br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RefSrfTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `DuMmY` `surfaces`;\<br>mapkey(continued) ~ FocusIn `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl`;\<br>mapkey(continued) ~ Focus `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl`;\<br>mapkey(continued) ~ Select `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `DuMmY` `surfaces`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `CollectorWdg_FocusTimer`;\<br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `shell_ref.<span class="hljs-number">0.0</span>` `PH.RefSrfTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `shell_ref.<span class="hljs-number">0.0</span>` `PH.RemSrfTbl`;l`;<br>mapkey dov @MAPKEY_LABEL删除旧版本<span class="hljs-comment">;~ Close `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Command `ProCmdFilePurge`;CmdFilePurge`;<br>mapkey sa @MAPKEY_LABEL保存<span class="hljs-comment">;~ Command `ProCmdModelSave` ;\</span><br>mapkey(continued) ~ Activate `file_saveas` `OK`;`;<br>mapkey end @MAPKEY_LABEL拭除未显示<span class="hljs-comment">;~ Close `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Command `ProCmdModelEraseNotDisp` <span class="hljs-comment">;~ Activate `file_erase_nd` `ok_pb`;\</span><br>mapkey(continued) e_nd` `ok_pb`;<br>mapkey spl @MAPKEY_LABEL草绘样条<span class="hljs-comment">;~ Command `ProCmdSketSpline`  1;1;</span><br>mapkey sv @MAPKEY_LABEL草绘视图<span class="hljs-comment">;~ Command `ProCmdViewSketchView`;hView`;</span><br>mapkey del @MAPKEY_LABEL删除<span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.AssyTree` `node6`;\<br>mapkey(continued) ~ PopupOver `main_dlg_cur` `PM_PHTLeft.AssyTree` <span class="hljs-number">1</span> `PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Command `ProCmdEditDeleteFeat@PopupMenuTree` <span class="hljs-comment">;~ FocusIn `del_sup_msg` `ok`;\</span><br>mapkey(continued) ~ Activate `del_sup_msg` `ok`;ok`;<br>mapkey dia @MAPKEY_LABEL测量直径<span class="hljs-comment">;~ Command `ProCmdNaMeasureDiameter`;er`;</span><br>mapkey dis @MAPKEY_LABEL测量距离<span class="hljs-comment">;~ Command `ProCmdNaMeasureDistance`;ce`;</span><br>mapkey da @MAPKEY_LABEL拔模分析<span class="hljs-comment">;~ Command `ProCmdNaGeometryDraftCheck` ;\</span><br>mapkey(continued) ~ Open `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `Sst_bar.filter_list` <span class="hljs-number">1</span> `4`;\<br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `pull_rep_` `0`;\<br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `pull_rep_` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `surface_rep_` `0`;\<br>mapkey(continued) ~ Focus `n<span class="hljs-built_in">a_draft</span>_check` `surface_rep_`;\<br>mapkey(continued) ~ Select `n<span class="hljs-built_in">a_draft</span>_check` `surface_rep_` <span class="hljs-number">1</span> `0`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `CollectorWdg_FocusTimer`;\<br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `surface_rep_` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `surface_rep_` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `pull_rep_` `0`;\<br>mapkey(continued) ~ Trigger `n<span class="hljs-built_in">a_draft</span>_check` `pull_rep_` ``<span class="hljs-comment">;_rep_` ``;</span><br>mapkey offs @MAPKEY_LABEL偏移曲面<span class="hljs-comment">;~ Command `ProCmdFtOffset`;FtOffset`;</span><br>mapkey ofs @MAPKEY_LABEL偏移草绘<span class="hljs-comment">;~ Command `ProCmdSketOffset`  1;fset`  1;</span><br>mapkey cg @MAPKEY_LABEL复制发布几何<span class="hljs-comment">;~ Command `ProCmdOduiDsfCopyGeom` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.References.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.PGCheckButton` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.References.<span class="hljs-number">0</span>` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.References.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` `0`;\<br>mapkey(continued) ~ Trigger `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` `0`;\<br>mapkey(continued) ~ Focus `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model`;\<br>mapkey(continued) ~ Select `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` <span class="hljs-number">1</span> `0`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `CollectorWdg_FocusTimer`;\<br>mapkey(continued) ~ Trigger `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `References.<span class="hljs-number">1.0</span>` `PH.Ref_Model` ``<span class="hljs-comment">;el` ``;</span><br>mapkey hi @MAPKEY_LABEL隐藏几何<span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.AssyTree` `node2`;\<br>mapkey(continued) ~ PopupOver `main_dlg_cur` `PM_PHTLeft.AssyTree` <span class="hljs-number">1</span> `PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Command `ProCmdHideFeat_PushBtn@PopupMenuTree`;<br>mapkey mtr @MAPKEY_LABEL显示模型树<span class="hljs-comment">;~ Command `ProCmdMdlTreeFilter` ;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `feat_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `placement_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `note_btn` <span class="hljs-number">1</span><span class="hljs-comment">;~ Activate `mdl_filter` `section_btn` 1;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `supres_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `envelope_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `aber_btn` <span class="hljs-number">1</span><span class="hljs-comment">;~ Activate `mdl_filter` `apply`;\</span><br>mapkey(continued) ~ Activate `mdl_filter` `ok_btn`;btn`;<br>mapkey uhi @MAPKEY_LABEL取消隐藏<span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.AssyTree` `node8`;\<br>mapkey(continued) ~ PopupOver `main_dlg_cur` `PM_PHTLeft.AssyTree` <span class="hljs-number">1</span> `PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Command `ProCmdUnhideFeat_PushBtn@PopupMenuTree`;`;<br>mapkey fst @MAPKEY_LABEL标注改为仿宋<span class="hljs-comment">;~ Move `main_dlg_cur` `NoteEdit` 2 3 3;\</span><br>mapkey(continued) ~ Move `main_dlg_cur` `NoteEdit` <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Move `main_dlg_cur` `NoteEdit` <span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-number">3</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Move `main_dlg_cur` `NoteEdit` <span class="hljs-number">2</span> <span class="hljs-number">0</span> <span class="hljs-number">3</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `UIT_TRANSLUCENT` `NEED_TO_CLOSE`;\<br><span class="hljs-title">mapkey(continued) ~ Open `main_dlg_cur` `Text_Style:</span>ProCmdDtlSetTextFont`;\<br><span class="hljs-title">mapkey(continued) ~ Trigger `main_dlg_cur` `Text_Style:</span>ProCmdDtlSetTextFont` `triumi`;\<br><span class="hljs-title">mapkey(continued) ~ Trigger `main_dlg_cur` `Text_Style:</span>ProCmdDtlSetTextFont` `kaiu`;\<br><span class="hljs-title">mapkey(continued) ~ Trigger `main_dlg_cur` `Text_Style:</span>ProCmdDtlSetTextFont` `daunpenh`;\<br><span class="hljs-title">mapkey(continued) ~ Trigger `main_dlg_cur` `Text_Style:</span>ProCmdDtlSetTextFont` `simfang`;\<br><span class="hljs-title">mapkey(continued) ~ Close `main_dlg_cur` `Text_Style:</span>ProCmdDtlSetTextFont`;\<br>mapkey(continued) ~ Command `ProCmdDtlSetTextFont`  `simfang`;ng`;<br>mapkey ren @MAPKEY_NAMErename<span class="hljs-comment">;@MAPKEY_LABEL重命名;\</span><br>mapkey(continued) ~ Close `main_dlg_cur` `appl_casc`;~ Command `ProCmdModelRename`;e`;<br>mapkey ddrw @MAPKEY_LABEL打开drw文件<span class="hljs-comment">;~ Command `ProCmdModelOpen` ;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Open `file_open` `Type`;~ Close `file_open` `Type`;\<br>mapkey(continued) ~ Select `file_open` `Type` <span class="hljs-number">1</span> `db_4`;<br>mapkey flipa @MAPKEY_LABEL反向箭头<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;\<br>mapkey(continued) ~ Command `ProCmdDwgFlipArrows@PopupMenuGraphicWinStack`;tack`;<br>mapkey noh @MAPKEY_LABEL消隐出图<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;\<br>mapkey(continued) ~ Command `ProCmdEditProperties@PopupMenuGraphicWinStack` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `drawing_view` `options_list` <span class="hljs-number">1</span> `ViewDisp`;\<br>mapkey(continued) ~ Open `drawing_view` `disp_style_rad`;\<br>mapkey(continued) ~ Close `drawing_view` `disp_style_rad`;\<br>mapkey(continued) ~ Select `drawing_view` `disp_style_rad` <span class="hljs-number">1</span> `nohidden`;\<br>mapkey(continued) ~ Move `drawing_view` `drawing_view` <span class="hljs-number">2</span> <span class="hljs-number">9.004888</span> <span class="hljs-number">4.899316</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `drawing_view` `psh_close`;\<br>mapkey(continued) ~ Select `drawing_view` `options_list` <span class="hljs-number">1</span> `ViewDisp`;\<br>mapkey(continued) ~ Open `drawing_view` `disp_style_rad`;\<br>mapkey(continued) ~ Close `drawing_view` `disp_style_rad`;\<br>mapkey(continued) ~ Select `drawing_view` `disp_style_rad` <span class="hljs-number">1</span> `hidden`;\<br>mapkey(continued) ~ Activate `drawing_view` `psh_ok`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;\<br>mapkey(continued) ~ Command `ProCmdEditProperties@PopupMenuGraphicWinStack` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `drawing_view` `options_list` <span class="hljs-number">1</span> `Rep`;\<br>mapkey(continued) ~ Select `drawing_view` `options_list` <span class="hljs-number">1</span> `ViewDisp`;\<br>mapkey(continued) ~ Open `drawing_view` `disp_style_rad`;\<br>mapkey(continued) ~ Close `drawing_view` `disp_style_rad`;\<br>mapkey(continued) ~ Select `drawing_view` `disp_style_rad` <span class="hljs-number">1</span> `nohidden`;\<br>mapkey(continued) ~ Activate `drawing_view` `psh_apply`;~ Activate `drawing_view` `psh_close`;\<br>mapkey(continued) se`;<br>mapkey arrow @MAPKEY_LABEL剖面箭头<span class="hljs-comment">;~ Command `ProCmdDwgAddViewArrows` ;\</span><br>mapkey(continued) @PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;;</span><br>mapkey pdf @MAPKEY_LABEL导出pdf到工作目录<span class="hljs-comment">;~ Close `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Command `ProCmdExportPreview` <span class="hljs-comment">;~ Command `ProCmdDwgPubSettings` ;\</span><br>mapkey(continued) ~ Select `intf_profile` `pdf_export.PDFMainTab` <span class="hljs-number">1</span> `pdf_export.PDFContent`;\<br>mapkey(continued) ~ Select `intf_profile` `pdf_export.pdf_font_stroke` <span class="hljs-number">1</span> `pdf_stroke_all`;\<br>mapkey(continued) ~ Activate `intf_profile` `OkPshBtn`;~ Command `ProCmdDwgPubExport` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `file_saveas` `Current Dir`;~ Activate `file_saveas` `OK`;<br>mapkey dim @MAPKEY_LABEL标注尺寸<span class="hljs-comment">;~ Command `ProCmdDwgCrStdNewRefDim` ;\</span><br>mapkey(continued) ~ Activate `dtl_attref_ui` `psh_ent_att`;<br>mapkey cen @MAPKEY_LABEL中心线<span class="hljs-comment">;~ Command `ProCmdSketCenterline`  1;</span><br>mapkey sec @MAPKEY_LABEL新建剖面<span class="hljs-comment">;~ Command `ProCmdViewVisTool` ;\</span><br>mapkey(continued) ~ Move `visual_dlg0` `visual_dlg0` <span class="hljs-number">2</span> <span class="hljs-number">16.175953</span> <span class="hljs-number">5.282502</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `visual_dlg0` `RadioSelApplMgr` <span class="hljs-number">1</span> `xsec`;\<br>mapkey(continued) ~ Select `visual_dlg0` `ZoneCreateCasc`;\<br>mapkey(continued) ~ Close `visual_dlg0` `ZoneCreateCasc`;\<br>mapkey(continued) ~ Activate `visual_dlg0` `xsec_crt_sketch`;<br>mapkey ori @MAPKEY_LABEL定向视图<span class="hljs-comment">;~ Command `ProCmdViewVisTool` ;\</span><br>mapkey(continued) ~ Move `visual_dlg0` `visual_dlg0` <span class="hljs-number">2</span> <span class="hljs-number">11.085044</span> <span class="hljs-number">5.583578</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `visual_dlg0` `ZoneNmCreate`;\<br>mapkey(continued) ~ Input `visual_dlg0` `Table_INPUT` `M`;\<br>mapkey(continued) ~ Update `visual_dlg0` `Table_INPUT` `M`;\<br>mapkey(continued) ~ Activate `visual_dlg0` `Table_INPUT`;\<br>mapkey(continued) ~ RButtonArm `visual_dlg0` `Table` <span class="hljs-number">2</span> `m` `name_column`;\<br>mapkey(continued) ~ PopupOver `visual_dlg0` `EditPanel` <span class="hljs-number">1</span> `Table`;\<br>mapkey(continued) ~ Open `visual_dlg0` `EditPanel`;~ Close `visual_dlg0` `EditPanel`;\<br>mapkey(continued) ~ Activate `visual_dlg0` `Edit`;\<br>mapkey(continued) ~ Move `orient` `orient` <span class="hljs-number">2</span> <span class="hljs-number">16.258065</span> <span class="hljs-number">6.486804</span><span class="hljs-comment">;</span><br>mapkey dstp @MAPKEY_LABEL打开stp<span class="hljs-comment">;~ Command `ProCmdModelOpen` ;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Open `file_open` `Type`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `file_open:Ph_list.Filelist:</span>&lt;NULL&gt;`;~ Close `file_open` `Type`;\<br>mapkey(continued) ~ Select `file_open` `Type` <span class="hljs-number">1</span> `filter_.stp,.step,`;<br>mapkey rel @MAPKEY_LABEL添加草绘关系<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `page_SubRibbon_control_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `page_Tools_control_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Command `ProCmdMmRels`;<br>mapkey poi @MAPKEY_LABEL插入基准点<span class="hljs-comment">;~ Command `ProCmdDatumPointGeneral`;</span><br>mapkey pla @MAPKEY_LABEL插入三个基准平面<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">1</span> `node1`;\<br>mapkey(continued) ~ Drag `main_dlg_cur` `PHTLeft.AssyTree` `node1`;\<br>mapkey(continued) ~ DragEnter `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">5</span> <span class="hljs-number">465</span> <span class="hljs-number">95</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">8</span> <span class="hljs-number">2</span> `main_dlg_w1` \<br>mapkey(continued) `PHTLeft.AssyTree` `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">94</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">900</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">89</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">750</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">88</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">700</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">85</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">600</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">83</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">550</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">82</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">500</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">81</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">450</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">79</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">400</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">78</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">350</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">76</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">300</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">75</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">250</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">73</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">200</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">72</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">150</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">70</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">100</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">69</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">50</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">68</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node4` <span class="hljs-number">2</span> <span class="hljs-number">472</span> <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">66</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node3` <span class="hljs-number">2</span> <span class="hljs-number">671</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">65</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node3` <span class="hljs-number">2</span> <span class="hljs-number">671</span> <span class="hljs-number">900</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">63</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node3` <span class="hljs-number">2</span> <span class="hljs-number">671</span> <span class="hljs-number">850</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">62</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node3` <span class="hljs-number">2</span> <span class="hljs-number">671</span> <span class="hljs-number">800</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragLeave `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">465</span> <span class="hljs-number">62</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> `node3` <span class="hljs-number">2</span> <span class="hljs-number">671</span> <span class="hljs-number">800</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Drop `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">5</span> <span class="hljs-number">465</span> <span class="hljs-number">62</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">8</span> <span class="hljs-number">2</span> `main_dlg_w1` \<br>mapkey(continued) `PHTLeft.AssyTree` `node3` <span class="hljs-number">2</span> <span class="hljs-number">671</span> <span class="hljs-number">800</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragFinished `main_dlg_cur` `PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Command `ProCmdDatumPlane` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">1</span> `node2`;\<br>mapkey(continued) ~ Drag `main_dlg_cur` `PHTLeft.AssyTree` `node2`;\<br>mapkey(continued) ~ DragEnter `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">5</span> <span class="hljs-number">534</span> <span class="hljs-number">183</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> <span class="hljs-number">8</span> <span class="hljs-number">2</span> \<br>mapkey(continued) `main_dlg_w1` `PHTLeft.AssyTree` `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">534</span> <span class="hljs-number">186</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">100</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">534</span> <span class="hljs-number">188</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">150</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">534</span> <span class="hljs-number">189</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">200</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">534</span> <span class="hljs-number">191</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">250</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">534</span> <span class="hljs-number">192</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">300</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">534</span> <span class="hljs-number">193</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">552</span> <span class="hljs-number">350</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">540</span> <span class="hljs-number">193</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">561</span> <span class="hljs-number">350</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">540</span> <span class="hljs-number">195</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">561</span> <span class="hljs-number">400</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">540</span> <span class="hljs-number">196</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">561</span> <span class="hljs-number">450</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">540</span> <span class="hljs-number">198</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">561</span> <span class="hljs-number">500</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">540</span> <span class="hljs-number">199</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">561</span> <span class="hljs-number">550</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">545</span> <span class="hljs-number">201</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">570</span> <span class="hljs-number">600</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">545</span> <span class="hljs-number">202</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">570</span> <span class="hljs-number">650</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">545</span> <span class="hljs-number">204</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">570</span> <span class="hljs-number">700</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">545</span> <span class="hljs-number">205</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">570</span> <span class="hljs-number">750</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">545</span> <span class="hljs-number">206</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">570</span> <span class="hljs-number">800</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">545</span> <span class="hljs-number">208</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">570</span> <span class="hljs-number">850</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">551</span> <span class="hljs-number">208</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">850</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">551</span> <span class="hljs-number">209</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">900</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">551</span> <span class="hljs-number">211</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `node1` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">557</span> <span class="hljs-number">212</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">557</span> <span class="hljs-number">214</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">563</span> <span class="hljs-number">215</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">563</span> <span class="hljs-number">218</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">568</span> <span class="hljs-number">219</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">568</span> <span class="hljs-number">221</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragOver `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">568</span> <span class="hljs-number">222</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragLeave `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">4</span> <span class="hljs-number">568</span> <span class="hljs-number">222</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Drop `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">5</span> <span class="hljs-number">568</span> <span class="hljs-number">222</span> <span class="hljs-number">3</span> <span class="hljs-number">0</span> <span class="hljs-number">8</span> <span class="hljs-number">2</span> `main_dlg_w1` \<br>mapkey(continued) `PHTLeft.AssyTree` `` <span class="hljs-number">2</span> <span class="hljs-number">578</span> <span class="hljs-number">950</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ DragFinished `main_dlg_cur` `PHTLeft.AssyTree`;<br>mapkey idd @MAPKEY_LABELidd破面修复<span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.AssyTree` `node7`;\<br>mapkey(continued) ~ PopupOver `main_dlg_cur` `PM_PHTLeft.AssyTree` <span class="hljs-number">1</span> `PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `PM_PHTLeft.AssyTree`;\<br>mapkey(continued) ~ Command `ProCmdRedefine@PopupMenuTree` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.Idd_Pb`;<br>mapkey nod @MAPKEY_LABEL不显示基准<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` \<br>mapkey(continued) `igToolbar_AncestorIGT_IGT_GRP_inh396938342.proe_win|.mcs29658718_mp|select_\<br>mapkey(continued) all_check` <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>mapkey pod @MAPKEY_LABEL显示基准点<span class="hljs-comment">;~ Command `ProCmdEnvPntsDisp`  1;</span><br>mapkey <span class="hljs-literal">and</span> @MAPKEY_LABEL不显示注解<span class="hljs-comment">;~ Command `ProCmdEnvAnnotElemDisp`  0;</span><br>mapkey axd @MAPKEY_LABEL显示基准轴<span class="hljs-comment">;~ Command `ProCmdEnvAxisDisp`  1;</span><br>mapkey pld @MAPKEY_LABEL显示基准平面<span class="hljs-comment">;~ Command `ProCmdEnvDtmDisp`  1;</span><br>mapkey map @MAPKEY_LABEL快捷键设置<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `main_dlg_w1:PHTLeft.AssyTree:</span>&lt;NULL&gt;`;~ Select `main_dlg_cur` `appl_casc`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `appl_casc`;~ Command `ProCmdRibbonOptionsDlg` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `env_layouts`;\<br>mapkey(continued) ~ Activate `ribbon_options_dialog` `env_layouts.Env_MapkeySet_Btn`;<br>mapkey open @MAPKEY_LABEL打开零件<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;\<br>mapkey(continued) ~ Command `ProCmdOpenModel@PopupMenuGraphicWinStack`;<br>mapkey sty @MAPKEY_LABEL样式视图管理<span class="hljs-comment">;~ Command `ProCmdViewVisTool` ;\</span><br>mapkey(continued) ~ Move `visual_dlg0` `visual_dlg0` <span class="hljs-number">2</span> <span class="hljs-number">13.603128</span> <span class="hljs-number">5.391984</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `visual_dlg0` `PropertiesBtn`;\<br>mapkey(continued) ~ Move `visual_dlg0` `visual_dlg0` <span class="hljs-number">2</span> <span class="hljs-number">18.037146</span> <span class="hljs-number">5.528837</span><span class="hljs-comment">;</span><br>mapkey drw @MAPKEY_LABEL创建同名工程图<span class="hljs-comment">;~ Close `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Command `ProCmdModelRename` <span class="hljs-comment">;~ Activate `rename` `Cancel`;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `appl_casc`;~ Close `main_dlg_cur` `appl_casc`;\<br>mapkey(continued) ~ Command `ProCmdModelNew` <span class="hljs-comment">;~ Select `new` `Type` 1 `Drawing`;\</span><br>mapkey(continued) ~ Input `new` `InputPanel1` `ELBOW_GEARBOX_TOPCOVER`;\<br>mapkey(continued) ~ Update `new` `InputPanel1` `ELBOW_GEARBOX_TOPCOVER`;~ Activate `new` `OK`;\<br>mapkey(continued) ~ Select `dwg_create` `rad_format` <span class="hljs-number">1</span> `2`;\<br>mapkey(continued) ~ Open `dwg_create` `opt_format_name`;~ Close `dwg_create` `opt_format_name`;<br>mapkey half @MAPKEY_LABEL工程图剖面加密<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;\<br>mapkey(continued) ~ Command `ProCmdDwgRenameXsec@PopupMenuGraphicWinStack` <span class="hljs-comment">;;\</span><br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `popupMenuRMBTimerCB`;\<br>mapkey(continued) ~ Close `rmb_popup` `PopupMenu`;#SPACING<span class="hljs-comment">;#HALF;#HALF;</span><br>mapkey gen @MAPKEY_LABEL定向M视图出图<span class="hljs-comment">;~ Command `ProCmdDwgViewGen` ;\</span><br>mapkey(continued) @PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;~ Select `drawing_view` `view_names_list` 1 `M`;\</span><br>mapkey(continued) ~ Activate `drawing_view` `view_names_list` <span class="hljs-number">1</span> `M`;\<br>mapkey(continued) ~ Activate `drawing_view` `psh_apply`;~ Activate `drawing_view` `psh_close`;<br>mapkey rez @MAPKEY_LABEL染色为紫红<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `page_Render_control_btn` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br><span class="hljs-title">mapkey(continued) ~ Select `main_dlg_cur` `Render:</span>ProCmdViewGallery`;\<br>mapkey(continued) ~ Select `main_dlg_cur` \<br>mapkey(continued) `ProCmdViewGallery_layoutph.palette_holder.myAppPalette.NamesList` <span class="hljs-number">1</span> \<br>mapkey(continued) `&lt;ptc-metallic-aluminium&gt; - <span class="hljs-number">3</span>`;\<br>mapkey(continued) ~ Timer `UI Desktop` `UI Desktop` `Gallery_UI_Timer`;\<br><span class="hljs-title">mapkey(continued) ~ Close `main_dlg_cur` `Render:</span>ProCmdViewGallery`;<br>mapkey baw @MAPKEY_LABEL换白色背景<span class="hljs-comment">;~ Select `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Close `main_dlg_cur` `appl_casc`;~ Command `ProCmdRibbonOptionsDlg` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `ConfigLayout`;\<br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `colors_layouts`;\<br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `colors_layouts`;\<br>mapkey(continued) ~ Open `ribbon_options_dialog` `colors_layouts.Color_scheme_optMenu`;\<br>mapkey(continued) ~ Close `ribbon_options_dialog` `colors_layouts.Color_scheme_optMenu`;\<br>mapkey(continued) ~ Select `ribbon_options_dialog` `colors_layouts.Color_scheme_optMenu` <span class="hljs-number">1</span> `2`;\<br>mapkey(continued) ~ Activate `ribbon_options_dialog` `OkPshBtn`;<br>mapkey bac @MAPKEY_LABEL换自定义背景<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `main_dlg_w12:PHTLeft.AssyTree:</span>&lt;NULL&gt;`;~ Select `main_dlg_cur` `appl_casc`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `appl_casc`;~ Command `ProCmdRibbonOptionsDlg` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `DisplayLayout`;\<br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `colors_layouts`;\<br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `colors_layouts`;\<br>mapkey(continued) ~ Open `ribbon_options_dialog` `colors_layouts.Color_scheme_optMenu`;\<br>mapkey(continued) ~ Close `ribbon_options_dialog` `colors_layouts.Color_scheme_optMenu`;\<br>mapkey(continued) ~ Select `ribbon_options_dialog` `colors_layouts.Color_scheme_optMenu` <span class="hljs-number">1</span> \<br>mapkey(continued) `Custom`;\<br>mapkey(continued) ~ Activate `ribbon_options_dialog` `colors_layouts.system_colors_file_open`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Activate `file_open` `computer_pb`;\<br><span class="hljs-title">mapkey(continued) ~ Select `file_open` `Ph_list.Filelist` 1 `d:</span>`;\<br><span class="hljs-title">mapkey(continued) ~ Activate `file_open` `Ph_list.Filelist` 1 `d:</span>`;\<br>mapkey(continued) ~ Select `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `Users`;\<br>mapkey(continued) ~ Activate `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `Users`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `file_open:Ph_list.Filelist:</span>&lt;NULL&gt;`;\<br>mapkey(continued) ~ Select `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `gsmeng`;\<br>mapkey(continued) ~ Activate `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `gsmeng`;\<br>mapkey(continued) ~ Select `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `temp-<span class="hljs-number">3</span>`;\<br>mapkey(continued) ~ Activate `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `temp-<span class="hljs-number">3</span>`;\<br>mapkey(continued) ~ Select `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `syscol.scl`;\<br>mapkey(continued) ~ Activate `file_open` `Ph_list.Filelist` <span class="hljs-number">1</span> `syscol.scl`;\<br>mapkey(continued) ~ Activate `ribbon_options_dialog` `OkPshBtn`;<br>mapkey axi @MAPKEY_LABEL插入基准轴<span class="hljs-comment">;~ Command `ProCmdDatumAxis` ;\</span><br>mapkey(continued) @PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;~ Activate `Odui_Dlg_00` `stdbtn_1`;</span><br>mapkey caap @MAPKEY_LABEL清除整体外观颜色<span class="hljs-comment">;\</span><br><span class="hljs-title">mapkey(continued) ~ Select `main_dlg_cur` `Render:</span>ProCmdViewGallery`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` \<br>mapkey(continued) `ProCmdViewGallery_layoutph.palette_holder.clearAppearance`;\<br><span class="hljs-title">mapkey(continued) ~ Close `main_dlg_cur` `Render:</span>ProCmdViewGallery`;\<br>mapkey(continued) ~ Activate `GET SELECT` `quit_sel`;\<br><span class="hljs-title">mapkey(continued) ~ Select `main_dlg_cur` `Render:</span>ProCmdViewGallery`;\<br>mapkey(continued) ~ Select `main_dlg_cur` \<br>mapkey(continued) `ProCmdViewGallery_layoutph.palette_holder.clearAppearance`;\<br>mapkey(continued) ~ Close `main_dlg_cur` \<br>mapkey(continued) `ProCmdViewGallery_layoutph.palette_holder.clearAppearance`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `clearAllAppearance`;\<br>mapkey(continued) ~ FocusIn `UI Message Dialog` `yes`;~ Activate `UI Message Dialog` `yes`;<br>mapkey cap @MAPKEY_LABEL清除部分外观颜色<span class="hljs-comment">;\</span><br><span class="hljs-title">mapkey(continued) ~ Select `main_dlg_cur` `Render:</span>ProCmdViewGallery`;\<br>mapkey(continued) ~ Select `main_dlg_cur` \<br>mapkey(continued) `ProCmdViewGallery_layoutph.palette_holder.clearAppearance`;\<br>mapkey(continued) ~ Close `main_dlg_cur` \<br>mapkey(continued) `ProCmdViewGallery_layoutph.palette_holder.clearAppearance`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `clearOneAppearance`;\<br><span class="hljs-title">mapkey(continued) ~ Close `main_dlg_cur` `Render:</span>ProCmdViewGallery`;<br>mapkey asm @MAPKEY_LABEL打开装配体<span class="hljs-comment">;~ Command `ProCmdModelOpen` ;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Open `file_open` `Type`;~ Close `file_open` `Type`;\<br>mapkey(continued) ~ Select `file_open` `Type` <span class="hljs-number">1</span> `db_37`;~ Activate `file_open` `Current Dir`;\<br>mapkey(continued) ~ Open `file_open` `Type`;~ Close `file_open` `Type`;\<br>mapkey(continued) ~ Select `file_open` `Type` <span class="hljs-number">1</span> `db_1`;<br>mapkey dsuf @MAPKEY_LABEL隐藏工程图下的曲面<span class="hljs-comment">;~ Command `ProCmdMdlTreeShowLyrs` ;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `main_dlg_w2:PHTLeft.AssyTree:</span>&lt;NULL&gt;`;\<br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `LayersAssyTree` `node0`;\<br>mapkey(continued) ~ Command `ProCmdLayer_NewLay` <span class="hljs-comment">;~ FocusOut `newlayerprops` `LayerNameInput`;\</span><br>mapkey(continued) ~ Open `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `Sst_bar.filter_list` <span class="hljs-number">1</span> `17`;\<br>mapkey(continued) ~ Command `ProCmdSelFilterSet` <span class="hljs-number">11</span><span class="hljs-comment">;~ Activate `newlayerprops` `OkBtn`;\</span><br><span class="hljs-title">mapkey(continued) ~ RButtonArm `main_dlg_cur` `LayersAssyTree` `node0:LAY0001:</span>in \<br>mapkey(continued) RIGHTHAND_RIGHT_SMALLARM.DRW`;~ Command `ProCmdViewHide` <span class="hljs-comment">;\</span><br><span class="hljs-title">mapkey(continued) ~ Select `main_dlg_cur` `LayersAssyTree` 1 `node0:</span><span class="hljs-number">06</span>_ALL_SURFS`;\<br><span class="hljs-title">mapkey(continued) ~ RButtonArm `main_dlg_cur` `LayersAssyTree` `node0:</span><span class="hljs-number">06</span>_ALL_SURFS`;\<br>mapkey(continued) ~ Command `ProCmdViewHide` <span class="hljs-comment">;\</span><br><span class="hljs-title">mapkey(continued) ~ Select `main_dlg_cur` `LayersAssyTree` 1 `node0:</span><span class="hljs-number">03</span>_ALL_CURVES`;\<br><span class="hljs-title">mapkey(continued) ~ RButtonArm `main_dlg_cur` `LayersAssyTree` `node0:</span><span class="hljs-number">03</span>_ALL_CURVES`;\<br>mapkey(continued) ~ Command `ProCmdViewHide`;<br>mapkey digs @MAPKEY_LABEL打开igs图档<span class="hljs-comment">;~ Command `ProCmdModelOpen` ;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `file_open:Ph_list.Filelist:</span>&lt;NULL&gt;`;~ Activate `file_open` `Current Dir`;\<br>mapkey(continued) ~ Open `file_open` `Type`;~ Close `file_open` `Type`;\<br>mapkey(continued) ~ Select `file_open` `Type` <span class="hljs-number">1</span> `filter_.igs,.iges,`;<br>mapkey skof @MAPKEY_LABEL草绘偏移<span class="hljs-comment">;~ Command `ProCmdSketOffset`  1;\</span><br>mapkey(continued) ~ Select `useedge` `EdgeType` <span class="hljs-number">1</span> `loop`;@PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;;\</span><br>mapkey(continued) ~ Select `useedge` `EdgeType` <span class="hljs-number">1</span> `single`;<br>mapkey pj @MAPKEY_LABEL投影曲线<span class="hljs-comment">;~ Command `ProCmdFtProject` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.projcrv_refs.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `projcrv_refs.<span class="hljs-number">1.0</span>` `PH.ChainTable` <span class="hljs-number">2</span> `DuMmY` `chains`;\<br>mapkey(continued) ~ Trigger `projcrv_refs.<span class="hljs-number">1.0</span>` `PH.ChainTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `projcrv_refs.<span class="hljs-number">1.0</span>` `PH.ChainTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `projcrv_refs.<span class="hljs-number">1.0</span>` `PH.ChainTable`;<br>mapkey arc @MAPKEY_LABEL三点画弧<span class="hljs-comment">;~ Command `ProCmdSket3Point`  1;</span><br>mapkey me @MAPKEY_LABEL合并曲面<span class="hljs-comment">;~ Command `ProCmdFtMerge` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `dashInst0.Done`;<br>mapkey ep @MAPKEY_LABEL曲面延伸<span class="hljs-comment">;~ Command `ProCmdFtExtendGr` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `dashInst0.Done`;<br>mapkey df @MAPKEY_LABEL零件拔模<span class="hljs-comment">;~ Command `ProCmdDraft` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.NeutsDashList` `0`;\<br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.NeutsDashList` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.draft_ref_page_2.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.DraftTable` <span class="hljs-number">2</span> `0` `content`;\<br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.DraftTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.DraftTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.NeutTable` <span class="hljs-number">2</span> `0` `content`;\<br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.NeutTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.NeutTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.PullsRefList` `0`;\<br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">1.0</span>` `PH.PullsRefList` ``<span class="hljs-comment">;</span><br>mapkey bz @MAPKEY_LABEL草图标注<span class="hljs-comment">;~ Command `ProCmdSketDimension`  1;</span><br>mapkey offd @MAPKEY_LABEL具有拔模的偏移<span class="hljs-comment">;~ Command `ProCmdFtOffset` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.offtype_flyout_tb` `2 \<br>mapkey(continued) offtype_flyout`;~ Activate `main_dlg_cur` `2 offtype_flyout` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.references.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">1.0</span>` `PH.SrfCollTbl` <span class="hljs-number">2</span> `0` `Refs`;\<br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">1.0</span>` `PH.SrfCollTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">1.0</span>` `PH.SrfCollTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">1.0</span>` `PH.sketch_list` `0`;\<br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">1.0</span>` `PH.sketch_list` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `references.<span class="hljs-number">1.0</span>` `PH.SrfCollTbl`;\<br>mapkey(continued) ~ Activate `references.<span class="hljs-number">1.0</span>` `PH.sketch_btn`;<br>mapkey tan @MAPKEY_LABEL草绘相切<span class="hljs-comment">;~ Command `ProCmdSketTangentConstr`;</span><br>mapkey mg @MAPKEY_LABEL合并继承<span class="hljs-comment">;~ Command `ProCmdOduiDsfGenMerge` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.Open_ref_model`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Activate `file_open` `Current Dir`;<br>mapkey work @MAPKEY_LABEL指定工作目录<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `main_dlg_w2:PHTLeft.AssyTree:</span>&lt;NULL&gt;`;~ Close `main_dlg_cur` `appl_casc`;\<br>mapkey(continued) ~ Command `ProCmdSessionChangeDir` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `DLG_PREVIEW_POST` `file_open`;\<br>mapkey(continued) ~ Trail `UI Desktop` `UI Desktop` `PREVIEW_POPUP_TIMER` \<br><span class="hljs-title">mapkey(continued) `file_open:Ph_list.Filelist:</span>&lt;NULL&gt;`;\<br>mapkey(continued) ~ Move `file_open` `file_open` <span class="hljs-number">2</span> <span class="hljs-number">5.708990</span> <span class="hljs-number">8.303985</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `file_open` `Current Dir`;<br>mapkey cha @MAPKEY_LABEL倒角<span class="hljs-comment">;~ Command `ProCmdChamferEdge`;</span><br>mapkey offh @MAPKEY_LABEL偏移加厚<span class="hljs-comment">;~ Command `ProCmdFtOffset` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.offtype_flyout_tb` `3 \<br>mapkey(continued) offtype_flyout`;~ Activate `main_dlg_cur` `3 offtype_flyout` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.references.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">2.0</span>` `PH.SrfCollTbl` <span class="hljs-number">2</span> `0` `Refs`;\<br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">2.0</span>` `PH.SrfCollTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `references.<span class="hljs-number">2.0</span>` `PH.SrfCollTbl` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `references.<span class="hljs-number">2.0</span>` `PH.SrfCollTbl`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.option.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>mapkey cy @MAPKEY_LABEL备份到工作目录<span class="hljs-comment">;~ Close `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Command `ProCmdModelBackup` <span class="hljs-comment">;~ Activate `file_saveas` `Current Dir`;\</span><br>mapkey(continued) ~ Activate `file_saveas` `OK`;<br>mapkey bm @MAPKEY_LABEL拔模<span class="hljs-comment">;~ Command `ProCmdDraft` ;\</span><br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.PullsDashList` `0`;\<br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.PullsDashList` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.draft_ref_page_2.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">0.0</span>` `PH.DraftTable` <span class="hljs-number">2</span> `0` `content`;\<br>mapkey(continued) ~ Trigger `draft_ref_page_2.<span class="hljs-number">0.0</span>` `PH.DraftTable` <span class="hljs-number">2</span> `` ``<span class="hljs-comment">;</span><br>mapkey cfg @MAPKEY_LABELconfig配置<span class="hljs-comment">;~ Select `main_dlg_cur` `appl_casc`;\</span><br>mapkey(continued) ~ Close `main_dlg_cur` `appl_casc`;~ Command `ProCmdRibbonOptionsDlg` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `ribbon_options_dialog` `PageSwitcherPageList` <span class="hljs-number">1</span> `ConfigLayout`;<br>mapkey cr @MAPKEY_LABEL复制-选择性粘贴<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">1</span> `node6`;\<br>mapkey(continued) ~ Command `ProCmdEditCopy` <span class="hljs-comment">;~ Command `ProCmdEditPasteSpecial` ;\</span><br>mapkey(continued) ~ Activate `paste_special` `applymoverotatePB` <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>mapkey cca @MAPKEY_LABEL删除现有图层<span class="hljs-comment">;~ Command `ProCmdMdlTreeShowLyrs` ;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `PHTLeft.PHLayerUI.AssyTree` <span class="hljs-number">1</span> \<br><span class="hljs-title">mapkey(continued) `node0:</span><span class="hljs-number">01</span>___PRT_ALL_DTM_PLN`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `PHTLeft.PHLayerUI.AssyTree` <span class="hljs-number">8</span> \<br><span class="hljs-title">mapkey(continued) `node0:01___PRT_ALL_DTM_PLN` `node0:</span><span class="hljs-number">01</span>___PRT_DEF_DTM_PLN` \<br><span class="hljs-title">mapkey(continued) `node0:02___PRT_ALL_AXES` `node0:</span><span class="hljs-number">03</span>___PRT_ALL_CURVES` \<br><span class="hljs-title">mapkey(continued) `node0:04___PRT_ALL_DTM_PNT` `node0:</span><span class="hljs-number">05</span>___PRT_ALL_DTM_CSYS` \<br><span class="hljs-title">mapkey(continued) `node0:05___PRT_DEF_DTM_CSYS` `node0:</span><span class="hljs-number">06</span>___PRT_ALL_SURFS` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.PHLayerUI.AssyTree` \<br><span class="hljs-title">mapkey(continued) `node0:</span><span class="hljs-number">06</span>___PRT_ALL_SURFS`;~ Command `ProCmdLayer_DelLay` <span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusIn `UI Message Dialog` `yes`;~ Activate `UI Message Dialog` `yes`;<br>mapkey ccs @MAPKEY_LABEL新建实体图层<span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.PHLayerUI.AssyTree` `node0`;\<br>mapkey(continued) ~ Command `ProCmdLayer_NewLay` <span class="hljs-comment">;~ Input `newlayerprops` `LayerNameInput` `s`;\</span><br>mapkey(continued) ~ Input `newlayerprops` `LayerNameInput` `so`;\<br>mapkey(continued) ~ Input `newlayerprops` `LayerNameInput` `sol`;\<br>mapkey(continued) ~ Input `newlayerprops` `LayerNameInput` `soli`;\<br>mapkey(continued) ~ Input `newlayerprops` `LayerNameInput` `solid`;\<br>mapkey(continued) ~ Update `newlayerprops` `LayerNameInput` `solid`;\<br>mapkey(continued) ~ Move `newlayerprops` `newlayerprops` <span class="hljs-number">2</span> <span class="hljs-number">25.882660</span> <span class="hljs-number">2.920469</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `newlayerprops` `LayerNameInput`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `Sst_bar.filter_list` <span class="hljs-number">1</span> `19`;\<br>mapkey(continued) ~ Command `ProCmdSelFilterSet` <span class="hljs-number">19</span><span class="hljs-comment">;</span><br>mapkey ccu @MAPKEY_LABEL新建曲线层<span class="hljs-comment">;\</span><br><span class="hljs-title">mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.PHLayerUI.AssyTree` `node0:</span>SOLID`;\<br>mapkey(continued) ~ Command `ProCmdLayer_NewLay` <span class="hljs-comment">;~ Input `newlayerprops` `LayerNameInput` `c`;\</span><br>mapkey(continued) ~ Update `newlayerprops` `LayerNameInput` `c`;\<br>mapkey(continued) ~ FocusOut `newlayerprops` `LayerNameInput`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `Sst_bar.filter_list` <span class="hljs-number">1</span> `4`;\<br>mapkey(continued) ~ Command `ProCmdSelFilterSet` <span class="hljs-number">13</span><span class="hljs-comment">;</span><br>mapkey fb @MAPKEY_LABEL发布几何<span class="hljs-comment">;~ Command `ProCmdOduiDsfPublishGeom` ;\</span><br>mapkey(continued) ~ Trigger `Odui_Dlg_00` `t1.SurfaceSetsList` `0`;\<br>mapkey(continued) ~ Trigger `Odui_Dlg_00` `t1.SurfaceSetsList` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Move `Odui_Dlg_00` `Odui_Dlg_00` <span class="hljs-number">2</span> <span class="hljs-number">22.743155</span> <span class="hljs-number">2.810952</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `Odui_Dlg_00` `t1.SurfaceSetsList` `0`;\<br>mapkey(continued) ~ Trigger `Odui_Dlg_00` `t1.SurfaceSetsList` ``<span class="hljs-comment">;</span><br>mapkey fill @MAPKEY_LABEL草绘圆角<span class="hljs-comment">;~ Command `ProCmdSketCirFilletWConstr`  1;\</span><br>mapkey(continued) @PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;@PAUSE_FOR_SCREEN_PICK;@PAUSE_FOR_SCREEN_PICK;\</span><br>mapkey(continued) @PAUSE_FOR_SCREEN_PICK<span class="hljs-comment">;</span><br>mapkey csu @MAPKEY_LABEL新建曲面层<span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `main_dlg_cur` `PHTLeft.PHLayerUI.AssyTree` `node0`;\<br>mapkey(continued) ~ Command `ProCmdLayer_NewLay` <span class="hljs-comment">;~ Input `newlayerprops` `LayerNameInput` `S`;\</span><br>mapkey(continued) ~ Update `newlayerprops` `LayerNameInput` `S`;\<br>mapkey(continued) ~ FocusOut `newlayerprops` `LayerNameInput`;\<br>mapkey(continued) ~ Open `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `Sst_bar.filter_list`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `Sst_bar.filter_list` <span class="hljs-number">1</span> `13`;\<br>mapkey(continued) ~ Command `ProCmdSelFilterSet` <span class="hljs-number">11</span><span class="hljs-comment">;</span><br>mapkey hob @MAPKEY_LABEL打标准螺丝孔<span class="hljs-comment">;~ Command `ProCmdHole` ;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `maindashInst0.ui_str_skt_std_type_rg` <span class="hljs-number">1</span> `Std`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.hole_fb_plcmnt_page.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>mapkey hot @MAPKEY_LABEL打普通孔<span class="hljs-comment">;~ Command `ProCmdHole` ;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.hole_fb_plcmnt_page.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `hole_fb_plcmnt_page.<span class="hljs-number">0.0</span>` `PH.ui_hole_prim_ref_cui_lst` `0`;\<br>mapkey(continued) ~ Trigger `hole_fb_plcmnt_page.<span class="hljs-number">0.0</span>` `PH.ui_hole_prim_ref_cui_lst` ``<span class="hljs-comment">;</span><br>mapkey line @MAPKEY_LABEL草绘直线<span class="hljs-comment">;~ Command `ProCmdSketLine`  1;</span><br>mapkey offt @MAPKEY_LABEL偏移替换<span class="hljs-comment">;~ Command `ProCmdFtOffset` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.ExclSrfColl` `0`;\<br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.ExclSrfColl` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Move `main_dlg_cur` `main_dlg_cur` <span class="hljs-number">2</span> -<span class="hljs-number">1.277705</span> <span class="hljs-number">0.365059</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `maindashInst0.offtype_flyout_tb` `4 \<br>mapkey(continued) offtype_flyout`;~ Activate `main_dlg_cur` `4 offtype_flyout` <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>mapkey nside @MAPKEY_LABELN侧曲面<span class="hljs-comment">;~ Command `ProCmdUtilLegacyApp`  1;#SURFACE;\</span><br>mapkey(continued) #<span class="hljs-keyword">NEW</span><span class="hljs-comment">;#ADVANCED;#DONE;#BOUNDARIES;#DONE;#N-SIDED SURF;#DONE;\</span><br>mapkey(continued) ~ Move `Odui_Dlg_01` `Odui_Dlg_01` <span class="hljs-number">2</span> <span class="hljs-number">19.275098</span> <span class="hljs-number">6.680574</span><span class="hljs-comment">;</span><br>mapkey pad @MAPKEY_LABEL尺寸阵列<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Select `main_dlg_cur` `PHTLeft.AssyTree` <span class="hljs-number">1</span> `node6`;\<br>mapkey(continued) ~ Trail `MiniToolbar` `MiniToolbar` `UIT_TRANSLUCENT` `NEED_TO_CLOSE`;\<br>mapkey(continued) ~ Command `ProCmdPattern`;<br>mapkey paf @MAPKEY_LABEL方向阵列<span class="hljs-comment">;~ Command `ProCmdPattern` ;\</span><br>mapkey(continued) ~ Open `main_dlg_cur` `maindashInst0.ui_pat_type`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `maindashInst0.ui_pat_type`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `maindashInst0.ui_pat_type` <span class="hljs-number">1</span> `ui_pat_type_dir`;<br>mapkey pah @MAPKEY_LABEL填充阵列<span class="hljs-comment">;~ Command `ProCmdPattern` ;\</span><br>mapkey(continued) ~ Open `main_dlg_cur` `maindashInst0.ui_pat_type`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `maindashInst0.ui_pat_type`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `maindashInst0.ui_pat_type` <span class="hljs-number">1</span> `ui_pat_type_fill`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.ui_pat_fill_sel_sketch.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `ui_pat_fill_sel_sketch.<span class="hljs-number">0.0</span>` `PH.ui_pat_fill_sketch_name` `0`;\<br>mapkey(continued) ~ Trigger `ui_pat_fill_sel_sketch.<span class="hljs-number">0.0</span>` `PH.ui_pat_fill_sketch_name` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `ui_pat_fill_sel_sketch.<span class="hljs-number">0.0</span>` `PH.ui_pat_fill_sketch_name` `0`;\<br>mapkey(continued) ~ Trigger `ui_pat_fill_sel_sketch.<span class="hljs-number">0.0</span>` `PH.ui_pat_fill_sketch_name` ``<span class="hljs-comment">;</span><br>mapkey pax @MAPKEY_LABEL轴阵列<span class="hljs-comment">;~ Command `ProCmdPattern` ;\</span><br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.ui_pat_dim_2_num` `0`;\<br>mapkey(continued) ~ Trigger `main_dlg_cur` `maindashInst0.ui_pat_dim_2_num` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Open `main_dlg_cur` `maindashInst0.ui_pat_type`;\<br>mapkey(continued) ~ Close `main_dlg_cur` `maindashInst0.ui_pat_type`;\<br>mapkey(continued) ~ Select `main_dlg_cur` `maindashInst0.ui_pat_type` <span class="hljs-number">1</span> `ui_pat_type_axis`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.ui_pat_dim_panel.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `ui_pat_dim_panel.<span class="hljs-number">0.0</span>` `PH.ui_pat_dim_1_array`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.ui_pat_dim_panel.<span class="hljs-number">0</span>` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.ui_pat_dim_panel.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ FocusOut `ui_pat_dim_panel.<span class="hljs-number">0.0</span>` `PH.ui_pat_dim_1_array`;<br>mapkey trc @MAPKEY_LABEL修剪曲线<span class="hljs-comment">;~ Command `ProCmdFtTrim` ;\</span><br>mapkey(continued) ~ HTMLEnter `main_dlg_cur` `dashboard_page_0|dashboard_help_0|<span class="hljs-number">0</span>.read_more`;\<br>mapkey(continued) ~ HTMLExit `main_dlg_cur` `dashboard_page_0|dashboard_help_0|<span class="hljs-number">0</span>.read_more`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.trimcrv_refs.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `trimcrv_refs.<span class="hljs-number">0.0</span>` `PH.TrimCurveList` `0`;\<br>mapkey(continued) ~ Trigger `trimcrv_refs.<span class="hljs-number">0.0</span>` `PH.TrimCurveList` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `trimcrv_refs.<span class="hljs-number">0.0</span>` `PH.TrimObjList` `0`;\<br>mapkey(continued) ~ Focus `trimcrv_refs.<span class="hljs-number">0.0</span>` `PH.TrimObjList`;\<br>mapkey(continued) ~ Select `trimcrv_refs.<span class="hljs-number">0.0</span>` `PH.TrimObjList` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `trimcrv_refs.<span class="hljs-number">0.0</span>` `PH.TrimObjList` ``<span class="hljs-comment">;@PAUSE_FOR_SCREEN_PICK;</span><br>mapkey trs @MAPKEY_LABEL修剪曲面<span class="hljs-comment">;~ Command `ProCmdFtTrim` ;\</span><br>mapkey(continued) ~ Enter `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ <span class="hljs-keyword">Exit</span> `main_dlg_cur` `dashInst0.Quit`;\<br>mapkey(continued) ~ Activate `main_dlg_cur` `chkbn.surf_trim_references.<span class="hljs-number">0</span>` <span class="hljs-number">1</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List5` `0`;\<br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List5` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` `0`;\<br>mapkey(continued) ~ Focus `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1`;\<br>mapkey(continued) ~ Select `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` ``<span class="hljs-comment">;@PAUSE_FOR_SCREEN_PICK;\</span><br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` `0`;\<br>mapkey(continued) ~ Focus `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1`;\<br>mapkey(continued) ~ Select `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` `0`;\<br>mapkey(continued) ~ Focus `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1`;\<br>mapkey(continued) ~ Select `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` <span class="hljs-number">0</span><span class="hljs-comment">;\</span><br>mapkey(continued) ~ RButtonArm `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` `0`;\<br>mapkey(continued) ~ PopupOver `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.ExpList_Wmo02` <span class="hljs-number">1</span> `PH.List1`;\<br>mapkey(continued) ~ Open `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.ExpList_Wmo02`;\<br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` ``<span class="hljs-comment">;\</span><br>mapkey(continued) ~ Close `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.ExpList_Wmo02`;\<br>mapkey(continued) ~ Activate `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.DelOne_Wmo02`;\<br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` `0`;\<br>mapkey(continued) ~ Trigger `surf_trim_references.<span class="hljs-number">0.0</span>` `PH.List1` ``<span class="hljs-comment">;@PAUSE_FOR_SCREEN_PICK;</span><br></code></pre></td></tr></table></figure>
+
+<p>其中，包含了快捷键映射和一些其他的配置。</p>
+<p>下面就是我在<code>config.pro</code>文件中添加的快捷键映射。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/cero%E5%BF%AB%E6%8D%B7%E9%94%AE.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="其他常用配置"><a href="#其他常用配置" class="headerlink" title="其他常用配置"></a>其他常用配置</h2><p>（设置转场动画时间秒数0.1-0.5较合适越大动画越慢）</p>
+<p>max_animation_time 0.1</p>
+<p>（设置模型线条的显示质量为高–high）</p>
+<p>edge_display_quality high</p>
+<p>（设置下拉菜单时为中英文双语菜单）</p>
+<p>menu_translation both</p>
+<p>（设置系统默认单位为公制单位–毫米、牛顿、秒）</p>
+<p>pro_unit_sys mmns</p>
+<p>(设置长度缺省单位为mm)</p>
+<p>pro_unit_length unit_mm</p>
+<p>(设置质量缺省单位为kg)</p>
+<p>pro_unit_mass unit_kilogram</p>
+<p>（设置历史轨迹文件trail存放目录为c:\temp\轨迹目录）</p>
+<p>trail_dir D:\creo7.0config\trail</p>
+<p>（主窗口下方的信息窗口仅显示3 行文字）</p>
+<p>visible_message_lines 3</p>
+<p>（保持输出的STP文件和proe里颜色一致，也就是导出的STP模型带有颜色）</p>
+<p>step_export_format ap214_cd</p>
+<p>（PROE启动时显示空页面）</p>
+<p>web_browser_homepage about:blank</p>
+<p>(设置工程图缺省绘图比例默认为1比1)</p>
+<p>default_draw_scale 1:1</p>
+<p>(设置相切边不显示)</p>
+<p>tangent_edge_display no</p>
+<p>(设置自动再生特征)</p>
+<p>allow_anatomic_features yes</p>
+<p>(设置质量自动计算，这个参数需要配置模型材料)</p>
+<p>mass_property_calculate automatic</p>
+<p>(允许用户定义“着色显示”着色的尺寸比率，使用缺省的“着色到：全窗口预览”设置。增加该变量，可创建高质量着色，但速度性能降低。减小该变量，产生相反的结果。缺省值为0.5。)</p>
+<p>photorender_preview_scale 0.25到1.0</p>
+<p>【常用配置六】</p>
+<p>使“插入&#x2F; 高级”菜单下的Local Push、Radius Dome、SectionDome、Ear、Lip、Shaft、Flange、Neck 等PROE2000中的旧特征显示在菜单中比如:”唇”高级命令）</p>
+<p>allow_anatomic_features yes</p>
+<p>（对话框的内定字型为Arial，黑体，10 号字）</p>
+<p>default_font 10, arial, bold</p>
+<p>（设置peizhi目录下的gb.dtl为工程图标准模板）</p>
+<p>drawing_setup_file D:\creo7.0config\LH活动绘图GB.dtl</p>
+<p>（指令选单的内定字型为Arial，黑体，10 号字）</p>
+<p>menu_font 10, arial, bold</p>
+<p>（Pro&#x2F;E 的字型使用旧版的大型字）</p>
+<p>use_pre_wildfire_text_font yes</p>
+<p>（组件设计时、预设的模板设为公制单位）</p>
+<p>template_designasm mmns_asm_design.asm</p>
+<p>（模具设计时、预设的模板设为公制单位）</p>
+<p>template_mfgmold mmns_mfg_mold.asm</p>
+<p>（钣金设计时、预设的模板设为公制单位）</p>
+<p>template_sheetmetalpart mmns_part_sheetmetal.prt</p>
+<p>（零件设计时、预设的模板设为公制单位）</p>
+<p>template_solidpart mmns_part_solid.prt</p>
+<p>设置显示的尺寸没有公差</p>
+<p>tol_mode nominal</p>
+<p>设置系统主界面颜色配置文件</p>
+<p>system_colors_file D:\creo7.0config\syscol.scl</p>
+<p>设置输出PDF时使用系统线宽设置</p>
+<p>pdf_use_pentable yes</p>
+<p>设置工程图格式文件路径</p>
+<p>pro_format_dir D:...</p>
+<p>设置零件模板</p>
+<p>template_solidpart D:\creo7.0config\LH_lingjianmuban\lh-ljmb.prt</p>
+<p>设置组件模板</p>
+<p>template_designasm D:\creo7.0config\LH_zujianmuban\mmns_asm_design_abs</p>
+<p>【常用配置七】</p>
+<p>关闭提示音</p>
+<p>bell no</p>
+<p>草绘界面自动摆正视图与屏幕平行</p>
+<p>sketcher_starts_in_2d yes</p>
+<p>设置所有模型模式中非角度尺寸的缺省小数位数</p>
+<p>default_dec_places 3</p>
+<p>设置角度尺寸小数位数</p>
+<p>default_ang_dec_places 2</p>
+<p>设置草绘时的尺寸小数位数</p>
+<p>sketcher_dec_places 2</p>
+<p>设置将图片嵌入工程图中，可以实现工程图打开时预览</p>
+<p>save_drawing_picture_file embed</p>
+<p>设置搜索文件</p>
+<p>search_path_file D:...</p>
+<p>设置下拉菜单的宽度</p>
+<p>set_menu_width 12</p>
+<p>设置图层方式（影响转CAD）</p>
+<p>intf_out_layer part_layer</p>
+<p>指定转CAD的转换设置文件</p>
+<p>dxf_export_mapping_file D:...</p>
+<p>设置模型树配置文件</p>
+<p>mdl_tree_cfg_file D:\creo7.0config\LH_muxingshutree.cfg</p>
+<p>设置系统坐标及基准面显示的字体大小</p>
+<p>text_height_factor 40</p>
+<p>设置注释文件路径</p>
+<p>pro_note_dir D:...</p>
+<p>设置保存副本时自动复制与零件或组件相关的工程图</p>
+<p>rename_drawings_with_object both</p>
+<p>设置使用8笔（影响打印）</p>
+<p>use_8_plotter_pens yes</p>
+<p>设置工程图格式文件的配置文件</p>
+<p>format_setup_file D:\peizhi\format.dtl</p>
+<p>设置工程图用的符号</p>
+<p>pro_symbol_dir D:\creo7.0config\LH_fuhaoku</p>
+<p>设置公差标准为ISO（国标）</p>
+<p>tolerance_standard iso</p>
+<p>设置打印机打印样式文件路径</p>
+<p>pro_plot_config_dir D:\peizhi\print_pcf</p>
+<p>设置材料库文件路径</p>
+<p>pro_material_dir D:\creo7.0config\LH_cailiaoku</p>
+<p>设置打印线宽配置文件</p>
+<p>pen_table_file D:\creo7.0config\LH_dayin\table.pnt</p>
+<p>【常用配置八】</p>
+<p>导出CAD文件默认哪个版本</p>
+<p>(保存DWG 2007版本文件）</p>
+<p>dwg_export_format 2007</p>
+<p>(保存dxf 2007版本文件）</p>
+<p>dxf_export_format 2007</p>
+<p>【常用配置九】</p>
+<p>为工程图设置默认图框</p>
+<p>template_drawing D:\creo7.0config\LH_gongchengtumuban\a4_hh.frm （此为起始目录路径，加文件名。图框一定要放在起始目录里面）</p>
+<p>【常用配置十】</p>
+<p>锁定已经修改的尺寸</p>
+<p>sketcher_lock_modified_dims yes</p>
+<p>如何保存特征树的隐藏状态</p>
+<p>save_objects all (建议不选all,因为到时旧版本会很多。建议使用changed)</p>
+<p>设置工程图，图框库目录</p>
+<p>pro_format_dir D:.… （此为启动目录路径，图框放入启动目录）</p>
+<p>设置绘图区背影色</p>
+<p>system_colors_file D:.…\syscol.scl （此为启动目录路径，配色放入启动目录）</p>
+<p>设置下拉菜单时为中英文双语菜单</p>
+<p>menu_translation both</p>
+<p><strong>同上</strong></p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><code class="hljs livescript">单位设置，使用长度mm重量g作为单位<br>pro_unit_length unit_mm<br>pro_unit_mass unit_gram<br>激活绝对精度，公差显示设置和缺省的小数点设置<br>enable_absolute_accuracy <span class="hljs-literal">yes</span><br>default_abs_accuracy <span class="hljs-number">0.001</span><br>tol_display <span class="hljs-literal">no</span><br>tol_mode nominal<br>default_dec_places <span class="hljs-number">2</span><br>打开自动计算模型质量属性选项，保证工程图参数化重量实时更新<br>mass_property_calculate automatic<br>允许工程图视图可以跟随鼠标拖动<br>allow_move_attach_in_dtl_move <span class="hljs-literal">yes</span><br>allow_move_view_with_move <span class="hljs-literal">yes</span><br>设置日期公司，允许使用旧版本指令，激活autobuildz<br>todays_date_note_format %yyyy-%Mmm-%dd<br>allow_anatomic_features <span class="hljs-literal">no</span><br>autobuildz_enabled <span class="hljs-literal">yes</span><br>菜单和帮助信息使用本地化（中文）<br>menu_translation <span class="hljs-literal">yes</span><br>msg_translation <span class="hljs-literal">yes</span><br>help_translation <span class="hljs-literal">yes</span><br>button_name_in_help <span class="hljs-literal">yes</span><br>缺省的模板文件设置<br>template_designasm $PRO_DIRECTORY<span class="hljs-string">\templates\mmns_asm_design.asm</span><br>template_solidpart $PRO_DIRECTORY<span class="hljs-string">\templates\mmns_part_solid.prt</span><br>template_drawing $PRO_DIRECTORY<span class="hljs-string">\templates\a3_drawing.drw</span><br>template_sheetmetalpart $PRO_DIRECTORY<span class="hljs-string">\templates\mmns_part_sheetmetal.prt</span><br>template_mfgmold $PRO_DIRECTORY<span class="hljs-string">\templates\mmns_mfg_mold.mfg</span><br>一些文件保存选项，自动创建同名工程图选项。<br>rename_drawings_with_object both<br>file_open_default_folder working_directory<br>start_model_dir D:<span class="hljs-string">\0_objlib\start-part</span><br>browser_favorite F:<span class="hljs-string">\work</span><br>override_store_back <span class="hljs-literal">yes</span><br>save_drawing_picture_file embed<br>save_objects changed<br>force_new_file_options_dialog <span class="hljs-literal">no</span><br>save_bitmap NONE<br>save_model_display shading_lod<br>save_texture_with_model <span class="hljs-literal">yes</span><br>重要的路径配置。包括库路径。符号路径、格式文件路径等。<br>pro_library_dir D:<span class="hljs-string">\0_objlib</span><br>pro_catalog_dir D:<span class="hljs-string">\0_objlib</span><br>mdl_tree_cfg_file d:<span class="hljs-string">\start_dir\wildfire2.0\tree.cfg</span><br>pro_format_dir D:<span class="hljs-string">\0_objlib\format</span><br>pro_symbol_dir D:<span class="hljs-string">\0_objlib\symbol</span><br>drawing_setup_file D:<span class="hljs-string">\0_objlib\dtl\icedrawing.dtl</span><br>symbol_instance_palette_file D:<span class="hljs-string">\0_objlib\symbol\symbols_palette.drw</span><br>pro_group_dir D:<span class="hljs-string">\0_objlib\udf</span><br>train_file_path d:<span class="hljs-string">\start_dir\trail_dir</span><br>trail_dir D:<span class="hljs-string">\START_DIR\trail_dir</span><br>pro_note_dir D:<span class="hljs-string">\0_objlib\notes</span><br>system_colors_file D:<span class="hljs-string">\0_objlib\color\syscol.scl</span><br>pro_font_dir C:<span class="hljs-string">\WINDOWS\Fonts</span><br>pro_colormap_path D:<span class="hljs-string">\start_dir\wildfire3.0</span><br>global_appearance_file D:<span class="hljs-string">\start_dir\wildfire3.0\ice.dmt</span><br>输入输出重要选项设置<br>intf2d_out_enhanced_ents hatch_only<br>use_export_2d_dialog <span class="hljs-literal">yes</span><br>intf_in_use_template_models <span class="hljs-literal">yes</span><br>dxf_out_scale_views <span class="hljs-literal">yes</span><br>dxf_out_drawing_scale <span class="hljs-literal">yes</span><br>dxf_export_format <span class="hljs-number">2004</span><br>iges_out_assembly_default_mode all_levels<br>dwg_export_format <span class="hljs-number">2004</span><br>intf_out_blanked_entities <span class="hljs-literal">yes</span><br>layout和元件界面自动装配的设置<br>auto_assembly_with_layouts <span class="hljs-literal">yes</span><br>autoplace_single_comp <span class="hljs-literal">yes</span><br>预选择的高亮选项设置<br>prehighlight <span class="hljs-literal">yes</span><br>dim_inactive_components never<br>打印相关设置<br>raster_plot_dpi <span class="hljs-number">100</span><br>use_8_plotter_pens <span class="hljs-literal">yes</span><br>use_software_linefonts <span class="hljs-literal">yes</span><br>pro_plot_config_dir D:<span class="hljs-string">\0_objlib\config</span><br>pen_table_file d:<span class="hljs-string">\0_objlib\config\table.pnt</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jishulink.com/post/543860">快捷键来源</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/436985709">其他配置来源</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ugsnx.com/thread-272213-1-1.html">其他配置来源</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E6%A2%B0/" class="category-chain-item">机械</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E6%A2%B0/Creo/" class="category-chain-item">Creo</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Creo10配置总结</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/04/18/Creo10配置总结/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/18/%E5%85%B3%E4%BA%8E%E6%A0%87%E8%AF%86%E5%88%9D%E5%A7%8B%E5%99%A8/" title="关于标识初始器">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">关于标识初始器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/17/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E9%A1%BA%E5%BA%8F%E7%82%B9/" title="C语言中的顺序点">
+                        <span class="hidden-mobile">C语言中的顺序点</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

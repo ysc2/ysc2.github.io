@@ -1,0 +1,964 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="多线程优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每一个程序员都应该了解的内存知识-Part6">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/29/%E6%AF%8F%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part6/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="多线程优化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292018420.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292018201.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020023.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020440.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020889.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020921.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020177.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292021979.png">
+<meta property="article:published_time" content="2024-04-29T12:15:10.000Z">
+<meta property="article:modified_time" content="2024-04-29T16:52:38.460Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292018420.png">
+  
+  
+  
+  <title>每一个程序员都应该了解的内存知识-Part6 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x62wko.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="每一个程序员都应该了解的内存知识-Part6"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-29 20:15" pubdate>
+          2024年4月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          20k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          167 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">每一个程序员都应该了解的内存知识-Part6</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>多线程优化</p>
+<span id="more"></span>
+
+
+<p><strong>注意：这篇文章使用 <code>Kimi AI</code> 进行翻译</strong></p>
+<h3 id="6-4-多线程优化"><a href="#6-4-多线程优化" class="headerlink" title="6.4 多线程优化"></a>6.4 多线程优化</h3><p>当涉及到多线程时，有三个不同的缓存使用方面很重要：</p>
+<ul>
+<li>并发性</li>
+<li>原子性</li>
+<li>带宽</li>
+</ul>
+<p>这些方面也适用于多进程情况，但由于多个进程（大多数情况下）是独立的，因此优化它们并不容易。可能的多进程优化是多线程场景中可用优化的一个子集。因此，我们将在这里专门处理后者。</p>
+<p>这里的并发性指的是，当同时运行多个线程时，进程经历的内存效应。线程的一个属性是它们都共享相同的地址空间，因此都可以访问相同的内存。在理想情况下，线程使用的内存区域是不同的，在这种情况下，这些线程之间的耦合度很低（例如，共同的输入和&#x2F;或输出）。如果多个线程使用相同的数据，则需要协调；这时原子性就发挥作用了。最后，根据机器架构，处理器可用的内存和处理器之间的总线带宽是有限的。我们将在以下各节中分别处理这三个方面——尽管它们当然密切相关。</p>
+<h4 id="6-4-1-并发性优化"><a href="#6-4-1-并发性优化" class="headerlink" title="6.4.1 并发性优化"></a>6.4.1 并发性优化</h4><p>最初，在本节中，我们将讨论两个单独的问题，实际上它们需要相反的优化。多线程应用程序在其某些线程中使用公共数据。正常的缓存优化要求保持数据在一起，以便应用程序的占用空间小，从而最大化适合任何时候缓存的内存量。</p>
+<p>这种方法存在一个问题：如果多个线程写入同一内存位置，缓存行必须在各自核心的 L1d 中处于“E”（独占）状态。这意味着会发送很多 RFO（远程填充操作）请求，在最坏的情况下，每个写入访问都要发送一个。因此，正常的写入突然变得非常昂贵。如果使用相同的内存位置，需要同步（可能通过使用原子操作，这在下一节中处理）。问题也很明显，当所有线程都使用不同的内存位置并且应该是独立的时。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292018420.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>图 6.10：并发缓存行访问开销</strong></p>
+</blockquote>
+<p>图 6.10 显示了这种“错误共享”的结果。测试程序（在第 9.3 节中显示）创建了一些线程，它们除了递增一个内存位置（5 亿次）之外什么都不做。测量的时间是从程序开始到程序在等待最后一个线程后结束。线程被固定在单独的处理器上。机器有四个 P4 处理器。蓝色值表示将每个线程的内存分配放置在单独缓存行的运行。红色部分是当线程的位置移动到仅有一个缓存行时发生的惩罚。</p>
+<p>蓝色测量值（使用单独的缓存行）符合预期。程序在多线程上没有惩罚地进行扩展。每个处理器将其缓存行保持在自己的 L1d 中，并且没有带宽问题，因为不需要读取太多代码或数据（实际上，它们都被缓存了）。测量的轻微增加确实是系统噪声，可能是一些预取效果（线程使用顺序缓存行）。</p>
+<p>通过将使用一个缓存行的时间与每个线程使用单独缓存行的时间进行比较计算出的开销是 390%，734% 和 1,147%。这些大数字乍一看可能会令人惊讶，但考虑到所需的缓存交互，应该是显而易见的。缓存行在一个处理器的缓存中被拉出，就在它完成写入缓存行之后。除了在任何给定时刻拥有缓存行的那个处理器之外，所有处理器都被延迟并且无法做任何事情。每个额外的处理器只会带来更多的延迟。</p>
+<p>从这些测量中可以清楚地看出，必须避免在程序中的这种情况。鉴于巨大的惩罚，这个问题在许多情况下是显而易见的（至少分析会显示代码位置），但现代硬件上存在一个陷阱。图 6.11 显示了在单处理器、四核机器（Intel Core 2 QX 6700）上运行代码时的等效测量。即使这种处理器的两个独立的 L2，测试用例也没有显示出任何可扩展性问题。当多次使用相同的缓存行时，会有轻微的开销，但它不会随着核心数的增加而增加。{ _我无法解释当所有四个核心都使用时数字较低的原因，但它是可重现的。} 如果使用这些处理器中的多个，我们当然会看到类似于图 6.10 的结果。尽管多核处理器的使用日益增加，许多机器仍将继续使用多个处理器，因此正确处理这种情况很重要，这可能意味着在真正的 SMP 机器上测试代码。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292018201.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>图 6.11：开销，四核</strong></p>
+</blockquote>
+<p>有一个非常简单的“修复”方法：将每个变量放在自己的缓存行上。这是与前面提到的优化相冲突的地方，具体来说，应用程序的占用空间将大大增加。这是不可接受的；因此，有必要提出一个更聪明的解决方案。</p>
+<p>需要的是识别哪些变量只由一个线程一次使用，那些只由一个线程使用的，以及可能在某些时候有争议的变量。每种情况都有不同的解决方案，并且是有用的。区分变量的最基本标准是：它们是否曾经被写入，以及这种情况发生的频率如何。</p>
+<p>从不写入的变量以及那些只初始化一次的变量基本上是常量。由于 RFO 请求只需要写操作，常量可以在缓存中共享（‘S’ 状态）。因此，这些变量不需要特别处理；将它们组合在一起是可以的。如果程序员正确地用 <code>const</code> 标记变量，工具链将把变量从正常变量移开，进入 <code>.rodata</code>（只读数据）或 <code>.data.rel.ro</code>（重新定位后的只读）节。不需要其他特殊操作。如果出于某种原因，变量不能正确地用 <code>const</code> 标记，程序员可以通过将它们分配到特殊节来影响它们的放置。</p>
+<p>当链接器构建最终二进制文件时，它首先将所有输入文件中同名的节附加在一起；然后这些节按照链接器脚本确定的顺序排列。这意味着，通过将所有基本上只是常量但未标记为如此的变量移动到特殊节中，程序员可以将所有这些变量组合在一起。在它们之间不会有经常写入的变量。通过适当对齐该节中的第一个变量，可以确保不会发生错误共享。假设这个小例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> foo = <span class="hljs-number">1</span>;<br><span class="hljs-type">int</span> bar __attribute__((section(<span class="hljs-string">&quot;.data.ro&quot;</span>))) = <span class="hljs-number">2</span>;<br><span class="hljs-type">int</span> baz = <span class="hljs-number">3</span>;<br><span class="hljs-type">int</span> xyzzy __attribute__((section(<span class="hljs-string">&quot;.data.ro&quot;</span>))) = <span class="hljs-number">4</span>;<br></code></pre></td></tr></table></figure>
+
+<p>如果编译，这个输入文件定义了四个变量。有趣的部分是，变量 <code>foo</code> 和 <code>baz</code>，以及 <code>bar</code> 和 <code>xyzzy</code> 分别组合在一起。没有属性定义，编译器将在它们在源代码中定义的顺序中将所有四个变量分配到名为 <code>.data</code> 的节中。{ _这不是由 ISO C 标准保证的，但是 gcc 的工作方式。} 有了代码本身，变量 <code>bar</code> 和 <code>xyzzy</code> 被放置在名为 <code>.data.ro</code> 的节中。节名 <code>.data.ro</code> 大体上是任意的。前缀 <code>.data.</code> 保证了 GNU 链接器将与其它数据节一起放置该节。</p>
+<p>同样的技术可以应用于分离大多数时候读取但偶尔写入的变量。只需选择一个不同的节名。在某些情况下，例如 Linux 内核，这种分离似乎是有意义的。</p>
+<p>如果变量只由一个线程使用，则有另一种指定变量的方式。在这种情况下，使用线程局部变量（见 [mytls]）是可能且有用的。</p>
+<p>在 gcc 中，C 和 C++ 语言允许使用 <code>__thread</code> 关键字将变量定义为每个线程的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> foo = <span class="hljs-number">1</span>;<br>__thread <span class="hljs-type">int</span> bar = <span class="hljs-number">2</span>;<br><span class="hljs-type">int</span> baz = <span class="hljs-number">3</span>;<br>__thread <span class="hljs-type">int</span> xyzzy = <span class="hljs-number">4</span>;<br></code></pre></td></tr></table></figure>
+
+<p>变量 <code>bar</code> 和 <code>xyzzy</code> 不是在正常的数据段中分配的；相反，每个线程都有自己的单独区域，用于存储这样的变量。这些变量可以有静态初始化器。所有线程局部变量都可以被所有其他线程访问，但除非一个线程将指向线程局部变量的指针传递给其他线程，否则其他线程无法找到该变量。由于变量是线程局部的，因此不会出现错误共享——除非程序人为地创建了问题。这个解决方案很容易设置（编译器和链接器做了所有工作），但它有它的成本。当创建线程时，它必须花一些时间设置线程局部变量，这需要时间和内存。此外，访问线程局部变量通常比使用全局或自动变量更昂贵（见 [mytls] 以了解如何自动最小化这些成本，如果可能的话）。</p>
+<p>使用线程局部存储（TLS）的一个缺点是，如果变量的使用转移到另一个线程，旧线程中的当前变量值对新线程不可用。每个线程的变量副本是不同的。通常这根本不是问题，如果它是，那么在转移到新线程时需要协调，此时可以复制当前值。</p>
+<p>第二个更大的问题是可能的资源浪费。如果一个变量一次只由一个线程使用，所有线程都必须在内存方面付出代价。如果一个线程在 DSO 中没有使用任何 TLS 变量，TLS 内存区域的延迟分配将防止这成为一个问题（除了应用程序本身的 TLS）。如果一个线程在某个 DSO 中只使用了一个 TLS 变量，该对象中所有其他 TLS 变量的内存也将被分配。如果大规模使用 TLS 变量，这可能会累积起来。</p>
+<p>通常可以给出的最佳建议是：</p>
+<ol>
+<li>至少将只读（初始化后）和读写变量分开。也许可以将读取为主的变量作为第三类扩展这种分离。</li>
+<li>将一起使用的读写变量组合成一个结构体。使用结构体是确保所有这些变量的内存位置以一致的方式紧密组合在一起的唯一方法，这种方式由所有 gcc 版本一致翻译。</li>
+<li>将经常由不同线程写入的读写变量移动到它们自己的缓存行上。这可能意味着在末尾添加填充以填满缓存行的剩余部分。如果与第 2 步结合，这通常并不真的是浪费。扩展上面的例子，我们可能会得到如下代码（假设 <code>bar</code> 和 <code>xyzzy</code> 打算一起使用）：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> foo = <span class="hljs-number">1</span>;<br><span class="hljs-type">int</span> baz = <span class="hljs-number">3</span>;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">al1</span> &#123;</span><br>    <span class="hljs-type">int</span> bar;<br>    <span class="hljs-type">int</span> xyzzy;<br>  &#125;;<br>  <span class="hljs-type">char</span> pad[CLSIZE - <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> al1)];<br>&#125; rwstruct __attribute__((aligned(CLSIZE))) =<br>  &#123; &#123; .bar = <span class="hljs-number">2</span>, .xyzzy = <span class="hljs-number">4</span> &#125; &#125;;<br></code></pre></td></tr></table></figure>
+
+<p>一些代码更改是必要的（对 <code>bar</code> 的引用必须替换为 <code>rwstruct.bar</code>，对 <code>xyzzy</code> 也是如此），但就是这样。编译器和链接器做了所有其他工作。{ _此代码必须使用 <code>-fms-extensions</code> 在命令行上编译。}</p>
+<ol start="4">
+<li>如果一个变量由多个线程使用，但每次使用都是独立的，将变量移动到 TLS 中。</li>
+</ol>
+<h4 id="6-4-2-原子性优化"><a href="#6-4-2-原子性优化" class="headerlink" title="6.4.2 原子性优化"></a>6.4.2 原子性优化</h4><p>如果多个线程同时修改相同的内存位置，处理器不保证任何特定结果。这是一个故意的决定，以避免在 99.999% 的所有情况下都不必要的成本。例如，如果一个内存位置处于‘S’状态，并且两个线程同时必须递增其值，执行管道不必等待缓存行在‘E’状态下可用后再从缓存中读取旧值以执行加法。相反，它读取当前在缓存中的值，并且一旦缓存行在‘E’状态下可用，新值就会被写回。如果两个线程中的两次缓存读取同时发生，结果将不是预期的；一次加法将会丢失。</p>
+<p>为了确保这不会发生，处理器提供了原子操作。这些原子操作例如，不会在可以以原子方式执行加法的方式进行加法之前读取旧值。除了等待其他核心和处理器外，一些处理器甚至为特定地址的原子操作向主板上的其他设备发出信号。所有这些都使原子操作变慢。</p>
+<p>处理器供应商决定提供不同的原子操作集。早期的 RISC 处理器，符合‘R’代表减少的原则，提供的原子操作非常少，有时只有一个原子位设置和测试。{ <em>HP Parisc 仍然没有提供更多…</em>} 在另一个极端，我们有 x86 和 x86-64，它们提供了大量的原子操作。通常可用的原子操作可以分为四类：</p>
+<p><strong>位测试</strong> </p>
+<p>这些操作原子地设置或清除一个位，并返回一个状态，指示位之前是否设置。</p>
+<p><strong>加载锁定&#x2F;存储条件（LL&#x2F;SC）</strong> </p>
+<p>{ _有些人使用“链接”而不是“锁定”，这都是一样的。}</p>
+<p>这些操作作为一对工作，其中特殊的加载指令用于启动事务，最终的存储只有在同时间没有被修改的情况下才会成功。存储操作指示成功或失败，因此程序可以根据需要重复努力。</p>
+<p><strong>比较并交换（CAS）</strong> </p>
+<p>这是一个三元操作，它只将作为参数提供的值写入地址（第二个参数），如果当前值与第三个参数值相同。</p>
+<p><strong>原子算术</strong> </p>
+<p>这些操作只在 x86 和 x86-64 上可用，可以在内存位置执行算术和逻辑操作。这些处理器支持这些操作的非原子版本，但 RISC 架构不支持。因此，它们的可用性受到限制。</p>
+<p>一个架构支持 LL&#x2F;SC 或 CAS 指令，而不是两者。两种方法基本上等效；它们同样好地实现原子算术操作，但 CAS 似乎是目前首选的方法。所有其他操作都可以使用它间接实现。例如，原子加法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> curval;<br><span class="hljs-type">int</span> newval;<br><span class="hljs-keyword">do</span> &#123;<br>  curval = var;<br>  newval = curval + addend;<br>&#125; <span class="hljs-keyword">while</span> (CAS(&amp;var, curval, newval));<br></code></pre></td></tr></table></figure>
+
+<p><code>CAS</code> 调用的结果表明操作是否成功。如果它返回失败（非零值），循环再次运行，执行加法，并再次尝试 CAS 调用。这会重复，直到成功。代码值得注意的是，内存位置的地址必须在两个单独的指令中计算。{ <em>x86 和</em> x86-64 上的 <code>CAS</code> 操作码可以在第二和后续迭代中避免加载值，但在这个平台上，我们可以以更简单的方式编写原子加法，使用单个加法操作码。} 对于 LL&#x2F;SC，代码看起来大致相同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> curval;<br><span class="hljs-type">int</span> newval;<br><span class="hljs-keyword">do</span> &#123;<br>  curval = LL(var);<br>  newval = curval + addend;<br>&#125; <span class="hljs-keyword">while</span> (SC(var, newval));<br></code></pre></td></tr></table></figure>
+
+<p>这里我们必须使用特殊的加载指令（<code>LL</code>），并且我们不需要将内存位置的当前值传递给 <code>SC</code>，因为处理器知道同时间内存位置是否被修改了。</p>
+<p>大的区别是 x86 和 x86-64，我们有原子操作，在这里，选择适当的原子操作以实现最佳结果很重要。图 6.12 显示了实现原子增量操作的三种不同方式。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1. 加法并读取结果</strong></td>
+<td>for (i &#x3D; 0; i &lt; N; ++i) __sync_add_and_fetch(&amp;var,1);</td>
+</tr>
+<tr>
+<td><strong>2. 加法并返回旧值</strong></td>
+<td>for (i &#x3D; 0; i &lt; N; ++i) __sync_fetch_and_add(&amp;var,1);</td>
+</tr>
+<tr>
+<td><strong>3. 原子替换新值</strong></td>
+<td>for (i &#x3D; 0; i &lt; N; ++i) { long v, n; do { v &#x3D; var; n &#x3D; v + 1; } while (!__sync_bool_compare_and_swap(&amp;var, v, n)); }</td>
+</tr>
+</tbody></table>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020023.png" srcset="/img/loading.gif" lazyload><br>图 6.12：循环中的原子增量</p>
+<p>所有三种方式在 x86 和 x86-64 上产生不同的代码，而在其他架构上代码可能相同。性能差异很大。下表显示了四个并发线程执行 100 万次增量的执行时间。代码使用了 gcc 的内置原语（<code>__sync_</code> *）。</p>
+<table>
+<thead>
+<tr>
+<th>1. 交换加法</th>
+<th>2. 加法并读取结果</th>
+<th>3. CAS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.23s</td>
+<td>0.21s</td>
+<td>0.73s</td>
+</tr>
+</tbody></table>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020440.png" srcset="/img/loading.gif" lazyload></p>
+<p>前两个数字相似；我们看到返回旧值稍微快一些。重要的信息是突出显示的字段，使用 CAS 时的成本。不出所料，它的成本要高得多。原因有几个：1. 有两次内存操作，2. CAS 操作本身更复杂，甚至需要条件操作，3. 如果两个并发访问导致 CAS 调用失败，整个操作必须在循环中重复。现在读者可能会问：为什么有人使用复杂且更长的代码，使用 CAS？答案是：复杂性通常被隐藏了。如前所述，CAS 目前是所有有趣架构的统一原子操作。因此，有些人认为用 CAS 定义所有原子操作就足够了。这使得程序更简单。但正如数字所示，结果可能远非最优。CAS 解决方案的内存处理开销是巨大的。以下说明了两个线程的执行，每个线程在自己的核心上。</p>
+<table>
+<thead>
+<tr>
+<th>线程 #1</th>
+<th>线程 #2</th>
+<th><code>var</code> 缓存状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v = var</code></td>
+<td></td>
+<td>‘E’ on Proc 1</td>
+</tr>
+<tr>
+<td><code>n = v + 1</code></td>
+<td><code>v = var</code></td>
+<td>‘S’ on Proc 1+2</td>
+</tr>
+<tr>
+<td>CAS(<code>var</code>)</td>
+<td><code>n = v + 1</code></td>
+<td>‘E’ on Proc 1</td>
+</tr>
+<tr>
+<td></td>
+<td>CAS(<code>var</code>)</td>
+<td>‘E’ on Proc 2</td>
+</tr>
+</tbody></table>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020889.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们看到，在这个短暂的执行期内，缓存行状态至少改变了三次；其中两次是 RFO。另外，第二个 CAS 将失败，因此该线程必须重复整个操作。在该操作期间，同样的情况可能会再次发生。</p>
+<p>相比之下，当使用原子算术操作时，处理器可以将执行加法（或任何其他操作）所需的加载和存储操作保持在一起。它可以确保同时发出的缓存行请求被阻塞，直到原子操作完成。因此，示例中的每个循环迭代最多导致一个 RFO 缓存请求，没有其他。所有这些意味着，定义机器抽象的级别至关重要，以便可以利用原子算术和逻辑操作。不应将 CAS 普遍用作统一机制。</p>
+<p>对于大多数处理器，原子操作本身始终是原子的。只有通过为不需要原子性的情况提供完全独立的代码路径来避免它们。这意味着更多的代码、条件语句和进一步的跳转到适当执行的直接执行。对于 x86 和 x86-64，情况有所不同：相同的指令可以以原子和非原子方式使用。要使它们原子，可以使用特殊前缀：<code>lock</code> 前缀。这为原子操作提供了避免高成本的机会，如果给定情况下不需要原子性要求。例如，库中的通用代码，如果需要，总是必须是线程安全的，可以从中受益。编写代码时不需要信息，决策可以在运行时做出。技巧是跳过 <code>lock</code> 前缀。这个技巧适用于 x86 和 x86-64 处理器允许使用 <code>lock</code> 前缀的所有指令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asm">    cmpl $, multiple_threads<br>    je   1f<br>    lock<br>1:  add  $1, some_var<br></code></pre></td></tr></table></figure>
+
+<p>如果这段汇编代码看起来难以理解，不用担心，它很简单。第一条指令检查变量是零还是非零。在这种情况下，非零表示多个线程正在运行。如果值为零，则执行第二条指令跳转到标签 <code>1</code>。否则，执行下一条指令。这是棘手的部分。如果 <code>je</code> 指令没有跳转，<code>add</code> 指令将带 <code>lock</code> 前缀执行。否则它将不带 <code>lock</code> 前缀执行。</p>
+<p>添加一个相对昂贵的操作，如条件跳转（如果分支预测失败则昂贵）似乎适得其反。确实可能是：如果大多数时间运行多个线程，性能会进一步降低，特别是如果分支预测不正确。但如果许多情况下只使用一个线程，代码会快得多。使用 if-then-else 结构的替代方案在两种情况下都会引入一个额外的无条件跳转，可能会更慢。鉴于原子操作的成本大约为 200 个周期，使用该技巧（或 if-then-else 块）的交叉点非常低。这绝对是一个值得记住的技术。不幸的是，这意味着不能使用 gcc 的 <code>__sync_</code> * 原语。</p>
+<h4 id="6-4-3-带宽考虑"><a href="#6-4-3-带宽考虑" class="headerlink" title="6.4.3 带宽考虑"></a>6.4.3 带宽考虑</h4><p>当使用许多线程时，如果它们不通过在不同核心上使用相同的缓存行来引起缓存争用，仍然存在潜在问题。每个处理器有一个最大带宽到内存，这个带宽由该处理器上的所有核心和超线程共享。根据机器架构（例如，图 2.1 中的一个），多个处理器可能共享通往内存的相同总线或北桥。</p>
+<p>处理器核心本身以频率运行，在满速下，即使在完美条件下，与内存的连接也无法在不等待的情况下满足所有加载和存储请求。现在，将可用带宽除以共享北桥连接的核心、超线程和处理器的数量，突然并行性成为一个大问题。理论上非常高效的程序可能受到内存带宽的限制。</p>
+<p>在图 3.32 中，我们已经看到增加处理器的 FSB 速度可以有很大帮助。这就是为什么，随着处理器上核心数量的增加，我们也将会看到 FSB 速度的增加。然而，如果程序使用大的工作集并且足够优化，这仍然永远不够。程序员必须准备好识别由于带宽限制导致的问题。</p>
+<p>现代处理器的性能测量计数器允许观察 FSB 争用。在 Core 2 处理器上，<code>NUS_BNR_DRV</code> 事件计数核心必须等待的周期数，因为总线未就绪。这表明总线高度使用，从或存储到主内存的加载甚至比平常更长。Core 2 处理器支持更多事件，可以计数特定的总线操作，如 RFO 或总线利用的一般情况。后者在开发期间调查应用程序的可扩展性可能性时可能会很有用。如果总线利用率已经接近 1.0，则可扩展性机会很小。</p>
+<p>如果识别出带宽问题，可以采取几件事情。它们有时是矛盾的，所以可能需要一些实验。一种解决方案是购买更快的计算机，如果有一些可用的话。获得更多的 FSB 速度、更快的 RAM 模块，可能还有靠近处理器的内存，可以——并且很可能会——有所帮助。它可能成本很高。如果问题程序只在一台（或几台机器）上需要，硬件的一次性费用可能比重写程序的成本更低。总的来说，最好还是改进程序。</p>
+<p>在优化程序本身以避免缓存未命中之后，实现更好带宽利用的唯一选项是更好地在可用的核心上放置线程。默认情况下，内核中的调度器将根据其自己的策略将线程分配给处理器。尽可能避免将线程从一个核心移动到另一个核心。调度器实际上对工作负载一无所知。它可以从缓存未命中等收集信息，但这在许多情况下并没有太多帮助。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020921.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>图 6.13：低效调度</strong></p>
+</blockquote>
+<p>可以导致大量 FSB 使用的情况之一是，当两个线程被安排在不同的处理器（或核心上，它们不共享缓存）上，并且它们使用相同的数据集时。图 6.13 显示了这种情况。核心 1 和 3 访问相同的数据（通过访问指示器和内存区域的相同颜色表示）。同样，核心 2 和 4 访问相同的数据。但是线程被安排在不同的处理器上。这意味着每个数据集必须从内存中读取两次。这种情况可以更好地处理。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292020177.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>图 6.14：高效调度</strong></p>
+</blockquote>
+<p>在图 6.14 中，我们看到它应该如何理想地看起来。现在使用的总缓存大小减少了，因为现在核心 1 和 2 以及核心 3 和 4 处理相同的数据。数据集只需从内存中读取一次。</p>
+<p>这是一个简单的例子，但通过扩展，它适用于许多情况。如前所述，内核中的调度器对数据的使用没有任何了解，因此程序员必须确保调度是高效的。没有多少内核接口可用于传达此要求。事实上，只有一个：定义线程亲缘性。</p>
+<p>线程亲缘性意味着将线程分配给一个或多个核心。调度器然后将在这些核心中选择（仅）决定在哪里运行线程。即使其他核心处于空闲状态，它们也不会被考虑。这听起来可能是一个缺点，但这是必须付出的代价。如果太多线程专门在一组核心上运行，剩余的核心可能大部分时间都处于空闲状态，除了改变亲缘性之外，没有什么可以做的。默认情况下，线程可以在任何核心上运行。</p>
+<p>有几种接口可用于查询和更改线程的亲缘性：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sched.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">sched_setaffinity</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">size_t</span> size, <span class="hljs-type">const</span> <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">sched_getaffinity</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">size_t</span> size, <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>这两个接口旨在用于单线程代码。<code>pid</code> 参数指定应更改或确定哪个进程的亲缘性。调用者显然需要适当的权限来执行此操作。第二和第三个参数指定核心的位掩码。第一个函数要求位掩码被填充，以便它可以设置亲缘性。第二个函数用所选线程的调度信息填充位掩码。这些接口在 <code> &lt;sched.h&gt;</code> 中声明。</p>
+<p><code>cpu_set_t</code> 类型也在该头文件中定义，以及许多用于操作和使用此类对象的宏。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sched.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_SETSIZE</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_SET(cpu, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_CLR(cpu, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_ZERO(cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_ISSET(cpu, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_COUNT(cpusetp)</span><br></code></pre></td></tr></table></figure>
+
+<p><code>CPU_SETSIZE</code> 指定可以在数据结构中表示的 CPU 数量。其他三个宏操作 <code>cpu_set_t</code> 对象。要初始化对象，应使用 <code>CPU_ZERO</code>；其他两个宏用于选择或取消选择单个核心。<code>CPU_ISSET</code> 测试特定处理器是否是集合的一部分。<code>CPU_COUNT</code> 返回集合中选定的核心数。<code>cpu_set_t</code> 类型为 CPU 数量提供了一个合理的默认值作为上限。随着时间的推移，它肯定会被证明太小；在那时，该类型将被调整。这意味着程序始终要注意大小。上面的便利宏根据 <code>cpu_set_t</code> 的定义隐式处理大小。如果需要更动态的大小处理，则应使用一组扩展的宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sched.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_SET_S(cpu, setsize, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_CLR_S(cpu, setsize, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_ZERO_S(setsize, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_ISSET_S(cpu, setsize, cpusetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_COUNT_S(setsize, cpusetp)</span><br></code></pre></td></tr></table></figure>
+
+<p>这些接口接受一个额外的参数，大小。为了能够动态分配大小的 CPU 集合，提供了三个宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sched.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_ALLOC_SIZE(count)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_ALLOC(count)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_FREE(cpuset)</span><br></code></pre></td></tr></table></figure>
+
+<p><code>CPU_ALLOC_SIZE</code> 宏返回必须为 <code>cpu_set_t</code> 结构分配的字节数，该结构可以处理 <code>count</code> 个 CPU。要分配这样一个块，可以使用 <code>CPU_ALLOC</code> 宏。以这种方式分配的内存应使用 <code>CPU_FREE</code> 释放。这些函数可能会在幕后使用 <code>malloc</code> 和 <code>free</code>，但这并不一定非要保持这种方式。</p>
+<p>最后，定义了 CPU 集合对象上的一些操作：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sched.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_EQUAL(cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_AND(destset, cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_OR(destset, cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_XOR(destset, cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_EQUAL_S(setsize, cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_AND_S(setsize, destset, cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_OR_S(setsize, destset, cpuset1, cpuset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPU_XOR_S(setsize, destset, cpuset1, cpuset2)</span><br></code></pre></td></tr></table></figure>
+
+<p>这两组四个宏可以检查两个集合是否相等，并对集合执行逻辑 AND、OR 和 XOR 操作。这些操作在使用一些 libNUMA 函数（见第 12 节）时可能会派上用场。</p>
+<p>进程可以使用 <code>sched_getcpu</code> 接口确定它当前正在哪个处理器上运行：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sched.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">sched_getcpu</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>结果是 CPU 集合中的 CPU 索引。由于调度的本质，这个数字并不总是 100 % 正确。线程在返回结果和线程返回用户级之间可能已经被移动到不同的 CPU 上。程序始终必须考虑不准确的可能。更重要的是，无论如何，线程被允许在其上运行的 CPU 集合。这个集合可以通过 <code>sched_getaffinity</code> 检索。集合由子线程和进程继承。线程不能依赖集合在其生命周期内保持稳定。亲缘性掩码可以从外部设置（见上述原型中的 <code>pid</code> 参数）；Linux 还支持 CPU 热插拔，这意味着 CPU 可以从系统中消失——因此，也从亲缘性 CPU 集合中消失。</p>
+<p>在多线程程序中，各个线程官方上没有 POSIX 定义的进程 ID，因此不能使用上述两个函数。相反，<code>&lt;pthread.h&gt;</code> 声明了四个不同的接口：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _GNU_SOURCE</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_setaffinity_np</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> th, <span class="hljs-type">size_t</span> size,</span><br><span class="hljs-params">                         <span class="hljs-type">const</span> <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_getaffinity_np</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> th, <span class="hljs-type">size_t</span> size, <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_setaffinity_np</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *at,</span><br><span class="hljs-params">                               <span class="hljs-type">size_t</span> size, <span class="hljs-type">const</span> <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_getaffinity_np</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *at, <span class="hljs-type">size_t</span> size,</span><br><span class="hljs-params">                                <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>前两个接口基本上与我们已经看到的两个接口相同，只是它们在第一个参数中接受线程句柄，而不是进程 ID。这允许在进程中单独解决线程。这也意味着这些接口不能从另一个进程中使用，它们严格用于进程内使用。第三和第四个接口使用线程属性。这些属性用于创建新线程。通过设置属性，可以从一开始就在特定的核心集合上调度线程。在线程实际开始之前选择目标处理器——而不是在线程已经开始之后——在许多不同的层面上可能是有利的，包括（尤其是）内存分配（见第 6.5 节的 NUMA）。</p>
+<p>谈到 NUMA，亲缘性接口在 NUMA 编程中也扮演着重要角色。我们很快就会回到这个案例。</p>
+<p>到目前为止，我们已经讨论了两个线程的工作集重叠的情况，使得让两个线程在同一个核心上有意义。相反的情况也可能是正确的。如果两个线程在不同的数据集上工作，将它们调度在同一个核心上可能会有问题。两个线程争夺同一个缓存，从而减少了彼此对缓存的有效使用。其次，两个数据集都必须加载到同一个缓存中；实际上，这增加了必须加载的数据量，因此可用带宽减半。</p>
+<p>在这种情况下的解决方案是设置线程的亲缘性，使它们不能被调度到同一个核心上。这与前面的情况相反，因此在进行任何更改之前，理解要优化的情况进行很重要。</p>
+<p>为了缓存共享而优化带宽实际上是 NUMA 编程的一个方面，这在下一节中介绍。我们只需要将“内存”的概念扩展到缓存。随着缓存级别的增加，这将变得越来越重要。因此，多核调度的解决方案在 NUMA 支持库中可用。有关如何确定亲缘性掩码而不使用硬编码系统详细信息或深入 <code>/sys</code> 文件系统底层的代码示例，请参见第 12 节。</p>
+<h3 id="6-5-NUMA-编程"><a href="#6-5-NUMA-编程" class="headerlink" title="6.5 NUMA 编程"></a>6.5 NUMA 编程</h3><p>对于 NUMA 编程，到目前为止关于缓存优化的所有内容也都适用。差异仅在该级别以下开始。NUMA 在访问地址空间的不同部分时引入了不同的成本。在统一内存访问中，我们可以优化以最小化页面错误（见第 7.5 节），但就是这样。所有页面都是平等的。</p>
+<p>NUMA 改变了这一点。访问成本可能取决于被访问的页面。不同的访问成本也增加了优化内存页面局部性的重要性。对于大多数 SMP 机器来说，NUMA 是不可避免的，因为 Intel 使用 CSI（对于 x86、x86-64 和 IA-64）和 AMD（对于 Opteron）都采用了它。随着每个处理器上核心数量的增加，我们可能会看到 SMP 系统的使用急剧减少（至少在数据中心和 CPU 使用要求极高的人的办公之外）。大多数家用机器只需要一个处理器，因此没有 NUMA 问题。但这 a) 不意味着程序员可以忽略 NUMA，b) 并不意味着没有相关问题。</p>
+<p>如果一个人思考对 NUMA 的概括，很快就会意识到概念扩展到处理器缓存。使用相同缓存的核心上的两个线程将比不共享缓存的核心上的线程更快地协作。这不是一个虚构的案例：</p>
+<ul>
+<li>早期的双核心处理器没有 L2 共享。</li>
+<li>例如，Intel 的 Core 2 QX 6700 和 QX 6800 四核芯片分别有两个独立的 L2 缓存。</li>
+<li>如早期所推测的，随着芯片上核心数量的增加和统一缓存的愿望，我们将拥有更多级别的缓存。</li>
+</ul>
+<p>缓存形成了它们自己的层次结构，核心上的线程放置对于共享（或不共享）缓存变得重要。这与 NUMA 面临的问题并没有太大不同，因此这两个概念可以统一。因此，即使只对非 SMP 机器感兴趣的人也应该阅读本节。</p>
+<p>在第 5.3 节中，我们已经看到 Linux 内核提供了许多有用且在 NUMA 编程中需要的信息。然而，收集这些信息并不容易。目前 Linux 上可用的 NUMA 库对此目的来说完全不合适。作者目前正在构建一个更合适的版本。</p>
+<p>现有的 NUMA 库 <code>libnuma</code>，是 numactl 包的一部分，不提供对系统架构信息的访问。它只是对可用系统调用的包装，以及一些常用操作的便利接口。Linux 今天可用的系统调用是：</p>
+<ul>
+<li><p><strong><code>mbind</code></strong> 为指定的内存页面选择节点的绑定。</p>
+</li>
+<li><p><strong><code>set_mempolicy</code></strong> 设置默认的内存绑定策略。</p>
+</li>
+<li><p><strong><code>get_mempolicy</code></strong> 获取默认的内存绑定策略。</p>
+</li>
+<li><p><strong><code>migrate_pages</code></strong> 将进程的所有页面从一个给定的节点集迁移到不同的节点集。</p>
+</li>
+<li><p><strong><code>move_pages</code></strong> 将选定的页面移动到给定的节点或请求关于页面的节点信息。</p>
+</li>
+</ul>
+<p>这些接口在 <code> &lt;numaif.h&gt;</code> 中声明，它随 <code>libnuma</code> 库一起提供。在我们深入更多细节之前，我们必须理解内存策略的概念。</p>
+<h4 id="6-5-1-内存策略"><a href="#6-5-1-内存策略" class="headerlink" title="6.5.1 内存策略"></a>6.5.1 内存策略</h4><p>定义内存策略的背后思想是允许现有代码在不需要大量修改的情况下，在 NUMA 环境中合理地工作。策略由子进程继承，这使得使用 numactl 工具成为可能。这个工具可以用来启动一个带有给定策略的程序。</p>
+<p>Linux 内核支持以下策略：</p>
+<p><strong><code>MPOL_BIND</code></strong> 内存仅从给定的节点集分配。如果不可能，则分配失败。</p>
+<p><strong><code>MPOL_PREFERRED</code></strong> 内存最好从给定的节点集分配。如果失败，考虑来自其他节点的内存。</p>
+<p><strong><code>MPOL_INTERLEAVE</code></strong> 内存从指定的节点等量分配。节点是通过 VMA 基于策略的虚拟内存区域的偏移选择的，或者是通过任务基于策略的自由运行计数器选择的。</p>
+<p><strong><code>MPOL_DEFAULT</code></strong> 根据区域的默认值选择分配。</p>
+<p>这个列表似乎是递归定义策略。这是半真的。事实上，内存策略形成了一个层次结构（见图 6.15）。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292021979.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>图 6.15：内存策略层次结构</strong></p>
+</blockquote>
+<p>如果地址被 VMA 策略覆盖，则使用此策略。共享内存段使用一种特殊类型的策略。如果没有为特定地址指定策略，则使用任务的策略。如果这也不存在，则使用系统的默认策略。</p>
+<p>系统的默认策略是将内存分配给请求内存的线程本地。默认情况下，没有提供任务和 VMA 策略。对于具有多个线程的进程，本地节点是“主”节点，即首先运行进程的节点。上述系统调用可以用来选择不同的策略。</p>
+<h4 id="6-5-2-指定策略"><a href="#6-5-2-指定策略" class="headerlink" title="6.5.2 指定策略"></a>6.5.2 指定策略</h4><p><code>set_mempolicy</code> 调用可以用来设置当前线程（内核术语中的任务）的任务策略。只有当前线程受到影响，而不是整个进程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numaif.h&gt;</span></span><br><br><span class="hljs-type">long</span> <span class="hljs-title function_">set_mempolicy</span><span class="hljs-params">(<span class="hljs-type">int</span> mode,</span><br><span class="hljs-params">                    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> *nodemask,</span><br><span class="hljs-params">                    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> maxnode)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>mode</code> 参数必须是上一节中介绍的 <code>MPOL_*</code> 常量之一。<code>nodemask</code> 参数指定要使用的内存节点，<code>maxnode</code> 是 <code>nodemask</code> 中的节点数（即位数）。如果使用 <code>MPOL_DEFAULT</code>，则忽略 <code>nodemask</code> 参数。如果 <code>nodemask</code> 为 <code>MPOL_PREFERRED</code> 的空指针，则选择本地节点。否则，<code>MPOL_PREFERRED</code> 使用 <code>nodemask</code> 中相应位设置的最低节点号。</p>
+<p>设置策略不会影响已经分配的内存。页面不会自动迁移；只有未来的分配受到影响。请注意内存分配和地址空间保留之间的区别：使用 <code>mmap</code> 建立的地址空间区域通常不是自动分配的。对内存区域的第一次读写操作将分配适当的页面。如果策略在访问同一地址空间区域的不同页面之间发生变化，或者如果策略允许从不同的节点分配内存，那么一个看似统一的地址空间区域可能会分散在许多内存节点上。</p>
+<h4 id="6-5-3-交换和策略"><a href="#6-5-3-交换和策略" class="headerlink" title="6.5.3 交换和策略"></a>6.5.3 交换和策略</h4><p>如果物理内存耗尽，系统必须丢弃干净页面并保存脏页面到交换空间。Linux 交换实现在将页面写入交换空间时丢弃节点信息。这意味着当页面被重用并且页面被分页时，将从头选择使用的节点。这种变化的关联意味着程序不能将节点关联存储为页面的属性。关联可以随着时间的推移而改变。对于与其他进程共享的页面，这种情况也可能发生，因为进程可能要求它（见下面的 <code>mbind</code> 讨论）。内核本身可以在一个节点空间不足而其他节点仍然有空闲空间时迁移页面。</p>
+<p>因此，用户级代码了解到的任何节点关联只能在短时间内是正确的。它更像是一个提示，而不是绝对信息。每当需要准确知识时，都应该使用 <code>get_mempolicy</code> 接口（见第 6.5.5 节）。</p>
+<h4 id="6-5-4-VMA-策略"><a href="#6-5-4-VMA-策略" class="headerlink" title="6.5.4 VMA 策略"></a>6.5.4 VMA 策略</h4><p>要为地址范围设置 VMA 策略，必须使用不同的接口：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numaif.h&gt;</span></span><br><br><span class="hljs-type">long</span> <span class="hljs-title function_">mbind</span><span class="hljs-params">(<span class="hljs-type">void</span> *start, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> len,</span><br><span class="hljs-params">            <span class="hljs-type">int</span> mode, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> *nodemask,</span><br><span class="hljs-params">            <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> maxnode, <span class="hljs-type">unsigned</span> flags)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>这个接口为地址范围 <code>[ start, start + len)</code> 注册了一个新的 VMA 策略。由于内存处理操作在页面上进行，因此起始地址必须与页面对齐。<code>len</code> 值会向上舍入到下一页大小。</p>
+<p><code>mode</code> 参数再次指定策略；值必须从第 6.5.1 节中的列表中选择。与 <code>set_mempolicy</code> 一样，<code>nodemask</code> 参数仅在某些策略中使用。它的处理是相同的。</p>
+<p><code>mbind</code> 接口的语义取决于 <code>flags</code> 参数的值。默认情况下，如果 <code>flags</code> 为零，系统调用为地址范围设置 VMA 策略。现有的映射不受影响。如果这还不够，目前有三个标志可以修改这种行为；它们可以单独或一起选择：</p>
+<ul>
+<li><strong><code>MPOL_MF_STRICT</code></strong></li>
+</ul>
+<p>如果 <code>nodemask</code> 未指定的所有页面都在 <code>mbind</code> 的 <code>start</code> 和 <code>len</code> 参数描述的地址范围内，则调用 <code>mbind</code> 将失败。如果将此标志与 <code>MPOL_MF_MOVE</code> 和&#x2F;或 <code>MPOL_MF_MOVEALL</code> 一起使用，并且任何页面无法移动，则调用将失败。</p>
+<ul>
+<li><strong><code>MPOL_MF_MOVE</code></strong></li>
+</ul>
+<p>内核将尝试移动在 <code>nodemask</code> 未指定的节点上分配的地址范围内的任何页面。默认情况下，只有当前进程的页表单独使用的页面才会被移动。</p>
+<ul>
+<li><strong><code>MPOL_MF_MOVEALL</code></strong></li>
+</ul>
+<p>像 <code>MPOL_MF_MOVE</code>，但内核将尝试移动所有页面，而不仅仅是当前进程的页表单独使用的页面。这有系统级的影响，因为它会影响其他进程（可能是不同用户拥有的）的内存访问。因此，<code>MPOL_MF_MOVEALL</code> 是一个需要特权的操作（需要 <code>CAP_NICE</code> 能力）。</p>
+<p><br><br><br>请注意，对 <code>MPOL_MF_MOVE</code> 和 <code>MPOL_MF_MOVEALL</code> 的支持仅在 Linux 内核的 2.6.16 版本中添加。</p>
+<p>不带任何标志调用 <code>mbind</code> 在需要在实际分配任何页面之前为新保留的地址范围指定策略时最有用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *p = mmap(<span class="hljs-literal">NULL</span>, len, PROT_READ|PROT_WRITE, MAP_ANON, <span class="hljs-number">-1</span>, <span class="hljs-number">0</span>);<br><span class="hljs-keyword">if</span> (p != MAP_FAILED)<br>  mbind(p, len, mode, nodemask, maxnode, <span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+
+<p>这段代码序列保留了 <code>len</code> 字节的地址空间范围，并指定应该使用引用 <code>nodemask</code> 中内存节点的 <code>mode</code> 策略。除非与 <code>mmap</code> 一起使用 <code>MAP_POPULATE</code> 标志，否则在 <code>mbind</code> 调用时不会有内存被分配，因此新策略适用于该地址空间区域的所有页面。</p>
+<p><code>MPOL_MF_STRICT</code> 标志单独使用可以用来确定 <code>mbind</code> 的 <code>start</code> 和 <code>len</code> 参数描述的地址范围内的任何页面是否分配在 <code>nodemask</code> 指定的节点之外。未更改任何已分配的页面。如果所有页面都在指定节点上分配，则根据 <code>mode</code> 更改地址空间区域的 VMA 策略。</p>
+<p>有时可能需要重新平衡内存，这种情况下可能需要将一个节点上分配的页面移动到另一个节点。将 <code>MPOL_MF_MOVE</code> 设置为 <code>mbind</code> 的调用将尽力实现这一目标。只有进程的页表树单独引用的页面才被考虑移动。可能有多个用户以线程或其他进程的形式共享该部分页表树。不可能影响其他进程，因为它们恰好映射了相同的数据。这些页面不共享页表条目。</p>
+<p>如果将 <code>MPOL_MF_STRICT</code> 和 <code>MPOL_MF_MOVE</code> 都传递给 <code>mbind</code>，则内核将尝试移动所有未在指定节点上分配的页面。如果不可能，调用将失败。这样的调用可能有助于确定是否有一个节点（或节点集）可以容纳所有页面。可以连续尝试几种组合，直到找到合适的节点。</p>
+<p>使用 <code>MPOL_MF_MOVEALL</code> 更难以辩解，除非运行当前进程是计算机的主要目的。原因是即使是出现在多个页表中的页面也会被移动。这很容易对其他进程产生负面影响。因此，应谨慎使用此操作。</p>
+<h4 id="6-5-5-查询节点信息"><a href="#6-5-5-查询节点信息" class="headerlink" title="6.5.5 查询节点信息"></a>6.5.5 查询节点信息</h4><p><code>get_mempolicy</code> 接口可以用来查询有关给定地址的 NUMA 状态的多种信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numaif.h&gt;</span></span><br><br><span class="hljs-type">long</span> <span class="hljs-title function_">get_mempolicy</span><span class="hljs-params">(<span class="hljs-type">int</span> *policy,</span><br><span class="hljs-params">                    <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> *nmask,</span><br><span class="hljs-params">                    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> maxnode,</span><br><span class="hljs-params">                    <span class="hljs-type">void</span> *addr, <span class="hljs-type">int</span> flags)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>当 <code>get_mempolicy</code> 被调用时，在 <code>flags</code> 中没有设置标志，有关地址 <code>addr</code> 的策略的信息存储在指向 <code>policy</code> 的指针指向的字中，以及指向 <code>nmask</code> 的指针指向的节点位掩码中。如果 <code>addr</code> 落在已指定 VMA 策略的地址空间区域中，则返回有关该策略的信息。否则，返回有关任务策略或必要时系统默认策略的信息。</p>
+<p>如果 <code>flags</code> 中设置了 <code>MPOL_F_NODE</code> 标志，并且管理 <code>addr</code> 的策略是 <code>MPOL_INTERLEAVE</code>，则存储在指向 <code>policy</code> 的指针指向的字中的值是下一次分配将要发生的节点的索引。这些信息可能用于设置将要使用新分配内存的线程的亲缘性。这可能是实现接近性的一种成本较低的方式，特别是如果线程尚未创建。</p>
+<p><code>MPOL_F_ADDR</code> 标志可用于检索另一种完全不同的数据项。如果使用此标志，则存储在指向 <code>policy</code> 的指针指向的字中的值是已为包含 <code>addr</code> 的页面分配内存的内存节点的索引。这些信息可用于决策可能的页面迁移，决定哪个线程可以最有效地工作在内存位置，等等。</p>
+<p>CPU（因此内存节点）是线程使用的比其内存分配更易变。除非有明确的请求，否则内存页面只有在极端情况下才会移动。程序可以查看当前的 CPU 和节点信息；只是必须避免假设关联不会改变。</p>
+<p>libNUMA 提供了两个接口，用于查询给定虚拟地址空间范围的节点信息：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;libNUMA.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_mem_get_node_idx</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_mem_get_node_mask</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr,</span><br><span class="hljs-params">                            <span class="hljs-type">size_t</span> size,</span><br><span class="hljs-params">                            <span class="hljs-type">size_t</span> __destsize,</span><br><span class="hljs-params">                            <span class="hljs-type">memnode_set_t</span> *dest)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>NUMA_mem_get_node_mask</code> 在 <code>dest</code> 中设置位，以表示根据管理策略，范围 <code>[ addr, addr + size)</code> 中的页面分配在（或将分配在）的所有内存节点。<code>NUMA_mem_get_node</code> 仅查看地址 <code>addr</code> 并返回此地址分配在（或将分配在）的内存节点的索引。这些接口比 <code>get_mempolicy</code> 更易于使用，可能应该被优先选择。</p>
+<p>线程当前使用的 CPU 可以使用 <code>sched_getcpu</code> 查询（见第 6.4.3 节）。使用这些信息，程序可以确定对 CPU 本地的内存节点（s），使用 libNUMA 中的 <code>NUMA_cpu_to_memnode</code> 接口：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;libNUMA.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_to_memnode</span><span class="hljs-params">(<span class="hljs-type">size_t</span> cpusetsize,</span><br><span class="hljs-params">                         <span class="hljs-type">const</span> <span class="hljs-type">cpu_set_t</span> *cpuset,</span><br><span class="hljs-params">                         <span class="hljs-type">size_t</span> memnodesize,</span><br><span class="hljs-params">                         <span class="hljs-type">memnode_set_t</span> *</span><br><span class="hljs-params">                         memnodeset)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>对这个函数的调用将在指向第四个参数的内存节点集对象中设置所有位，以对应于任何在指向第二个参数的 CPU 集合中本地的内存节点。就像 CPU 信息本身一样，这些信息只有在机器配置发生变化时才是正确的（例如，CPU 被移除和添加）。</p>
+<p><code>memnode_set_t</code> 对象中的位可以在调用底层函数（如 <code>get_mempolicy</code>）时使用。使用 libNUMA 中的其他函数更方便。反向映射可通过以下方式获得：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;libNUMA.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_to_cpu</span><span class="hljs-params">(<span class="hljs-type">size_t</span> memnodesize,</span><br><span class="hljs-params">                         <span class="hljs-type">const</span> <span class="hljs-type">memnode_set_t</span> *</span><br><span class="hljs-params">                         memnodeset,</span><br><span class="hljs-params">                         <span class="hljs-type">size_t</span> cpusetsize,</span><br><span class="hljs-params">                         <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>结果 <code>cpuset</code> 中设置的位是本地于 <code>memnodeset</code> 中相应位设置的任何内存节点的 CPU。对于这两个接口，程序员必须意识到这些信息会随着时间的推移而变化（特别是 CPU 热插拔）。在许多情况下，输入位集只有一个位被设置，但是，例如，将 <code>sched_getaffinity</code> 调用检索到的整个 CPU 集合传递给 <code>NUMA_cpu_to_memnode</code> 以确定线程可以直接访问哪些内存节点，也是有意义的。</p>
+<h4 id="6-5-6-CPU-和节点集"><a href="#6-5-6-CPU-和节点集" class="headerlink" title="6.5.6 CPU 和节点集"></a>6.5.6 CPU 和节点集</h4><p>通过改变代码以使用迄今为止描述的接口来调整 SMP 和 NUMA 环境可能非常昂贵（或不可能），如果源代码不可用。此外，系统管理员可能想要对用户和&#x2F;或进程可以使用的资源施加限制。对于这些情况，Linux 内核支持所谓的 CPU 集。这个名字有点误导，因为它们也涵盖了内存节点。它们也与 <code>cpu_set_t</code> 数据类型无关。</p>
+<p>CPU 集的接口目前是特殊的文件系统。它通常不挂载（至少到目前为止）。这可以通过以下命令更改：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mount -t cpuset none /dev/cpuset<br></code></pre></td></tr></table></figure>
+
+<p>当然，挂载点 <code>/dev/cpuset</code> 必须存在。这个目录的内容是默认（根）CPU 集的描述。它最初包括所有 CPU 和所有内存节点。该目录中的 <code>cpus</code> 文件显示了 CPU 集中的 CPU，<code>mems</code> 文件显示了内存节点，<code>tasks</code> 文件显示了进程。</p>
+<p>要创建一个新的 CPU 集，只需在层次结构中的任何位置创建一个新目录。新的 CPU 集将从父级继承所有设置。然后，可以通过向新目录中的 <code>cpus</code> 和 <code>mems</code> 伪文件中写入新值来更改新 CPU 集的 CPU 和内存节点。</p>
+<p>如果一个进程属于一个 CPU 集，那么该进程的 CPU 和内存节点的设置将用作亲缘性和内存策略位掩码的掩码。这意味着程序不能选择任何不在进程使用的 CPU 集的 <code>cpus</code> 文件中的 CPU（即，在 <code>tasks</code> 文件中列出的 CPU）。对于内存策略的节点掩码和 <code>mems</code> 文件也是如此。</p>
+<p>程序不会遇到任何错误，除非掩码之后掩码为空，因此 CPU 集是控制程序执行的几乎不可见的手段。这种方法在具有许多 CPU 和&#x2F;或内存节点的大型机器上特别有效。将进程移动到新的 CPU 集就像将进程 ID 写入适当 CPU 集的 <code>tasks</code> 文件一样简单。</p>
+<p>CPU 集的目录包含许多其他文件，可以用来指定内存压力下的行为和对 CPU 和内存节点的独占访问等细节。感兴趣的读者可以参考内核源代码树中的 <code>Documentation/cpusets.txt</code> 文件。</p>
+<h4 id="6-5-7-明确的-NUMA-优化"><a href="#6-5-7-明确的-NUMA-优化" class="headerlink" title="6.5.7 明确的 NUMA 优化"></a>6.5.7 明确的 NUMA 优化</h4><p>所有的本地内存和亲缘性规则都不能帮助，如果所有线程在所有节点上都需要访问相同的内存区域。当然，可以通过简单地将线程数量限制为直接连接到内存节点的处理器支持的数量来解决问题。然而，这并不利用 SMP NUMA 机器的优势，因此不是一个真正的选择。</p>
+<p>如果所讨论的数据是只读的，那么有一个简单的解决方案：复制。每个节点可以获取数据的自己的副本，这样就不需要节点间的访问。执行此操作的代码可能如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<span class="hljs-title function_">local_data</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>   <span class="hljs-type">static</span> <span class="hljs-type">void</span> *data[NNODES];<br>   <span class="hljs-type">int</span> node =<br>     NUMA_memnode_self_current_idx();<br>   <span class="hljs-keyword">if</span> (node == <span class="hljs-number">-1</span>)<br>     <span class="hljs-comment">/* Cannot get node, pick one.  */</span><br>     node = <span class="hljs-number">0</span>;<br>   <span class="hljs-keyword">if</span> (data[node] == <span class="hljs-literal">NULL</span>)<br>     data[node] = allocate_data();<br>   <span class="hljs-keyword">return</span> data[node];<br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">worker</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>   <span class="hljs-type">void</span> *data = local_data();<br>   <span class="hljs-keyword">for</span> (...) &#123;<br>     compute using data<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个代码中，<code>worker</code> 函数通过调用 <code>local_data</code> 获取数据的本地副本的指针。然后它继续循环，使用这个指针。<code>local_data</code> 函数保留了一个已经分配的数据副本的列表。每个系统有有限数量的内存节点，因此指向每个节点内存副本的指针数组的大小是有限的。<code>NUMA_memnode_system_count</code> 函数从 libNUMA 返回这个数字。如果当前节点的指针，由 <code>NUMA_memnode_self_current_idx</code> 调用确定，尚未知道，则分配一个新的副本。</p>
+<p>重要的是要意识到，如果线程在 <code>sched_getcpu</code> 系统调用后被调度到连接到不同内存节点的另一个 CPU 上，并不会发生可怕的事情。这只意味着 <code>worker</code> 中使用 <code>data</code> 变量的访问将访问另一个内存节点上的内存。这会减慢程序的速度，直到 <code>data</code> 被重新计算，但仅此而已。内核将始终避免无故重新平衡每个 CPU 的运行队列。如果发生这样的转移，通常是有充分理由的，并且不会在不久的将来再次发生。</p>
+<p>当涉及到的内存区域是可写的时，情况会更加复杂。在这种情况下，简单的复制将不起作用。根据具体情况，可能有一些可能的解决方案。</p>
+<p>例如，如果可写内存区域用于累积结果，可能有可能首先为每个内存节点创建一个单独的区域以累积结果。然后，当这项工作完成时，将所有每个节点的内存区域合并以获得总结果。即使工作从未真正停止，但需要中间结果，这种技术也可以工作。这种方法的要求是，累积结果的操作是无状态的，即，它不依赖于之前收集的结果。</p>
+<p>然而，直接访问可写内存区域总是更好的。如果对内存区域的访问次数很大，可能有必要强制内核将涉及的内存页面迁移到本地节点。如果访问次数非常高，并且不同节点上的写入没有同时发生，这可能会有所帮助。但请注意，内核不能创造奇迹：页面迁移是复制操作，因此并不便宜。这个成本必须摊销。</p>
+<h4 id="6-5-8-利用所有带宽"><a href="#6-5-8-利用所有带宽" class="headerlink" title="6.5.8 利用所有带宽"></a>6.5.8 利用所有带宽</h4><p>图 5.4 中的数字显示，当缓存无效时，对远程内存的访问并不比对本地内存的访问明显变慢。这意味着程序可能通过将不必再次读取的数据写入连接到另一个处理器的内存中，从而节省本地内存的带宽。连接到 DRAM 模块的带宽和互连的带宽大多是独立的，因此并行使用可以提高整体性能。</p>
+<p>是否真的可能取决于许多因素。一个人必须非常确定缓存是无效的，因为否则与远程访问相关的减速是可测量的。另一个大问题是远程节点是否对自己的内存带宽有需求。在采取这种方法之前，必须详细检查这种可能性。理论上，利用处理器可用的所有带宽可能会产生积极的效果。10h 系列 Opteron 处理器可以直接连接到多达四个其他处理器。利用所有这些额外的带宽，可能结合适当的预取（特别是 <code>prefetchw</code>）可以带来改进，如果系统的其余部分配合的话。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/256433/">原文</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%86%85%E5%AD%98/" class="category-chain-item">内存</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>每一个程序员都应该了解的内存知识-Part6</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/04/29/每一个程序员都应该了解的内存知识-Part6/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/29/%E6%AF%8F%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part7/" title="每一个程序员都应该了解的内存知识-Part7">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">每一个程序员都应该了解的内存知识-Part7</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/29/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part5/" title="每个程序员都应该了解的内存知识-Part5">
+                        <span class="hidden-mobile">每个程序员都应该了解的内存知识-Part5</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

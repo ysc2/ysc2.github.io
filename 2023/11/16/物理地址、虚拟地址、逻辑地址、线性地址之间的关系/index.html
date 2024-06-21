@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/16/%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E3%80%81%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E3%80%81%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E3%80%81%E7%BA%BF%E6%80%A7%E5%9C%B0%E5%9D%80%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-sergei-a-2589456.jpg">
+<meta property="article:published_time" content="2023-11-16T08:13:46.000Z">
+<meta property="article:modified_time" content="2023-11-16T10:35:59.136Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-sergei-a-2589456.jpg">
+  
+  
+  
+  <title>物理地址、虚拟地址、逻辑地址、线性地址之间的关系 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-sergei-a-2589456.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="物理地址、虚拟地址、逻辑地址、线性地址之间的关系"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-16 16:13" pubdate>
+          2023年11月16日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">物理地址、虚拟地址、逻辑地址、线性地址之间的关系</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>物理地址、虚拟地址、逻辑地址、线性地址之间的关系</p>
+<span id="more"></span>
+
+<h1 id="什么是物理地址"><a href="#什么是物理地址" class="headerlink" title="什么是物理地址"></a>什么是物理地址</h1><p>在计算机中，机械硬盘使用非常广泛。通过机械硬盘的结构，我们可以知道物理地址是如何来的。</p>
+<p>机械硬盘将几个磁盘连接在一起，每一个磁盘都可以看作一个个同心圆组成的，每一个同心圆被称之为一个<strong>磁道</strong>，每一个<strong>磁道</strong>又被划分为一个个<strong>扇区</strong>，所以<strong>扇区</strong>是磁盘上的最小存储单位。<strong>扇区</strong>常常又被称之为<strong>数据块</strong>（一个数据块通常大小为512byte）。通过给这些<strong>数据块</strong>来编号，这就是物理地址。</p>
+<h2 id="物理地址的由来"><a href="#物理地址的由来" class="headerlink" title="物理地址的由来"></a>物理地址的由来</h2><p>物理地址由<strong>内存控制器</strong>生成，然后传递给内存中的存储单元。当处理器需要访问内存中的数据时，它将请求发送到内存控制器，内存控制器会根据物理地址找到对应的存储单元，并将其中的数据返回给处理器。</p>
+<h1 id="什么是虚拟地址"><a href="#什么是虚拟地址" class="headerlink" title="什么是虚拟地址"></a>什么是虚拟地址</h1><p><strong>虚拟地址是CPU保护模式下的一个概念</strong>，保护模式是80286系列和之后的x86兼容CPU操作模式，在CPU引导完操作系统内核后，操作系统内核会进入一种CPU保护模式，也叫虚拟内存管理，在这之后的程序在运行时都处于虚拟内存当中。</p>
+<h2 id="为什么需要使用虚拟地址"><a href="#为什么需要使用虚拟地址" class="headerlink" title="为什么需要使用虚拟地址"></a>为什么需要使用虚拟地址</h2><ol>
+<li>安全，不直接使用物理地址。避免了直接将底层暴露出来</li>
+<li>方便管理，在多进程的计算机中，直接使用物理内存不方便程序员管理。</li>
+<li>更适合多进程。虚拟地址有远远大于物理地址的容量。</li>
+</ol>
+<h1 id="物理地址和虚拟地址之间的转换"><a href="#物理地址和虚拟地址之间的转换" class="headerlink" title="物理地址和虚拟地址之间的转换"></a>物理地址和虚拟地址之间的转换</h1><h2 id="从宏观上来看："><a href="#从宏观上来看：" class="headerlink" title="从宏观上来看："></a>从宏观上来看：</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161641181.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上面可以看到虚拟地址和物理地址之间的转换路径。</p>
+<blockquote>
+<p>首先通过查询TLB（转址旁路缓存，TLB中存储了上次进行地址转换使用过的转换关系），如果没有对应的地址的转换关系的话，就直接进行转换。否则直接访问内存。</p>
+</blockquote>
+<h2 id="如何进行转换的？"><a href="#如何进行转换的？" class="headerlink" title="如何进行转换的？"></a>如何进行转换的？</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161652458.png" srcset="/img/loading.gif" lazyload><br>通过上面的图，可以看到具体的转换过程。</p>
+<blockquote>
+<p>需要注意的是，如果开启了换页机制则，需要将线性地址转换为物理地址，如果没有开启换页机制则线性地址直接就是物理地址。不需要转换。</p>
+</blockquote>
+<h1 id="程序运行中的各地址转换"><a href="#程序运行中的各地址转换" class="headerlink" title="程序运行中的各地址转换"></a>程序运行中的各地址转换</h1><p>在程序中，我们使用的偏移地址，这个偏移地址是相对于段来说的。<br>那么偏移地址如何转换成为一个物理地址？</p>
+<h2 id="偏移地址的组成"><a href="#偏移地址的组成" class="headerlink" title="偏移地址的组成"></a>偏移地址的组成</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161757109.png" srcset="/img/loading.gif" lazyload></p>
+<p>通过上面的图可以知道，偏移地址是由<strong>段选择符+段内偏移值</strong>组成的。</p>
+<p>段选择符的组成：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161808553.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>TI标识了使用LDT还是GDT</p>
+</li>
+<li><p>索引号就是段描述符表中的索引</p>
+</li>
+<li><p>整体的转换流程如图所示：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161807827.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li>根据段选择符中的TI位确定使用GDT还是LDT，再根据寄存器获取要使用的段描述符表的地址</li>
+<li>段选择符的前13位是段描述符表中的索引，据此得到段描述符，这样就取到了段的基地址Base</li>
+<li>Base + offset就是要转换的线性地址了</li>
+</ol>
+</li>
+</ul>
+<h2 id="线性地址"><a href="#线性地址" class="headerlink" title="线性地址"></a>线性地址</h2><p>线性地址是逻辑地址转换成物理地址的中间层，CPU的MMU（内存管理单元）负责将线性地址转换成物理地址。</p>
+<p>为了节省空间，引入了页目录和页表的概念，每个进程都有自己的页目录，它的地址存储在CPU的寄存器中。<br>以32位机为例。一个32位的线性地址被分为3部分：</p>
+<p>页目录索引（10位）<br>页表索引（10位）<br>偏移（12位）</p>
+<p>转换的过程：</p>
+<p>从CPU寄存器cr3中获取到页目录地址（操作系统在调度进程的时候，负责将页目录地址放入寄存器）<br>根据线性地址的页目录索引部分，去页目录中找到页表<br>根据线性地址的页表索引部分，找到页的起始地址<br>起始地址 + 偏移，就得到了物理地址</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161820121.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>虚拟地址是一个宽泛的概念，<strong>其可以是偏移地址、也可以是线性地址</strong>，总之不是物理地址的地址一般称之为虚拟地址。</p>
+<p>程序员编程（逻辑地址）&lt;—通过算法–&gt;操作系统（虚拟地址）&lt;—通过内存管理单元–&gt;物理元件（物理地址）</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://blog.timd.cn/virtual-address/">http://blog.timd.cn/virtual-address/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fengxing999/p/11022872.html">https://www.cnblogs.com/fengxing999/p/11022872.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.osdev.org/GDT_Tutorial">https://wiki.osdev.org/GDT_Tutorial</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bjbz_cxy/article/details/78508795">https://blog.csdn.net/bjbz_cxy/article/details/78508795</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>物理地址、虚拟地址、逻辑地址、线性地址之间的关系</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/16/物理地址、虚拟地址、逻辑地址、线性地址之间的关系/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E4%BD%8D%E5%B8%A6/" title="stm32中的位带">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">stm32中的位带</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/16/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" title="常见的开源协议总结">
+                        <span class="hidden-mobile">常见的开源协议总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

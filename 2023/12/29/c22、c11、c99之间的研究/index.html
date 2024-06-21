@@ -1,0 +1,895 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结各主要c标准之间的关系和C语言的知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c语言标准的研究">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/29/c22%E3%80%81c11%E3%80%81c99%E4%B9%8B%E9%97%B4%E7%9A%84%E7%A0%94%E7%A9%B6/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="总结各主要c标准之间的关系和C语言的知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png">
+<meta property="article:published_time" content="2023-12-29T15:51:00.000Z">
+<meta property="article:modified_time" content="2024-05-01T11:34:41.279Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png">
+  
+  
+  
+  <title>c语言标准的研究 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="c语言标准的研究"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-29 23:51" pubdate>
+          2023年12月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">c语言标准的研究</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结各主要c标准之间的关系和C语言的知识点</p>
+<span id="more"></span>
+
+<hr>
+<h1 id="C语言的历史"><a href="#C语言的历史" class="headerlink" title="C语言的历史"></a>C语言的历史</h1><p>作为编程语言<code>B</code>的后继者，<code>C </code>最初由 Dennis Ritchie与 Ken Thompson在 1972 年至 1973 年间在贝尔实验室开发，用于构建在 Unix 上运行的实用程序。它被应用于重新实现Unix操作系统的内核。20世纪80年代，C逐渐流行起来。它已成为使用最广泛的编程语言之一，其 C 编译器可用于几乎所有现代计算机体系结构和操作系统。</p>
+<p><a target="_blank" rel="noopener" href="https://www.bell-labs.com/usr/dmr/www/chist.html">具体的历史</a></p>
+<h1 id="c标准历史"><a href="#c标准历史" class="headerlink" title="c标准历史"></a>c标准历史</h1><h2 id="C89、ANSIC、C90"><a href="#C89、ANSIC、C90" class="headerlink" title="C89、ANSIC、C90"></a>C89、ANSIC、C90</h2><p>C语言的第一个标准是<code>1989</code>年完成的ANSI X3.159-1989 “Programming Language C”。称之为<code>C89</code>。由于这个标注由<code>ANSI</code>美国国家标准协会制定，所以又称之为<code>ANSIC</code>。</p>
+<p>在1990年，ANSI C标准（带有一些小改动）被国际标准化组织采纳为ISO&#x2F;IEC 9899:1990，这个版本有时候称为<code>C90</code>。<strong>因此，<code>C89</code>和<code>C90</code>通常指同一种语言。</strong></p>
+<p>所以这三种标准实际上是同一种标准的不同叫法。</p>
+<p><strong>需要注意的是<code>K&amp;R C</code>。1978 年，Brian Kernighan 和 Dennis Ritchie 出版了第一版《C 编程语言》。这本书以其作者名字的首字母缩写为 K&amp;R，多年来一直作为该语言的非正式规范。它描述的 C 版本通常称为“K&amp;R C”。由于该产品于 1978 年发布，因此也被称为 C78。本书的第二版涵盖了后来的ANSI C标准，如下所述。</strong></p>
+<p>所以<code>K&amp;R C</code>其实并不是严格意义上的标准，虽然有很多人将其视为最初的C语言标准。</p>
+<h2 id="C99"><a href="#C99" class="headerlink" title="C99"></a>C99</h2><p>在2000年三月，ANSI采纳了ISO&#x2F;IEC 9899:1999标准。这个标准通常指C99。</p>
+<h2 id="C11"><a href="#C11" class="headerlink" title="C11"></a>C11</h2><p>在2011年12月，ANSI采纳了ISO&#x2F;IEC 9899:2011标准。这个标准通常即C11。</p>
+<h2 id="C17"><a href="#C17" class="headerlink" title="C17"></a>C17</h2><p>C17 于 2018 年 6 月作为 ISO&#x2F;IEC 9899:2018 发布，是 C 编程语言的当前标准。<strong>它没有引入新的语言功能</strong>，仅引入技术更正以及对 C11 中的缺陷的澄清。<strong>需要注意的是该标准也被称之为<code>C18</code>，这是因为它于2017年编写并于2018年6月发布。</strong>但是官方的称呼是<code>C17</code>而不是<code>C18</code>。</p>
+<h2 id="C23"><a href="#C23" class="headerlink" title="C23"></a>C23</h2><p>C23 是下一个（C17 之后）主要 C 语言标准修订版的非正式名称。预计将于 2024 年发布。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的描述，我们可以知道c标准发展线：<br><code>K&amp;R C</code>(非正式标准)-&gt;<code>C89</code>(<code>ANSI C</code> <code>C90</code>)-&gt;<code>C99</code>-&gt;<code>C11</code>-&gt;<code>C17</code>(<code>C18</code>)-&gt;<code>C23</code></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300021379.png" srcset="/img/loading.gif" lazyload></p>
+<p>自从<code>C11</code>以来与下一次的C标准之间的时间间隔都是6年。</p>
+<hr>
+<h1 id="具体的标准"><a href="#具体的标准" class="headerlink" title="具体的标准"></a>具体的标准</h1><h1 id="C89"><a href="#C89" class="headerlink" title="C89"></a>C89</h1><p>这一代的标准是第一次严格意义上的C标准，其是<code>K&amp;R C</code>的超集。添加了：函数原型（借自 C++）、 void 指针、对国际字符集和语言环境的支持以及预处理器增强。尽管参数声明的语法得到了扩展以包括 C++ 中使用的样式，但为了与现有源代码兼容，K&amp;R 接口仍然被允许。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300058299.png" srcset="/img/loading.gif" lazyload alt="C89中的关键字"></p>
+<h1 id="c99"><a href="#c99" class="headerlink" title="c99"></a>c99</h1><p><code>c99</code>是1999年发布的C语言标准，所以称之为<code>c99</code>。<code>c99</code>是在<code>c89</code>的基础上进行的改善。</p>
+<h2 id="关键字的变化"><a href="#关键字的变化" class="headerlink" title="关键字的变化"></a>关键字的变化</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300059578.png" srcset="/img/loading.gif" lazyload alt="C99中的关键字"></p>
+<p>其引入了一些新的关键字：</p>
+<ul>
+<li>内联函数<code>inline</code></li>
+<li>指针限定<code>restrict</code></li>
+<li>布尔类型<code>_Bool</code></li>
+<li>虚数类型<code>_Imaginary</code></li>
+<li>复数类型<code>_Complex</code></li>
+</ul>
+<h1 id="C11-1"><a href="#C11-1" class="headerlink" title="C11"></a>C11</h1><h2 id="关键字的变化-1"><a href="#关键字的变化-1" class="headerlink" title="关键字的变化"></a>关键字的变化</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312300102915.png" srcset="/img/loading.gif" lazyload alt="C11中的关键字"></p>
+<p>其中引入的新关键字：</p>
+<ul>
+<li><code>_Alignas</code></li>
+<li><code>_Alignof</code></li>
+<li><code>_Atomic</code></li>
+<li><code>_Generic</code></li>
+<li><code>_Noreturn</code></li>
+<li><code>_Starct_assert</code></li>
+<li><code>_Thread_loacl</code></li>
+</ul>
+<h1 id="C17-1"><a href="#C17-1" class="headerlink" title="C17"></a>C17</h1><h2 id="关键字的变化-2"><a href="#关键字的变化-2" class="headerlink" title="关键字的变化"></a>关键字的变化</h2><p>C17没有添加新的关键字。</p>
+<p>本文记录一下C&#x2F;C++标准版本，以及不同版本的新特性。其中:</p>
+<ul>
+<li><p>C语言: C89&#x2F;90、C95、C99、C11、C17</p>
+</li>
+<li><p>C++语言: C++98、C++03、C++11、C++14、C++17、C++20</p>
+</li>
+</ul>
+<h2 id="1-发行标准"><a href="#1-发行标准" class="headerlink" title="1. 发行标准"></a>1. 发行标准</h2><h3 id="1-1-C语言标准"><a href="#1-1-C语言标准" class="headerlink" title="1.1 C语言标准"></a>1.1 C语言标准</h3><ul>
+<li><p>C89 (ANSI X3.159-1989)： 由美国国家标准协会（ANSI）于1989年发布的C语言标准，也被称作ANSI C。</p>
+</li>
+<li><p>C90 (ISO&#x2F;IEC 9899:1990)： 与C89基本相同，是C89在国际化上的延伸，由国际标准化组织（ISO）和国际电工委员会（IEC）于1990年采纳的C语言标准。</p>
+</li>
+<li><p>C95 (ISO&#x2F;IEC 9899:1995)： 是对ISO C90标准的一次修订，增加了一些新特性，例如支持多字节字符等。</p>
+</li>
+<li><p>C99 (ISO&#x2F;IEC 9899:1999)： 由ISO&#x2F;IEC在1999年采纳的新版C语言标准，新增了一些特性，如内联函数、边长数组、严格类型别名、具名结构初始化等。</p>
+</li>
+<li><p>C11 (ISO&#x2F;IEC 9899:2011)： 由ISO&#x2F;IEC于2011年发布的C语言标准，增加了更多的新特性，例如静态断言、通用结构初始器、匿名结构和联合等。</p>
+</li>
+<li><p>C17 (ISO&#x2F;IEC 9899:2018)： 于2018年发布的当前最新的C语言标准，主要修复了C11标准中的一些问题，没有引入新特性。</p>
+</li>
+</ul>
+<h3 id="1-2-C-语言标准"><a href="#1-2-C-语言标准" class="headerlink" title="1.2 C++语言标准"></a>1.2 C++语言标准</h3><ul>
+<li><p>C++98： 于1998年发布的C标准，是最早的国际标准化版本，包含了面向对象编程、模板等基本特性。</p>
+</li>
+<li><p>C++03： 于2003年发布，对C++98进行一些小修小补，主要是修复C++98的一些bug和漏洞。</p>
+</li>
+<li><p>C++11： 于2011年发布，被视为现代C++的开始，引入了多个重要特性，如自动类型推导、基于范围的 for 循环、Lambda 表达式、智能指针等。</p>
+</li>
+<li><p>C++14： 于2014年发布的C++标准，以更大的灵活性和性能优化为目标，引入了多个新特性，进行了增量式改进，例如泛型Lambda表达式、返回类型后置等。</p>
+</li>
+<li><p>C++17： 于2017年发布，进一步完善C++特性，如结构化绑定、并行算法库、内联变量等。</p>
+</li>
+<li><p>C++20： 最新的C标准，已经获得批准，编译器也已经开始支持其中的新特性。它引入了模块、概念、协程等重要特性 ，对C++语言进行了较大的扩展。</p>
+</li>
+</ul>
+<p>这些标准制定了C语言和C++的基本规范，各个编译器需要支持这些标准以确保代码的正确执行和相互兼容。在实际编程过程中，需要根据所使用编译器的支持情况选择合适的标准。</p>
+<h2 id="2-版本新特性"><a href="#2-版本新特性" class="headerlink" title="2. 版本新特性"></a>2. 版本新特性</h2><h3 id="2-1-C语言版本新特性"><a href="#2-1-C语言版本新特性" class="headerlink" title="2.1 C语言版本新特性"></a>2.1 C语言版本新特性</h3><ol>
+<li><strong>C89&#x2F;90</strong></li>
+</ol>
+<ul>
+<li><p>函数原型</p>
+</li>
+<li><p>const 限定符</p>
+</li>
+<li><p>volatile 限定符</p>
+</li>
+<li><p>enum 枚举类型</p>
+</li>
+<li><p>void 指针类型</p>
+</li>
+<li><p>单行注释，使用 <code>//</code></p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>C99</strong></li>
+</ol>
+<ul>
+<li><p>可变长度数组（VLA）</p>
+</li>
+<li><p>行内函数 (inline)</p>
+</li>
+<li><p>类型宽度宏，如 <code>UINT32_MAX</code></p>
+</li>
+<li><p>严格的类型别名规则（strict aliasing）</p>
+</li>
+<li><p>灵活的数组成员 (Flexible Array Member)</p>
+</li>
+<li><p>复合文字 (Compound Literals)</p>
+</li>
+<li><p>布尔数据类型 <code>_Bool</code></p>
+</li>
+<li><p>复数和虚数数据类型</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>C11</strong></li>
+</ol>
+<ul>
+<li><p>多线程支持</p>
+</li>
+<li><p>原子操作</p>
+</li>
+<li><p>静态断言（Static assertions）</p>
+</li>
+<li><p>无类型泛型宏（Generic selection）</p>
+</li>
+<li><p>匿名结构和匿名联合</p>
+</li>
+<li><p>外部变量的对齐声明</p>
+</li>
+<li><p>类型泛化表达式</p>
+</li>
+</ul>
+<h3 id="2-2-C-语言特性"><a href="#2-2-C-语言特性" class="headerlink" title="2.2 C++语言特性"></a>2.2 C++语言特性</h3><p>1） <strong>C++98</strong></p>
+<ul>
+<li><p>命名空间（namespaces）</p>
+</li>
+<li><p>类模板（class templates）</p>
+</li>
+<li><p>异常处理（exceptions）</p>
+</li>
+<li><p>运行时类型识别（RTTI）</p>
+</li>
+<li><p>标准模板库（STL）</p>
+</li>
+<li><p>bool 类型</p>
+</li>
+<li><p>类型转换操作符</p>
+</li>
+</ul>
+<p>2） <strong>C++03</strong></p>
+<p>在C++98基础上修复了一些bug和漏洞</p>
+<p>3） <strong>C++11</strong></p>
+<ul>
+<li><p>自动类型推导（auto）</p>
+</li>
+<li><p>基于范围的 for 循环（Range-based for loops）</p>
+</li>
+<li><p>Lambda 表达式</p>
+</li>
+<li><p>右值引用和移动语义（Rvalue references and move semantics）</p>
+</li>
+<li><p>初始化列表（Initializer lists）</p>
+</li>
+<li><p>类型推断 decltype</p>
+</li>
+<li><p>constexpr 编译时计算</p>
+</li>
+<li><p>强类型枚举（Scoped enumerations）</p>
+</li>
+<li><p>nullptr为NULL的替代品</p>
+</li>
+<li><p>智能指针（shared_ptr, unique_ptr, weak_ptr）</p>
+</li>
+<li><p>并发编程（包括多线程的支持）</p>
+</li>
+</ul>
+<p>4） <strong>C++14</strong></p>
+<ul>
+<li><p>泛型Lambda表达式</p>
+</li>
+<li><p>返回类型后置（函数返回类型推导）</p>
+</li>
+<li><p>二进制字面值</p>
+</li>
+<li><p>编译时整数序列（整数常量模板）</p>
+</li>
+<li><p>引入传递引用类型的函数</p>
+</li>
+<li><p>引入类型deprecated属性 (废弃声明)</p>
+</li>
+</ul>
+<p>5） <strong>C++17</strong></p>
+<ul>
+<li><p>结构化绑定（Structured bindings）</p>
+</li>
+<li><p>并行算法库（Parallel algorithms）</p>
+</li>
+<li><p>内联变量（Inline variables）</p>
+</li>
+<li><p>文件系统库（Filesystem library）</p>
+</li>
+<li><p>变体类型（std::variant）</p>
+</li>
+<li><p>可选类型（std::optional）</p>
+</li>
+<li><p>任务型未来（std::future）</p>
+</li>
+</ul>
+<ol start="6">
+<li><strong>C++20</strong></li>
+</ol>
+<ul>
+<li><p>概念（Concepts）</p>
+</li>
+<li><p>范围（Ranges）</p>
+</li>
+<li><p>协程（Coroutines）</p>
+</li>
+<li><p>模块（Modules）</p>
+</li>
+<li><p>连续表述（constexpr features）</p>
+</li>
+<li><p>Lambda 表达式的优化</p>
+</li>
+<li><p>std::span 视图经常使用的一段连续内存</p>
+</li>
+<li><p>std::format 格式库</p>
+</li>
+</ul>
+<p><strong>[参看]:</strong></p>
+<ol>
+<li><p><a target="_blank" rel="noopener" href="https://cplusplus.com/reference/algorithm/sort/">cpluscpus reference</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/">cppreference</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/crr411422/article/details/125592160">C&#x2F;C++标准版本及不同版本的新特性</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_65139309/article/details/130540716">深入剖析C++ 11新特性</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/0voice/cpp_new_features">cpp_new_feature</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://cpp.sh/">c++ shell</a></p>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>c语言标准的研究</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/29/c22、c11、c99之间的研究/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/12/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E7%BD%91%E7%AB%99/" title="常用的知识点网站">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">常用的知识点网站</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/29/%E5%AF%B9%E4%BA%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%A0%94%E7%A9%B6-uftrace/" title="对于开源项目的研究--uftrace">
+                        <span class="hidden-mobile">对于开源项目的研究--uftrace</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

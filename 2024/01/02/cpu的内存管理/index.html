@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="cpu的内存管理的总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cpu的内存管理">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/02/cpu%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="cpu的内存管理的总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3779).png">
+<meta property="article:published_time" content="2024-01-02T10:47:04.000Z">
+<meta property="article:modified_time" content="2024-01-10T06:31:32.024Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3779).png">
+  
+  
+  
+  <title>cpu的内存管理 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3779).png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="cpu的内存管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-02 18:47" pubdate>
+          2024年1月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          63 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">cpu的内存管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>cpu的内存管理的总结</p>
+<span id="more"></span>
+
+<h1 id="cpu运行模式下的内存管理"><a href="#cpu运行模式下的内存管理" class="headerlink" title="cpu运行模式下的内存管理"></a>cpu运行模式下的内存管理</h1><p>实际上Linux中的内存管理和cpu中的运行模式是紧密相关的。那么我们可以知道cpu有哪些运行模式了。这篇文件对运行模式进行了简单的总结。</p>
+<p>下面这张图体现了各个模式下的内存模型，在除开<code>64bit长模式</code>下，其他模式的内存模型都是分段的。32 位虚拟内存空间被视为代码、堆栈和数据段的分段地址空间集，每个段都有自己的基地址和保护参数。通过将段选择器添加到地址来指定分段空间。</p>
+<p>而长模式下，<code>64</code> 位虚拟内存空间<strong>被视为单个、平坦（未分段）地址空间</strong>。程序地址访问位置可以位于线性 <code>64</code> 位地址空间中的任何位置。出于内存保护的目的，操作系统可以对代码、堆栈和数据段使用单独的选择器，但所有这些段的基地址始终为 <code>0</code>。</p>
+<p>注意一个是<code>64bit</code>地址空间，另外几个都是<code>32bit</code>地址空间。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401011751164.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意<code>64bit</code>这里是平坦内存模型，与之相对应的是多段内存模型，平坦内存模型中，每个寄存器中的值都是0，所以使得每一个段一开始都是指向同一个地方的。</p>
+<p>分段内存模型的内存管理：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401022115917.png" srcset="/img/loading.gif" lazyload></p>
+<p>具体的：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401022138030.png" srcset="/img/loading.gif" lazyload></p>
+<p>平坦内存模型的内存管理：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401022136743.png" srcset="/img/loading.gif" lazyload></p>
+<p>Effective Address：有效地址</p>
+<p>具体的：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401022138791.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="分段内存管理"><a href="#分段内存管理" class="headerlink" title="分段内存管理"></a>分段内存管理</h1><p>以兼容性著称的x86处理器，即便到了今天的64位时代，依然保留了对segmentation的向前兼容，而linux操作系统最开始也是基于i386写的，所以也保留了对segmentation的支持。了解下历史，往往可以让我们对后来出现的某些事物有更好的理解。</p>
+<p>分段机制提供十个段寄存器，每个段寄存器定义一个段。其中六个寄存器（CS、DS、ES、FS、GS 和 SS）定义<strong>用户段</strong>。用户段保存软件、数据和堆栈，可供应用软件和系统软件使用。其余四个段寄存器（GDT、LDT、IDT 和 TR）<strong>定义系统段</strong>。系统段包含仅由系统软件初始化和使用的数据结构。段寄存器包含指向段起始位置的基地址、定义段大小的限制以及定义段保护特性的属性。</p>
+<p>尽管分段在重新定位和保护软件和数据方面提供了很大的灵活性，但结合软件和硬件分页支持来处理内存隔离和重新定位通常会更有效。因此，大多数现代系统软件都会绕过分段功能。然而，分段不能完全禁用，了解分段机制对于实现长模式系统软件非常重要。这是由于在传统模式中仍然需要使用到分段功能，</p>
+<p>下面我们通过对于各个cpu模式的分析，来学习cpu的分段机制。</p>
+<h2 id="分段所使用的数据结构、寄存器"><a href="#分段所使用的数据结构、寄存器" class="headerlink" title="分段所使用的数据结构、寄存器"></a>分段所使用的数据结构、寄存器</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401042013660.png" srcset="/img/loading.gif" lazyload></p>
+<p>段寄存器——六个段寄存器（CS、DS、ES、FS、GS 和 SS）用于指向用户段。当描述符被加载到段寄存器之一时，段选择器会选择该描述符。这导致处理器自动将选定的描述符加载到段寄存器的软件不可见部分。</p>
+<p>描述符表寄存器—三个描述符表寄存器（GDTR、LDTR 和 IDTR）用于指向系统段。描述符表寄存器标识了该描述符表的虚拟内存位置和大小。</p>
+<p>任务寄存器（TR）—描述当前任务状态段（TSS）的位置和限制。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401042009183.png" srcset="/img/loading.gif" lazyload></p>
+<p>上面两张图显示了分段所使用的寄存器和数据结构，其中第二张图的从左往右：<br>段选择器：这些数据都存储在段寄存器中如CS、DS等等。段选择寄存器的作用是去系统表（GDT、LDT、IDT）中查找的<strong>偏移值</strong>。</p>
+<p><strong>关于系统表的详细描述都在AMD手册第二本的4.6节</strong></p>
+<h2 id="实模式下的分段"><a href="#实模式下的分段" class="headerlink" title="实模式下的分段"></a>实模式下的分段</h2><p>8086的CPU是16位的，但intel的工程师希望在不改变CPU寄存器和指令集的基础上，让它可以可以寻址更大的内存范围。于是他们使用了一种叫segmentation的机制，即一个逻辑地址（logical address）由segment加上offset组成，一般表达为segement:offset的形式。</p>
+<p>当segment的值放入segment register时，就是告诉CPU：现在要访问这个segment对应的内存区域，然后再根据offset的值，在这个segment内找到对应的字节。转换后形成的地址被称作线性地址（linear address），若offset为16位，linear address &#x3D; segment&lt;&lt;4 + offset，则寻址范围就扩大成了20位，比如logical address为0xA000:0x5F00，转换成linear address就是0xA5F00。</p>
+<p>这种内存访问被称为实模式（Real Mode），因为linear address是由segment基址移位加上一个偏移得到，因此实模式下的这种segmentation被称为shift-and-add segmentation。</p>
+<h2 id="8086虚拟模式下的分段"><a href="#8086虚拟模式下的分段" class="headerlink" title="8086虚拟模式下的分段"></a>8086虚拟模式下的分段</h2><p>Virtual-8086模式支持在保护模式下运行的16位实模式程序。它使用简单形式的内存分段、可选分页和有限的保护检查。</p>
+<p>段基址是给定段中的最低地址，等于段选择器 * 16。POP 和 MOV 指令的工作方式与实模式下完全相同，可用于将（可能）新的段选择器加载到其中一个段寄存器。</p>
+<h2 id="保护模式下的分段"><a href="#保护模式下的分段" class="headerlink" title="保护模式下的分段"></a>保护模式下的分段</h2><p>80286也使用segmentation，但和8086不同的是，80286中segment register存的不再是segment的起始地址，而是一个segment selector，通过这个selector查找GDT表获得segment descriptor，segment descriptor存的才是segment的起始地址，因此保护模式下的这种segmentation被称为table-based segmentation（区别于实模式的shift-and-add方式）。</p>
+<h2 id="长模式中的分段"><a href="#长模式中的分段" class="headerlink" title="长模式中的分段"></a>长模式中的分段</h2><p>长模式又分为了两种子模式：</p>
+<ul>
+<li>64bit长模式</li>
+<li>兼容模式</li>
+</ul>
+<p>64bit长模式:下禁用分段，创建平面<code>64</code>位虚拟地址空间。正如将要看到的，某些段寄存器（特别是系统段寄存器）的某些功能继续在 <code>64</code> 位模式下使用。</p>
+<p>兼容模式：这个模式和传统模式中的分段处理是一致。</p>
+<h3 id="64bit下的段寄存器"><a href="#64bit下的段寄存器" class="headerlink" title="64bit下的段寄存器"></a>64bit下的段寄存器</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401011800896.png" srcset="/img/loading.gif" lazyload></p>
+<p>CS：</p>
+<p>64 位模式下的 CS 寄存器。在 64 位模式下，CS 寄存器的大部分隐藏部分被忽略。 64 位模式仅识别 L（长整型）、D（默认操作大小）和 DPL（描述符特权级别）属性。地址计算假定 CS.base 值为 0。CS 引用不检查 CS.limit 值，而是检查有效地址是否采用规范形式。</p>
+<p>DS、ES、SS：</p>
+<p>64 位模式下的 DS、ES 和 SS 寄存器。在 64 位模式下，ES、DS 和 SS 段寄存器的内容被忽略。段寄存器隐藏部分中的所有字段（基址、限制和属性）都将被忽略。64 位模式下引用 ES、DS 或 SS 段的地址计算被视为段基址为 0。处理器不执行限制检查，而是检查所有虚拟地址引用是否采用规范形式。</p>
+<p>GS、FS：</p>
+<p>与 <code>CS、DS、ES</code> 和 <code>SS</code> 段不同，<code>FS</code> 和 <code>GS</code> 段覆盖<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote">&lt;span class&#x3D;”hint–top hint–rounded” aria-label&#x3D;”Segment Override 段覆盖   我们已经知道，有效地址是通过段寄存器值加上相应偏移量的值来计算的。但是，如果我们想使用特定代码的默认段之外的其他段寄存器怎么办？段覆盖提供了这样一种方法：</p>
+<pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre><pre><code class="hljs c">GS寄存器常用来访问进程的控制块(PCB)<br><br>FS寄存器常用来访问TLS本地线程存储<br></code></pre>">[2]</span></a></sup>可以在 64 位模式下使用。当在 64 位模式下使用 `FS` 和 `GS` 段覆盖时，它们各自的基地址将用于有效地址 (EA<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Effective address (EA) 中文又称之为偏移地址、有效地址。其实就是相对于基地址的偏移">[1]</span></a></sup>) 计算。完整的 `EA` 计算则变为（`FS` 或 `GS​​`）。FS.base 和 GS.base 值也扩展到完整的 64 位虚拟地址大小。
+
+<p><code>fs</code> 和 <code>gs</code> 是唯一在 64 位模式下执行任何操作的段覆盖。</p>
+<h1 id="分页的管理"><a href="#分页的管理" class="headerlink" title="分页的管理"></a>分页的管理</h1><p>我们已经知道，现代cpu的内存管理方式。分段的方法使用的越来越少。下面我们学习cpu是如何分页的。</p>
+<h2 id="长模式"><a href="#长模式" class="headerlink" title="长模式"></a>长模式</h2><p>下面这张图显示了，长模式下两种子模式的内存管理方法。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401011730560.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到，实际上在64bit模式下内存管理是直接通过分页机制进行的，而不再需要前文所述的哪些步骤。但是对应兼容模式来说是需要的，首先将逻辑地址转换为线性地址（虚拟地址），然后通过分页机制完成虚拟地址到物理地址的转换。</p>
+<p>需要注意这里的<code>paging</code>是不可选的。</p>
+<h2 id="传统模式"><a href="#传统模式" class="headerlink" title="传统模式"></a>传统模式</h2><p>由于传统模式主要是32bit地址。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401011737457.png" srcset="/img/loading.gif" lazyload><br>由此我们可以看出在传统模式中，只有实模式不需要通过页转换就直接由线性地址变成物理地址，这是因为实模式一般用于操作系统启动时，这使得页映射操作不便进行。</p>
+<p>需要注意保护模式和虚拟8086模式下的<code>paging</code>是可选的。不同于长模式都是不可选的。实模式不需要进行页转换。</p>
+<h1 id="寄存器划分"><a href="#寄存器划分" class="headerlink" title="寄存器划分"></a>寄存器划分</h1><p>由于<code>64bit长模式</code>单独使用一种内存模型，所以我们需要分开讨论寄存器的使用。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401011800896.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="64bit长模式"><a href="#64bit长模式" class="headerlink" title="64bit长模式"></a>64bit长模式</h2><p>在该模式下只有CS、FS、GS可以使用，其中FS寄存器和GS寄存器的主要作用是：   </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">MOV AX , [BX] ;这是没有使用段覆盖的情况, 有效地址等于 DS&lt;&lt;4 + BX<br>MOV AX, SS : [BX] ;这就是使用了段前缀的情况, 有效地址等于 SS&lt;&lt;4 + BX<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="其他模式"><a href="#其他模式" class="headerlink" title="其他模式"></a>其他模式</h2><p>在其他模式下,寄存器是照常使用的。</p>
+<p><a href="https://ysc2.github.io/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/">关于segmentation和保护模式的关系</a></p>
+<h1 id="分段机制"><a href="#分段机制" class="headerlink" title="分段机制"></a>分段机制</h1><p>由上我们已经知道了虽然分段机制的使用已经很少了，但是我们仍然需要了解它。</p>
+<h1 id="分页机制概述"><a href="#分页机制概述" class="headerlink" title="分页机制概述"></a>分页机制概述</h1><p>不管是intel的<code>IA32</code>还是AMD的<code>Long</code>模式都需要使用分页来进行内存管理，并且很多时候使用分页大于使用分段。并且每个进程都可以应用自己的页表。</p>
+<p>传统的 <code>x86</code> 架构支持将 <code>32</code> 位虚拟地址转换为 <code>32</code> 位物理地址（作为特殊模式支持更大的物理地址，例如 <code>36</code> 位或 <code>40</code> 位地址）。 <code>AMD64</code> 架构增强了这种支持，允许将 <code>64</code> 位虚拟地址转换为 <code>52</code> 位物理地址，尽管处理器实现可以支持更小的虚拟地址和物理地址空间。</p>
+<h2 id="页面翻译（转换）概述"><a href="#页面翻译（转换）概述" class="headerlink" title="页面翻译（转换）概述"></a>页面翻译（转换）概述</h2><p>下图显示了长模式中使用的页面翻译层次结构的概述。传统模式分页使用此转换层次结构的子集（传统模式中不存在页面映射级别 4 表，并且可能会或可能不会使用 PDP 表，具体取决于启用的分页模式）。第 5 级转换，即页面映射级别 5，仅在启用 5 级分页时才存在。如图所示，虚拟地址分为多个字段，每个字段用作转换表中的偏移量。完整的翻译链由虚拟地址字段引用的所有表条目组成。最低阶虚拟地址位用作物理页的字节偏移量。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041418963.png" srcset="/img/loading.gif" lazyload></p>
+<p>关于页大小的支持：</p>
+<p>支持以下物理页大小：<code>4 KB</code>、<code>2 MB</code>、<code>4 MB</code> 和 <code>1 GB</code>。</p>
+<p>在长模式下，可以使用 <code>4-KB</code>、<code>2-MB</code> 和 <code>1-GB</code> 大小。</p>
+<p>在传统模式下，可以使用 <code>4KB</code>、<code>2MB</code> 和 <code>4MB</code> 大小。</p>
+<p>虚拟地址的长度为 <code>32</code> 位，并且可以使用最多支持的物理地址大小的物理地址。 <code>AMD64</code> 架构允许将最多 <code>64</code> 位长的虚拟地址转换为最多 <code>52</code> 位长的物理地址，从而增强了传统转换支持。 </p>
+<p>页面翻译设置选项：</p>
+<ul>
+<li>Page-Translation Enable (CR0.PG)          PTE</li>
+<li>Physical-Address Extensions (CR4.PAE)     PAE</li>
+<li>Page-Size Extensions (CR4.PSE)            PSE</li>
+<li>Long-Mode Active (EFER.LMA)               LMA</li>
+</ul>
+<p>分别是页翻译使能、物理地址扩展、页大小扩展、长模式活动（自己乱翻译的）。下表体现了不同模式下的页面翻译选项的使用情况：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041436284.png" srcset="/img/loading.gif" lazyload></p>
+<p>当开启了<code>PAE</code>时 <code>PAE</code> 分页将<strong>页转换表条目</strong>的大小加倍至 <code>64</code> 位，以便表条目可以容纳更大的物理内存。</p>
+<h2 id="长模式下的页翻译（转换）机制"><a href="#长模式下的页翻译（转换）机制" class="headerlink" title="长模式下的页翻译（转换）机制"></a>长模式下的页翻译（转换）机制</h2><p>长模式页面转换需要使用物理地址扩展（PAE）。在激活长模式之前，必须通过将 <code>CR4.PAE</code> 设置为 <code>1</code> 来启用 <code>PAE</code>。在启用 <code>PAE</code> 之前激活长模式会导致发生一般保护异常 (#GP)。并且在长模式下 <code>PAE</code> 是一直开启的。因此页目录项 (PDE.PS) 中的 PS 位在 4 KB 和 2 MB 页面大小之间进行选择，并且忽略 <code>CR4.PSE</code> 位。当支持 <code>1 GB</code> 页面时，<code>PDPE</code>。 <code>PS</code> 位选择 <code>1 GB</code> 页面大小。</p>
+<p>开启长模式后，虚拟地址的位数从<code>32</code>位增长至<code>64</code>位。并且这个模式和传统模式的不同在于没有了两种页翻译模式：正常分页模式和PAE分页模式。</p>
+<p>在长模式下，当 5 级分页禁用时（CR4[LA57]&#x3D;0），CR3 寄存器用于指向 PML4 基地址；当 5 级分页使能时（CR4[LA57]&#x3D;1），CR3 寄存器用于指向 PML5 基地址。 ）。 CR3 在长模式下扩展为 64 位，允许 PML4 或 PML5 表位于 52 位物理地址空间中的任何位置。</p>
+<p>以下是长模式下的<code>CR3</code>寄存器中的数值。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041729160.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="4KB-页转换"><a href="#4KB-页转换" class="headerlink" title="4KB 页转换"></a>4KB 页转换</h4><p>使用的是4级页表时的结构。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041733509.png" srcset="/img/loading.gif" lazyload></p>
+<p>使用4级页表时，<code>64</code>位虚拟地址被划为6个部分，</p>
+<p>使用5级页表的结构。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041735404.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2MB-页转换"><a href="#2MB-页转换" class="headerlink" title="2MB 页转换"></a>2MB 页转换</h4><p>页所占的空间越大，所需要的页表级数就越低。使用<code>2MB</code>时，页转换结构如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041739078.png" srcset="/img/loading.gif" lazyload></p>
+<p>当开启5级页表时： </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041739029.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2GB-页转换"><a href="#2GB-页转换" class="headerlink" title="2GB 页转换"></a>2GB 页转换</h4><p>在长模式下，1 GB 物理页转换是通过将虚拟地址划分为最多五个字段来执行的。最多三个字段用作级别页面翻译层次结构的索引。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041742965.png" srcset="/img/loading.gif" lazyload></p>
+<p>这里需要注意的是，虽然是一个二级页转换，但是使用的是<code>PML4T</code>表和<code>PDPE</code>表，而不是靠近物理内存的页表。</p>
+<p>当开启了5级页表时；</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041745086.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="传统模式下的页翻译（转换）机制"><a href="#传统模式下的页翻译（转换）机制" class="headerlink" title="传统模式下的页翻译（转换）机制"></a>传统模式下的页翻译（转换）机制</h2><p>传统模式下有两种翻译模式：</p>
+<ul>
+<li>正常分页(Non-PAE)</li>
+<li>PAE分页</li>
+</ul>
+<p><code>x86-64</code>架构使用<code>CR3</code>寄存器存储页表的基地址，该寄存器中存储的格式和其使用两种页翻译模式有关：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041440792.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上图中我们可以看到：</p>
+<ul>
+<li>页表基地址字段（就是最长的白色的段）的长度取决于所使用的模式<ul>
+<li>在<code>Non-PAE</code>模式下其占用了<code>31:12</code>位的空间</li>
+<li>在<code>PAE</code>模式下占用了<code>31:5</code>位的空间</li>
+</ul>
+</li>
+<li>Page-Level Writethrough (PWT) Bit.页级直写 (PWT) 位。位 3。页级写通指示最高级别的页转换表是否具有写回或写通缓存策略。当PWT&#x3D;0时，表有写回缓存策略。当PWT&#x3D;1时，表具有writethrough缓存策略。</li>
+<li>Page-Level Cache Disable (PCD) Bit.页级高速缓存禁用 (PCD) 位。位 4。页级高速缓存禁用指示最高级别页转换表是否可高速缓存。当 PCD&#x3D;0 时，表可缓存。当 PCD&#x3D;1 时，该表不可缓存。</li>
+<li>Reserved，保留位，写入CR3 时，保留字段应由软件清0。</li>
+</ul>
+<h3 id="正常分页-Non-PAE"><a href="#正常分页-Non-PAE" class="headerlink" title="正常分页(Non-PAE)"></a>正常分页(Non-PAE)</h3><p>这个模式支持的<code>4KB</code>和<code>4MB</code>的页大小。</p>
+<h4 id="4KB的页面转换"><a href="#4KB的页面转换" class="headerlink" title="4KB的页面转换"></a>4KB的页面转换</h4><p>下图显示了这个模式下的<code>4KB</code>页面翻译（转换）<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041454544.png" srcset="/img/loading.gif" lazyload></p>
+<p>首先这是一个二级页表。4 KB 物理页转换是通过将 32 位虚拟地址划分为三个字段来执行的。上面两个字段中的每一个都用作两级页面翻译层次结构的索引。虚拟地址被划分三段，每一段都是对应页的偏移地址，最后一个是物理页的偏移地址。</p>
+<p>从上图可以看到在页目录表、页表中存储的结构：<code>PDE</code> <code>PTE</code>。它们的具体结构如下：</p>
+<p>PDE：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041501120.png" srcset="/img/loading.gif" lazyload></p>
+<p>PTE：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041502264.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="4MB的页面转换"><a href="#4MB的页面转换" class="headerlink" title="4MB的页面转换"></a>4MB的页面转换</h4><p>4 MB 页面转换。仅当启用页面大小扩展 (CR4.PSE&#x3D;1) 且禁用物理地址扩展 (CR4.PAE&#x3D;0) 时，才支持 4 MB 页面转换。</p>
+<p>PSE 以 32 位 PDE 格式 (PDE.PS) 定义页面大小位。处理器在页面转换期间使用该位来支持 4 MB 和 4 KB 页面。当 PDE.PS 设置为 1 时，选择 4 MB 页面，并且 PDE 直接指向 4 MB 物理页面。 PTE 不用于 4 MB 页面转换。如果 PDE.PS 被清除为 0，或者如果禁用 4 MB 页面转换，则 PDE 指向 PTE。</p>
+<p>上面我们说了<code>4KB</code>的页面转换，而<code>4MB</code>的页面转换实际上更加简单。如下图所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041505588.png" srcset="/img/loading.gif" lazyload></p>
+<p>有一个二级页表直接变成了一级页表。虚拟地址不在被划分为三个段，而是两个段。并且仔细看的话PED旁边的数字从32变成了40，这是开启了PSE（页大小扩展）的结果。</p>
+<blockquote>
+<p>AMD64 架构修改了 PSE 模式下的传统 32 位 PDE 格式，将物理地址大小支持增加到 40 位。地址大小的增加是通过使用位 20:13 来保存八个额外的高阶物理地址位来实现的。位 21 被保留，必须清除为 0。如下图PDE结构</p>
+</blockquote>
+<div class="note note-info">
+            <p>关于PSE模式就是上面我们提到的四种页翻译选项之一。</p>
+          </div>
+
+<p>此时的PDE结构又不相同了，因为少了一级页表：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041507240.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="PAE模式"><a href="#PAE模式" class="headerlink" title="PAE模式"></a>PAE模式</h3><p>上面我们说了非PAE模式下的页翻译机制，现在我们看PAE模式下又和之前的哪个模式有什么不一样的地方。</p>
+<p>当启用物理地址扩展 (CR4.PAE&#x3D;1) 时，使用 <code>PAE</code> 分页。 <code>PAE</code> 分页将页转换表条目的大小加倍至 <code>64</code> 位（所以我们在下面会看到每一个页表项的位数变成了64位），以便表条目可以容纳更大的<code>52</code>位的物理内存。</p>
+<p>每个表的大小仍然是 <code>4 KB</code>，这意味着每个表可以容纳 <code>512</code> 个 <code>64</code> 位条目。 <code>PAE</code> 分页还引入了第三级页转换表，称为页目录指针表 (<code>PDPT</code>)。</p>
+<p>和非PAE模式不同还有：PAE 分页模式下大页的大小为 <code>2 MB</code>，而不是 <code>4 MB</code>。 PAE 使用页目录页大小位 (PDE.PS) 来允许在 <code>4 KB</code> 和 <code>2 MB</code> 页大小之间进行选择。 PAE 自动使用页面大小位，因此 PAE 分页将忽略 <code>CR4.PSE</code> 的值。</p>
+<h4 id="4KB-PAE页转换"><a href="#4KB-PAE页转换" class="headerlink" title="4KB PAE页转换"></a>4KB PAE页转换</h4><p>直接使用上了三级页表，这也是传统模式下支持的最高级了。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041521968.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到虚拟地址被划为四段，多了一个<code>Page-Directory-Pointer Offset</code>页目录指针表。</p>
+<ul>
+<li>31-30位索引到四条页表项的PDPE</li>
+<li>29-21位索引到512条页表项的PDE</li>
+<li>10-12位索引到512条页表项的PTE</li>
+<li>11-9位索引到具体的物理页地址</li>
+</ul>
+<p>具体的关于各种页的结构如下：     </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041644776.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2MB-PAE页转换"><a href="#2MB-PAE页转换" class="headerlink" title="2MB PAE页转换"></a>2MB PAE页转换</h4><p>具体内容：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041645177.png" srcset="/img/loading.gif" lazyload></p>
+<p>和<code>4KB</code>的不同如下：</p>
+<ul>
+<li>使用二级表，而不是三级表<br>其他和<code>4KB</code>基本一致。</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401041647561.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="其他知识点"><a href="#其他知识点" class="headerlink" title="其他知识点"></a>其他知识点</h1><h2 id="限制检查"><a href="#限制检查" class="headerlink" title="限制检查"></a>限制检查</h2><p>除 64 位模式外，所有引用内存的指令都会执行限制检查。限制检查检测尝试访问当前段边界之外的内存、尝试执行当前代码段之外的指令以及在当前描述符表之外进行索引。如果指令未通过限制检查，则所有其他段限制违规都会发生一般保护异常，或者堆栈段限制违规会发生堆栈故障异常。</p>
+<p>在 64 位模式下，在访问 CS、DS、ES、FS、GS 和 SS 选择器寄存器引用的任何段期间，不会检查段限制。相反，处理器会检查用于引用内存的虚拟地址是否采用规范地址形式。在 64 位模式下，与传统模式和兼容模式一样，会检查描述符表限制。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>AMD64 Architecture Programmer’s Manual Volume 1:Application Programming</p>
+<p>AMD64 Architecture Programmer’s Manual Volume 2:System Programming</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67735248">https://zhuanlan.zhihu.com/p/67735248</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67714693">https://zhuanlan.zhihu.com/p/67714693</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.includehelp.com/embedded-system/segment-override-prefix-8086-microprocessor.aspx">https://www.includehelp.com/embedded-system/segment-override-prefix-8086-microprocessor.aspx</a></p>
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>Effective address (EA) 中文又称之为偏移地址、有效地址。其实就是相对于基地址的偏移
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:2" class="footnote-text"><span>Segment Override 段覆盖   我们已经知道，有效地址是通过段寄存器值加上相应偏移量的值来计算的。但是，如果我们想使用特定代码的默认段之外的其他段寄存器怎么办？段覆盖提供了这样一种方法：<br><figure class="highlight plaintext"><table><tr><td class="gutter">undefined</td><td class="code">undefined</td></tr></table></figure>
+<a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>cpu的内存管理</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/02/cpu的内存管理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/03/%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E9%85%8D%E7%BD%AE%E4%B8%AA%E4%BA%BA%E8%B5%84%E4%BA%A7/" title="如何合理配置个人资产">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何合理配置个人资产</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/02/%E5%85%B3%E4%BA%8E%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E7%9A%84%E9%97%AE%E9%A2%98/" title="关于静态链接库的问题">
+                        <span class="hidden-mobile">关于静态链接库的问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

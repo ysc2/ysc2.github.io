@@ -1,0 +1,711 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="关于CPU 高速缓存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每个程序员都应该了解的内存知识-Part2">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/28/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part2/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="关于CPU 高速缓存">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrvgk.jpg">
+<meta property="article:published_time" content="2024-04-28T04:29:27.000Z">
+<meta property="article:modified_time" content="2024-04-29T16:53:33.000Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrvgk.jpg">
+  
+  
+  
+  <title>每个程序员都应该了解的内存知识-Part2 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrvgk.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="每个程序员都应该了解的内存知识-Part2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-28 12:29" pubdate>
+          2024年4月28日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">每个程序员都应该了解的内存知识-Part2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>关于CPU 高速缓存</p>
+<span id="more"></span>
+
+<h1 id="直接看原文翻译"><a href="#直接看原文翻译" class="headerlink" title="直接看原文翻译"></a>直接看原文翻译</h1><p><a target="_blank" rel="noopener" href="https://www.oschina.net/translate/what-every-programmer-should-know-about-cpu-cache-part2?print">原文翻译</a></p>
+<p>CPU今天比25年前要复杂得多。在那些日子里，CPU核心的频率与内存总线的水平相当。内存访问速度仅比寄存器访问速度稍慢。但在90年代初，这种情况发生了戏剧性的变化，当时CPU设计师提高了CPU核心的频率，但内存总线和RAM芯片的性能并没有成比例地提高。这并不是因为无法制造更快的RAM，正如前一节所解释的。这是可能的，但并不经济。与当前CPU核心一样快的RAM比任何动态RAM都要贵几个数量级。</p>
+<p>如果选择是在拥有非常少但非常快的RAM的机器和拥有大量相对快的RAM的机器之间，鉴于工作集大小超过小RAM大小以及访问次级存储介质（如硬盘）的成本，第二种机器总是会赢。这里的问题是次级存储的速度，通常是硬盘，必须用来存储工作集被交换出去的部分。访问这些磁盘的速度比甚至DRAM访问还要慢几个数量级。</p>
+<p>幸运的是，这不必是一个全有或全无的决定。计算机可以拥有少量的高速SRAM，以及大量的DRAM。一种可能的实现方式是将处理器的地址空间的某个区域专门用于包含SRAM，其余部分用于DRAM。然后操作系统的任务就是最佳地分配数据以利用SRAM。基本上，在这种情况下，SRAM作为处理器寄存器集的扩展。</p>
+<p>虽然这是一种可能的实现方式，但它并不可行。忽略将这种SRAM支持的内存的物理资源映射到进程的虚拟地址空间的问题（这本身就是非常困难的），这种方法将要求每个进程在软件中管理这个内存区域的分配。内存区域的大小因处理器而异（即，处理器拥有不同数量的昂贵的SRAM支持的内存）。组成程序的每个模块都会要求其快速内存的份额，这通过同步要求引入了额外的成本。简而言之，拥有快速内存的好处将完全被管理资源的开销所抵消。</p>
+<p>因此，与其将SRAM置于操作系统或用户的控制之下，不如让它成为处理器透明使用和管理的资源。在这种模式下，SRAM被用来临时复制（换句话说，缓存）处理器可能很快使用的主要内存中的数据。这是可能的，因为程序代码和数据具有时间和空间的局部性。这意味着，在短期内，相同代码或数据被重复使用的可能性很大。对于代码来说，这意味着代码中很可能有循环，因此相同的代码一遍又一遍地执行（空间局部性的完美案例）。数据访问也理想地限于小区域。即使在短期内使用的内存不紧密在一起，相同的数据很快就会被重复使用（时间局部性）。对于代码来说，这意味着，例如，在循环中进行函数调用，该函数位于地址空间的其他地方。该函数可能在内存中很远，但对该函数的调用将在时间上很接近。对于数据来说，这意味着一次使用的内存总量（工作集大小）理想地是有限的，但由于RAM的随机访问特性，使用的内存并不紧密在一起。意识到局部性的存在是当今我们使用的CPU缓存概念的关键。</p>
+<p>一个简单的计算可以展示缓存理论上可以有多有效。假设访问主存储需要200个周期，访问缓存存储需要15个周期。那么，如果没有任何缓存，使用100个数据元素各100次的代码将在内存操作上花费2,000,000个周期，如果所有数据都可以被缓存，则只需要168,500个周期。这是一个91.5%的改进。</p>
+<p>用于缓存的SRAM的大小比主存储小很多倍。在作者使用带有CPU缓存的工作站的经验中，缓存大小一直是主存储大小的1&#x2F;1000（今天：4MB缓存和4GB主存储）。这本身并不构成问题。如果工作集的大小（当前正在处理的数据集）小于缓存大小，那就没关系。但是，计算机没有大的主存储是有原因的。工作集的大小肯定会大于缓存。这尤其适用于运行多个进程的系统，其中工作集的大小是所有单独进程和内核的大小之和。</p>
+<p>需要应对缓存有限大小的是一套好的策略，以确定任何给定时间应该缓存什么。由于工作集中的所有数据并不完全同时使用，我们可以使用技术暂时用其他数据替换缓存中的一些数据。也许这可以在实际需要数据之前完成。这种预取将通过与程序执行异步发生来消除一些访问主存储的成本。所有这些技术以及更多可以用于使缓存看起来比实际大。我们将在第3.3节中讨论它们。一旦所有这些技术都被利用，就取决于程序员来帮助处理器。这将如何完成将在第6节中讨论。</p>
+<p>在深入研究 CPU 缓存实现的技术细节之前，一些读者可能会发现首先了解缓存如何融入现代计算机系统的“大局”的更多细节是有用的。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404281235334.png" srcset="/img/loading.gif" lazyload></p>
+<p>图3.1展示了最小的缓存配置。它对应于早期部署CPU缓存的系统中可以找到的架构。CPU核心不再直接连接到主存储器。{在更早的系统中，缓存就像CPU和主存储器一样连接到系统总线上。这更像是一种临时解决方案，而不是真正的解决方案。}所有的加载和存储操作都必须通过缓存。CPU核心和缓存之间的连接是特殊的、快速的连接。在简化的表示中，主存储器和缓存连接到系统总线上，该总线也可用于与系统的其他组件通信。我们引入了系统总线作为“FSB”，这是今天使用的名称；见第2.2节。在本节中，我们忽略了北桥；假设它存在是为了促进CPU与主存储器之间的通信。</p>
+<p>尽管过去几十年的计算机使用了冯·诺依曼架构，但经验表明，将用于代码和数据的缓存分开是有利的。自1993年以来，英特尔一直使用独立的代码和数据缓存，并且从未回头。代码和数据所需的存储区域在很大程度上是相互独立的，这就是为什么独立缓存工作得更好。近年来，另一个优势出现了：对于最常见的处理器，指令解码步骤是缓慢的；缓存解码后的指令可以加速执行，特别是当由于错误预测或无法预测的分支导致流水线为空时。</p>
+<p>缓存引入后不久，系统变得更加复杂。缓存和主存储器之间的速度差异再次增加，以至于增加了另一个级别的缓存，比一级缓存更大、更慢。出于经济原因，仅仅增加一级缓存的大小并不是一个选项。今天，甚至有些机器常规使用三级缓存。具有这样处理器的系统看起来像图3.2。随着单个CPU核心数量的增加，未来缓存级别数量可能会进一步增加。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404281240433.png" srcset="/img/loading.gif" lazyload></p>
+<p>图3.2展示了三级缓存，并引入了我们在文档其余部分将使用的术语。L1d是一级数据缓存，L1i是一级指令缓存，以此类推。请注意，这是一个示意图；在现实中，从核心到主存储器的数据流不必通过任何更高级别的缓存。CPU设计师在设计缓存接口时有很多自由度。对于程序员来说，这些设计选择是不可见的。</p>
+<p>此外，我们还有具有多个核心的处理器，每个核心可以有多个“线程”。核心和线程之间的差异在于，不同的核心拥有各自独立的（几乎所有的硬件资源。核心可以完全独立地运行，除非它们同时使用相同的资源——例如，与外部的连接。另一方面，线程几乎共享了处理器的所有资源。英特尔对线程的实现只有线程的独立寄存器，即便如此也是有限制的，一些寄存器是共享的。因此，现代CPU的完整图景看起来像图3.3。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404281241030.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这个图中，我们有两个处理器，每个处理器有两个核心，每个核心有两个线程。线程共享一级缓存。核心（深灰色阴影部分）有各自独立的一级缓存。CPU的所有核心共享更高级别的缓存。当然，两个处理器（浅灰色阴影的两个大框）不共享任何缓存。当我们讨论多进程和多线程应用对缓存的影响时，所有这些都将变得非常重要。</p>
+<h2 id="3-2-高层次的缓存操作"><a href="#3-2-高层次的缓存操作" class="headerlink" title="3.2 高层次的缓存操作"></a>3.2 高层次的缓存操作</h2><p>为了理解使用缓存的成本和节省，我们必须结合第2节中关于机器架构和RAM技术的知识和上一节中描述的缓存结构。</p>
+<p>默认情况下，CPU核心读取或写入的所有数据都存储在缓存中。有些内存区域不能被缓存，但这是只有操作系统实现者需要关心的事情；对应用程序程序员来说是不可见的。还有一些指令允许程序员故意绕过某些缓存。这将在第6节中讨论。</p>
+<p>如果CPU需要一个数据字，首先搜索缓存。显然，缓存不能包含整个主存储器的内容（否则我们就不需要缓存了），但由于所有内存地址都是可缓存的，每个缓存条目都使用主存储器中数据字的地址进行标记。这样，对一个地址的读写请求可以在缓存中搜索匹配的标记。这里的地址可以是虚拟地址或物理地址，取决于缓存的实现。</p>
+<p>由于标记需要占用空间，除了实际的内存外，选择一个字作为缓存的粒度是低效的。在x86机器上的32位字上，标记本身可能需要32位或更多。此外，由于空间局部性是缓存所依赖的原则之一，不考虑这一点将是不利的。由于相邻的内存可能会一起使用，它也应该一起被加载到缓存中。还记得我们在第2.2.1节中学到的：如果RAM模块能够连续传输多个数据字而不需要新的CAS或甚至是RAS信号，它们会更加有效。因此，存储在缓存中的条目不是单个字，而是多个连续字的“行”。在早期的缓存中，这些行长32字节；现在规范是64字节。如果内存总线是64位宽，这意味着每条缓存行需要8次传输。DDR有效地支持这种传输模式。</p>
+<p>当处理器需要内存内容时，整个缓存行被加载到L1d中。每个缓存行的内存地址是通过根据缓存行大小掩蔽地址值来计算的。对于一个64字节的缓存行，这意味着低6位被清零。被丢弃的位用作缓存行内的偏移量。在某些情况下，剩余的位被用来在缓存中定位行并作为标记。在实践中，一个地址值被分成三个部分。对于一个32位的地址，它可能看起来如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404281241222.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这个图中我们有两个处理器，每个处理器有两个核心，每个核心有两个线程<br>线程共享一级缓存。核心（深灰色阴影部分）有各自独立的一级缓存。CPU的所有核心共享更高级别的缓存。当然，两个处理器（浅灰色阴影的两个大框）不共享任何缓存。当我们讨论多进程和多线程应用对缓存的影响时，所有这些都将变得非常重要。</p>
+<h2 id="3-2-高层次的缓存操作-1"><a href="#3-2-高层次的缓存操作-1" class="headerlink" title="3.2 高层次的缓存操作"></a>3.2 高层次的缓存操作</h2><p>为了理解使用缓存的成本和节省，我们必须结合第2节中关于机器架构和RAM技术的知识和上一节中描述的缓存结构。</p>
+<p>默认情况下，CPU核心读取或写入的所有数据都存储在缓存中。有些内存区域不能被缓存，但这是只有操作系统实现者需要关心的事情；对应用程序程序员来说是不可见的。还有一些指令允许程序员故意绕过某些缓存。这将在第6节中讨论。</p>
+<p>如果CPU需要一个数据字，首先搜索缓存。显然，缓存不能包含整个主存储器的内容（否则我们就不需要缓存了），但由于所有内存地址都是可缓存的，每个缓存条目都使用主存储器中数据字的地址进行标记。这样，对一个地址的读写请求可以在缓存中搜索匹配的标记。这里的地址可以是虚拟地址或物理地址，取决于缓存的实现。</p>
+<p>由于标记需要占用空间，除了实际的内存外，选择一个字作为缓存的粒度是低效的。在x86机器上的32位字上，标记本身可能需要32位或更多。此外，由于空间局部性是缓存所依赖的原则之一，不考虑这一点将是不利的。由于相邻的内存可能会一起使用，它也应该一起被加载到缓存中。还记得我们在第2.2.1节中学到的：RAM模块能够连续传输多个数据字而不需要新的CAS或甚至是RAS信号，它们会更加有效。因此，存储在缓存中的条目不是单个字，而是多个连续字的“行”。在早期的缓存中，这些行长32字节；现在规范是64字节。如果内存总线是64位宽，这意味着每条缓存行需要8次传输。DDR有效地支持这种传输模式。</p>
+<p>当处理器需要内存内容时，整个缓存行被加载到L1d中。每个缓存行的内存地址是通过根据缓存行大小掩蔽地址值来计算的。对于一个64字节的缓存行，这意味着低6位被清零。被丢弃的位用作缓存行内的偏移量。在某些情况下，剩余的位被用来在缓存中定位行并作为标记。在实践中，一个地址值被分成三个部分。对于一个32位的地址，它可能看起来如下：</p>
+<h3 id="缓存行大小为2-O，低O位用作缓存行内的偏移量"><a href="#缓存行大小为2-O，低O位用作缓存行内的偏移量" class="headerlink" title="缓存行大小为2^O，低O位用作缓存行内的偏移量"></a>缓存行大小为2^O，低O位用作缓存行内的偏移量</h3><ul>
+<li>下一个S位选择“缓存集”。我们很快就会更详细地讨论为什么使用集而不是单个槽来存放缓存行。目前，只需理解有2^S个缓存行集。</li>
+<li>这留下了顶部的32 - S - O &#x3D; T位，形成标记。这些T位与每个缓存行相关联的值，用于区分所有在同一缓存集中缓存的别名（所有地址的S部分相同的缓存行都被称为相同的别名）。</li>
+<li>用于寻址缓存集的S位不需要存储，因为它们对于同一集中的所有缓存行都是相同的。</li>
+</ul>
+<p>当指令修改内存时，处理器仍然需要首先加载一个缓存行，因为没有指令会一次性修改整个缓存行（规则的例外：如第6.1节中解释的写入组合）。因此，在写操作之前必须加载缓存行的内容。不可能为缓存持有部分缓存行。一个被写入且尚未回写到主存储器的缓存行被称为“脏”的。一旦写入，脏标志就会被清除。</p>
+<p>为了能够在缓存中加载新数据，几乎总是首先需要在缓存中腾出空间。从L1d中逐出会将缓存行推入到L2（使用相同的缓存行大小）。这当然意味着需要在L2中腾出空间。这反过来可能会将内容推入L3和最终推入主存储器。每次逐出的成本都会逐渐增加。这里描述的是现代AMD和VIA处理器更倾向于使用的独占缓存模型。英特尔实现了包容缓存，其中L1d中的每个缓存行也存在于L2中。因此，从L1d中逐出要快得多。有足够的L2缓存，浪费内存存储在两个地方的劣势是最小的，并且在逐出时是值得的。独占缓存的一个可能优势是，加载新的缓存行只需要触及L1d而不需要触及L2，这可能会更快。</p>
+<p>CPU可以随意管理缓存，只要处理器架构定义的内存模型没有改变。例如，处理器完全可以利用几乎没有或没有内存总线活动，并主动将脏缓存行写回主存储器。在x86和x86-64处理器中，不同制造商之间，甚至在同一制造商的模型之间，缓存架构的多样性证明了内存模型抽象的强大。</p>
+<p>在对称多处理器（SMP）系统中，CPU的缓存不能独立于彼此工作。所有处理器都应该在任何时候看到相同的内存内容。维护这种统一的内存视图被称为“缓存一致性”。如果一个处理器只是简单地查看自己的缓存和主存储器，它将看不到其他处理器中脏缓存行的内容。直接从另一个处理器访问一个处理器的缓存将是非常昂贵的，并且是一个巨大的瓶颈。相反，处理器会检测到另一个处理器想要读取或写入某个特定的缓存行。</p>
+<p>如果检测到写入访问，并且处理器在其缓存中有该缓存行的干净副本，则此缓存行被标记为无效。未来的引用将需要重新加载该缓存行。请注意，另一个CPU上的读取访问并不需要使无效，可以保留多个干净的副本。</p>
+<p>更复杂的缓存实现允许另一种可能性发生。如果另一个处理器想要读取或写入的缓存行当前在第一个处理器的缓存中被标记为脏，那么就需要采取不同的行动。在这种情况下，主存储器已经过时，请求的处理器必须从第一个处理器那里获取缓存行内容。通过窥探，第一个处理器注意到这种情况并自动向请求的处理器发送数据。这个操作绕过了主存储器，尽管在某些实现中，内存控制器应该注意到这种直接传输，并更新主存储器中的缓存行内容。如果访问是为了写入，第一个处理器随后会使其本地缓存行的副本无效。</p>
+<p>随着时间的推移，已经开发出了许多缓存一致性协议。最重要的一个是MESI，我们将在第3.3.4节中介绍。所有这些的结果可以用几个简单的规则概括：</p>
+<ul>
+<li>脏缓存行不存在于任何其他处理器的缓存中。</li>
+<li>相同的缓存行的干净副本可以存在于任意多的缓存中。</li>
+</ul>
+<p>如果这些规则能够得到维护，即使在多处理器系统中，处理器也可以有效地使用它们的缓存。所有处理器需要做的就是监视彼此的写入访问，并将其地址与它们本地缓存中的地址进行比较。在下一节中，我们将更详细地讨论实现和成本。</p>
+<p>最后，我们至少应该给出与缓存命中和未命中相关联的成本的印象。这些是英特尔为Pentium M列出的数字：</p>
+<ul>
+<li>寄存器：&lt;&#x3D; 1个周期</li>
+<li>L1d：大约3个周期</li>
+<li>L2：大约14个周期</li>
+<li>主存储器：大约240个周期</li>
+</ul>
+<p>这些是在CPU周期内测量的实际访问时间。值得注意的是，对于片上L2缓存，访问时间的很大一部分（可能甚至是大部分）是由线延迟引起的。这是一种物理限制，随着缓存大小的增加，这种情况只会变得更糟。只有工艺缩小（例如，从Merom的60nm到Penryn的45nm在英特尔的产品线中）才能改善这些数字。</p>
+<p>表中的数字看起来很高，但幸运的是，并不是每次缓存加载和未命中都需要支付全部成本。成本的一部分可以被隐藏。今天的处理器都使用不同长度的内部流水线，指令在其中被解码并准备执行。如果内存加载操作可以足够早地在流水线中开始，它可能与其他操作并行发生，并且加载的全部成本可能被隐藏。这通常对L1d是可能的；对于一些具有长流水线的处理器，对L2也是如此。</p>
+<p>对于写入操作，CPU不必等到值安全地存储在内存中。只要随后指令的执行看起来与值存储在内存中的效果相同，就没有什么可以阻止CPU走捷径。它可以提前开始执行下一个指令。通过使用可以保存不再在常规寄存器中可用的值的影子寄存器，甚至可以更改将要存储在不完整写入操作中的值。</p>
+<h1 id="原文"><a href="#原文" class="headerlink" title="原文"></a>原文</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/252125/">原文</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%86%85%E5%AD%98/" class="category-chain-item">内存</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>每个程序员都应该了解的内存知识-Part2</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/04/28/每个程序员都应该了解的内存知识-Part2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/28/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part3/" title="每个程序员都应该了解的内存知识-Part3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">每个程序员都应该了解的内存知识-Part3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/28/%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part1/" title="每个程序员都应该了解的内存知识-Part1">
+                        <span class="hidden-mobile">每个程序员都应该了解的内存知识-Part1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结学习vim的笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim学习笔记">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/29/vim%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="总结学习vim的笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/930dfaf3b9e7c47cf06d007f47e28e3bf9098442.jpg">
+<meta property="article:published_time" content="2023-11-29T11:09:55.000Z">
+<meta property="article:modified_time" content="2024-05-06T15:08:53.803Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/930dfaf3b9e7c47cf06d007f47e28e3bf9098442.jpg">
+  
+  
+  
+  <title>vim学习笔记 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/930dfaf3b9e7c47cf06d007f47e28e3bf9098442.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="vim学习笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-29 19:09" pubdate>
+          2023年11月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          16k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          135 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">vim学习笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结学习vim的笔记</p>
+<span id="more"></span>
+
+<h1 id="vim中的基本概念"><a href="#vim中的基本概念" class="headerlink" title="vim中的基本概念"></a>vim中的基本概念</h1><h2 id="word和WORD"><a href="#word和WORD" class="headerlink" title="word和WORD"></a>word和WORD</h2><p>Vim对<strong>单词</strong>有两种不同的定义，并且分别用“单词”（word）和“字串”（WORD）对其进行区分。我们之前遇到过的每个面向单词的动作命令，都有一个面向字串的命令与其对应，这当中包括 W、B、E和 gE。</p>
+<p>实际上当使用小写的时候代表的就是<code>word</code> 使用大写字母的使用就是<code>WORD</code>。如：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402070158382.png" srcset="/img/loading.gif" lazyload></p>
+<p>一个单词由字母、数字、下划线，或其他非空白字符的序列组成，单词间以空白字符分隔（参见<code>:h word</code>）。而字串的定义则更简单，它由非空白字符序列组成，字串间以空白字符分隔（参见<code>:h WORD</code>）。</p>
+<p>如果你想更快地移动的话，可以用面向字串的动作命令；而如果你想以更细的粒度移动的话，则可以用面向单词的动作命令。</p>
+<h1 id="多文件编辑"><a href="#多文件编辑" class="headerlink" title="多文件编辑"></a>多文件编辑</h1><p><strong>标签页(tab)、窗口(window)、缓冲区(buffer)是Vim多文件编辑的三种方式，它们可以单独使用，也可以同时使用。</strong> 它们的关系是这样的：</p>
+<blockquote>
+<p>A buffer is the in-memory text of a file. A window is a viewport on a buffer. A tab page is a collection of windows. –vimdoc</p>
+</blockquote>
+<blockquote>
+<p>缓冲区是文件的内存文本。窗口是缓冲区上的视口。标签页是窗口的集合。</p>
+</blockquote>
+<p>三者具体的关系如下：</p>
+<ul>
+<li><p>buffer: 当用 vim 打开一个文件编辑时，编辑的对象并不是源文件，vim 会先将文件加载到内存中，用户编辑的数据存储再 buffer 中，使用 :w 可以将 buffer 中的数据写入，使用 :q! 表示退出并丢弃 buffer 中的内容。</p>
+</li>
+<li><p>window: window 就是 buffer 的视口，用于显示 buffer 的内容，一个 buffer 可以显示在多个 window 中，也可以多个 window 显示不同的 buffer</p>
+</li>
+<li><p>tab: tab 页是一组 window</p>
+</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404211538780.png" srcset="/img/loading.gif" lazyload></p>
+<p>使用-O参数可以让Vim以分屏的方式打开多个文件：</p>
+<pre><code class="hljs">vim -O main.cpp my-oj-toolkit.h
+</code></pre>
+<p>使用小写的-o可以水平分屏。</p>
+<ul>
+<li><p>vim a b c 可以打开 a b c 三个文件</p>
+</li>
+<li><p>使用 :n 可以跳转到一个文件</p>
+</li>
+<li><p>:e# 回到刚才编辑的文件</p>
+</li>
+</ul>
+<h1 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h1><p>引用Vim官方解释，缓冲区是一个文件的内容占用的那部分Vim内存：</p>
+<blockquote>
+<p>A buffer is an area of Vim’s memory used to hold text read from a file. In addition, an empty buffer with no associated file can be created to allow the entry of text. –vim.wikia</p>
+</blockquote>
+<ul>
+<li>每个窗口显示一个在一个缓冲区上查看(通常是文件)。</li>
+<li>一个缓冲区可以出现在多个窗口中(窗口2和窗口3显示相同的缓冲区)。</li>
+<li>有些缓冲区可能被隐藏(不显示)。</li>
+</ul>
+<h2 id="buffer的三种状态"><a href="#buffer的三种状态" class="headerlink" title="buffer的三种状态"></a>buffer的三种状态</h2><ul>
+<li><p>active：显示在窗口中的 buffer</p>
+</li>
+<li><p>hidden: 没有显示在窗口中的 buffer</p>
+</li>
+<li><p>inactive：没有显示，并且没有任何东西，没有与某个文件进行绑定</p>
+</li>
+</ul>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs txt">:ls 或者是:buffer可以查看所有的buffer，与之一样的命令还有 :buffers<br><br>ls显示的符号的意义：<br><br>% 符号指明哪个缓冲区在当前窗口中可见，而 # 符号则代表轮换文件。按 &lt;C-^&gt;可以在当前文件和轮换文件间快速切换，在本例中，按一次会切换到 a.txt，再按一次，就又回到 b.txt了。注意：想要使用&lt;C-^&gt;来转换缓冲区，之前必须先使用命令 :bnext<br><br>缓冲区 a.txt 前有一个 + 号，表示这个缓冲区被修改过了。如果现在保存文件的话，缓冲区的内容就会被写入磁盘里，而 + 号也会消失了。<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="创建缓冲区"><a href="#创建缓冲区" class="headerlink" title="创建缓冲区"></a>创建缓冲区</h2><p>每次打开一个文件时，vim都会自动打开一个缓冲区。使用命令<code>:ls</code> <code>:buffers</code>可以进行查看。</p>
+<p>不带任何参数打开多个文件便可以把它们都放入缓冲区（Buffer）：</p>
+<pre><code class="hljs">vim a.txt b.txt
+</code></pre>
+<blockquote>
+<p>当你使用:q关闭文件时？是否看到过1 more file to edit的警告？那就是缓冲区中的文件。</p>
+</blockquote>
+<h2 id="缓冲区之间的移动"><a href="#缓冲区之间的移动" class="headerlink" title="缓冲区之间的移动"></a>缓冲区之间的移动</h2><p>我们可以用4条命令来遍历缓冲区列表。<code>:bprev</code> 和 <code>:bnext</code> 在列表中反向或正向移动，每次移动一项；而 <code>:bfirst</code> 和 <code>:blast</code> 则分别跳到列表的开头和结尾。</p>
+<h2 id="缓冲区的删除"><a href="#缓冲区的删除" class="headerlink" title="缓冲区的删除"></a>缓冲区的删除</h2><p><code>:bdelete N1 N2 N3</code> <code>:N,M bdelete</code>注意：删除一个缓冲区并不会影响缓冲区所关联的文件，而只是简单地把该文件在内存中的映像删掉。如果我们想删除编号5～10（包含5和10）的缓冲区，可以执行 :5,10bd；然而，如果想要保留编号为8的缓冲区的话，那么就只能用 :bd 5 6 7 9 10 了。</p>
+<h2 id="缓冲区相关命令"><a href="#缓冲区相关命令" class="headerlink" title="缓冲区相关命令"></a>缓冲区相关命令</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282045741.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="标签页"><a href="#标签页" class="headerlink" title="标签页"></a>标签页</h1><p><strong>标签页是容纳一些窗口的容器</strong></p>
+<p>用 <code>Vim</code> 的标签页可以把工作分隔到不同的工作区。<code>Vim</code> 中的标签页更像是 <code>Linux</code> 中的虚拟桌面，而不是像其他文本编辑器中的标签页。</p>
+<p>标签页是最常见的多文件编辑方式吧，熟悉IDE的小伙伴一定能很快上手！ 使用<code>-p</code>参数来用多个标签页启动<code>Vim</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim -p main.cpp my-oj-toolkit.h /private/etc/hosts<br></code></pre></td></tr></table></figure>
+
+<h2 id="如何使用标签页"><a href="#如何使用标签页" class="headerlink" title="如何使用标签页"></a>如何使用标签页</h2><pre><code class="hljs">:lcd &#123;path&#125;               //设置当前窗口的本地工作目录
+:windo lcd &#123;path&#125;      //设置所有窗口的本地工作目录
+</code></pre>
+<h2 id="打开及关闭标签页"><a href="#打开及关闭标签页" class="headerlink" title="打开及关闭标签页"></a>打开及关闭标签页</h2><pre><code class="hljs">:close        //关闭此窗口以及包含此窗口的标签页
+:tabclose    //关闭当前标签页，无论其中有多少个窗口 :tabc
+:tabonly    //关闭当前标签页外的所有其他标签页 :tabo
+:tabedit &#123;filename&#125;    //在新标签页打开文件  :tabe
+:tabe[dit] &#123;file&#125;   edit specified file in a new tab
+:tabf[ind] &#123;file&#125;   open a new tab with filename given, searching the &#39;path&#39; to find it
+:tabc[lose]         close current tab
+:tabc[lose] &#123;i&#125;     close i-th tab
+:tabo[nly]          close all other tabs (show only the current tab)
+
+Ctrl+w+T                //把当前窗口移到一个新标签页
+</code></pre>
+<blockquote>
+<p>中括号中的部分可以省略，在Vim中:h tabedit可以查看命令帮助。</p>
+</blockquote>
+<h2 id="在标签页中切换"><a href="#在标签页中切换" class="headerlink" title="在标签页中切换"></a>在标签页中切换</h2><pre><code class="hljs">:tabn         go to next tab
+:tabp         go to previous tab
+:tabfirst     go to first tab
+:tablast      go to last tab
+
+
+123gt                  //跳到标签页123
+123gT                 //跳转方向与上一条相反
+:tabnext 2，同123gt   //切换到编号为2的标签页
+:tabnext，同gt           //切换到下一个标签页
+:tabprevious，同gT    //切换到上一个标签页
+</code></pre>
+<p>在正常模式（normal）下，还可以使用快捷键：</p>
+<pre><code class="hljs">gt            go to next tab
+gT            go to previous tab
+&#123;i&#125;gt         go to tab in position i 
+</code></pre>
+<h2 id="重排标签页"><a href="#重排标签页" class="headerlink" title="重排标签页"></a>重排标签页</h2><pre><code class="hljs">:tabmove N
+当N为0时，当前标签页会被移到开头
+当N为空时，当前标签页会被移到结尾
+当N为123时，当前标签页会被移到123标签页
+</code></pre>
+<h1 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h1><h2 id="常用的窗口操作"><a href="#常用的窗口操作" class="headerlink" title="常用的窗口操作"></a>常用的窗口操作</h2><ul>
+<li><p>CTRL‑W ] 分割窗口并跳转到光标下的标签</p>
+</li>
+<li><p>CTRL‑W f 分割窗口并编辑光标下的<strong>文件名</strong> (file)</p>
+</li>
+<li><p>CTRL‑W ^ 分割窗口并编辑轮换文件</p>
+</li>
+<li><p>CTRL‑W n 或 :new 创建新空白窗口 (new)</p>
+</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404271719318.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>n</code> 表示上一个，<code>N</code>表示下一个</p>
+<h2 id="窗口的创建"><a href="#窗口的创建" class="headerlink" title="窗口的创建"></a>窗口的创建</h2><p><code>：split </code>   新建一个窗口，将当前窗口分割成两半，他们显示的是相同缓冲区的内容（同一个文件）。这样就可以在两个窗口中浏览相同的文件了。可以简写为 <code>sp + 窗口名</code></p>
+<p><code>：vsplit </code>  创建全新的垂直分割的窗口，同样是显示和当前窗口同一个文件内容。可以简写为 <code>vsp + 窗口名</code></p>
+<p><strong>注意，如果直接在命令行中输入 <code>:split</code> <code>:vsplit</code>，所打开的窗口中的内容和原来的窗口中的内容是一样的。</strong></p>
+<h2 id="窗口的关闭"><a href="#窗口的关闭" class="headerlink" title="窗口的关闭"></a>窗口的关闭</h2><p>有4种关闭窗口的方式，分别是：离开（quit）、关闭（close）、隐藏（hide）、关闭其他窗口</p>
+<p>^代表Ctrl键<br>^Wq，离开当前窗口<br>^Wc，关闭当前的窗口<br>^Wo，关闭当前窗口以外的所有窗口</p>
+<h2 id="窗口切换"><a href="#窗口切换" class="headerlink" title="窗口切换"></a>窗口切换</h2><p>ctrl w + hjkl 光标在各个窗口之间切换</p>
+<p><strong>Ctrl + w + w：这个命令会在所有窗口中循环移动</strong></p>
+<p>Ctrl + w + t：移动到最左上角的窗口</p>
+<p>Ctrl + w + b：移动到最右下角的窗口</p>
+<p>Ctrl + w + p：移动到前一个访问的窗口</p>
+<h3 id="窗口移动"><a href="#窗口移动" class="headerlink" title="窗口移动"></a>窗口移动</h3><p>Ctrl + w + r：向右或向下方交换窗口，而Ctrl + w + R则和它方向相反。</p>
+<p>光标会随着窗口而移动</p>
+<p>Ctrl + w + x：交换同列或同行的窗口的位置。vim默认交换当前窗口的与它下一个窗口的位置，如果下方没有窗口，则试着与上一个窗口交换位置。亦可在此命令前加上数量，与制定的窗口交换位置。</p>
+<h3 id="窗口移动并且改变布局"><a href="#窗口移动并且改变布局" class="headerlink" title="窗口移动并且改变布局"></a>窗口移动并且改变布局</h3><p>注：下面的第三个字母都是大写，按玩Ctrl + w之后，按shif + 相应的字母。后面用^代替Ctrl<br>Ctrl + w + K ：移动当前窗口至屏幕顶端，并占用全部宽度<br>^WJ： 移动窗口至屏幕底端，并占用全部宽度<br>^WH：移动窗口至屏幕左端，并占用全部高度<br>^WL：移动窗口至屏幕右端，并占用全部高度</p>
+<p>^WT ：移动窗口至屏新的现有分页</p>
+<h3 id="行和列的调整"><a href="#行和列的调整" class="headerlink" title="行和列的调整"></a>行和列的调整</h3><pre><code class="hljs">:res(ize)+num 把当前窗口高度增加num行
+
+:res(ize)-num 把当前窗口高度减少num行
+</code></pre>
+<p>横向调整</p>
+<pre><code class="hljs">:vertical res(ize) num 指定当前窗口为num列
+
+:vertical res(ize)+num 把当前窗口增加num列
+
+:vertical res(ize)-num 把当前窗口减少num列
+
+
+Ctrl+w +        增加窗口高度
+Ctrl+w -        减小窗口高度
+Ctrl+w =        统一窗口高度
+</code></pre>
+<h1 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h1><h2 id="关于-命令"><a href="#关于-命令" class="headerlink" title="关于.命令"></a>关于<code>.</code>命令</h2><p>这个命令的作用是重复你上一次的操作</p>
+<h2 id="G和"><a href="#G和" class="headerlink" title="&gt;G和&lt;G"></a><code>&gt;G</code>和<code>&lt;G</code></h2><p>这两个命令前者是在行头添加一个<code>tab</code>，后者是删除一个<code>tab</code>。可以和命令<code>.</code>一起使用。</p>
+<h1 id="常用的操作"><a href="#常用的操作" class="headerlink" title="常用的操作"></a>常用的操作</h1><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs txt">:E 打开一个文件夹，使用hjkl选择文件回车进入<br><br>:ter 打开一个终端窗口 使用exit退出<br><br>ctrl w + hjkl 光标在各个窗口之间切换<br><br>:shell 可以在不关闭vim的情况下切换到shell命令行<br><br>:exit 从shell回到vim<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="翻页命令"><a href="#翻页命令" class="headerlink" title="翻页命令"></a>翻页命令</h1><p>ctrl+f	向上翻页<br>ctrl+b	向下翻页<br>ctrl+u  向下翻半页<br>ctrl+d  向上翻半页<br>ctrl+y  向下翻一行<br>ctrl+e  向上翻一行<br>L       屏幕底行<br>H       屏幕顶行<br>zz      移动屏幕至光标位屏幕中央</p>
+<h1 id="搜索命令"><a href="#搜索命令" class="headerlink" title="搜索命令"></a>搜索命令</h1><p><code>/</code>和<code>?</code>是vim中的两种搜索命令，但是它们两个的搜索方向相反，<code>/</code>是向后搜索。</p>
+<p>设置&#x2F;取消大小写：</p>
+<pre><code class="hljs">:set noignorecase # 不区分大小写
+:set ignorecase # 区分大小写 
+:set incsearch 可以在敲键的同时搜索，按下回车把移动光标移动到匹配的词； 按下 Esc 取消搜索。
+:set wrapscan 用来设置到文件尾部后是否重新从文件头开始搜索。
+</code></pre>
+<h2 id="搜索历史"><a href="#搜索历史" class="headerlink" title="搜索历史"></a>搜索历史</h2><p>假设你执行了三个查找命令: </p>
+<pre><code class="hljs">    /one
+    /two
+    /three
+</code></pre>
+<p>现在，让我们输入 “&#x2F;“ 启动一次查找，但先不按下回车键。现在按 <Up> (上箭头)，Vim把 “&#x2F;three” 放到你的命令行上。回车就会从当前位置查找 “three”。如果你不回车，继续按 <Up>，Vim 转而显示 “&#x2F;two”，而下一次 <Up> 变成 “&#x2F;one”。你还可以用 <Down> 命令在历史记录中反向查找。</p>
+<p>如果你知道前面用过的一个模式以什么开头，而且你想再使用这个模式的话，可以在输入<Up> 前输入这个开头。继续前面的例子，你可以输入 “&#x2F;o<Up>“，Vim 就会在命令行上显示 “&#x2F;one”。</p>
+<p>冒号开头的命令也有历史记录。这允许你取回前一个命令并再次执行。这两种历史记录是相互独立的。</p>
+<h2 id="单词搜索"><a href="#单词搜索" class="headerlink" title="单词搜索"></a>单词搜索</h2><p>在vim中进行单词搜索有两种方法：</p>
+<p>假设你在文本中看到一个单词 “TheLongFunctionName” 而你想找到下一个相同的单词。<br>你可以输入 “&#x2F;TheLongFunctionName”，但这要输入很多东西。而且如果输错了，Vim 是不可能找到你要找的单词的。</p>
+<p>有一个简单的方法: 把光标移到那个单词下面使用 <code>*</code> 命令。Vim 会取得光标上的单词并把它作为被查找的字符串。<code>#</code> 命令在反向完成相同的功能。你可以在命令前加一个计数: <code>3*</code> 查找光标下单词第三次出现的地方。</p>
+<p>第二种方法就是直接进行搜索：<br>如果你输入 “&#x2F;the”，你也可能找到 “there”。要找到以 “the” 结尾的单词，可以用: </p>
+<pre><code class="hljs">    /the\&gt;
+</code></pre>
+<p>“&gt;“ 是一个特殊的记号，表示只匹配单词末尾。类似地，”&lt;“ 只匹配单词的开头。<br>这样，要匹配一个完整的单词 “the”，只需: </p>
+<pre><code class="hljs">    /\&lt;the\&gt;
+</code></pre>
+<p>这不会匹配 “there” 或者 “soothe”。注意 <code>*</code> 和 <code>#</code> 命令也使用了 “词首” 和”词尾” 标记来匹配整个单词 (要部分匹配，使用 <code>g*</code> 和 <code>g#</code>)</p>
+<p><strong>大小写搜索</strong>: 在查找模式中加入 <code>\c</code> 表示大小写不敏感查找，<code>\C</code> 表示大小写敏感查找。</p>
+<p><code>/foo\c</code></p>
+<h2 id="搜索高亮"><a href="#搜索高亮" class="headerlink" title="搜索高亮"></a>搜索高亮</h2><p><code>gd</code>可以直接完成任务，使用<code>:noh</code>取消高亮。</p>
+<h1 id="查找和替换"><a href="#查找和替换" class="headerlink" title="查找和替换"></a>查找和替换</h1><p>这个功能其实很难使用, 注意是因为命令太多了. </p>
+<pre><code class="hljs">:s（substitute）命令用来查找和替换字符串。
+
+:&#123;作用范围&#125;s/&#123;目标&#125;/&#123;替换&#125;/&#123;替换标志&#125;
+</code></pre>
+<p>例如 <code>:%s/foo/bar/g</code> 会在全局范围<code>(%)</code>查找 <code>foo</code> 并替换为 <code>bar</code>，所有出现都会被替换<code>（g）</code>。</p>
+<h2 id="作用范围"><a href="#作用范围" class="headerlink" title="作用范围"></a>作用范围</h2><p>作用范围分为当前行、全文、选区等等。</p>
+<p>当前行：</p>
+<pre><code class="hljs">:s/foo/bar/g
+</code></pre>
+<p>全文：</p>
+<pre><code class="hljs">:%s/foo/bar/g
+</code></pre>
+<p>选区，在 <code>Visual</code> 模式下选择区域后输入 :<code>，Vim</code> 即可自动补全为 :<code>&#39;&lt;,&#39;&gt;</code>。</p>
+<pre><code class="hljs">:&#39;&lt;,&#39;&gt;s/foo/bar/g
+</code></pre>
+<p><code>2-11</code> 行：</p>
+<pre><code class="hljs">:5,12s/foo/bar/g
+</code></pre>
+<p>当前行 <code>.</code> 与接下来两行 <code>+2</code>：</p>
+<pre><code class="hljs">:.,+2s/foo/bar/g
+</code></pre>
+<h2 id="替换标识符"><a href="#替换标识符" class="headerlink" title="替换标识符"></a>替换标识符</h2><h1 id="光标的移动"><a href="#光标的移动" class="headerlink" title="光标的移动"></a>光标的移动</h1><p>涉及的主要按键是：<br><code>$</code>：行尾<br><code>^</code>：软行首（就是不包括空格）<br><code>0</code>：硬行首（直接到真正的行首）<br><code>w/W</code>：下一个单词首<br><code>e/E</code>：下一个单词尾<br><code>ge</code>：g命令是一个附加命令，这个命令含义和<code>e</code>相反，移动到上一个单词尾<br><code>b/B</code>：上一个单词首<br><code>h</code>：左移一位<br><code>j</code>：下移一位<br><code>k</code>：上移一位<br><code>l</code>：左移一位<br><code>&#123;&#125;</code>：段首尾<br><code>H</code>：屏幕顶行<br><code>L</code>：屏幕底行<br><code>M</code>：屏幕中央<br><code>:10</code>： 移动光标到文件第 <code>10</code> 行。可以 <code>:set number</code> 来让 <code>vim</code> 显示行号。<br><code>zt</code>： 光标所在字符不动，将当前行移动到屏幕顶部，通常用来查看完整的下文，比如函数、类的定义。<br><code>zz</code>： 光标所在字符不动，将当前行移到屏幕中间。<br><code>zb</code>： 光标所在字符不动，将当前行移到屏幕底部。</p>
+<p>软硬行首的区别</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs txt">          ^<br>     &lt;-----------x<br>.....This is a line with example text <br>&lt;----------------x   x--------------&gt;<br><br>        0                  $<br></code></pre></td></tr></table></figure>
+<p><code>.....</code>表示空格</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404251954965.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="行内搜索"><a href="#行内搜索" class="headerlink" title="行内搜索"></a>行内搜索</h2><p>在行内使用搜索达到快速移动的目的。<br>行内搜索的按键是<code>f/F</code>其中<code>f</code>是向右搜索。<code>t/T</code>命令和<code>f/F</code>命令非常相似，其含义是<code>To</code>。它们唯一的不同是，<code>t/T</code>只会到达目标的前一个字符上。而<code>f/F</code>是直接到达该字符。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs txt">To err is human.  To really foul up you need a computer. <br>                 ---------------------&gt;<br>                          3fl<br></code></pre></td></tr></table></figure>
+
+<h1 id="vim键盘图"><a href="#vim键盘图" class="headerlink" title="vim键盘图"></a>vim键盘图</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312090843302.png" srcset="/img/loading.gif" lazyload></p>
+<p>由图可知：</p>
+<ul>
+<li><code>g</code>和<code>z</code>是附加命令，也就是它们都需要和其他命令一起使用。</li>
+<li><code>^</code>的含义是移动到软行首，而<code>0</code>是移动到硬行首。区别是<code>^</code>只是移动到这行的第一个字符处，而<code>0</code>是移动到真正的行首。与<code>0</code>相对应的是<code>$</code>，而不是<code>^</code>。</li>
+<li><code>o</code>和<code>O</code>的作用分别是：向下起一行和向上起一行</li>
+</ul>
+<p><code>dd</code>和<code>cc</code>的关系是, 前者不会进入插入模式，但是后者会。两者都是删除的作用。</p>
+<h2 id="操作符命令"><a href="#操作符命令" class="headerlink" title="操作符命令"></a>操作符命令</h2><p>上图中的橙色就是操作符命令。</p>
+<p><strong>操作符 + 动作命令 &#x3D; 操作</strong></p>
+<p>d{motion} 命令可以对一个字符（dl）、一个完整单词（daw）或一整个段落（dap）进行操作，它作用的范围由动作命令决定。c{motion}、y{motion}以及其他一些命令也类似，它们被统称为操作符（operator）。</p>
+<p><strong>需要注意的是{motion}的含义就是文本对象，只有命令后面有这个{motion}则这个命令后面可以接上文本对象</strong></p>
+<p>下图就是操作符表，包含了vim中的所有操作符。当然，我们可以定义自己的操作符，使用<code>h:map-operator</code>来查看相关信息。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402070121251.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>Vim的语法只有一条额外规则，即当一个操作符命令被连续调用两次时，它会作用于当前行。所以 dd 删除当前行，而 &gt;&gt; 缩进当前行。gU 命令是一种特殊情况，我们既可以用 gUgU ，也可以用简化版的 gUU 来使它作用于当前行。</strong></p>
+<h3 id="操作符待决模式"><a href="#操作符待决模式" class="headerlink" title="操作符待决模式"></a>操作符待决模式</h3><p>结识操作符待决模式普通、插入及可视模式很容易辨识，但是Vim还有另外一些很容易被忽视的模式，操作符待决模式（Operator-Pending mode）就是一个例子。</p>
+<p>每天我们无数次地使用它，但通常它只持续不到一秒时间。举个例子，在我们执行命令 dw 时，就会激活该模式。这一模式只在按 d 及 w 键之间的短暂时间间隔内存在，一眨眼工夫就不见了。</p>
+<p>如果我们把Vim想象成有限状态机，那么操作符待决模式就是一个只接受动作命令的状态。这个状态在我们调用操作符时被激活，然后什么也不做，直到我们提供了一个动作命令，完成整个操作。当操作符待决模式被激活时，我们可以像平常一样按 <Esc> 中止该操作，返回到普通模式。</p>
+<p>很多命令都由两个或更多的按键来调用（查阅<code>:h g</code>、<code>:h z</code>、<code>:h ctrl-w</code> ，或者<code>:h [</code>，可以看到一些例子），但在多数情况下，头一个按键只是第二个按键的前缀。这些命令不会激活操作符待决模式，相反，可以把它们当成命名空间（namespace），用来扩充可用命令的数目。只有操作符才会激活操作符待决模式。</p>
+<p><strong>你也许想知道，为什么要有一个完整的模式，专门用于操作符和动作命令之间的短暂瞬间，而命名空间命令则仅仅是普通模式的一个扩充？</strong>好问题！这是因为我们能够创建自定义映射项来激活或终结操作符待决模式。<strong>换句话说，它允许我们创建自定义的操作符及动作命令，从而让我们可以扩充Vim的词汇。</strong></p>
+<h2 id="在vim中删除的键有："><a href="#在vim中删除的键有：" class="headerlink" title="在vim中删除的键有："></a>在vim中删除的键有：</h2><p>其实就是sdcx四个键的大小写, d和c一组都是需要组合的键(但是这个两个将的大写是可以直接使用的), s和x一组是不需要组合的键</p>
+<ol>
+<li><code>x</code>相当于删除键.<code>X</code>相当于<code>退格键</code></li>
+<li><code>cc</code>单个<code>c</code>键按了没有用必须要组合其他键. 使用这个可以删除一行并且不进入插入模式. </li>
+<li><code>dd</code>这个作用和上面是一样的, 但是<code>dd</code>不会进入插入模式</li>
+<li><code>s</code>删除光标处的字符, <code>S</code>是删除当前行然后进入插入模式</li>
+<li>需要注意的是<code>c</code>和<code>d</code>单按都是没有用的. 必须组合, 模式是c\d+动作键(就是图中绿色的)<ol>
+<li><code>cc</code></li>
+<li><code>dd</code></li>
+<li><code>cw</code> <code>c$</code></li>
+<li><code>dw</code> <code>d^</code></li>
+<li><code>c2h</code> 删除左侧的两个字符</li>
+<li><code>d2l</code> 删除右侧的两个字符</li>
+<li><code>df;</code> 向右删除到一个<code>;</code></li>
+</ol>
+</li>
+<li><code>D</code>这个就是从当前光标删除到行尾, 不进入插入模式</li>
+<li><code>C</code>和上面一样, 但是进入插入模式</li>
+</ol>
+<h2 id="移动键"><a href="#移动键" class="headerlink" title="移动键"></a>移动键</h2><p>+或Enter: 把光标移至下一行第一个非空白字符。   <br><br><br>-: 把光标移至上一行第一个非空白字符。   <br><br><br>w: 前移一个单词，光标停在下一个单词开头；   <br><br><br>W: 移动下一个单词开头，但<strong>忽略一些标点</strong>；   <br><br><br>e: 前移一个单词，光标停在下一个单词末尾；   <br><br><br>E: 移动到下一个单词末尾，如果词尾有标点，则<strong>移动到标点</strong>；   <br><br><br>b: 后移一个单词，光标停在上一个单词开头；   <br><br><br>B: 移动到上一个单词开头，<strong>忽略一些标点</strong>；   <br><br></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402180141585.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="vim中的跳转"><a href="#vim中的跳转" class="headerlink" title="vim中的跳转"></a>vim中的跳转</h1><p>一般，每次你执行一个会将光标移动到本行之外的命令，该移动即被称为一个 “跳转” 。这包括查找命令 “&#x2F;“ 和 “n” (无论跳转到多远的地方)。但不包括 “fx” 和 “tx” 这些行内查找命令或者 “w” 和 “e” 等词移动命令。另外 “j” 和 “k” 不会被当做是一次 “跳转”，即使你在前面加上计数前缀使之移动<br>到很远的地方也不例外。</p>
+<p>由于 <code>jump list</code> 保留了光标的移动记录，我们可以通过 <code>:jumps</code> 查看 <code>jump list</code>，vim 会显示近 <code>100</code> 条记录；我们也可以可以在 <code>jump list</code> 中选中记录进行对应位置的跳转。</p>
+<p>但是使用 <code>:jumps</code> 查看 <code>jump list</code> 来进行跳转的操作比较繁琐，而且很多时候我们并不关心之前这么多的跳转，我们只在乎跳转的顺序，因为只有顺着 <code>jump list</code> 的顺序，我们总会跳到想去的位置，这时我们可以使用以下命令：</p>
+<pre><code class="hljs">    ctrl + i：跳转到 jump list 的后一个记录    
+    ctrl + o：跳转到 jump list 的前一个记录
+</code></pre>
+<p><strong>需要注意的是，jump list的存储对象是跳转，诸如<code>hjkl</code>这些移动命令并不是跳转。</strong></p>
+<h2 id="类型跳转"><a href="#类型跳转" class="headerlink" title="类型跳转"></a>类型跳转</h2><p>使用<code>ctags filename</code>生成一个<code>tag</code>文件，然后就可以在目标文件中进行类型的跳转了使用<code>ctrl ]</code>使用<code>ctrl t</code>跳回来。</p>
+<h2 id="文件跳转"><a href="#文件跳转" class="headerlink" title="文件跳转"></a>文件跳转</h2><p>使用<code>gf</code>跳转到文件，使用<code>ctrl o</code>回来。</p>
+<h2 id="使用标记"><a href="#使用标记" class="headerlink" title="使用标记"></a>使用标记</h2><p><code>m&#123;a-zA-Z&#125;</code>命令会用选定的字母标记当前光标所在位置。小写位置标记只在每个缓冲区里局部可见，而大写位置标记则全局可见。</p>
+<p>标号是全局的，只要使用vim创建的标号，不管在哪个文件使用命令<code>marks</code>都可以看到，并且可以直接使用<code>&#39;</code>来进行跳转。</p>
+<p><code>m + [小写字母]</code>：只可在<strong>单个文件内</strong>跳转的标记；后面的为标记的标识符，用于跳转的指向；可以理解为当前标记的名字；下同<br><code>m + [大写字母]</code>：可在<strong>多个文件之间</strong>跳转的标记</p>
+<p><code>mm</code> 和 <code>m</code> 命令是一对便于使用的命令，它们分别设置位置标记 m，以及跳转到该标记。</p>
+<p><code>ma</code>使用<code>a</code>来表示这一行，跳转后可以使用<code>&#39;a</code>(注意是单引号)来跳转到这行，标号可以使用任意符号。</p>
+<p>使用<code>:makes</code>查看所有的标号。注意这个</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402180005734.png" srcset="/img/loading.gif" lazyload></p>
+<p>删除标号：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">:delmarks name<br><br># 删除所有标号<br>:delmarks!<br></code></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="多文件操作"><a href="#多文件操作" class="headerlink" title="多文件操作"></a>多文件操作</h1><h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><p>修改了一个文件之后可以直接使用<code>:edit filename</code>修改下一个文件，但是这种方法会退出原本的文件。如果没有报错的话会报错，<code>:edit! filename</code>强制退出。</p>
+<h2 id="文件列表"><a href="#文件列表" class="headerlink" title="文件列表"></a>文件列表</h2><p>使用命令<code>args</code>可以查看vim的参数，实际就是<code>vim filename1 filename2</code>。<br>可以使用这个命令打开多个文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:args file1 file2 file3<br></code></pre></td></tr></table></figure>
+
+<h2 id="文件杂项操作"><a href="#文件杂项操作" class="headerlink" title="文件杂项操作"></a>文件杂项操作</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim -R filename <span class="hljs-comment"># 以只读打开文件，但是仍然可以使用:w!强制修改</span><br>vim -M filename <span class="hljs-comment"># 以只读模式打开文件，无法强制修改</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="文件之间的移动"><a href="#文件之间的移动" class="headerlink" title="文件之间的移动"></a>文件之间的移动</h2><pre><code class="hljs">&lt;backspace&gt; 跳转到交替文件（上一个文件）。
+gt 跳转到下一个标签页。
+gT 跳转到上一个标签页。
+</code></pre>
+<h1 id="ctrl快捷键"><a href="#ctrl快捷键" class="headerlink" title="ctrl快捷键"></a>ctrl快捷键</h1><h2 id="插入模式"><a href="#插入模式" class="headerlink" title="插入模式"></a>插入模式</h2><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">ctrl + k<br>键入二合字母<br>命令：dig可以查看所有的二合字母<br><br>ctrl + c/[<br>退出插入模式<br><br>ctrl + i<br>跳转到 jump list 的后一个记录<br><br>ctrl + o<br>跳转到 jump list 的前一个记录<br><br>**如 `j` `k` 一样， `i` `o` 的按键位置也是一样的规律：表示下一个在左，表示上一个的在右**<br><br>ctrl + r<br>后面跟寄存器名称，插入寄存器内容<br><br>ctrl + d<br>在当前行删除一个缩进，不论光标在哪<br><br>ctrl + t<br>在当前行插入一个缩进，不论光标在哪<br><br> <span class="hljs-number">0</span> + ctrl + d<br>删除当前行的所有缩进<br><br> ^ + ctrl + d<br>删除当前行的所有缩进，恢复下一行的缩进<br><br>ctrl + h<br>删除前一个字符<br><br>ctrl + w<br>删除光标前的单词<br><br>ctrl + u<br>删除至行尾<br><br>ctrl + m<br>回车<br><br>ctrl + e<br>插入光标下方的字符<br><br>ctrl + y<br>插入光标上方的字符<br></code></pre></td></tr></table></figure>
+
+<h2 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h2><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs excel">ctrl + a<br>把 <span class="hljs-built_in">N</span> 加到光标所在/之后的数值上，默认加一<br><br>ctrl + x<br>把 <span class="hljs-built_in">N</span> 减到光标所在/之后的数值上，默认减一<br><br>ctrl + b<br>光标向上滚动一屏<br><br>ctrl + f<br>光标向下滚动一屏<br><br>ctrl + c<br>终止当前的 (搜索) 命令<br><br>ctrl + d<br>光标向下滚动半屏<br><br>ctrl + u<br>光标向上滚动半屏<br><br>ctrl + e<br>文本上滚 <span class="hljs-built_in">N</span> 行<br><br>ctrl + y<br>文本下滚 <span class="hljs-built_in">N</span> 行<br><br>ctrl + g<br>显示当前文件名和位置<br><br>ctrl + o/<span class="hljs-built_in">t</span><br>跳转到跳转表里第 <span class="hljs-built_in">N</span> 个较旧的位置<br><br>ctrl + i<br>跳转到跳转表里第 <span class="hljs-built_in">N</span> 个较新的位置<br><br>ctrl + r<br>重做 &#x27;u&#x27; 撤销的改变<br></code></pre></td></tr></table></figure>
+
+<h1 id="文本对象"><a href="#文本对象" class="headerlink" title="文本对象"></a>文本对象</h1><p>vim中提供了文本对象，文本对象允许我们操作括号、被引用的文本、XML标签以及其他文本中的常见结构。</p>
+<p>Vim 的文本对象分为两类：<strong>一类是操作分隔符的文本对象，如 i)、i” 和 it；另一类用于操作文本块，如单词、句子和段落。</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402070114400.png" srcset="/img/loading.gif" lazyload></p>
+<p>Vim 的文本对象由两个字符组成，第一个字符永远是 i 或是 a。我们一般说，以 i 开头的文本对象会选择分隔符内部的文本，而以 a 开头的文本对象则会选择包括分隔符在内的整个文本。为了便于记忆，可以把 i 想成“inside”，而把 a 想成“around”或“all”。</p>
+<h2 id="分隔符文本对象"><a href="#分隔符文本对象" class="headerlink" title="分隔符文本对象"></a>分隔符文本对象</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402070114075.png" srcset="/img/loading.gif" lazyload></p>
+<p>用文本对象执行操作可视模式适用于介绍文本对象，因为可以很容易看到发生的变化。然而，在操作符待决模式中使用文本对象，才能真正展现出它们的强大能力。文本对象自身并不是动作命令，我们不能用它们在文档中移动。但是我们却可以在可视模式及操作符待决模式中使用文本对象。</p>
+<p><strong>记住：每当在命令语法里看到{motion} 时，你也可以在这个地方使用文本对象，常见的例子包括 d{motion}、c{motion}和 y{motion}（更多命令，请参见操作符命令表格）。</strong></p>
+<h2 id="范围文本对象"><a href="#范围文本对象" class="headerlink" title="范围文本对象"></a>范围文本对象</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402070144471.png" srcset="/img/loading.gif" lazyload></p>
+<p>范围文本对象主要是四种类型：</p>
+<ul>
+<li>word 单词</li>
+<li>WORD 字串</li>
+<li>句子</li>
+<li>段落</li>
+</ul>
+<p>看看和分隔符文本对象相比，范围文本对象中的<code>a</code>和<code>i</code>有什么不同。</p>
+<p>在分隔符文本对象中<code>i</code>代表的是不包括分隔符，而<code>a</code>则表示包括分隔符。</p>
+<p>在范围文本对象中，<code>i</code>表示的是不包括范围文本两边的空格，而<code>a</code>则表示包括。</p>
+<h2 id="两种文本对象的使用"><a href="#两种文本对象的使用" class="headerlink" title="两种文本对象的使用"></a>两种文本对象的使用</h2><p>实际上文本对象主要和操作符一起使用。</p>
+<p>实列：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402070142855.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上图可以知道，两种文本对象都需要跟在操作命令后面使用。</p>
+<h1 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h1><p>vim中有三种可视模式可以使用：<code>v</code> <code>V</code> <code>Ctrl V</code></p>
+<p>这个三种模式分别是单个字符选择模式、行选择模式、块&#x2F;列选择模式</p>
+<p>使用<code>gv</code>可以重复选择上一次选中的字符</p>
+<p><code> `&lt;</code>和<code> `&gt;</code> 前者是可以区域的开头，后者是结尾。<strong>这类表示范围的符号中，<code>&gt;</code>附近的符号都是在 <code>&lt;</code> 的右边</strong>如：</p>
+<p><code> `&lt;</code> <code> \&lt;</code> <code> `&gt;</code> <code> \&gt;</code></p>
+<p>在该模式下有些快捷键可以快速在选中的文本中<strong>再次选择文本</strong>，如：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282046378.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><ul>
+<li><p>像大多数移动命令一样，<code>$</code>命令接受计数前缀。但是 “移动到一行的行尾 n 次”没有什么意义，所以它会使光标移动到另一行。例如，<code>1$</code> 移动到当前行的行尾，而<code>2$</code>则移动到下一行的行尾，如此类推。<br><code>0</code> 命令不能加计数前缀，因为 <code>0</code> 本身就是个数字。而且，出人意料地是，<code>^</code>命令使用计数前缀也没有任何效果。</p>
+</li>
+<li><p>当我们按错了某个命令想要退出时，<code>esc</code>可以退出大部分命令</p>
+</li>
+<li><p>使用<code>:help e37</code>直接查看e37错误码的帮助信息</p>
+</li>
+<li><p><code>!</code>一般表示强制操作，大多数命令可以在后面加上它一表示强制操作，如果在命令的<strong>前面</strong>使用 <code>!</code> 则表示运行 <code>shell</code> 中的命令</p>
+</li>
+<li><p><code>&lt;&lt;</code>和<code>&gt;&gt;</code> 前者是删除本行前的tab，后者是在本行添加一个tab。如果本行没有tab可供删除或者是已经有了tab则无法使用<code>&lt;&lt;</code>和<code>&gt;&gt;</code>。<code>&lt;</code>和<code>&gt;</code>可以在各个模式下使用，在可视模式下使用时可以快速添加tab。</p>
+</li>
+<li><p><code>cc</code>在普通模式下按这个可以进入插入模式并且会直接跳到和上下行一致的开头处。</p>
+</li>
+<li><p>先按<code>num+o</code>一个数字+<code>o</code>，然后输入文本可以将这个文本复制<code>num</code>遍，同样的使用<code>num+O</code>可以从上面开始插入<code>num</code>个</p>
+</li>
+<li><p><code>r</code>：替换当前光标下的字符，按下 <code>r</code>，然后输入一个字符，用来替换当前字符</p>
+</li>
+<li><p><code>A</code>：和<code>a</code>一样进入插入模式，但是是从句尾开始插入。</p>
+</li>
+<li><p><code>/</code> 称之为正斜线</p>
+</li>
+</ul>
+<h1 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h1><ol>
+<li><code>vip</code>选中一个段落</li>
+<li>重复和后退<img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220341622.png" srcset="/img/loading.gif" lazyload></li>
+<li>在vim中有文本行和屏幕行的区别，实际上这是因为文本行太长导致无法在屏幕上完整的显示，而将一个文本行拆分开来。在很多编译器中都没有这两个概念的区分，它们直接操作屏幕行。<br><br>实际上将原来操作文本行的命令：<code>h j k l </code>和<code>$ ^ 0</code>等等，加上一个<code>g</code>就变成了操作屏幕行，注意不可以一直按着<code>g</code>然后去按其他按键。</li>
+<li><code>yy</code>和<code>Y</code>作用一致: 复制当前行</li>
+<li><code>g_</code>到本行最后一个非 blank 字符的位置。</li>
+<li><code>t</code>和<code>f</code>命令：<code>t&#123;char&#125;</code>和<code>f&#123;char&#125;</code>分别是查找字符<code>&#123;char&#125;</code>的左边界和右边界。同样的<code>T</code>和<code>F</code>命令也是查找字符<code>&#123;char&#125;</code>的左边界和右边界，但是是反向查找。<code>dt&quot;</code>删除至光标左边的双引号，<code>df)</code>删除至光标左边的右括号。</li>
+<li>命令<code>ddp</code>可以快速交换两行。</li>
+<li>命令<code>xp</code>可以交换两个字符。</li>
+<li>命令<code>80ichar</code>可以插入80个字符。</li>
+<li>在普通模式下使用 <code>K</code> 可以用 ‘keywordprg’ 程序 (缺省: “man”) 查光标下的关键字通过 <code>man</code> 命令快速搜索信息</li>
+<li>使用 <code>J 可以快速连接两行，并且添加**空格**，使用 </code>gJ&#96; 可以合并两行，并且删除<strong>空格</strong>。</li>
+<li><code>:qa</code> 退出 <code>Vim</code> 并放弃所有的更改。</li>
+<li><code>:xa</code> 写入所有的更改并且退出</li>
+<li><code>&#123;visual&#125;g?</code> 用 <code>rot13</code> 编码高亮的文本</li>
+<li><code>N ]p</code> 同 <code>p</code>，但调整当前行的缩进，其中 <code>N</code>表示行数。所谓的调整缩进就是使用这个命令进行粘贴不会有缩进，但是使用<code>p</code>命令进行粘贴会有缩进。这个是在光标的上面粘贴。而命令 <code>N [</code>则是在光标的下面进行粘贴。</li>
+<li><code>N gp</code> 同 <code>p</code>，但将光标留在新文本之后。其含义就是<strong>粘贴完之后光标会跳转到下一行的开头</strong>。</li>
+<li>使用命令 <code>ctrl + x</code> 可以进行补全：<ol>
+<li><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404271749721.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+</li>
+</ol>
+<h1 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h1><p>vim中提供了一个<code>.</code>命令，这个命令可以理解位低级的宏。这<code>.</code>是重复上一次的操作，<strong>上一次的操作是从<code>normal</code>模式到<code>insert</code>模式之间所执行的操作</strong>。</p>
+<p>vim还提供了宏，所谓的宏就是记录你在<code>normal</code>模式下的行为至寄存器中，然后可以重复使用。</p>
+<p><code>q</code>+{a-zA-Z0-9}之间的一个字符，其实就是寄存器名称。</p>
+<h2 id="如何使用宏"><a href="#如何使用宏" class="headerlink" title="如何使用宏"></a>如何使用宏</h2><p><code>q</code>键既是开始录制宏键，也是结束录制宏键</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220338975.png" srcset="/img/loading.gif" lazyload></p>
+<p>使用<code>:reg a(register name)</code>可以查看宏的内容。</p>
+<p>通过<code>@a</code>执行录制的宏，使用<code>@@</code>执行最近使用过的宏</p>
+<p>使用宏的时候尤其需要注意光标的位置，因为宏是从当前光标的位置开始执行的。所以我们需要在录制宏的时候就使用<code>$ ^ 0 </code>等等位移键控制好光标的位置。</p>
+<p><code>22@q</code>将<code>q</code>中存储的宏执行<code>22</code>次。</p>
+<h2 id="串行执行宏和并行执行宏"><a href="#串行执行宏和并行执行宏" class="headerlink" title="串行执行宏和并行执行宏"></a>串行执行宏和并行执行宏</h2><p>宏可以多次执行，但是一旦执行至某一次时出现了错误，如果是串行执行的话就会停下来，不在执行。如果是并行执行的话就会跳过错误继续执行。</p>
+<p>如何并行执行：</p>
+<p><code>:normal @q</code>在<code>v</code>模式下选中的代码中执行宏，此时就是并行执行宏，否则都是串行执行。</p>
+<h2 id="给宏追加命令"><a href="#给宏追加命令" class="headerlink" title="给宏追加命令"></a>给宏追加命令</h2><p>有时候，我们在录制宏的过程中会漏掉某个至关重要的步骤。在这种情况下，我们没必要从头开始重录所有的步骤，而是可以在现有宏的结尾附加额外的命令。</p>
+<p>如果我们使用<code>qa</code>来记录一个宏到<code>a</code>寄存器中，记录完成之后按下<code>q</code>退出，但是我们如果漏过一些命令此时可以使用<code>qA</code>来在该宏的最后面加上命令。</p>
+<p>这个方法缺点明显，就是只可以在宏的后面进行添加命令。</p>
+<p>还可以直接通过修改宏来达到目的：</p>
+<ol>
+<li><p>首先，我们按G键，跳到当前文档的结尾，目的是要把寄存器a中的内容粘贴至新的一行。处理这种情况最简单的方式是用 :put命令：➾:put a <br><br>为什么不直接用 “ap 命令呢？因为，在本例的上下文中，p命令会把寄存器a的内容粘贴至当前行的光标之后。而:put命令总会将它们粘贴至当前行的下方，无论寄存器保存的是面向行的还是面向字符的文本块。</p>
+</li>
+<li><p>现在我们可以像编辑普通文本一样编辑宏了。</p>
+</li>
+<li><p>我们依次运行命令 0 以及 “ay$，将把该行除回车符之外的每一个字符都复制下来。在把宏的内容保存回寄存器a之后，我们就可以用dd删除这一行了。尽管删除的内容最终将被保存到缺省寄存器，但我们也不会用到它们。<br><br>做完以上这些步骤，当前寄存器 a中保存着一个新的、改进的宏。我们可将其用于本节刚开始的示例文本。</p>
+</li>
+</ol>
+<h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1><p>在 Ex 命令影响范围广且距离远 中，我们已经了解了这个一般规律，即普通模式命令，适合在本地进行操作，而 Ex 命令则可以远距离操作。</p>
+<p>在 <code>Vim</code> 中，有一种特殊的模式叫做命令行模式，它可以让我们输入一些命令，而无需离开当前模式。</p>
+<p>这个模式下可以执行其他模式下的一些命令，但是这个模式的特点是适用于远距离的、长范围的情况。</p>
+<p>使用<code>@:</code>可以重复执行上一次的命令。</p>
+<p>其实命令行模式中的许多命令都是和普通模式中的命令效果是一样的。但是<strong>一般来说使用命令行模式会要快于直接使用命令模式</strong></p>
+<p>直接进入 <code>Vim</code> 之后所在的模式就是命令行模式。</p>
+<h2 id="显示命令-P"><a href="#显示命令-P" class="headerlink" title="显示命令 P"></a>显示命令 P</h2><p>这个命令其实是 <code>print</code> 命令的缩写，作用是打印当前行。</p>
+<p>这个命令可以打印你给定范围中的文本，其中给定范围的方式可以是：</p>
+<ul>
+<li>行号范围：<code>10,20p</code></li>
+<li>选择范围：<code>&#39;&lt;,&#39;&gt;p</code></li>
+<li>正则表达式范围：<code>/(.*)/p</code></li>
+</ul>
+<p><strong>其一般的范围形式就是<code>&#123;start,end&#125;</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.</code></td>
+<td>代表当前行</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>代表当前行的结尾</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>代表整个文档</td>
+</tr>
+</tbody></table>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404252210670.png" srcset="/img/loading.gif" lazyload></p>
+<p>第 <code>0</code> 行在文件中并不真实存在，但它作为一个地址，在某些特定场景下会很有用处。特别是，在把指定范围内的行复制或移动到文件开头时，可以用它做 <code>:copy &#123;address&#125;</code> 及 <code>:move &#123;address&#125;</code> 命令的最后一个参数。</p>
+<p>所以一下命令的含义就明确了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">:,.<span class="hljs-variable">$p</span>  <span class="hljs-comment"># 打印当前行到结尾</span><br>:%p    <span class="hljs-comment"># 打印整个文档</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="地址的偏移"><a href="#地址的偏移" class="headerlink" title="地址的偏移"></a>地址的偏移</h3><p>除开直接指定打印的范围之后，还可以对打印的范围进行偏移：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:.,.+3p  <span class="hljs-comment"># 打印当前行到当前行的第三行</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="复制命令-t-和移动命令-m"><a href="#复制命令-t-和移动命令-m" class="headerlink" title="复制命令 t 和移动命令 m"></a>复制命令 t 和移动命令 m</h2><p>复制命令的简称是<code>t</code>，但是全称是 <code>copy</code> 。这个命令的作用是复制指定范围的文本到寄存器中。<strong>为了更好地记忆，你可以把该命令想成“复制到（copy TO）”。</strong>其实这个命令的本意就是这样的。通过下面的例子可以知道。</p>
+<p>移动命令全称是 <code>move</code> ，简称为 <code>m</code>。它的作用是移动指定范围的文本到另一个位置。</p>
+<h3 id="复制命令"><a href="#复制命令" class="headerlink" title="复制命令"></a>复制命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">:6t.  <span class="hljs-comment"># 把第6行的内容复制到当前行的下一行</span><br>:t6.  <span class="hljs-comment"># 把当前行的内容复制到第6行的下一行</span><br>:t.    <span class="hljs-comment"># 把当前行的内容复制到下一行，这个命令相当于 yyp</span><br>:t$    <span class="hljs-comment"># 把当前行的内容复制到文件末尾</span><br>:`&lt;,`&gt;t0  <span class="hljs-comment"># 把选择区域的内容复制到文件开头</span><br></code></pre></td></tr></table></figure>
+
+<p><code>:t.</code>命令会创建一个当前行副本，而另外一种做法则是用普通模式的复制和粘贴<br>命令（<code>yyp</code>）来达到同样的效果。这两种复制当前行的技术有个需要关注的差别：<code>yyp</code> 会使用寄存器，而 <code>:t.</code> 则不会。因此，当我不想覆盖默认寄存器中的当前内容时，有时我会使用 <code>:t.</code> 来复制行。</p>
+<h3 id="移动命令"><a href="#移动命令" class="headerlink" title="移动命令"></a>移动命令</h3><p><code>:move</code> 命令看上去和 <code>:copy</code> 命令很相似：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:[range]move &#123;address&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上面这个就是移动命令支持的语法。</p>
+<h3 id="重复命令"><a href="#重复命令" class="headerlink" title="重复命令"></a>重复命令</h3><h3 id="命令行窗口"><a href="#命令行窗口" class="headerlink" title="命令行窗口"></a>命令行窗口</h3><p>使用 <code>q:</code> 可以进入命令行窗口，这个窗口中有一些历史信息，同样的在命令行窗口中也可以使用 <code>Vim</code> 中的命令。按下<strong>回车</strong>可以执行命令</p>
+<h3 id="运行-shell-命令"><a href="#运行-shell-命令" class="headerlink" title="运行 shell 命令"></a>运行 shell 命令</h3><p>在命令行模式中，输入 <code>:!</code> 然后输入 shell 命令，就可以运行 shell 命令。</p>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:!<span class="hljs-built_in">ls</span>  <span class="hljs-comment"># 列出当前目录下的文件</span><br></code></pre></td></tr></table></figure>
+
+<p>注意区分 <code>:!ls</code> 和 <code>:ls</code> 的不同之处。前者调用的是 <code>shell</code> 中的 <code>ls</code>命令，而 <code>:ls</code>调用的是 <code>Vim</code> 的内置命令，用来显示缓冲区列表的内容。</p>
+<p><strong>在 <code>Vim</code> 的命令行中，符号 <code>%</code> 代表当前文件名</strong>，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">:gcc %  <span class="hljs-comment"># 编译当前文件并生成可执行文件</span><br></code></pre></td></tr></table></figure>
+
+<p><code>:!&#123;cmd&#125;</code> 这种语法适用于执行一次性命令，但是如果想在 <code>shell</code> 中执行几条命令要怎么做？对这种情况，可以执行 <code>Vim</code> 的 <code>:shell</code> 命令来启动一个交互的 <code>shell</code> 会话。</p>
+<p>把缓冲区内容作为标准输入或输出</p>
+<p><code>:read !&#123;cmd&#125;</code> 命令让我们把命令的标准输出重定向到缓冲区。正如你所期望的<br>一样，<code>:write !&#123;cmd&#125;</code> 做相反的事。它把缓冲区内容作为指定 <code>&#123;cmd&#125;</code> 的标准输入</p>
+<p>根据叹号在命令行上的位置不同，它的含义也不大相同。比较一下这些命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">:write! sh<br>:write ! sh<br>:write !sh<br></code></pre></td></tr></table></figure>
+
+<p>上面三种写法中，只有<strong>第二种和第三种</strong>是<strong>一样的</strong>。其含义都是将缓冲区中的内容作为指定命令的标准输入。 </p>
+<p><strong>但是，第一种写法的含义是：将当前的缓冲区数据强制写入到文件 <code>sh</code> 中</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404260217439.png" srcset="/img/loading.gif" lazyload></p>
+<p>转到具体的内容中去:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs txt">|usr_29.txt|		用户手册中关于在程序的不同部分间移动的内容。<br>|usr_30.txt|		用户手册中关于编辑程序的内容。<br>|C-indenting|		输入时自动设置每行的缩进。<br>|=|			重新缩进一些行。<br>|format-comments|	对注释进行排版。<br><br>|:checkpath|		显示所有被 (嵌套) 包含的文件。<br>|[i|			在当前和被包含的文件中查找光标所在的的标识符。<br>|[_CTRL-I|		跳到 &quot;[i&quot; 的匹配。<br>|[I|			列出在当前和被包含的文件中匹配光标所在的标识符的行。<br>|[d|			在当前和被包含的文件中查找光标所在的标识符的宏定义。<br><br>|CTRL-]|		跳到光标所在的标签处 (例如: 函数的定义)。<br>|CTRL-T|		跳回执行 CTRL-] 命令前的地方。<br>|:tselect|		从一连串匹配的标签中选出一个。<br><br>|gd|			跳到光标所在的局部变量的声明处。<br>|gD|			跳到光标所在的全局变量的声明处。<br><br>|gf|			跳到光标所在的文件名表示的文件。<br><br>|%|			跳到匹配的 ()、&#123;&#125;、[]、/* */、#if、#else、#endif 处。<br>|[/|			跳到上一个注释开始的位置。<br>|]/|			跳到下一个注释结束的位置。<br>|[#|			反向到未闭合的 #if、#ifdef 或 #else 处。<br>|]#|			正向到未闭合的 #else 或 #endif 处。<br>|[(|			反向到未闭合的 &#x27;(&#x27; 处。<br>|])|			正向到未闭合的 &#x27;)&#x27; 处。<br>|[&#123;|			反向到未闭合的 &#x27;&#123;&#x27; 处。<br>|]&#125;|			正向到未闭合的 &#x27;&#125;&#x27; 处。<br><br>|v_ab|			选中 &quot;一个块&quot; (&quot;a block&quot;)，从 &quot;[(&quot; 至 &quot;])&quot;，含括号<br>|v_ib|			选中 &quot;内含块&quot; (&quot;inner block&quot;)，从 &quot;[(&quot; 至 &quot;])&quot;<br>|v_aB|			选中 &quot;一个大块&quot; (&quot;a Block&quot;)，从 &quot;[&#123;&quot; 至 &quot;]&#125;&quot;，含括号<br>|v_iB|			选中 &quot;内含大块&quot; (&quot;inner Block&quot;)，从 &quot;[&#123;&quot; 至 &quot;]&#125;&quot;<br></code></pre></td></tr></table></figure>
+
+<h1 id="启动参数"><a href="#启动参数" class="headerlink" title="启动参数"></a>启动参数</h1><p>在使用命令 <code>Vim</code> 打开文件时，可以用一些参数来控制打开方式。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">vim</span> [<span class="hljs-keyword">options</span>] ‑ 从标准输入读入文件<br><br><span class="hljs-keyword">vim</span> [<span class="hljs-keyword">options</span>] ‑t &#123;<span class="hljs-keyword">tag</span>&#125; 编辑与标签 &#123;<span class="hljs-keyword">tag</span>&#125; 关联的文件<br><br>‑g 启动 GUI (同时允许其他选项)<br><br>+[num] 置光标于第 [num] 行 (缺省: 末行)<br><br>+&#123;<span class="hljs-keyword">command</span>&#125; 载入文件后执行命令 &#123;<span class="hljs-keyword">command</span>&#125;<br><br>+/&#123;pat&#125; &#123;<span class="hljs-keyword">file</span>&#125; .. 置光标于首次出现 &#123;pat&#125; 处<br><br>-R 只读模式<br><br>-d 比较模式<br></code></pre></td></tr></table></figure>
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://vim.nauxscript.com/vim/day-8.html#%E8%A1%8C%E5%86%85%E6%90%9C%E7%B4%A2">https://vim.nauxscript.com/vim/day-8.html#%E8%A1%8C%E5%86%85%E6%90%9C%E7%B4%A2</a></p>
+<p><a target="_blank" rel="noopener" href="https://yianwillis.github.io/vimcdoc/doc/usr_03.html#03.7">https://yianwillis.github.io/vimcdoc/doc/usr_03.html#03.7</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/shuangde800/article/details/11430659">窗口操作</a></p>
+<p><a target="_blank" rel="noopener" href="https://yyq123.blogspot.com/">https://yyq123.blogspot.com/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.easwy.com/archives/advanced-vim-skills-netrw-bufexplorer-winmanager-plugin/">vim使用技巧作者博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://haicoder.net/vim/vim-edit-page-downup.html">大量快捷键操作</a></p>
+<p><a target="_blank" rel="noopener" href="https://tszv.vercel.app/pages/7e38ab/#ctrl-t">在不同的软件中使用vim模式的教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://vim.nauxscript.com/vim/day-11.html#%E4%BD%95%E4%B8%BA%E8%B7%B3%E8%BD%AC%EF%BC%88jump%EF%BC%89">和上面一致</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.uinio.com/Linux/Vim/#%E5%AE%8F%E5%BD%95%E5%88%B6">http://www.uinio.com/Linux/Vim/#%E5%AE%8F%E5%BD%95%E5%88%B6</a></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.itpub.net/8225414/viewspace-944533/">Vim快捷键</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/vim/" class="category-chain-item">vim</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>vim学习笔记</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/29/vim学习笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/29/unix-domain-Socket/" title="unix-domain-Socket">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">unix-domain-Socket</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/28/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" title="计算机网络基础">
+                        <span class="hidden-mobile">计算机网络基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

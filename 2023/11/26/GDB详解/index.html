@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结学习GDB的知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GDB详解">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/26/GDB%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="总结学习GDB的知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-min-an-1406866.jpg">
+<meta property="article:published_time" content="2023-11-26T06:53:33.000Z">
+<meta property="article:modified_time" content="2024-06-21T17:52:29.141Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-min-an-1406866.jpg">
+  
+  
+  
+  <title>GDB详解 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-min-an-1406866.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="GDB详解"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-26 14:53" pubdate>
+          2023年11月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">GDB详解</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结学习GDB的知识点</p>
+<span id="more"></span>
+
+
+<h1 id="GDB的初始化文件"><a href="#GDB的初始化文件" class="headerlink" title="GDB的初始化文件"></a>GDB的初始化文件</h1><p>GDB会在执行的时候运行一些初始化文件。这些初始化文件或者说是配置文件有三个等级。</p>
+<p>系统配置文件</p>
+<p>用户配置文件</p>
+<p>本地配置文件</p>
+<h2 id="系统配置文件"><a href="#系统配置文件" class="headerlink" title="系统配置文件"></a>系统配置文件</h2><p>首先运行的是系统初始化文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/gdb/gdbinit<br>/etc/gdb/gdbinit.d<br></code></pre></td></tr></table></figure>
+<p>其中<code>gdbinit</code>这是单个系统范围的初始化文件。它的位置由 –with-system-gdbinit 配置选项指定。它在 GDB 启动时首先加载，然后再处理命令行选项。</p>
+<p><code>gdbinit.d</code>这是系统范围的初始化目录。它的位置由 –with-system-gdbinit-dir 配置选项指定。当 GDB 启动时，在处理命令行选项之前，此目录中的文件会在 system.gdbinit （如果启用）之后立即按字母顺序加载。文件需要具有可识别的脚本语言扩展名 ( .py &#x2F; .scm ) 或使用 .gdb 扩展名命名才能解释为常规 GDB 命令。<strong>GDB 不会递归到该目录的任何子目录。</strong></p>
+<h2 id="用户配置文件"><a href="#用户配置文件" class="headerlink" title="用户配置文件"></a>用户配置文件</h2><p>系统配置文件的作用范围是所有的用户，用户的配置文件是作用于单个用户。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-variable">$XDG_CONFIG_HOME</span>/gdb/gdbinit<br><span class="hljs-variable">$HOME</span>/.config/gdb/gdbinit<br><span class="hljs-variable">$HOME</span>/.gdbinit<br></code></pre></td></tr></table></figure>
+
+<p>其中<code>$XDG_CONFIG_HOME</code>是一个gdb的环境变量。</p>
+<div class="note note-info">
+            <p>不管是系统配置文件还是用户配置文件，都可以使用<code>-nx</code>命令行选项来阻止加载系统范围的初始化文件</p>
+          </div>
+
+<div class="note note-success">
+            <p>如果想要执行本地初始化文件，而不是系统的，或者是用户的则需要在<code>$XDG_CONFIG_HOME/gdb/gdbinit</code>或者是<code>$HOME/.config/gdb/gdbinit</code>中加入：</p>
+          </div>
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">add-auto-load-safe-path /your/path/.gdbinit<br><br><span class="hljs-comment">#或者是这样，但是这相当于关闭了安全路径</span><br><br>add-auto-load-safe-path /<br></code></pre></td></tr></table></figure>
+
+<p>当然你也可以直接指定配置文件通过<code>-x</code>命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gdb -x ./path/.gdbinit<br></code></pre></td></tr></table></figure>
+
+<h2 id="三者的执行顺序"><a href="#三者的执行顺序" class="headerlink" title="三者的执行顺序"></a>三者的执行顺序</h2><p><strong>系统初始化</strong>-&gt;<strong>用户初始化</strong>-&gt;<strong>本地初始化</strong></p>
+<p>并且，最后执行的初始化文件具有决定性的作用。</p>
+<h2 id="小细节"><a href="#小细节" class="headerlink" title="小细节"></a>小细节</h2><p>gdb的命令很多，gdb把之分成许多个种类。help命令只是例出gdb的命令种类，如果要看种类中的命令，可以使用<code> help &lt;class&gt;</code> 命令，如：<code>help breakpoints</code>，查看设置断点的所有命令。也可以直接<code>help &lt;command&gt;</code>来查看命令的帮助。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Initialization-Files.html#Initialization-Files">https://sourceware.org/gdb/current/onlinedocs/gdb.html/Initialization-Files.html#Initialization-Files</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaoyuwz1234/article/details/51762748">https://blog.csdn.net/xiaoyuwz1234/article/details/51762748</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tyustli/article/details/133363847">https://blog.csdn.net/tyustli/article/details/133363847</a></p>
+<h1 id="gdbinit文件的配置"><a href="#gdbinit文件的配置" class="headerlink" title=".gdbinit文件的配置"></a><code>.gdbinit</code>文件的配置</h1><h2 id="基本的语法组成"><a href="#基本的语法组成" class="headerlink" title="基本的语法组成"></a>基本的语法组成</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs txt">define &lt;command&gt;<br> <br>&lt;code&gt;<br> <br>end<br> <br>document &lt;command&gt;  当在gdb中输入help command时显示的文本<br> <br>&lt;help text&gt;<br> <br><br>Usage:  简要命令的描述 使用命令help user查看<br><br>end<br><br></code></pre></td></tr></table></figure>
+<p>如果输入 help user 命令，您会看到已在 .gdbinit 文件中输入的所有用户命令的摘要。.gdbinit 用户定义命令的设计者提供了一个重要特性，您在编写自己的命令时不应忽略该特性：document … end 子句。随着这些命令数量的增加，维护有关命令如何工作的功能文档将变得非常关键。</p>
+<p><strong>所以我们可以通过这个文件定制自己的gdb</strong></p>
+<h2 id="在-gdbinit文件中定义钩子函数"><a href="#在-gdbinit文件中定义钩子函数" class="headerlink" title="在.gdbinit文件中定义钩子函数"></a>在.gdbinit文件中定义钩子函数</h2><p>钩子函数就是在某事件发生时执行这个函数，gdb中的钩子函数语法：</p>
+<p>当运行具有钩子函数的命令<code>foo</code>时，这个钩子函数会先于命令<code>foo</code>运行。使用语法<code>hook-foo</code>。</p>
+<p>语法<code>hookpost-foo</code>是指在<code>foo</code>命令运行完之后，再运行钩子函数。</p>
+<p>例子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">define hook-echo<br><span class="hljs-built_in">echo</span> &lt;&lt;&lt;---<br>end<br><br>define hookpost-echo<br><span class="hljs-built_in">echo</span> ---&gt;&gt;&gt;\n<br>end<br><br>(gdb) <span class="hljs-built_in">echo</span> Hello World<br>&lt;&lt;&lt;---Hello World---&gt;&gt;&gt;<br>(gdb)<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：钩子函数可以为所有的单数命令定义，但是不可以为命令的简称定义。如可以为<code>backtrace</code>命令写钩子，但是不可以为<code>bt</code>命令写钩子。尽管这两个命令含义是一样的。</p>
+<p><strong>具有多个单词的命令如何编写钩子？</strong>：</p>
+<p>我们可以通过将hook-或hookpost-添加到命令的最后一个字来钩子多字命令，例如define target hook-remote“将钩子添加到target remote。</p>
+<p>如果在执行钩子期间发生错误，GDB命令的执行将停止，GDB将发出提示（在您实际键入的命令有机会运行之前）。</p>
+<p>如果尝试定义与任何已知命令都不匹配的钩子，则会从define命令得到警告。</p>
+<h2 id="参考资料-1"><a href="#参考资料-1" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wads23456/article/details/105064833">https://blog.csdn.net/wads23456/article/details/105064833</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gdbinit/Gdbinit/blob/master/gdbinit">已经定义好的.gdbinit文件</a></p>
+<p><a target="_blank" rel="noopener" href="https://codeantenna.com/a/8Qh7GXnwCE">钩子函数</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kking_edc/article/details/114746806">https://blog.csdn.net/kking_edc/article/details/114746806</a></p>
+<p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb/Hooks.html#Hooks">在.gdbinit文件中定义钩子函数</a></p>
+<h1 id="gdb插件"><a href="#gdb插件" class="headerlink" title="gdb插件"></a>gdb插件</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liuhanxu/p/17011775.html">https://www.cnblogs.com/liuhanxu/p/17011775.html</a></p>
+</li>
+<li><p>其中gdbgui还可以。</p>
+</li>
+<li><p>gdb-peda</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://pengfeixc.com/blogs/clang/gdb-debug-2-and-3">https://pengfeixc.com/blogs/clang/gdb-debug-2-and-3</a></p>
+</li>
+</ul>
+<h1 id="gdb的工作原理"><a href="#gdb的工作原理" class="headerlink" title="gdb的工作原理"></a>gdb的工作原理</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406212240109.png" srcset="/img/loading.gif" lazyload></p>
+<p>gdb 通过系统调用 <code>ptrace</code> 来接管一个进程的执行。ptrace 系统调用提供了一种方法使得父进程可以观察和控制其它进程的执行，检查和改变其核心映像以及寄存器。它主要用来实现断点调试和系统调用跟踪。ptrace 系统调用的原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/ptrace.h&gt;</span></span><br><span class="hljs-type">long</span> <span class="hljs-title function_">ptrace</span><span class="hljs-params">(<span class="hljs-keyword">enum</span> __ptrace_request request, <span class="hljs-type">pid_t</span> pid, <span class="hljs-type">void</span> *addr, <span class="hljs-type">void</span> *data)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>pid_t pid</strong>：指示 ptrace 要跟踪的进程。</p>
+</li>
+<li><p>*_void addr_：指示要监控的内存地址。</p>
+</li>
+<li><p>*_void data_：存放读取出的或者要写入的数据。</p>
+</li>
+<li><p><strong>enum __ptrace_request request</strong>：决定了系统调用的功能，几个主要的选项：</p>
+<ul>
+<li><p>_PTRACE_TRACEME_：表示此进程将被父进程跟踪，任何信号（除了 <code>SIGKILL</code>）都会暂停子进程，接着阻塞于 <code>wait()</code> 等待的父进程被唤醒。子进程内部对 <code>exec()</code> 的调用将发出 <code>SIGTRAP</code> 信号，这可以让父进程在子进程新程序开始运行之前就完全控制它。</p>
+</li>
+<li><p>_PTRACE_ATTACH_：attach 到一个指定的进程，使其成为当前进程跟踪的子进程，而子进程的行为等同于它进行了一次 PTRACE_TRACEME 操作。但需要注意的是，虽然当前进程成为被跟踪进程的父进程，但是子进程使用 <code>getppid()</code> 的到的仍将是其原始父进程的 pid。</p>
+</li>
+<li><p>_PTRACE_CONT_：继续运行之前停止的子进程。可同时向子进程交付指定的信号。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="断点的实现"><a href="#断点的实现" class="headerlink" title="断点的实现"></a>断点的实现</h2><p>断点的功能是通过内核信号实现的，在 <code>x86</code> 架构上，内核向某个地址打入断点，实际上就是往该地址写入断点指令 <code>INT 3</code>，即 <code>0xCC</code> 。目标程序运行到这条指令之后会触发 <code>SIGTRAP</code> 信号，<code>gdb</code> 捕获这个信号，并根据目标程序当前停止的位置查询 <code>gdb</code> 维护的断点链表，若发现在该地址确实存在断点，则可判定为断点命中。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Linux/GDB/" class="category-chain-item">GDB</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>GDB详解</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/26/GDB详解/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/26/GPIO/" title="GPIO">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">GPIO</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/26/DMA%E5%A4%96%E8%AE%BE/" title="DMA外设">
+                        <span class="hidden-mobile">DMA外设</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="记载总结相机这个项目在硬件设计上遇到的问题，以及总结解决方案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记相机项目硬件上遇到的问题以及总结">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/15/%E8%AE%B0%E7%9B%B8%E6%9C%BA%E9%A1%B9%E7%9B%AE%E7%A1%AC%E4%BB%B6%E4%B8%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="记载总结相机这个项目在硬件设计上遇到的问题，以及总结解决方案。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrx9k.png">
+<meta property="article:published_time" content="2024-04-15T11:54:33.000Z">
+<meta property="article:modified_time" content="2024-06-20T13:53:00.004Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrx9k.png">
+  
+  
+  
+  <title>记相机项目硬件上遇到的问题以及总结 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrx9k.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="记相机项目硬件上遇到的问题以及总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-15 19:54" pubdate>
+          2024年4月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">记相机项目硬件上遇到的问题以及总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>记载总结相机这个项目在硬件设计上遇到的问题，以及总结解决方案。</p>
+<span id="more"></span>
+
+<h1 id="第一次硬件测试"><a href="#第一次硬件测试" class="headerlink" title="第一次硬件测试"></a>第一次硬件测试</h1><p>今天在嘉立创打印的 <code>PCB</code> 板到了，但是在初次的测试中发现了一些问题：</p>
+<ul>
+<li>没有提前了解关于电源的使用情况，导致电源线连接不上，导致测试无法进行。并且没有了解到<code>锂电502550</code>电池的使用方法，<strong>也就是说在写PCB之前没有去了解如何使用相关的电池</strong>，因为之前都是直接插电来使用的。</li>
+<li>摄像头 <code>PCB</code> 板的绘制没有摆好元器件的位置。</li>
+<li>第一次设计的显示器板的长度没有设计好，使得该板中的按键已经放不下了</li>
+</ul>
+<h1 id="关于电源的选择"><a href="#关于电源的选择" class="headerlink" title="关于电源的选择"></a>关于电源的选择</h1><p>由于我制作的是一个相机，所以应该选择一个便于移动的电源。在 <code>wikipedia</code> 上可以查到有哪些电源可以选择：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/List_of_battery_sizes">https://en.wikipedia.org/wiki/List_of_battery_sizes</a></p>
+<h2 id="关于电源的选择上，如果如果是需要可以移动的产片，可以选择：-纽扣电池-航模电池：注意很多-diy-项目在使用这种电池的时候，都是直接将引线焊接到-pcb-板上的-TYPE-C-接口，这种接口需要特别注意：一个是输出的电压的问题，我看大多数的-diy-项目都是使用直接输出-5V-电压的充电器，而不是使用普通的手机等等产品的电源适配器"><a href="#关于电源的选择上，如果如果是需要可以移动的产片，可以选择：-纽扣电池-航模电池：注意很多-diy-项目在使用这种电池的时候，都是直接将引线焊接到-pcb-板上的-TYPE-C-接口，这种接口需要特别注意：一个是输出的电压的问题，我看大多数的-diy-项目都是使用直接输出-5V-电压的充电器，而不是使用普通的手机等等产品的电源适配器" class="headerlink" title="关于电源的选择上，如果如果是需要可以移动的产片，可以选择：- 纽扣电池- 航模电池：注意很多 diy 项目在使用这种电池的时候，都是直接将引线焊接到 pcb 板上的- TYPE-C 接口，这种接口需要特别注意：一个是输出的电压的问题，我看大多数的 diy 项目都是使用直接输出 5V 电压的充电器，而不是使用普通的手机等等产品的电源适配器**"></a>关于电源的选择上，如果如果是需要可以移动的产片，可以选择：<br>- 纽扣电池<br>- 航模电池：<strong>注意很多 diy 项目在使用这种电池的时候，都是直接将引线焊接到 pcb 板上的<br>- TYPE-C 接口，这种接口需要特别注意：</strong>一个是输出的电压的问题，我看大多数的 diy 项目都是使用直接输出 5V 电压的充电器，而不是使用普通的手机等等产品的电源适配器**</h2><h2 id="Type-C-接口"><a href="#Type-C-接口" class="headerlink" title="Type-C 接口"></a>Type-C 接口</h2><p>这个接口需要特别注意，其有三者引脚数：</p>
+<ul>
+<li>6 Pin的接口</li>
+<li>16 Pin的接口</li>
+<li>24 Pin的接口</li>
+</ul>
+<p>其中，6 Pin的接口只可以用来充电，无法进行数据传输<br><br>16 Pin的接口二者都可以<br><br>24 Pin的接口也是都可以，但是传输的速度要快于 12 Pin的接口。<br></p>
+<p>下面是三种引脚的接线图：</p>
+<h3 id="6-Pin-接口"><a href="#6-Pin-接口" class="headerlink" title="6 Pin 接口"></a>6 Pin 接口</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Screenshot_2024-05-24-03-50-46-293_tv.danmaku.bil.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="16-Pin-接口"><a href="#16-Pin-接口" class="headerlink" title="16  Pin 接口"></a>16  Pin 接口</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Screenshot_2024-05-24-03-50-41-199_tv.danmaku.bil.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="24-Pin-接口"><a href="#24-Pin-接口" class="headerlink" title="24 Pin 接口"></a>24 Pin 接口</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/Screenshot_2024-05-24-03-49-48-076_tv.danmaku.bil.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>同时需要注意的是，如果直接使用类似于手机充电器这样子的一般的充电器来提供电源的话则需要在被充电的设备上使用一块<strong>协议芯片</strong>，这个芯片可以帮助电源适配器和设备进行匹配，这样就可以传输合适的电压了。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202405250150150.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>如果想要直接传输 5V 电压，则需要 cc 引脚接 5.1K 电阻，此时则是默认输出 5V 电压。可以两个 cc 引脚都接 5.1K 的电阻，或者是 cc1 接 5.1K电阻，然后 cc2 接底。最好还是接上两个电阻</strong>。或者是使用一个指定输出 5V 的电源适配器。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sjm005/article/details/126709117">https://blog.csdn.net/sjm005/article/details/126709117</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.shoudian.org/thread-1543627-1-1.html">https://www.shoudian.org/thread-1543627-1-1.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weifengdq/article/details/95965050">https://blog.csdn.net/weifengdq/article/details/95965050</a></li>
+</ul>
+<h1 id="焊接"><a href="#焊接" class="headerlink" title="焊接"></a>焊接</h1><p>焊接的时候需要注意：</p>
+<ul>
+<li>如果是有方向性的元器件一定要注意方向性，否则焊上去之后根本使用不了。<ul>
+<li>各种二极管</li>
+<li>LED灯</li>
+<li>各种芯片</li>
+<li>有一些电容也是有正负的</li>
+</ul>
+</li>
+<li>焊接的时候需要注意元器件的焊接的顺序：<strong>焊接元器件不应该根据元器件焊接的难易程度来进行判断</strong><ul>
+<li>先焊一些小的元器件，防止后面焊接大的元器件的时候，有元器件对焊枪进行阻挡</li>
+<li>通过原理图来焊接元器件，<strong>焊接的时候应该需要从电源开始，这样方便对 pcb 板进行测试</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="元器件的焊接"><a href="#元器件的焊接" class="headerlink" title="元器件的焊接"></a>元器件的焊接</h2><ol>
+<li>焊接引脚多、引脚小等不易焊接的元器件的时候应该在焊接完成之后<strong>使用万用表对其进行短路测试，防止出现短接情况</strong></li>
+</ol>
+<h1 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h1><p>可以通过不同连接器的组合来实现更加好的功能。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>在绘制 <code>PCB</code> 之前，需要先了解相关的电源、电池、摄像头等硬件的使用方法，并且在设计时注意元器件的位置。</li>
+<li><code>PCB</code> 设计、原理图设计实际上是一体的，因为<code>PCB</code> 板上的电路的连接是通过原理图来实现的。所以在绘制原理图的时候就需要考虑好元器件的位置，以及电路的连接。<strong>尤其是需要将引脚引出的时候，如何去分配引脚非常重要</strong></li>
+<li>通过嘉立创绘制<strong>多块电路板</strong>的时候可以通过 <code>PCB</code> 板的拼接来实现，这样可以节省成本。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A1%AC%E4%BB%B6/" class="category-chain-item">硬件</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>记相机项目硬件上遇到的问题以及总结</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/04/15/记相机项目硬件上遇到的问题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/16/%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" title="常见的算法总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">常见的算法总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/15/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AA%E5%90%AF%E5%8A%A8%E7%9B%98/" title="如何快速制作一个启动盘">
+                        <span class="hidden-mobile">如何快速制作一个启动盘</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

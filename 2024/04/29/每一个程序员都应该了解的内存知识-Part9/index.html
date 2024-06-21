@@ -1,0 +1,874 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="附录和参考书目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每一个程序员都应该了解的内存知识-Part9">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/29/%E6%AF%8F%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part9/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="附录和参考书目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292343846.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292343494.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292344937.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292344608.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292344118.png">
+<meta property="article:published_time" content="2024-04-29T13:53:21.000Z">
+<meta property="article:modified_time" content="2024-04-29T16:51:51.369Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292343846.png">
+  
+  
+  
+  <title>每一个程序员都应该了解的内存知识-Part9 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-m3ojdk.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="每一个程序员都应该了解的内存知识-Part9"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-29 21:53" pubdate>
+          2024年4月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          21k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          178 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">每一个程序员都应该了解的内存知识-Part9</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>附录和参考书目</p>
+<span id="more"></span>
+
+<p><strong>注：本文由 <code>Kimi AI</code> 翻译</strong></p>
+<h1 id="9-附录和参考文献"><a href="#9-附录和参考文献" class="headerlink" title="9 附录和参考文献"></a>9 附录和参考文献</h1><h2 id="9-1-矩阵乘法"><a href="#9-1-矩阵乘法" class="headerlink" title="9.1 矩阵乘法"></a>9.1 矩阵乘法</h2><p>这是第6.2.1节中矩阵乘法的完整基准程序。有关所用内联函数的详细信息，请参阅Intel的参考手册。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;emmintrin.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 1000</span><br><span class="hljs-type">double</span> res[N][N] __attribute__ ((aligned (<span class="hljs-number">64</span>)));<br><span class="hljs-type">double</span> mul1[N][N] __attribute__ ((aligned (<span class="hljs-number">64</span>)));<br><span class="hljs-type">double</span> mul2[N][N] __attribute__ ((aligned (<span class="hljs-number">64</span>)));<br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SM (CLS / sizeof (double)))</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>   <span class="hljs-comment">// ... 初始化 mul1 和 mul2</span><br>    <br>   <span class="hljs-type">int</span> i, i2, j, j2, k, k2;<br>   <span class="hljs-type">double</span> *<span class="hljs-keyword">restrict</span> rres;<br>   <span class="hljs-type">double</span> *<span class="hljs-keyword">restrict</span> rmul1;<br>   <span class="hljs-type">double</span> *<span class="hljs-keyword">restrict</span> rmul2;<br>   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; N; i += SM)<br>     <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; N; j += SM)<br>       <span class="hljs-keyword">for</span> (k = <span class="hljs-number">0</span>; k &lt; N; k += SM)<br>         <span class="hljs-keyword">for</span> (i2 = <span class="hljs-number">0</span>, rres = &amp;res[i][j], rmul1 = &amp;mul1[i][k]; i2 &lt; SM;<br>              ++i2, rres += N, rmul1 += N)<br>           &#123;<br>             _mm_prefetch (&amp;rmul1[<span class="hljs-number">8</span>], _MM_HINT_NTA);<br>             <span class="hljs-keyword">for</span> (k2 = <span class="hljs-number">0</span>, rmul2 = &amp;mul2[k][j]; k2 &lt; SM; ++k2, rmul2 += N)<br>               &#123;<br>                 __m128d m1d = _mm_load_sd (&amp;rmul1[k2]);<br>                 m1d = _mm_unpacklo_pd (m1d, m1d);<br>                 <span class="hljs-keyword">for</span> (j2 = <span class="hljs-number">0</span>; j2 &lt; SM; j2 += <span class="hljs-number">2</span>)<br>                   &#123;<br>                     __m128d m2 = _mm_load_pd (&amp;rmul2[j2]);<br>                     __m128d r2 = _mm_load_pd (&amp;rres[j2]);<br>                     _mm_store_pd (&amp;rres[j2],<br>                                   _mm_add_pd (_mm_mul_pd (m2, m1d), r2));<br>                   &#125;<br>               &#125;<br>           &#125;<br>   <br>   <span class="hljs-comment">// ... 使用 res 矩阵</span><br>   <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>循环结构与第6.2.1节中的最终版本大致相同。最大的变化是加载 <code>rmul1[k2]</code> 的值已经从内循环中提取出来，因为我们必须创建一个向量，其中两个元素具有相同的值。这就是 <code>_mm_unpacklo_pd()</code> 内联函数的作用。</p>
+<p>另一个值得注意的是，我们显式对齐了三个数组，以确保我们期望在同一缓存行中的值实际上确实在那里。</p>
+<h2 id="9-2-调试分支预测"><a href="#9-2-调试分支预测" class="headerlink" title="9.2 调试分支预测"></a>9.2 调试分支预测</h2><p>如果按照第6.2.2节的建议使用 <code>likely</code> 和 <code>unlikely</code> 的定义，使用GNU工具链很容易有一个调试模式来检查假设是否真的成立。宏的定义可以替换为以下内容：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> DEBUGPRED</span><br><span class="hljs-meta"># <span class="hljs-keyword">define</span> unlikely(expr) __builtin_expect (!!(expr), 0)</span><br><span class="hljs-meta"># <span class="hljs-keyword">define</span> likely(expr) __builtin_expect (!!(expr), 1)</span><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><span class="hljs-keyword">asm</span> (<span class="hljs-string">&quot;.section predict_data, \&quot;aw\&quot;; .previous\n&quot;</span><br>     <span class="hljs-string">&quot;.section predict_line, \&quot;a\&quot;; .previous\n&quot;</span><br>     <span class="hljs-string">&quot;.section predict_file, \&quot;a\&quot;; .previous&quot;</span>);<br><span class="hljs-meta"># <span class="hljs-keyword">ifdef</span> __x86_64__</span><br><span class="hljs-meta">#  <span class="hljs-keyword">define</span> debugpred__(e, E) \</span><br><span class="hljs-meta">   (&#123; long int _e = !!(e); \</span><br><span class="hljs-meta">      asm volatile (<span class="hljs-string">&quot;.pushsection predict_data\n&quot;</span></span><br>                    <span class="hljs-string">&quot;..predictcnt%=: .quad 0; .quad 0\n&quot;</span><br>                    <span class="hljs-string">&quot;.section predict_line; .quad %c1\n&quot;</span><br>                    <span class="hljs-string">&quot;.section predict_file; .quad %c2; .popsection\n&quot;</span><br>                    <span class="hljs-string">&quot;addq $1,..predictcnt%=(,%0,8)&quot;</span> \<br>                    : : <span class="hljs-string">&quot;r&quot;</span> (_e == E), <span class="hljs-string">&quot;i&quot;</span> (__LINE__), <span class="hljs-string">&quot;i&quot;</span> (__FILE__)); \<br>     __builtin_expect (_e, E); \<br>   &#125;)<br><span class="hljs-meta"># <span class="hljs-keyword">elif</span> defined __i386__</span><br><span class="hljs-meta">#  <span class="hljs-keyword">define</span> debugpred__(e, E) \</span><br><span class="hljs-meta">   (&#123; long int _e = !!(e); \</span><br><span class="hljs-meta">      asm volatile (<span class="hljs-string">&quot;.pushsection predict_data\n&quot;</span></span><br>                    <span class="hljs-string">&quot;..predictcnt%=: .long 0; .long 0\n&quot;</span><br>                    <span class="hljs-string">&quot;.section predict_line; .long %c1\n&quot;</span><br>                    <span class="hljs-string">&quot;.section predict_file; .long %c2; .popsection\n&quot;</span><br>                    <span class="hljs-string">&quot;incl ..predictcnt%=(,%0,4)&quot;</span> \<br>                    : : <span class="hljs-string">&quot;r&quot;</span> (_e == E), <span class="hljs-string">&quot;i&quot;</span> (__LINE__), <span class="hljs-string">&quot;i&quot;</span> (__FILE__)); \<br>     __builtin_expect (_e, E); \<br>   &#125;)<br><span class="hljs-meta"># <span class="hljs-keyword">else</span></span><br><span class="hljs-meta">#  <span class="hljs-keyword">error</span> <span class="hljs-string">&quot;debugpred__ definition missing&quot;</span></span><br><span class="hljs-meta"># <span class="hljs-keyword">endif</span></span><br><span class="hljs-meta"># <span class="hljs-keyword">define</span> unlikely(expt) debugpred__ ((expr), 0)</span><br><span class="hljs-meta"># <span class="hljs-keyword">define</span> likely(expr) debugpred__ ((expr), 1)</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br></code></pre></td></tr></table></figure>
+
+<p>这些宏使用GNU汇编器和链接器提供的大量功能，在创建ELF文件时。<code>DEBUGPRED</code> 情况下的第一个 <code>asm</code> 语句定义了三个额外的节；它主要向汇编器提供有关如何创建节的信息。所有节在运行时都是可用的，<code>predict_data</code> 节是可写的。重要的是所有节名称都是有效的C标识符。原因很快就会清楚。</p>
+<p>新的 <code>likely</code> 和 <code>unlikely</code> 宏的定义引用了特定于机器的 <code>debugpred__</code> 宏。这个宏有以下任务：</p>
+<ol>
+<li><p>在 <code>predict_data</code> 节中分配两个词以包含正确和不正确预测的计数。这两个字段通过使用 <code>%=</code> 获得唯一名称；前导点确保符号不会污染符号表。</p>
+</li>
+<li><p>在 <code>predict_line</code> 节中分配一个词以包含 <code>likely</code> 或 <code>unlikely</code> 宏使用的行号。</p>
+</li>
+<li><p>在 <code>predict_file</code> 节中分配一个词以包含 <code>likely</code> 或 <code>unlikely</code> 宏使用的文件名的指针。</p>
+</li>
+<li><p>根据表达式 <code>e</code> 的实际值增加为此宏创建的“正确”或“不正确”计数器。我们这里不使用原子操作，因为它们要慢得多，而且在发生冲突的不太可能的情况下绝对精度不是那么重要。如果需要，很容易更改。</p>
+</li>
+</ol>
+<p><code>.pushsection</code> 和 <code>.popsection</code> 伪操作在汇编器手册中有描述。感兴趣的读者被要求使用手册和一些试错来探索这些定义的细节。</p>
+<p>这些宏自动且透明地处理收集关于正确和不正确分支预测的信息。缺少的是如何获取结果的方法。最简单的方法是为对象定义一个析构函数并在其中打印结果。这可以通过像这样定义的函数实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">extern</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> __start_predict_data;<br><span class="hljs-keyword">extern</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> __stop_predict_data;<br><span class="hljs-keyword">extern</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> __start_predict_line;<br><span class="hljs-keyword">extern</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span> *__start_predict_file;<br><br><span class="hljs-type">static</span> <span class="hljs-type">void</span><br>__attribute__ ((destructor))<br>predprint(<span class="hljs-type">void</span>)<br>&#123;<br>   <span class="hljs-type">long</span> <span class="hljs-type">int</span> *s = &amp;__start_predict_data;<br>   <span class="hljs-type">long</span> <span class="hljs-type">int</span> *e = &amp;__stop_predict_data;<br>   <span class="hljs-type">long</span> <span class="hljs-type">int</span> *sl = &amp;__start_predict_line;<br>   <span class="hljs-type">const</span> <span class="hljs-type">char</span> **sf = &amp;__start_predict_file;<br>   <span class="hljs-keyword">while</span> (s &lt; e) &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s:%ld: incorrect=%ld, correct=%ld%s\n&quot;</span>, *sf, *sl, s[<span class="hljs-number">0</span>], s[<span class="hljs-number">1</span>],<br>             s[<span class="hljs-number">0</span>] &gt; s[<span class="hljs-number">1</span>] ? <span class="hljs-string">&quot;   ==== WARNING&quot;</span> : <span class="hljs-string">&quot;&quot;</span>);<br>      ++sl;<br>      ++sf;<br>      s += <span class="hljs-number">2</span>;<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里，节名称是有效的C标识符这一事实得到了应用；它被GNU链接器用来自动定义（如果需要的话）两个节的符号。<code>__start_XYZ</code> 符号对应于节 <code>XYZ</code> 的开始，而 <code>__stop_XYZ</code> 是节 <code>XYZ</code> 之后的第一个字节的位置。这些符号使得在运行时可以迭代节内容。请注意，由于节的内容可能来自链接器在链接时使用的所有文件，因此编译器和汇编器没有足够的信息来确定节的大小。只有通过这些神奇的链接器生成的符号，才能迭代节内容。</p>
+<p>代码不仅仅迭代一个节；而是涉及三个节。由于我们知道，对于 <code>predict_data</code> 节中添加的每两个字，我们向 <code>predict_line</code> 和 <code>predict_file</code> 节各自添加一个字，我们不必检查这两个节的边界。我们只需携带指针并统一递增它们。</p>
+<p>代码为代码中出现的每个预测打印出一行。它突出显示了预测不正确的用法。当然，这可以更改，并且调试模式可以限制为仅标记不正确预测多于正确预测的条目。这些是需要更改的候选项。还有一些细节使问题复杂化；例如，如果分支预测发生在在多个地方使用的宏中，则必须一起考虑所有宏用法，然后才能做出最终判断。</p>
+<p>最后两个评论：这种调试操作所需的数据不小，而且，在DSOs的情况下，是昂贵的（必须重新定位 <code>predict_file</code> 节）。因此，不应在生产二进制文件中启用调试模式。最后，每个可执行文件和DSO都创建自己的输出，分析数据时必须记住这一点。</p>
+<h2 id="9-3-测量缓存行共享开销"><a href="#9-3-测量缓存行共享开销" class="headerlink" title="9.3 测量缓存行共享开销"></a>9.3 测量缓存行共享开销</h2><p>本节包含测试程序，用于测量使用同一缓存行上的变量与使用不同缓存行上的变量的开销。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;error.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N (atomic ? 10000000 : 500000000)</span><br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> atomic;<br><span class="hljs-type">static</span> <span class="hljs-type">unsigned</span> nthreads;<br><span class="hljs-type">static</span> <span class="hljs-type">unsigned</span> disp;<br><span class="hljs-type">static</span> <span class="hljs-type">long</span> **reads;<br><br><span class="hljs-type">static</span> <span class="hljs-type">pthread_barrier_t</span> b;<br><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> *<br><span class="hljs-title function_">tf</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span><br>&#123;<br>   <span class="hljs-type">long</span> *p = arg;<br><br>   <span class="hljs-keyword">if</span> (atomic)<br>     <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = <span class="hljs-number">0</span>; n &lt; N; ++n)<br>       __sync_add_and_fetch(p, <span class="hljs-number">1</span>);<br>   <span class="hljs-keyword">else</span><br>     <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = <span class="hljs-number">0</span>; n &lt; N; ++n)<br>       &#123;<br>         *p += <span class="hljs-number">1</span>;<br>         <span class="hljs-keyword">asm</span> <span class="hljs-title function_">volatile</span><span class="hljs-params">(<span class="hljs-string">&quot;&quot;</span> : : <span class="hljs-string">&quot;m&quot;</span> (*p))</span>;<br>       &#125;<br><br>   <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>   <span class="hljs-keyword">if</span> (argc &lt; <span class="hljs-number">2</span>)<br>     disp = <span class="hljs-number">0</span>;<br>   <span class="hljs-keyword">else</span><br>     disp = atol(argv[<span class="hljs-number">1</span>]);<br><br>   <span class="hljs-keyword">if</span> (argc &lt; <span class="hljs-number">3</span>)<br>     nthreads = <span class="hljs-number">2</span>;<br>   <span class="hljs-keyword">else</span><br>     nthreads = atol(argv[<span class="hljs-number">2</span>]) ?: <span class="hljs-number">1</span>;<br><br>   <span class="hljs-keyword">if</span> (argc &lt; <span class="hljs-number">4</span>)<br>     atomic = <span class="hljs-number">1</span>;<br>   <span class="hljs-keyword">else</span><br>     atomic = atol(argv[<span class="hljs-number">3</span>]);<br><br>   pthread_barrier_init(&amp;b, <span class="hljs-literal">NULL</span>, nthreads);<br><br>   <span class="hljs-type">void</span> *p;<br>   posix_memalign(&amp;p, <span class="hljs-number">64</span>, (nthreads * disp ?: <span class="hljs-number">1</span>) * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">long</span>));<br>   <span class="hljs-type">long</span> *mem = p;<br><br>   <span class="hljs-type">pthread_t</span> th[nthreads];<br>   <span class="hljs-type">pthread_attr_t</span> a;<br>   pthread_attr_init(&amp;a);<br>   <span class="hljs-type">cpu_set_t</span> c;<br>   <span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> i = <span class="hljs-number">1</span>; i &lt; nthreads; ++i)<br>     &#123;<br>        CPU_ZERO(&amp;c);<br>        CPU_SET(i, &amp;c);<br>        pthread_attr_setaffinity_np(&amp;a, <span class="hljs-keyword">sizeof</span>(c), &amp;c);<br>        mem[i * disp] = <span class="hljs-number">0</span>;<br>        pthread_create(&amp;th[i], &amp;a, tf, &amp;mem[i * disp]);<br>     &#125;<br><br>   CPU_ZERO(&amp;c);<br>   CPU_SET(<span class="hljs-number">0</span>, &amp;c);<br>   pthread_setaffinity_np(pthread_self(), <span class="hljs-keyword">sizeof</span>(c), &amp;c);<br>   mem[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>   tf(&amp;mem[<span class="hljs-number">0</span>]);<br><br>   <span class="hljs-keyword">if</span> ((disp == <span class="hljs-number">0</span> &amp;&amp; mem[<span class="hljs-number">0</span>] != nthreads * N)<br>       || (disp != <span class="hljs-number">0</span> &amp;&amp; mem[<span class="hljs-number">0</span>] != N))<br>     error(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-string">&quot;mem[0] wrong: %ld instead of %d&quot;</span>,<br>            mem[<span class="hljs-number">0</span>], disp == <span class="hljs-number">0</span> ? nthreads * N : N);<br><br>   <span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> i = <span class="hljs-number">1</span>; i &lt; nthreads; ++i)<br>     &#123;<br>        pthread_join(th[i], <span class="hljs-literal">NULL</span>);<br>        <span class="hljs-keyword">if</span> (disp != <span class="hljs-number">0</span> &amp;&amp; mem[i * disp] != N)<br>          error(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-string">&quot;mem[%u] wrong: %ld instead of %d&quot;</span>, i, mem[i * disp], N);<br>     &#125;<br><br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>代码主要作为示例提供，演示如何编写测量缓存行开销等效果的程序。循环体中的 <code>tf</code> 是有趣的部分。已知编译器的 <code>__sync_add_and_fetch</code> 内联函数生成原子添加指令。在第二个循环中，我们必须“使用”增加的结果（通过内联 <code>asm</code> 语句）。<code>asm</code> 不引入任何实际代码；相反，它防止编译器将增加操作提升出循环。</p>
+<p>第二个有趣的部分是程序将线程固定在特定处理器上。代码假设处理器编号为0到3，如果机器有四个或更多逻辑处理器，这通常是这种情况。代码可以使用 libNUMA 接口来确定可用处理器的编号，但是这个测试程序应该在不引入此依赖性的情况下广泛可用。很容易以这样或那样的方式进行修复。</p>
+<h1 id="10-OProfile技巧"><a href="#10-OProfile技巧" class="headerlink" title="10 OProfile技巧"></a>10 OProfile技巧</h1><p>以下不是关于如何使用oprofile的教程。关于这个主题已经写了很多文档。相反，它旨在提供一些更高层次的提示，如何查看自己的程序以找到可能的问题点。但在那之前，我们至少必须有一个关于oprofile的最小介绍。</p>
+<h2 id="10-1-Oprofile基础知识"><a href="#10-1-Oprofile基础知识" class="headerlink" title="10.1 Oprofile基础知识"></a>10.1 Oprofile基础知识</h2><p>Oprofile的工作分为两个阶段：收集然后分析。收集由内核执行；它不能在用户级别完成，因为测量使用CPU的性能计数器。这些计数器需要访问MSRs，这反过来又需要特权。</p>
+<p>每个现代处理器都提供自己的性能计数器集。在某些架构上，所有处理器实现都提供了计数器的一个子集，而其他计数器则因版本而异。这使得给出关于使用oprofile的一般建议变得困难。还没有（尚未）一个更高层次的抽象来隐藏这些细节。</p>
+<p>处理器版本还控制着任何时候可以跟踪的事件数量，以及它们的组合方式。这为情况增加了更多的复杂性。</p>
+<p>如果用户了解有关性能计数器的必要的详细信息，可以使用opcontrol程序来选择要计数的事件。对于每个事件，需要指定“溢出编号”（在记录事件之前必须发生的事件数量），事件是否应计入用户级别和&#x2F;或内核，最后是“单元掩码”（它选择性能计数器的子功能）。</p>
+<p>要在x86和x86-64处理器上计数CPU周期，必须发出以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">opcontrol --event CPU_CLK_UNHALTED:30000:0:1:1<br></code></pre></td></tr></table></figure>
+
+<p>数字30000是溢出编号。选择一个合理的值对于系统的行为和收集的数据很重要。要求接收有关事件的每个发生的数据是一个坏主意。对于许多事件，这将使机器停止运行，因为它将只工作在数据收集事件溢出上；这就是为什么oprofile强制执行最小值的原因。不同事件的最小值不同，因为不同事件在正常代码中被触发的概率不同。</p>
+<p>选择一个非常高的数字会降低概要文件的分辨率。在每个溢出处，oprofile会记录此时执行的指令的地址；对于x86和PowerPC，在某些情况下，它还可以记录回溯。{<em>回溯支持有望在某个时候对所有架构都可用。}</em> 通过粗略分辨率，热点可能不会获得代表性的命中数；这一切都是关于概率，这就是为什么oprofile被称为概率分析器。溢出编号越低，对系统的影响就越大，就减速而言，但分辨率越高。</p>
+<p>如果要分析特定程序，并且系统不用于生产，通常最有用的是使用尽可能低的溢出值。每个事件的确切值可以使用查询：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">opcontrol --list-events<br></code></pre></td></tr></table></figure>
+
+<p>如果被分析程序与另一个进程交互，并且减速导致交互出现问题，则可能会出现问题。如果进程有一些实时要求，在经常被中断时无法满足，那么必须找到中间地带。如果整个系统要在长时间内进行分析，情况也是如此。一个低的溢出编号将意味着巨大的减速。在任何情况下，oprofile和任何其他分析机制一样，都会引入不确定性和不准确性。</p>
+<p>分析必须使用 <code>opcontrol --start</code> 启动，并且可以用 <code>opcontrol --stop</code> 停止。当oprofile处于活动状态时，它会收集数据；这些数据首先在内核中收集，然后以批次发送到用户级守护程序，在那里进行解码并写入文件系统。使用 <code>opcontrol --dump</code> 可以请求将内核中缓冲的所有信息释放到用户级。</p>
+<p>收集的数据可以包含来自不同性能计数器的事件。除非用户选择在单独的oprofile运行之间清除存储的数据，否则所有数字都保持并行。可以在同一事件的不同场合累积数据。如果在不同的分析运行期间遇到事件，则如果用户选择这样做，数字将被累加。</p>
+<p>用户级数据收集过程的后半部分将数据多路分解。每个文件的数据单独存储。甚至可以区分由各个可执行文件使用的DSOs，甚至可以区分个别线程的数据。通过这种方式产生的数据可以使用 <code>oparchive</code> 进行归档。由此命令生成的文件可以传输到另一台机器上，然后在那里进行分析。</p>
+<p>使用opreport程序可以从分析结果生成报告。使用opannotate可以查看各种事件发生的位置：哪个指令，如果数据可用，在哪个源代码行。这使得找到热点变得容易。计数CPU周期将指出大部分时间花费在哪里（包括缓存未命中），而计数退休指令则允许找到大部分执行指令的位置——这两者之间有很大的差异。</p>
+<p>单个命中一个地址通常没有意义。统计分析的一个副作用是，只执行几次，甚至只执行一次的指令，可能会被归因于一个命中。在这种情况下，通过重复验证结果是非常必要的。</p>
+<h2 id="10-2-它看起来像什么"><a href="#10-2-它看起来像什么" class="headerlink" title="10.2 它看起来像什么"></a>10.2 它看起来像什么</h2><p>一个oprofile会话可以像这样简单：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">opcontrol -i cachebench</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">opcontrol -e INST_RETIRED:6000:0:0:1 --start</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">./cachebench ...</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">opcontrol -h</span><br></code></pre></td></tr></table></figure>
+
+<p>请注意，包括实际程序在内的这些命令都是以root身份运行的。这里以root身份运行程序只是为了简单起见；程序可以由任何用户执行，oprofile会注意到它。下一步是分析数据。使用opreport我们可以看到：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">CPU: Core 2, speed 1596 MHz (estimated)<br>Counted INST_RETIRED.ANY_P events (number of instructions retired) with a unit mask of<br>0x00 (No unit mask) count 6000<br>INST_RETIRED:6000|<br>   samples|      %|<br>------------------<br>    116452 100.000 cachebench<br></code></pre></td></tr></table></figure>
+
+<p>这意味着我们收集了一堆事件；现在可以使用opannotate以更详细地查看数据。我们可以看到程序中记录了最多事件的位置。<code>opannotate --source</code>输出的一部分看起来像这样：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">:static void<br>:inc (struct l *l, unsigned n)<br>:&#123;<br>:  while (n-- &gt; 0) /* inc total:  13980 11.7926 */<br>:    &#123;<br>:      5  0.0042 :      ++l-&gt;pad[0].l;<br>:  13974 11.7875 :      l = l-&gt;n;<br>:      1 8.4e-04 :      asm volatile (&quot;&quot; :: &quot;r&quot; (l));<br>:    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这是测试的内部函数，大部分时间都花在这里。我们看到样本分布在循环的所有三行上。这主要是因为采样并不总是100%准确地记录记录的指令指针。CPU执行指令的顺序可能会变化；重建确切的执行顺序以产生正确的指令指针是很难的。最新的CPU版本尝试为少数事件这样做，但通常情况下，这并不值得努力——或者根本不可能。在大多数情况下，这并不重要。即使存在正态分布的样本集，程序员也应该能够弄清楚发生了什么。</p>
+<h2 id="10-3-开始分析"><a href="#10-3-开始分析" class="headerlink" title="10.3 开始分析"></a>10.3 开始分析</h2><p>当开始分析一段代码时，我们当然可以从程序中花费最长时间的地方开始。那段代码当然应该尽可能地优化。但接下来会发生什么呢？程序在哪里花费了不必要的时间？</p>
+<p>这个问题不容易回答。</p>
+<p>这种情况下的一个问题是，绝对值并不说明真实情况。程序中的一个循环可能需要大部分时间，这是可以的。高CPU利用率有很多可能的原因。但更常见的是，CPU使用率更均匀地分布在整个程序中。在这种情况下，绝对值指向许多地方，这是没有用的。</p>
+<p>在许多情况下，查看两个事件的比率是有帮助的。例如，一个函数中错误预测的分支数量如果没有对函数执行频率的度量，那么这个绝对值就没有意义。是的，绝对值与程序的性能相关。每次调用错误预测的比率对函数的代码质量更有意义。Intel的x86和x86-64优化手册[intendopt]描述了应该调查的比率（引用文档的核心2事件附录B.7）。与内存处理相关的一些相关比率如下。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>指令获取暂停</td>
+<td><code>CYCLES_L1I_MEM_STALLED</code> &#x2F;<br><code>CPU_CLK_UNHALTED.CORE</code></td>
+<td>由于缓存或ITLB未命中，导致指令解码器等待新数据的周期比率。</td>
+</tr>
+<tr>
+<td>ITLB未命中率</td>
+<td><code>ITLB_MISS_RETIRED</code> &#x2F; <code>INST_RETIRED.ANY</code></td>
+<td>每个指令的ITLB未命中。如果此比率高，则代码分布在太多页面上。</td>
+</tr>
+<tr>
+<td>L1I未命中率</td>
+<td><code>L1I_MISSES</code> &#x2F; <code>INST_RETIRED.ANY</code></td>
+<td>每个指令的L1i未命中。执行流是不可预测的或代码大小太大。在前一种情况下，避免间接<br>跳转可能会有所帮助。在后一种情况下，块重新排序或避免<br>内联可能会有所帮助。</td>
+</tr>
+<tr>
+<td>L2指令未命中率</td>
+<td><code>L2_IFETCH.SELF.I_STATE</code> &#x2F;<br><code>INST_RETIRED.ANY</code></td>
+<td>每个指令的L2未命中程序代码。任何大于零的值表明代码局部性问题比L1i未命中更严重。</td>
+</tr>
+<tr>
+<td>装载率</td>
+<td><code>L1D_CACHE_LD.MESI</code> &#x2F; <code>CPU_CLK_UNHALTED.CORE</code></td>
+<td>每个周期的读取操作。Core 2核心可以服务一个装载<br>操作。高比率意味着执行受内存<br>读取限制。</td>
+</tr>
+<tr>
+<td>存储顺序阻塞</td>
+<td><code>STORE_BLOCK.ORDER</code> &#x2F;<br><code>CPU_CLK_UNHALTED.CORE</code></td>
+<td>由于先前的存储未命中缓存，存储被阻塞的比率。</td>
+</tr>
+<tr>
+<td>L1d阻塞加载率</td>
+<td><code>LOAD_BLOCK.L1D</code> &#x2F;<br><code>CPU_CLK_UNHALTED.CORE</code></td>
+<td>由于缺乏资源，L1d阻止的加载。通常这意味着太多的并发L1d访问。</td>
+</tr>
+<tr>
+<td>L1D未命中率</td>
+<td><code>L1D_REPL</code> &#x2F; <code>INST_RETIRED.ANY</code></td>
+<td>每个指令的L1d未命中。高比率意味着预取无效，L2使用得太频繁。</td>
+</tr>
+<tr>
+<td>L2数据未命中率</td>
+<td><code>L2_LINES_IN.SELF.ANY</code> &#x2F;<br><code>INST_RETIRED.ANY</code></td>
+<td>每个指令的数据L2未命中。如果值显著<br>大于零，则硬件和软件预取无效。处理器需要更多（或更早）的软件预取帮助。</td>
+</tr>
+<tr>
+<td>L2需求未命中率</td>
+<td><code>L2_LINES_IN.SELF.DEMAND</code> &#x2F;<br><code>INST_RETIRED.ANY</code></td>
+<td>硬件预取器根本没有使用的每个指令的数据L2未命中。这意味着，预取甚至还没有开始。</td>
+</tr>
+<tr>
+<td>有用的NTA预取率</td>
+<td><code>SSE_PRE_MISS.NTA</code> &#x2F;<br><code>SSS_PRE_EXEC.NTA</code></td>
+<td>相对于所有非时间性预取的总数，有用的非时间性预取的比率。低值意味着许多值已经在缓存中。这个比率也可以为其他预取类型计算。</td>
+</tr>
+<tr>
+<td>晚期NTA预取率</td>
+<td><code>LOAD_HIT_PRE</code> &#x2F; <code>SSS_PRE_EXEC.NTA</code></td>
+<td>相对于所有非时间性预取的总数，具有正在进行的预取的数据的加载请求的比率。高值意味着软件预取指令发出得太晚了。这个比率也可以为其他预取类型计算。</td>
+</tr>
+</tbody></table>
+<p>对于所有这些比率，程序应该运行时指导oprofile测量两个事件。这保证了两个计数是可比较的。在除法之前，必须确保考虑了可能不同的溢出值。最简单的方法是通过将每个事件的计数乘以溢出值来确保这一点。</p>
+<p>这些比率对于整个程序、可执行文件&#x2F;DSO级别，甚至函数级别都是有意义的。越深入地查看程序，包含在值中的错误就越多。</p>
+<p>为了使比率有意义，需要基线值。这并不像看起来那么简单。不同类型的代码具有不同的特性，一个程序中的比率值可能很糟糕，而在另一个程序中可能是正常的。</p>
+<h2 id="11-内存类型"><a href="#11-内存类型" class="headerlink" title="11 内存类型"></a>11 内存类型</h2><p>尽管对于高效编程并非必要知识，但描述一些内存类型的更多技术细节可能是有用的。具体来说，我们在这里感兴趣的是“注册”与“未注册”以及ECC与非ECC DRAM类型之间的区别。</p>
+<p>“注册”和“缓冲”这两个术语在描述带有DRAM模块上一个额外组件的DRAM类型时可以互换使用：一个缓冲区。所有DDR内存类型都可以是注册和未注册的形式。对于未注册的模块，内存控制器直接连接到模块上的所有芯片上。图11.1显示了设置。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292343846.png" srcset="/img/loading.gif" lazyload><br><strong>图11.1：未注册的DRAM模块</strong></p>
+<p>从电气角度来看，这是相当苛刻的。内存控制器必须能够处理所有内存芯片的容量（图中显示的六个芯片以上）。如果内存控制器（MC）有限制，或者要使用许多内存模块，这种设置并不理想。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292343494.png" srcset="/img/loading.gif" lazyload><br><strong>图11.2：注册DRAM模块</strong></p>
+<p>缓冲（或注册）内存改变了这种情况：RAM芯片不是直接连接到DRAM模块上的内存，而是连接到一个缓冲区，然后该缓冲区再连接到内存控制器。这显著降低了电气连接的复杂性。内存控制器驱动DRAM模块的能力增加了与节省的连接数相对应的因子。</p>
+<p>有了这些优势，问题是：为什么不是所有的DRAM模块都是缓冲的？有几个原因。显然，缓冲模块有点复杂，因此更昂贵。成本不是唯一的因素。缓冲区稍微延迟了来自RAM芯片的信号；延迟必须足够长，以确保来自RAM芯片的所有信号都被缓冲。结果是，DRAM模块的延迟增加了。这里值得一提的最后一个因素是，额外的电子元件增加了能源成本。由于缓冲区必须以总线频率运行，因此该组件的能源消耗可能相当大。</p>
+<p>考虑到DDR2和DDR3模块的其他因素，通常不可能每个存储体有超过两个DRAM模块。内存控制器的引脚数量限制了存储体的数量（在商品硬件中为两个）。大多数内存控制器能够驱动四个DRAM模块，因此未注册模块就足够了。在具有高内存需求的服务器环境中，情况可能会有所不同。</p>
+<p>服务器环境的另一个方面是它们不能容忍错误。由于RAM单元中电容器保持的微小电荷，可能会出现错误。人们经常开玩笑说宇宙辐射，但这确实是可能的。加上阿尔法衰变和其他自然现象，它们导致RAM单元中的内容从0变为1或反之亦然。使用的内存越多，发生此类事件的可能性就越大。</p>
+<p>如果这样的错误是不可接受的，可以使用ECC（错误校正码）DRAM。错误校正码使硬件能够识别不正确的单元内容，并在某些情况下纠正错误。在旧时代，奇偶校验只识别错误，并且当检测到错误时必须停止机器。有了ECC，相反，少量的错误位可以自动纠正。如果错误数量太多，则无法正确执行内存访问，机器仍然会停止。然而，对于工作DRAM模块来说，这种情况相当不可能，因为必须在同一模块上发生多个错误。</p>
+<p>当我们谈论ECC内存时，我们实际上并不完全正确。不是内存执行错误检查；相反，是内存控制器。DRAM模块只是提供更多的存储，并与实际数据一起传输额外的非数据位。通常，ECC内存存储每8位数据的1位额外位。为什么使用8位将在后面解释。</p>
+<p>在将数据写入内存地址时，内存控制器在将数据和ECC传输到内存总线之前，会实时计算新内容的ECC。当读取时，接收到数据和ECC，内存控制器计算数据的ECC，并将其与从DRAM模块传输的ECC进行比较。如果ECC匹配，一切正常。如果不匹配，内存控制器尝试纠正错误。如果无法进行此纠正，则记录错误，机器可能会停止。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292344937.png" srcset="/img/loading.gif" lazyload><br><strong>表11.1：ECC和数据位的关系</strong></p>
+<p>几种错误校正技术在使用中，但对于DRAM ECC，通常使用汉明码。汉明码最初用于使用能够识别和纠正一个翻转位（SEC，单错误校正）的能力对四个数据位进行编码。该机制可以轻松扩展到更多的数据位。数据位W的数量与错误代码位E的数量之间的关系由方程描述</p>
+<p>E &#x3D; ⌈log2 (W+E+1)⌉</p>
+<p>迭代求解这个方程得到表11.1第二列中的值。通过增加一个位，我们可以使用一个简单的奇偶校验位识别两个翻转位。这被称为SEC&#x2F;DED，单错误校正&#x2F;双错误检测。通过这个额外的位，我们得到了表11.1第四列中的值。对于W&#x3D;64的开销足够低，数字（64,8）是8的倍数，所以这是ECC的一个自然选择。在大多数模块上，每个RAM芯片产生8位，因此任何其他组合都会导致不太有效的解决方案。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292344608.png" srcset="/img/loading.gif" lazyload><br><strong>图11.3：汉明生成矩阵构造</strong></p>
+<p>使用W&#x3D;4和E&#x3D;3的代码可以轻松演示汉明码计算。我们在编码字的战略位置计算奇偶校验位。图11.3显示了原则。在对应于二的幂的位位置上添加了奇偶校验位。第一个奇偶校验位P1的奇偶校验和包含每第二个位。第二个奇偶校验位P2的奇偶校验和包含数据位1、3和4（这里编码为3、6和7）。类似地计算P4。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404292344118.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以使用矩阵乘法更优雅地描述奇偶校验位的计算。我们构造一个矩阵G &#x3D; [I|A]，其中I是单位矩阵，A是我们可以从图11.3中确定的奇偶校验生成矩阵。现在，如果我们将每个输入数据项表示为一个4维向量d，我们可以计算r&#x3D;d⋅G并得到一个7维向量r。这就是在ECC DDR的情况下存储的数据。</p>
+<p>要解码数据，我们构造一个新的矩阵H&#x3D;[AT|I]，其中AT是计算G时的奇偶校验生成矩阵的转置。这意味着：</p>
+<p>H⋅r的结果显示存储的数据是否有缺陷。如果没有，乘积是三维向量(0 0 0)T。否则，乘积的值，当解释为数字的二进制表示时，表示翻转位的列号。内存控制器可以纠正该位，程序将不会注意到存在问题。</p>
+<p>处理DED部分的额外位只是稍微复杂一些。通过更多的努力，可以创建可以纠正两个翻转位甚至更多的代码。是概率和风险决定是否需要这样做。一些内存制造商表示，每750小时可以在256MB的RAM中发生一次错误。通过加倍内存量，时间减少了75％。有足够的内存，在短时间内经历错误的概率可以是显著的，ECC RAM成为必需。时间框架甚至可能如此之小，以至于SEC&#x2F;DED实现甚至不足够。</p>
+<p>而不是实现更多的错误校正能力，服务器主板有能力在给定的时间框架内自动读取所有内存。这意味着，无论内存是否实际被处理器请求，内存控制器都会读取数据，如果ECC检查失败，则将已纠正的数据写回内存。只要在读取所有内存并将其写回所需的时间框架内发生少于两个内存错误的概率是可以接受的，SEC&#x2F;DED错误校正是一个完全合理的解决方案。</p>
+<p>与注册DRAM一样，必须问的问题是：为什么ECC DRAM不是常态？这个问题的答案与注册RAM的等效问题相同：额外的RAM芯片增加了成本，奇偶校验计算增加了延迟。未注册的，非ECC内存可以显著更快。由于注册和ECC DRAM的问题相似，通常只找到注册的，ECC DRAM，而不是未注册的，非ECC DRAM。</p>
+<p>另一种克服内存错误的方法。一些制造商提供所谓的“内存RAID”，其中数据在多个DRAM模块或至少RAM芯片上冗余分布。具有此功能的主板可以使用未注册的DRAM模块，但内存总线上增加的流量可能会抵消ECC和非ECC DRAM模块的访问时间差异。</p>
+<h2 id="12-libNUMA介绍"><a href="#12-libNUMA介绍" class="headerlink" title="12 libNUMA介绍"></a>12 libNUMA介绍</h2><p>尽管程序员需要的许多信息，如调度线程，适当分配内存等，都是可用的，但获取这些信息却相当繁琐。现有的NUMA支持库（libnuma，在RHEL&#x2F;Fedora系统上的numactl包中）远未提供足够的功能。</p>
+<p>作为响应，作者提出了一个新的库，提供NUMA所需的所有功能。由于内存和缓存层次结构处理的重叠，这个库对于非NUMA系统上的多线程和多核处理器也也很有用——几乎所有当前可用的机器。</p>
+<p>这个新库的功能迫切需要遵循本文档中的建议。这就是这里提到它的唯一原因。该库（截至撰写本文时）尚未完成，未经审查，未经打磨，并且未广泛分发。它在未来可能会发生显著变化。它目前在 <a target="_blank" rel="noopener" href="http://people.redhat.com/drepper/libNUMA.tar.bz2">http://people.redhat.com/drepper/libNUMA.tar.bz2</a> 上可用。</p>
+<p>这个库的接口严重依赖于 <code>/sys</code> 文件系统导出的信息。如果该文件系统未挂载，许多函数将简单地失败或提供不准确的信息。如果进程在 <code>chroot</code> 监狱中执行，这一点尤其重要要记住。</p>
+<p>库的接口头包含当前以下定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-type">memnode_set_t</span>;<br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_ZERO_S(setsize, memnodesetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_SET_S(node, setsize, memnodesetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_CLR_S(node, setsize, memnodesetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_ISSET_S(node, setsize, memnodesetp)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_COUNT_S(setsize, memnodesetp)</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_EQUAL_S(setsize, memnodesetp1, memnodesetp2)</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_AND_S(setsize, destset, srcset1, srcset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_OR_S(setsize, destset, srcset1, srcset2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_XOR_S(setsize, destset, srcset1, srcset2)</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_ALLOC_SIZE(count)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_ALLOC(count)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MEMNODE_FREE(memnodeset)</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_system_count</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_system_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">cpu_set_t</span> *dest)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_self_count</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_self_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">cpu_set_t</span> *dest)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_self_current_idx</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_self_current_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">cpu_set_t</span> *dest)</span>;<br><br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">NUMA_cpu_level_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">cpu_set_t</span> *dest,</span><br><span class="hljs-params">                            <span class="hljs-type">size_t</span> srcsize, <span class="hljs-type">const</span> <span class="hljs-type">cpu_set_t</span> *src,</span><br><span class="hljs-params">                            <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> level)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_system_count</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_system_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">memnode_set_t</span> *dest)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_self_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">memnode_set_t</span> *dest)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_self_current_idx</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_self_current_mask</span><span class="hljs-params">(<span class="hljs-type">size_t</span> destsize, <span class="hljs-type">memnode_set_t</span> *dest)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_cpu_to_memnode</span><span class="hljs-params">(<span class="hljs-type">size_t</span> cpusetsize, <span class="hljs-type">const</span> <span class="hljs-type">cpu_set_t</span> *cpuset,</span><br><span class="hljs-params">                       <span class="hljs-type">size_t</span> __memnodesize, <span class="hljs-type">memnode_set_t</span> *memnodeset)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_memnode_to_cpu</span><span class="hljs-params">(<span class="hljs-type">size_t</span> memnodesize, <span class="hljs-type">const</span> <span class="hljs-type">memnode_set_t</span> *memnodeset,</span><br><span class="hljs-params">                       <span class="hljs-type">size_t</span> cpusetsize, <span class="hljs-type">cpu_set_t</span> *cpuset)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_mem_get_node_idx</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">NUMA_mem_get_node_mask</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr, <span class="hljs-type">size_t</span> size,</span><br><span class="hljs-params">                           <span class="hljs-type">size_t</span> destsize, <span class="hljs-type">memnode_set_t</span> *dest)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>MEMNODE_*</code> 宏在形式和功能上类似于第6.4.3节中引入的 <code>CPU_*</code> 宏。没有非 <code>_S</code> 变体的宏，它们都需要一个大小参数。<code>memnode_set_t</code> 类型相当于 <code>cpu_set_t</code>，但这次是针对内存节点的。请注意，内存节点的数量不需要与CPU的数量有任何关系，反之亦然。可以有一个内存节点对应多个CPU，甚至没有CPU。因此，动态分配的内存节点位集的大小不应由CPU的数量决定。</p>
+<p>相反，应该使用 <code>NUMA_memnode_system_count</code> 接口。它返回当前注册的节点数。这个数字可能会随着时间的推移增长或缩小。然而，通常情况下，它会保持不变，因此是用于大小内存节点位集的好值。分配再次类似于 <code>CPU_</code> 宏，使用 <code>MEMNODE_ALLOC_SIZE</code>、<code>MEMNODE_ALLOC</code> 和 <code>MEMNODE_FREE</code> 进行。</p>
+<p>作为与 <code>CPU_*</code> 宏的最后并行，库还提供了比较内存节点位集是否相等和执行逻辑操作的宏。</p>
+<p><code>NUMA_cpu_*</code> 函数提供处理CPU集的功能。部分接口只是使现有功能以新名称可用。<code>NUMA_cpu_system_count</code> 返回系统中的CPU数量，<code>NUMA_CPU_system_mask</code> 变体返回设置了适当位的位掩码——这是其他方式无法获得的功能。</p>
+<p><code>NUMA_cpu_self_count</code> 和 <code>NUMA_cpu_self_mask</code> 返回有关当前线程当前被允许在其上运行的CPU的信息。<code>NUMA_cpu_self_current_idx</code> 返回当前使用的CPU的索引。</p>
+<p>此信息可能在返回时已经过时，由于内核可以做出的调度决策；必须始终假定其不准确。<code>NUMA_cpu_self_current_mask</code> 返回相同的信息，并在位集中设置了适当的位。</p>
+<p><code>NUMA_memnode_system_count</code> 已经介绍过了。<code>NUMA_memnode_system_mask</code> 是等效的函数，它填充一个位集。<code>NUMA_memnode_self_mask</code> 根据线程当前可以运行的任何CPU直接连接的内存节点填充一个位集。</p>
+<p><code>NUMA_memnode_self_current_idx</code> 和 <code>NUMA_memnode_self_current_mask</code> 返回更专门的信息。返回的信息是连接到线程当前正在运行的处理器的内存节点。正如对于 <code>NUMA_cpu_self_current_*</code> 函数一样，当函数返回时，此信息可能已经过时；它只能作为提示使用。</p>
+<p><code>NUMA_cpu_to_memnode</code> 函数可用于将一组CPU映射到直接连接的内存节点集。如果CPU设置中只设置了单个位，则可以确定每个CPU属于哪个内存节点。目前，Linux并不支持单个CPU属于超过一个内存节点；理论上，这在未来可能会改变。为了在另一个方向上进行映射，可以使用 <code>NUMA_memnode_to_cpu</code> 函数。</p>
+<p>如果内存已经被分配，有时了解其被分配的位置是有用的。这就是 <code>NUMA_mem_get_node_idx</code> 和 <code>NUMA_mem_get_node_mask</code> 允许程序员确定的。前者返回由参数指定的地址对应的页面被分配的内存节点的索引——或者根据当前安装的策略，如果页面尚未分配，将被分配。第二个函数可以为整个地址范围执行工作；它以位集的形式返回信息。函数的返回值是使用的不同内存节点的数量。</p>
+<p>在本节的其余部分，我们将看到这些接口的一些用例示例。在所有情况下，我们跳过错误处理和CPU和&#x2F;或内存节点的数量对于 <code>cpu_set_t</code> 和 <code>memnode_set_t</code> 类型分别过大的情况。使代码健壮是留给读者作为练习的。</p>
+<h3 id="12-1-确定给定CPU的线程兄弟"><a href="#12-1-确定给定CPU的线程兄弟" class="headerlink" title="12.1 确定给定CPU的线程兄弟"></a>12.1 确定给定CPU的线程兄弟</h3><p>要调度辅助线程，或者从被调度在给定CPU的线程上受益的其他线程，可以使用以下代码序列。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">cpu_set_t</span> cur;<br>CPU_ZERO(&amp;cur);<br>CPU_SET(cpunr, &amp;cur);<br><span class="hljs-type">cpu_set_t</span> hyperths;<br>NUMA_cpu_level_mask(<span class="hljs-keyword">sizeof</span>(hyperths), &amp;hyperths, <span class="hljs-keyword">sizeof</span>(cur), &amp;cur, <span class="hljs-number">1</span>);<br>CPU_CLR(cpunr, &amp;hyperths);<br></code></pre></td></tr></table></figure>
+
+<p>该代码首先为由 <code>cpunr</code> 指定的CPU生成一个位集。然后将此位集与第五个参数一起传递给 <code>NUMA_cpu_level_mask</code>，该参数指定我们正在寻找超线程。结果返回在 <code>hyperths</code> 位集中。剩余要做的就是清除对应于原始CPU的位。</p>
+<h3 id="12-2-确定给定CPU的核心兄弟"><a href="#12-2-确定给定CPU的核心兄弟" class="headerlink" title="12.2 确定给定CPU的核心兄弟"></a>12.2 确定给定CPU的核心兄弟</h3><p>如果两个线程不应被调度在两个超线程上，但可以从缓存共享中受益，我们需要确定处理器的其他核心。以下代码序列可以完成此操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">cpu_set_t</span> cur;<br>CPU_ZERO(&amp;cur);<br>CPU_SET(cpunr, &amp;cur);<br><span class="hljs-type">cpu_set_t</span> hyperths;<br><span class="hljs-type">int</span> nhts = NUMA_cpu_level_mask(<span class="hljs-keyword">sizeof</span>(hyperths), &amp;hyperths, <span class="hljs-keyword">sizeof</span>(cur), &amp;cur, <span class="hljs-number">1</span>);<br><span class="hljs-type">cpu_set_t</span> coreths;<br><span class="hljs-type">int</span> ncs = NUMA_cpu_level_mask(<span class="hljs-keyword">sizeof</span>(coreths), &amp;coreths, <span class="hljs-keyword">sizeof</span>(cur), &amp;cur, <span class="hljs-number">2</span>);<br>CPU_XOR(&amp;coreths, &amp;coreths, &amp;hyperths);<br>ncs -= nhts;<br></code></pre></td></tr></table></figure>
+
+<p>代码的第一部分与确定超线程的代码相同。这不是巧合，因为我们必须区分给定CPU的超线程与其他核心。这是通过调用 <code>NUMA_cpu_level_mask</code> 的第二部分实现的，但这次级别为2。剩余要做的就是从结果中移除给定CPU的所有超线程。<code>nhts</code> 和 <code>ncs</code> 变量用于跟踪相应位集中设置的位数。</p>
+<p>生成的掩码可用于调度另一个线程。如果不需要显式调度其他线程，则使用核心的决定可以留给操作系统。否则，可以迭代地运行以下代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span> (ncs &gt; <span class="hljs-number">0</span>) &#123;<br>   <span class="hljs-type">size_t</span> idx = <span class="hljs-number">0</span>;<br>   <span class="hljs-keyword">while</span> (!CPU_ISSET(idx, &amp;ncs))<br>      ++idx;<br>   CPU_ZERO(&amp;cur);<br>   CPU_SET(idx, &amp;cur);<br>   nhts = NUMA_cpu_level_mask(<span class="hljs-keyword">sizeof</span>(hyperths), &amp;hyperths, <span class="hljs-keyword">sizeof</span>(cur), &amp;cur, <span class="hljs-number">1</span>);<br>   CPU_XOR(&amp;coreths, &amp;coreths, &amp;hyperths);<br>   ncs -= nhts;<br><br>   <span class="hljs-comment">// ... 在CPU idx上调度线程 ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>循环在每次迭代中从剩余的、使用的核中选择一个CPU编号。然后它计算这个CPU的所有超线程。得到的结果位集然后从可用核的位集中减去（使用 <code>CPU_XOR</code>）。如果XOR操作没有移除任何东西，那么真的出了问题。<code>ncs</code> 变量已更新，我们准备好了下一轮，但在做出调度决定之前，我们还没有准备好。最后，任何 <code>idx</code>、<code>cur</code> 或 <code>hyperths</code> 都可以用来调度线程，这取决于程序的要求。通常最好尽可能让操作系统自由，因此使用 <code>hyperths</code> 位集，以便操作系统可以选择最佳的超线程。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>[amdccnuma]<br>Performance guidelines for amd athlon™ 64 and amd opteron™ ccnuma multiprocessor systems. Advanced Micro Devices, 2006.</li>
+<li>[arstechtwo]<br>Stokes, Jon &#96;&#96;Hannibal’’. Ars Technica RAM Guide, Part II: Asynchronous and Synchronous DRAM. <a target="_blank" rel="noopener" href="http://arstechnica.com/paedia/r/ram_guide/ram_guide.part2-1.html">http://arstechnica.com/paedia/r/ram_guide/ram_guide.part2-1.html</a>, 2004.</li>
+<li>[continuous]<br>Anderson, Jennifer M., Lance M. Berc, Jeffrey Dean, Sanjay Ghemawat, Monika R. Henzinger, Shun-Tak A. Leung, Richard L. Sites, Mark T. Vandevoorde, Carl A. Waldspurger and William E. Weihl. Continuous profiling: Where have all the cycles gone. Proceedings of the 16th acm symposium of operating systems principles, pages 1–14. 1997.</li>
+<li>[dcas]<br>Doherty, Simon, David L. Detlefs, Lindsay Grove, Christine H. Flood, Victor Luchangco, Paul A. Martin, Mark Moir, Nir Shavit and Jr. Guy L. Steele. DCAS is not a Silver Bullet for Nonblocking Algorithm Design. Spaa ‘04: proceedings of the sixteenth annual acm symposium on parallelism in algorithms and architectures, pages 216–224. New York, NY, USA, 2004. ACM Press.</li>
+<li>[ddrtwo]<br>Dowler, M. Introduction to DDR-2: The DDR Memory Replacement. <a target="_blank" rel="noopener" href="http://www.pcstats.com/articleview.cfm?articleID=1573">http://www.pcstats.com/articleview.cfm?articleID=1573</a>, 2004.</li>
+<li>[directcacheaccess]<br>Huggahalli, Ram, Ravi Iyer and Scott Tetrick. Direct Cache Access for High Bandwidth Network I&#x2F;O. , 2005.</li>
+<li>[dwarves]<br>Melo, Arnaldo Carvalho de. The 7 dwarves: debugging information beyond gdb. Proceedings of the linux symposium. 2007.</li>
+<li>[futexes]<br>Drepper, Ulrich. Futexes Are Tricky., 2005. <a target="_blank" rel="noopener" href="http://people.redhat.com/drepper/futex.pdf">http://people.redhat.com/drepper/futex.pdf</a>.</li>
+<li>[goldberg]<br>Goldberg, David. What Every Computer Scientist Should Know About Floating-Point Arithmetic. ACM Computing Surveys, 23(1):5–48, 1991.</li>
+<li>[highperfdram]<br>Cuppu, Vinodh, Bruce Jacob, Brian Davis and Trevor Mudge. High-Performance DRAMs in Workstation Environments. IEEE Transactions on Computers, 50(11):1133–1153, 2001.</li>
+<li>[htimpact]<br>Margo, William, Paul Petersen and Sanjiv Shah. Hyper-Threading Technology: Impact on Compute-Intensive Workloads. Intel Technology Journal, 6(1), 2002.</li>
+<li>[intelopt]<br>Intel 64 and ia-32 architectures optimization reference manual. Intel Corporation, 2007.</li>
+<li>[lockfree]<br>Fober, Dominique, Yann Orlarey and Stephane Letz. Lock-Free Techiniques for Concurrent Access to Shared Objects. In GMEM, editor, Actes des journées d’informatique musicale jim2002, marseille, pages 143–150. 2002.</li>
+<li>[micronddr]<br>Double Data Rate (DDR) SDRAM MT46V. Micron Technology, 2003.</li>
+<li>[mytls]<br>Drepper, Ulrich. ELF Handling For Thread-Local Storage. Technical report, Red Hat, Inc., 2003.</li>
+<li>[nonselsec]<br>Drepper, Ulrich. Security Enhancements in Red Hat Enterprise Linux. , 2004.</li>
+<li>[oooreorder]<br>McNamara, Caolán. Controlling symbol ordering. <a target="_blank" rel="noopener" href="http://blogs.linux.ie/caolan/2007/04/24/controlling-symbol-ordering/">http://blogs.linux.ie/caolan/2007/04/24/controlling-symbol-ordering/</a>, 2007.</li>
+<li>[sramwiki]<br>Wikipedia. Static random access memory. <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Static_Random_Access_Memory">http://en.wikipedia.org/wiki/Static_Random_Access_Memory</a>, 2006.</li>
+<li>[transactmem]<br>Herlihy, Maurice and J. Eliot B. Moss. Transactional memory: Architectural support for lock-free data structures. Proceedings of 20th international symposium on computer architecture. 1993.</li>
+<li>[vectorops]<br>Gebis, Joe and David Patterson. Embracing and Extending 20th-Century Instruction Set Architectures. Computer, 40(4):68–75, 2007.</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/258188/">原文</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%86%85%E5%AD%98/" class="category-chain-item">内存</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>每一个程序员都应该了解的内存知识-Part9</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/04/29/每一个程序员都应该了解的内存知识-Part9/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E5%8D%95%E6%8E%A8%E8%8D%90/" title="计算机书单推荐">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计算机书单推荐</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/29/%E6%AF%8F%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%91%98%E9%83%BD%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E5%86%85%E5%AD%98%E7%9F%A5%E8%AF%86-Part8/" title="每一个程序员都应该了解的内存知识-Part8">
+                        <span class="hidden-mobile">每一个程序员都应该了解的内存知识-Part8</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

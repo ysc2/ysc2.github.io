@@ -1,0 +1,953 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="如何使用 QEMU 模拟一块开发板？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用qemu模拟一块开发板">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/05/11/%E4%BD%BF%E7%94%A8qemu%E6%A8%A1%E6%8B%9F%E4%B8%80%E5%9D%97%E5%BC%80%E5%8F%91%E6%9D%BF/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="如何使用 QEMU 模拟一块开发板？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/6dzq97.jpg">
+<meta property="article:published_time" content="2024-05-11T12:38:51.000Z">
+<meta property="article:modified_time" content="2024-06-18T17:01:40.320Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/6dzq97.jpg">
+  
+  
+  
+  <title>使用qemu模拟一块开发板 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/6dzq97.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="使用qemu模拟一块开发板"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-11 20:38" pubdate>
+          2024年5月11日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          127 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">使用qemu模拟一块开发板</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>如何使用 QEMU 模拟一块开发板？</p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>事实上，qemu可以用来模拟各种硬件，并且 <code>qemu</code> 官方也提供了一些已经配置好的硬件开发板。所以，我们可以直接使用这些配置好的开发板来进行模拟。<strong>同时也可以自己配置自己的独特的开发板</strong>。</p>
+<p>首先，我们先说如何使用 <code>qemu</code> 官方提供的配置好的开发板。</p>
+<h1 id="关于QEMU的杂项"><a href="#关于QEMU的杂项" class="headerlink" title="关于QEMU的杂项"></a>关于QEMU的杂项</h1><h2 id="qemu-qemu-kvm-qemu-system-x86-64-qemu-x86-64命令的区别"><a href="#qemu-qemu-kvm-qemu-system-x86-64-qemu-x86-64命令的区别" class="headerlink" title="qemu&#x2F;qemu-kvm&#x2F;qemu-system-x86_64&#x2F;qemu-x86_64命令的区别"></a>qemu&#x2F;qemu-kvm&#x2F;qemu-system-x86_64&#x2F;qemu-x86_64命令的区别</h2><h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><p>在老版本中有单独的qemu-kvm模块存在，结合qemu一起做虚拟机工作。在后续新版本中，已经将qemu-kvm模块完全合并到qemu中去。因此当需要使用kvm特性时候，只需要qemu-system-x86_64 启动命令中增加参数 –enable-kvm参数使能即可。</p>
+<ul>
+<li>(<a target="_blank" rel="noopener" href="http://blog.csdn.net/tantexian/article/details/41281171">http://blog.csdn.net/tantexian/article/details/41281171</a>)</li>
+</ul>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><blockquote>
+<p>I asked the mailing list, here’s what I got:</p>
+<p>qemu-arch like &#x2F;usr&#x2F;local&#x2F;bin&#x2F;qemu-x86_64 is for running a program of that arch on the host machine of what ever arch, but not a virtual machine<br>qemu-system-arch like &#x2F;usr&#x2F;local&#x2F;bin&#x2F;qemu-system-x86_64 is for running a system of that arch on the host machine to enable kvm support, qemu parameter -enable-kvm is needed, libvirt should have taken care of this if right xml is configured</p>
+<p>Thanks Jakob for the answer in the mailing list.</p>
+</blockquote>
+<ul>
+<li>(<a target="_blank" rel="noopener" href="http://serverfault.com/questions/767212/difference-between-qemu-kvm-qemu-system-x86-64-qemu-x86-64">http://serverfault.com/questions/767212/difference-between-qemu-kvm-qemu-system-x86-64-qemu-x86-64</a>)</li>
+</ul>
+<p>意思是，类似qemu-x86_64这种命令是运行某种架构的程序的，qemu-system-x86_64是运行某种架构系统的（虚拟机），如果需要kvm支持，需要加上参数 -enable-kvm， 如果使用libvirt可以配置相应的xml来实现kvm支持。</p>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><blockquote>
+<p>Actually, qemu-kvm is a simple wrapper of qemu-system-x86_64.</p>
+<p>In my x86_64 gentoo OS, the content of qemu-kvm script is</p>
+<p>#!&#x2F;bin&#x2F;sh$ exec &#x2F;usr&#x2F;bin&#x2F;qemu-system-x86_64 –enable-kvm “$@”</p>
+</blockquote>
+<ul>
+<li>(<a target="_blank" rel="noopener" href="https://lists.nongnu.org/archive/html/qemu-discuss/2012-02/msg00018.html">https://lists.nongnu.org/archive/html/qemu-discuss/2012-02/msg00018.html</a>)</li>
+</ul>
+<p>意思是，gentoo里面的qemu-kvm就是运行“qemu-system-x86_64 –enable-kvm”， 是一个脚本。</p>
+<h3 id="4"><a href="#4" class="headerlink" title="4"></a>4</h3><blockquote>
+<p>The KVM project used to maintain a fork of QEMU called qemu-kvm. All feature differences have been merged into QEMU upstream and the development of the fork suspended.</p>
+<p>To use KVM pass –enable-kvm to QEMU.</p>
+</blockquote>
+<ul>
+<li>(<a target="_blank" rel="noopener" href="http://wiki.qemu.org/Features/KVM">http://wiki.qemu.org/Features/KVM</a>)</li>
+</ul>
+<p>官方文档，意思是KVM项目以前fork了一个QEMU的镜像并称为qemu-kvm。现在所有不同的特征都被merge到QEMU的upstream了，称为qemu-kvm的fork版本暂停开发了。</p>
+<h3 id="暂时的结论"><a href="#暂时的结论" class="headerlink" title="暂时的结论"></a>暂时的结论</h3><p>现在的qemu已经整合qemu-kvm，不再有qemu-kvm的说法了。一般创建x86的虚拟机需要用到qemu-system-x86_64这个命令，并需要加上–enable-kvm来支持kvm加速。有些Linux发行版的qemu-kvm命令仅仅是qemu-system-x86_64的软链接或者简单包装。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.jcix.top/2016-11-02/qemu_commands/">https://blog.jcix.top/2016-11-02/qemu_commands/</a></li>
+</ul>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p><strong>首先，不管是编译什么软件，在 Linux 中都需要使用编译器等等一系列的工具，我们称之为工具链。由于我们需要编译不同于我们 PC 架构的软件，所以需要安装交叉编译器。</strong></p>
+<p>安装各种架构的工具链是一件麻烦事，但是好在有一些开源的工具可以帮助我们安装。</p>
+<p>我们首先了解一下相关工具的命令规则：</p>
+<p>GCC 的命名规则为：<strong>arch [-vendor] [-os] [-(gnu)eabi]-gcc</strong></p>
+<p>比如 <code>arm-linux-gnueabi-gcc</code> ， <code>arm-none-eabi-gcc</code>， <code>aarch64-linux-gnu-gcc</code></p>
+<p><strong>带 [] 的是可选部分。</strong></p>
+<ul>
+<li><p>arch：芯片架构，比如 32 位的 Arm 架构对应的 arch 为 arm，64 位的 Arm 架构对应的 arch 为 aarch64。</p>
+</li>
+<li><p>vendor ：工具链提供商，大部分工具链名字里面都没有包含这部分。</p>
+</li>
+<li><p>os ：编译出来的可执行文件(目标文件)针对的操作系统，比如 Linux。</p>
+</li>
+</ul>
+<p>其中 <code>arm-none-eabi-gcc</code> 一般适用用于 <code>Arm Cortex-M/Cortex-R</code> 平台，它使用的是 <code>newlib</code> 库。</p>
+<p><code>arm-linux-gnueabi-gcc</code> 和 <code>aarch64-linux-gnu-gcc</code> 适用于 <code>Arm Cortex-A</code> 系列芯片，前者针对 <code>32</code> 位芯片，后者针对 <code>64</code> 位芯片，它使用的是 <code>glibc</code> 库。可以用来编译 u-boot、linux kernel 以及应用程序。</p>
+<p>另外需要补充一点的是，<code>32</code> 位的 Arm 和 <code>64</code> 位的 Arm，它们的指令集是不同的，所以需要使用不同的工具链。当然，<code>Arm64</code> 为了保证前向兼容，提供了一个 <code>32</code> 位的兼容模式，所以我们用 <code>arm-linux-gnueabi-gcc</code> 编译的应用程序也是可以直接在Arm64 的系统上运行的，但是 <code>Linux Kernel</code> 和 <code>U-Boot</code> 就不行，除非你提前把 <code>CPU</code> 切换到 <code>32</code> 位模式。曾经有个项目使用了一颗四核的 Arm64 芯片，但是内存只有64M，为了节省空间，在 CPU 运行到 <code>U-Boot</code> 之前，我们就把它切到了 32 位模式，后面的 <code>U-Boot</code>、<code>Linux Kernel</code>，应用全部都用 <code>32</code> 位编译，加上 <code>Thumb</code> 指令集，节省了不少空间。</p>
+<h2 id="ARM平台"><a href="#ARM平台" class="headerlink" title="ARM平台"></a>ARM平台</h2><p>现在 Arm 平台上用的最广泛的工具链是 Linaro 发布的，大家可以到 Linaro 官网下载，地址如下：</p>
+<p>在这个平台上，可以使用 <a target="_blank" rel="noopener" href="https://www.linaro.org/downloads/">linaro</a> 提供的工具链。</p>
+<p>同时，我们也可以不使用这个工具链，自己编译工具链。</p>
+<h3 id="安装交叉编译器"><a href="#安装交叉编译器" class="headerlink" title="安装交叉编译器"></a>安装交叉编译器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get install gcc-arm-linux-gnueabi<br></code></pre></td></tr></table></figure>
+
+<p>如果想要卸载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get remove gcc-arm-linux-gnueabi<br></code></pre></td></tr></table></figure>
+
+<p>如果提示缺少相对应的安装库则：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get install build-essential pkg-config zlib1g-dev libglib2.0-0 libglib2.0-dev  libsdl1.2-dev libpixman-1-dev libfdt-dev autoconf automake libtool librbd-dev libaio-dev flex bison -y<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="使用官方的配置开发板"><a href="#使用官方的配置开发板" class="headerlink" title="使用官方的配置开发板"></a>使用官方的配置开发板</h1><p>qemu 官方是提供了一些已经配置好的开发板，我们可以直接使用这些配置好的开发板来进行模拟。<strong>但是， qemu 也支持自定义的开发板，我们可以自己配置自己的独特的开发板。这个部分我们之后再说</strong>。</p>
+<p>使用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">qemu-system-arm -M ?<br></code></pre></td></tr></table></figure>
+
+<p>这个查看所有支持的开发板。</p>
+<h2 id="准备好qemu"><a href="#准备好qemu" class="headerlink" title="准备好qemu"></a>准备好qemu</h2><p>首先，我们需要安装 <code>qemu</code> 软件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get install qemu-system-arm<br></code></pre></td></tr></table></figure>
+
+<h2 id="准备好引导文件——Uboot"><a href="#准备好引导文件——Uboot" class="headerlink" title="准备好引导文件——Uboot"></a>准备好引导文件——Uboot</h2><p><strong>需要注意的是，如果直接使用 qemu 运行 Linux 的话其实是不需要 uboot 的的。这是因为其实 qemu 自带了一个引导程序，可以直接引导 Linux 内核</strong>。也就是说，如果直接使用 qemu 运行 Linux，我们不需要安装 <code>u-boot</code>。也是可以执行的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">qemu-system-arm \<br>-M vexpress-a9 \<br>-m 512M \<br>-kernel /path_to_kernel_dir/arch/arm/boot/zImage -dtb  \<br>/path_to_kernel_dir/arch/arm/boot/dts/vexpress-v2p-ca9.dtb \<br>-nographic \<br>-append <span class="hljs-string">&quot;root=/dev/mmcblk0  console=ttyAMA0&quot;</span> \<br>-sd a9rootfs.ext3<br></code></pre></td></tr></table></figure>
+
+<p><strong>从上面这个命令中可以看出来，这里是直接使用 <code>zImage</code> 作为内核，而不是使用的 <code>uImage</code>作为内核。</strong></p>
+<p><strong>如果是直接再电脑上使用 qemu 来运行 Linux，我们可以不用安装 uboot 。但是，对于嵌入式环境下，我们还是需要安装 <code>u-boot</code> 的。因为qemu自带bootloader功能，可以直接引导内核，有点类似于自带BIOS系统的电脑主板。但是嵌入式设备通常是没有这样的条件的，所以我们如果真的要用QEMU完成仿真工作的话，还是得把u-boot加进来。</strong></p>
+<p>一般来说，我们使用 <code>u-boot</code> 作为引导程序，使用 <code>u-boot</code> 引导 <code>linux</code> 内核的时候是需要内核的。<code>uboot</code> 的作用主要是引导，引导 kernel、rootfs 等等。</p>
+<p>首先从官方网站下载 <code>u-boot</code> 软件包，然后解压：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@github.com:u-boot/u-boot.gitc<br><br>tar -xvf u-boot-2021.04.tar.bz2<br></code></pre></td></tr></table></figure>
+
+<p>然后进行配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> u-boot-2021.04<br>make CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm vexpress_ca9x4_defconfig<br><span class="hljs-comment"># 这个由于官方已经提供了相关开发板的默认配置，就不再需要更改了，指定官方已经写好的配置。</span><br></code></pre></td></tr></table></figure>
+
+<p>编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">make CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm -j8make vexpress_ca9x4_defconfig<br></code></pre></td></tr></table></figure>
+
+<p>编译完毕之后，在当前目录下会生成<code>u-boot</code>文件，这个文件可以使用以下命令启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo qemu-system-arm -M vexpress-a9 -m 256 -kernel ./u-boot -nographic<br><span class="hljs-comment"># -nographic 不使用图形化界面，仅仅使用串口</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>这里在准备好 uboot 之后，我们可以使用 qemu 进行测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">qemu-system-arm \<br>-M vexpress-a9 \<br>-m 512M \<br>-kernel /path_to_uboot/u-boot \<br>-nographic \<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>这里可以使用 qemu 来研究 uboot 的启动流程，可以帮助我们理解 uboot 的工作原理。</p>
+          </div>
+
+
+<p>此时由于缺少 <code>linux</code> 内核，所以无法启动系统，我们需要准备好 <code>linux</code> 内核。</p>
+<h2 id="准备好内核——Linux-Kernel"><a href="#准备好内核——Linux-Kernel" class="headerlink" title="准备好内核——Linux Kernel"></a>准备好内核——Linux Kernel</h2><p>首先我们再 <code>GitHub</code> 上下载 <code>linux</code> 内核源码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@github.com:torvalds/linux.git<br></code></pre></td></tr></table></figure>
+
+<p>配置、编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 解压</span><br>tar xf linux-5.10.tar.xz<br><span class="hljs-built_in">cd</span>  linux-5.10<br><span class="hljs-comment"># 配置，要指定ARCH=arm（也可以设置环境变量），才会从arm架构中找配置文件，这里注意Linux内核已经帮我们编写好了一些配置文件，可以去 /arch 下的文件夹中找。注意 arm 和 arm64 是不同的，一个是 32 位 一个是 64 位。</span><br>make ARCH=arm  vexpress_defconfig<br><span class="hljs-comment"># 编译，可以使用参数zImage,modules,dtbs编译指定的部分，默认全部编译</span><br>make CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm -j8<br><span class="hljs-comment"># 生成的文件位于arch/arm/boot下</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>由于我们使用 Uboot 进行引导，所以需要 uImage 作为内核，而不是 zImage</strong>。所以需要将 Linux 内核修改为 uImage 格式。二者有什么区别：** uImage 是带有 长度为 0x40 长的信息头的内核镜像，而 zImage 是没有信息头的内核镜像**。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">make zImage -j8 <span class="hljs-comment">#注意，由于 uImage 是由 zImage 来生成的</span><br>make uImage <br></code></pre></td></tr></table></figure>
+
+<p>制作 uImage 注意。uboot 有单独的工具生成 uImage，但是 Linux 内核也会自带工具用以从 zImage 来生成 uImage 。但是<strong>好像不是所有的 Linux 版本都自带这个工具</strong>。</p>
+<p>所以我们可以使用 uboot 自带的工具来生成 uImage：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install u-boot-tools<br>make CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm  LOADADDR=0x60003000 uImage -j8<br></code></pre></td></tr></table></figure>
+
+<p>使用 uboot 引导 Linux内核时需要注意，不是直接使用 qemu 命令中的 <code>-kernel uImage</code>，就可以了。而是要使用其他方法：</p>
+<ul>
+<li>将 uImage 放到 SD 卡中，并制作启动脚本。这里还可以将根文件系统也放在 SD 卡中</li>
+<li>使用 USB 启动，并制作启动脚本。</li>
+<li>使用网络启动，并制作启动脚本。</li>
+</ul>
+<h3 id="将内核和根文件系统放到-SD-卡中"><a href="#将内核和根文件系统放到-SD-卡中" class="headerlink" title="将内核和根文件系统放到 SD 卡中"></a>将内核和根文件系统放到 SD 卡中</h3><p>介绍一下 <code>parted</code> 命令：</p>
+<p><code>parted</code> 是一个功能强大的命令行分区管理工具，用于磁盘分区的创建、调整大小、移动、删除和文件系统格式化等操作。它支持多种类型的磁盘和分区表格式，包括 MBR（主引导记录）和 GPT（全局唯一标识磁盘分区表）。通常，<code>parted</code> 提供了一个交互式的命令行界面，你可以在其中输入命令并执行。但是，当需要自动化任务或者在脚本中使用 <code>parted</code> 时，交互式界面就不太适用了。这时，可以使用 <code>--script</code> 参数来指示 <code>parted</code> 执行一系列的命令，这些命令在 <code>--script</code> 之后直接写入，没有交互提示。</p>
+<p>如果不使用 <code>--script</code> 参数，<code>parted</code> 会进入一个命令行模式，在该模式下，你可以输入命令，但是不能使用交互式命令。下面有一些常用的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">parted [设备路径] <span class="hljs-comment"># 启动 parted</span><br><span class="hljs-built_in">print</span> <span class="hljs-comment"># 打印磁盘信息</span><br>mklabel [分区表类型] <span class="hljs-comment"># 创建新分区，设置磁盘的分区表类型，例如 msdos 或 gpt。</span><br>mkpart [分区类型] [起始位置] [结束位置] <span class="hljs-comment"># 创建一个新的分区，其中 分区类型 可以是 primary、logical 或 extended，起始位置 和 结束位置 是以扇区为单位的。</span><br>mkfs [文件系统类型] [分区号] <span class="hljs-comment"># 格式化指定的分区，文件系统类型 可以是 ext2、ext3、ext4、xfs、ntfs 等。</span><br>resizepart [分区号] [新大小] <span class="hljs-comment"># 调整指定分区的大小。</span><br><span class="hljs-built_in">rm</span> [分区号] <span class="hljs-comment"># 删除指定的分区号</span><br>quit <span class="hljs-comment"># 退出 parted 命令行界面。</span><br></code></pre></td></tr></table></figure>
+
+<p>首先，我们制作一个 SD 卡：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=SD  bs=1M count=64<br>sudo parted SD --script -- mklabel msdos  <br><span class="hljs-comment"># 这个命令在 SD 文件上创建一个新的分区表，使用 MS-DOS（MBR）分区表类型。</span><br><br><span class="hljs-comment"># 这里和2048对齐一下，减少一个警告 </span><br>sudo parted SD --script -- mkpart primary fat32 2048s 40956s<br><span class="hljs-comment"># 这个命令在 SD 文件上创建第一个主分区，使用 FAT32 文件系统，从磁盘的第 2048 个扇区开始，到第 40956 个扇区结束。</span><br>sudo parted SD --script -- mkpart primary ext4 40960s -1<br><span class="hljs-comment"># 这个命令在 SD 文件上创建第二个主分区，使用 ext4 文件系统，从第 40960 个扇区开始，一直到文件的末尾。</span><br><br><span class="hljs-comment"># 建立映射，然后格式化两个分区</span><br>sudo losetup --show /dev/loop15 SD<br><span class="hljs-comment"># sudo apt install kpartx</span><br>sudo kpartx -va /dev/loop15<br>sudo mkfs.vfat /dev/mapper/loop15p1<br><span class="hljs-comment"># 格式化第一个分区为 FAT32 文件系统</span><br>sudo mkfs.ext4 /dev/mapper/loop15p2<br><span class="hljs-comment"># 格式化第二分区为 ext4 文件系统</span><br><br><span class="hljs-comment"># 拷贝内核zImage、vexpress-v2p-ca9.dtb到第一个分区</span><br>sudo mount /dev/mapper/loop15p1 /mnt<br>sudo <span class="hljs-built_in">cp</span> ../linux-5.10/arch/arm/boot/uImage  /mnt<br>sudo <span class="hljs-built_in">cp</span> ../linux-5.10/arch/arm/boot/dts/vexpress-v2p-ca9.dtb /mnt<br><span class="hljs-comment"># 拷贝文件系统内的所有文件到第二个分区</span><br>sudo mount /dev/mapper/loop15p2 /media<br>sudo <span class="hljs-built_in">cp</span> -r ../busybox-1.32.0/rootfs/* /media<br>sudo <span class="hljs-built_in">chown</span> -R root.root /media/*<br><span class="hljs-comment"># 卸载</span><br>sudo umount /mnt<br>sudo umount /media​<br></code></pre></td></tr></table></figure>
+
+<p>总结一下，上面的步骤包括：</p>
+<ol>
+<li>创建一个 64M 的空文件 SD，并格式化为 MS-DOS 分区表。</li>
+<li>创建两个主分区，第一个分区为 FAT32 文件系统，第二个分区为 ext4 文件系统。</li>
+<li>建立映射，并格式化两个分区。</li>
+<li>拷贝内核和根文件系统到两个分区。</li>
+<li>卸载两个分区。</li>
+</ol>
+<p>现在，我们已经完成了 SD 卡的制作，下面我们就可以使用 qemu 启动 Linux 系统了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># u-boot启动SD卡中的kernel和文件系统</span><br>qemu-system-arm \<br>	-M vexpress-a9 \<br>	-m 512M \<br>	-kernel ./u-boot-2022.04/u-boot \<br>	-nographic \<br>	-append <span class="hljs-string">&quot;root=/dev/mmcblk0 console=ttyAMA0&quot;</span> \<br>	-sd ./rootfs/SD<br><br><span class="hljs-comment"># 启动</span><br>fatls mmc 0:1<br>fatload mmc 0:1 60003000 uImage<br>fatload mmc 0:1 60500000 vexpress-v2p-ca9.dtb<br>setenv bootargs <span class="hljs-string">&#x27;init=/linuxrc root=/dev/mmcblk0p2 rw rootwait earlyprintk console=ttyAMA0&#x27;</span><br>bootm 60003000 - 60500000<br><br><span class="hljs-comment"># tips</span><br>这里对文件系统的修改会保存<br><br></code></pre></td></tr></table></figure>
+
+<p>启动下面的这几个命令是在 uboot 启动之后的命令，也就是说，这些命令都是 uboot 自带的。</p>
+<ol>
+<li><p>列出 MMC 卡内容（如果使用 MMC 作为存储设备）：</p>
+<pre><code class="hljs"> fatls mmc 0:1
+</code></pre>
+</li>
+<li><p>从 MMC 卡加载内核映像：</p>
+<pre><code class="hljs"> fatload mmc 0:1 60003000 uImage
+</code></pre>
+</li>
+<li><p>从 MMC 卡加载设备树：</p>
+<pre><code class="hljs"> fatload mmc 0:1 60500000 vexpress-v2p-ca9.dtb
+</code></pre>
+</li>
+<li><p>设置启动参数：</p>
+<pre><code class="hljs"> setenv bootargs &#39;console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw earlyprintk rootfstype=ext4&#39;
+</code></pre>
+</li>
+<li><p>启动 Linux 内核：</p>
+<pre><code class="hljs"> bootm 60003000 60500000
+</code></pre>
+</li>
+</ol>
+<p><strong>在这些步骤中，60003000 是内核映像加载到的内存地址，60500000 是设备树加载到的内存地址。这些地址可能需要根据你的系统进行调整。</strong></p>
+<h3 id="使用网络启动"><a href="#使用网络启动" class="headerlink" title="使用网络启动"></a>使用网络启动</h3><p>通过网络中启动主要使用利用了 <code>tftp</code> 网络</p>
+<p>通过网桥，将OS镜像(uImage)，通过网络协议下载到U-Boot中，从而通过U-Boot启动OS：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202405260018033.png" srcset="/img/loading.gif" lazyload></p>
+<p>首先需要安装好一些前置的软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install tftp-hpa tftpd-hpa xinetd uml-utilities bridge-utils<br></code></pre></td></tr></table></figure>
+
+<p>这个地方有两种方法可以实现网络启动：</p>
+<ol>
+<li>一个是手动配置参数。</li>
+<li>第二个是直接修改 uboot 的源代码</li>
+</ol>
+<h4 id="手动配置参数"><a href="#手动配置参数" class="headerlink" title="手动配置参数"></a>手动配置参数</h4><p>这种方法不便于多次使用，而且每次都需要手动配置参数，比较麻烦。</p>
+<ol>
+<li><p>首先第一步是要配置好 tftp 服务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 设置tftp配置路径文件</span><br>sudo vim /etc/default/tftpd-hpa<br><span class="hljs-comment"># 将下面的内容复制近来</span><br>TFTP_USERNAME=<span class="hljs-string">&quot;tftp&quot;</span><br>TFTP_DIRECTORY=<span class="hljs-string">&quot;/home/thinks2/ProgramProject/qemu_study/tftpboot&quot;</span> <span class="hljs-comment"># 该路径即为tftp可以访问到的路径</span><br>TFTP_ADDRESS=<span class="hljs-string">&quot;:69&quot;</span><br>TFTP_OPTIONS=<span class="hljs-string">&quot;--secure&quot;</span><br><span class="hljs-comment"># 重启tftp服务</span><br>sudo /etc/init.d/tftpd-hpa restart<br></code></pre></td></tr></table></figure></li>
+<li><p>第二步需要创建好 tftp 目录，然后将内核、设备树、根文件系统放在这个文件夹中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ..<br><span class="hljs-built_in">mkdir</span> tftpboot<br><span class="hljs-built_in">cd</span> tftpboot<br><span class="hljs-built_in">cp</span> ../u-boot-2022.10/u-boot ./<br><span class="hljs-built_in">cp</span> ../linux-4.19.269/arch/arm/boot/uImage ./<br><span class="hljs-built_in">cp</span> ../linux-4.19.269/arch/arm/boot/dts/vexpress-v2p-ca9.dtb ./<br></code></pre></td></tr></table></figure></li>
+<li><p>第三步配置网络信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">ifconfig <span class="hljs-comment"># 查看网卡信息</span><br><span class="hljs-comment"># 修改/etc/netplan/01-network-manager-all.yaml的信息配置:</span><br>sudo vim /etc/netplan/01-network-manager-all.yaml<br><br><span class="hljs-comment"># 将下面的信息添加到其中去</span><br>network:<br>  version: 2<br>  renderer: networkd<br>  ethernets:<br>      ens37:    <span class="hljs-comment">#这里设置的是你还需要上网的网卡, ifconfig查看</span><br>          dhcp4: <span class="hljs-built_in">yes</span><br>      ens38:    <span class="hljs-comment">#这里设置的是br0桥接到的网卡</span><br>          dhcp4: no<br>  bridges:        <br>      br0:        <span class="hljs-comment">#这里设置的是br0网桥</span><br>          dhcp4: <span class="hljs-built_in">yes</span><br>          interfaces:<br>              - ens37 <span class="hljs-comment">#声明br0网桥接入的网卡是ens37</span><br><br>sudo netplan apply <span class="hljs-comment">#使得上面的配置生效</span><br>ifconfig <span class="hljs-comment">#重新查看网卡信息</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202405260219395.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>第四步需要配置 <code>/etc/qemu-ifdown</code> 文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo vim /etc/qemu-ifdown<br><span class="hljs-comment"># 将下面的内容添加到文件中</span><br><span class="hljs-comment">#! /bin/sh</span><br><span class="hljs-comment"># Script to shut down a network (tap) device for qemu.</span><br><span class="hljs-comment"># Initially this script is empty, but you can configure,</span><br><span class="hljs-comment"># for example, accounting info here.</span><br><span class="hljs-built_in">echo</span> sudo brctl delif br0 <span class="hljs-variable">$1</span><br>sudo brctl delif br0 <span class="hljs-variable">$1</span><br><span class="hljs-built_in">echo</span> sudo tunctl -d <span class="hljs-variable">$1</span><br>sudo tunctl -d <span class="hljs-variable">$1</span><br><span class="hljs-built_in">echo</span> brctl show<br>brctl show<br></code></pre></td></tr></table></figure></li>
+<li><p>第五步配置 <code>/etc/qemu-ifup</code> 文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo vim /etc/qemu-ifup<br><span class="hljs-comment"># 将下面的内容添加到文件中</span><br><span class="hljs-comment">#!/bin/sh</span><br><span class="hljs-built_in">echo</span> sudo tunctl -u $(<span class="hljs-built_in">id</span> -un) -t <span class="hljs-variable">$1</span><br>sudo tunctl -u $(<span class="hljs-built_in">id</span> -un) -t <span class="hljs-variable">$1</span><br><span class="hljs-built_in">echo</span> sudo ifconfig <span class="hljs-variable">$1</span> 0.0.0.0 promisc up<br>sudo ifconfig <span class="hljs-variable">$1</span> 0.0.0.0 promisc up<br><span class="hljs-built_in">echo</span> sudo brctl addif br0 <span class="hljs-variable">$1</span><br>sudo brctl addif br0 <span class="hljs-variable">$1</span><br><span class="hljs-built_in">echo</span> brctl show<br>brctl show<br>sudo ifconfig br0 192.168.33.145 <span class="hljs-comment"># 这里设置的是网桥br0的地址</span><br></code></pre></td></tr></table></figure></li>
+<li><p>回到 tftpboot 目录下，创建一个脚本文件，方便下次使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/tftpboot<br>vim ./start.sh<br><br><span class="hljs-comment">#添加下面的内容</span><br><br><span class="hljs-comment">#!/bin/sh</span><br>qemu-system-arm \<br>	-M vexpress-a9 \<br>	-m 512M \<br>	-kernel ./u-boot-2022.10/u-boot \<br>	-nographic \<br>	-append <span class="hljs-string">&quot;root=/dev/sda1 console=ttyAMA0&quot;</span> \<br>    -sd rootfs.ext3 \<br></code></pre></td></tr></table></figure></li>
+<li><p>运行上面的 start.sh 脚本进入 uboot 启动流程，此时再次对 uboot 进行配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">setenv ipaddr   192.168.33.144                              <span class="hljs-comment"># 设置u-boot这边的地址(和br0同一网段即可)</span><br>setenv serverip 192.168.33.145                            <span class="hljs-comment"># 设置服务器地址(br0网桥的地址)</span><br>tftp 0x60003000 uImage                                       <span class="hljs-comment"># 从tftp下载uImage</span><br>tftp 0x60500000 vexpress-v2p-ca9.dtb                     <span class="hljs-comment"># 从tftp下载设备树</span><br>setenv bootargs <span class="hljs-string">&quot;root=/dev/mmcblk0 rw console=ttyAMA0&quot;</span>       <span class="hljs-comment"># 设置根文件系统挂载位置、权限、控制台设备</span><br>bootm 0x60003000 - 0x60500000   <br></code></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>至此，已经完成了所有的步骤</strong>，下面讲第二种方法，即直接修改 uboot 的源代码。</p>
+<h4 id="直接修改-uboot-的源代码"><a href="#直接修改-uboot-的源代码" class="headerlink" title="直接修改 uboot 的源代码"></a>直接修改 uboot 的源代码</h4><p>这种方法比较简单，不需要配置额外的脚本文件，直接修改 uboot 的源代码即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ./u-boot<br>vim ./etc/config/vexpress_commom.h<br><span class="hljs-comment">#在文件下面添加</span><br><br><span class="hljs-comment">#define CONFIG_IPADDR   192.168.33.144</span><br><span class="hljs-comment">#define CONFIG_NETMASK  255.255.255.0</span><br><span class="hljs-comment">#define CONFIG_SERVERIP 192.168.33.145</span><br><br><span class="hljs-comment">#注意，下面的内容需要在比较新U-boot上面才可以使用。在makemenuconfig中找到： make menuconfig -&gt; Boot options -&gt; 勾除Enable a default value or bootcmd 注意需要首先勾除，然后再添加下面的内容。如果你使用的是旧版本的u-boot，则需要在makemenuconfig中去添加下面的内容。</span><br><br><span class="hljs-comment">#ifndef CONFIG_BOOTCOMMAND</span><br><span class="hljs-comment">#define PING_COMMAND &quot;ping 192.168.70.30;&quot;</span><br><span class="hljs-comment">#define CONFIG_BOOTCOMMAND \</span><br>    PING_COMMAND \<br>    <span class="hljs-string">&quot;tftp 0x60003000 uImage;&quot;</span> \<br>    <span class="hljs-string">&quot;tftp 0x60500000 vexpress-v2p-ca9.dtb;&quot;</span> \<br>    <span class="hljs-string">&quot;setenv bootargs &#x27;root=/dev/mmcblk0 rw console=ttyAMA0&#x27;;&quot;</span> \<br>    <span class="hljs-string">&quot;bootm 0x60003000 - 0x60500000;&quot;</span><br><span class="hljs-comment">#endif</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="参考资料——网络启动"><a href="#参考资料——网络启动" class="headerlink" title="参考资料——网络启动"></a>参考资料——网络启动</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8619a6739040">https://www.jianshu.com/p/8619a6739040</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhaixue.cc/qemu/qemu-u-boot.html">https://www.zhaixue.cc/qemu/qemu-u-boot.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/nature_07/article/details/128607903">https://blog.csdn.net/nature_07/article/details/128607903</a></li>
+</ul>
+<h2 id="准备好-rootfs"><a href="#准备好-rootfs" class="headerlink" title="准备好 rootfs"></a>准备好 rootfs</h2><p>Linux发行版的根文件系统很复杂，而我们这里用到的根文件系统很简单，<strong>我们要制作的根文件系统 &#x3D; busybox(包含基础的Linux命令)  + 运行库 + 几个字符设备。</strong> 根文件系统依赖于每个开发板支持的存储设备，可以放到Nor Flash上，也可以放到SD卡，甚至外部磁盘上。最关键的一点是你要清楚知道开发板有什么存储设备。</p>
+<p>下面，我们来制作一个简单的根文件系统。</p>
+<p>先在Ubuntu主机环境下，形成目录结构，里面存放的文件和目录与单板上运行所需要的目录结构完全一样，然后再打包成镜像（在开发板看来就是SD卡），这个临时的目录结构称为根目录。**这里其实还有第二中方法，即使用网络进行</p>
+<ol>
+<li><p>下载 busybox</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://busybox.net/downloads/busybox-1.36.1.tar.bz2<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>busybox 编译</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar -xvf busybox-1.36.1.tar.bz2<br><span class="hljs-built_in">cd</span> busybox-1.36.1<br>make defconfig<br><br><span class="hljs-comment">#make menuconfig</span><br><span class="hljs-comment">#   勾选  Settings-&gt; [*] Build static binary (no shared libs) </span><br><span class="hljs-comment">#   如果勾选了上面的设置的话，编译出来的 busybox 就不会依赖动态链接库，可以减少空间占用。并且可以省略下面的制作根文件系统的时候的：</span><br><span class="hljs-comment">#   cp /usr/lib/arm-linux-gnueabi/lib* rootfs/lib/ 这个步骤可以省略。</span><br><br>make CROSS_COMPILE=arm-linux-gnueabi-<br>make install CROSS_COMPILE=arm-linux-gnueabi- -j8<br></code></pre></td></tr></table></figure>
+
+<p> <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202405192029516.png" srcset="/img/loading.gif" lazyload></p>
+<p> 如果使用 <code>menuconfig</code> 进行配置的话，可以看到有很多选项，我们可以根据自己的需求进行选择：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">(1) 设置一下编辑器环境，方便操作:<br>Settings —-&gt; [*] vi-style line editing commands (New)<br><br>(2) 设置一下安装路径，避免错误安装在根目录<br>Settings —-&gt; Destination path <span class="hljs-keyword">for</span> ‘make install’<br><br></code></pre></td></tr></table></figure>
+<p> 通过 <code>make install</code> 命令把生成的根文件创建在顶层目录(busybox-1.32.1根目录) <code>_install</code> 下，如果是通过 <code>make defconfig O=…/output</code> 导出配置的，则在相应的output目录下进入 <code>_install</code> 目录</p>
+<p> 这个编译的地方还有第二种方法可以使用，即直接更改 <code>Makefile</code> 文件，再 <code>Makefile</code> 中找到 <code>ARCH</code> 和 <code>CROSS_COMPILE</code> 变量，修改成如下内容：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">ARCH ?= arm<br>CROSS_COMPILE = arm-linux-gnueabi-<br></code></pre></td></tr></table></figure>
+
+
+<p> 至此，我们已经准备好了 busybox ，下面需要的是制作一个根目录结构。</p>
+</li>
+<li><p>创建根目录结构</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p rootfs/&#123;dev,etc/init.d,lib&#125;<span class="hljs-built_in">mkdir</span> rootfs<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>将 busybox 复制到根目录下：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cp</span> busybox-1.36.1/_install/* -r rootfs/<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>从工具链中拷贝运行库到lib目录下：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cp</span> /usr/lib/arm-linux-gnueabi/lib* rootfs/lib/<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>创建4个tty端终设备：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">mknod</span> rootfs/dev/tty1 c 4 1<br>sudo <span class="hljs-built_in">mknod</span> rootfs/dev/tty2 c 4 2<br>sudo <span class="hljs-built_in">mknod</span> rootfs/dev/tty3 c 4 3<br>sudo <span class="hljs-built_in">mknod</span> rootfs/dev/tty4 c 4 4<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<p><strong>至此，我们已经制作好了一个简单的根文件系统，里面包含了 busybox、运行库、4个字符设备。</strong>下面，我们需要制作根文件系统镜像文件。</p>
+<ol start="4">
+<li><p>将上面的根文件打包成镜像文件</p>
+<ul>
+<li><p>生成512M大小的磁盘镜像</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">qemu-img create -f raw rootfs.ext3 512M<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>格式化成ext3文件系统</p>
+</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">mkfs -t ext3 ./rootfs.ext3<br><span class="hljs-comment"># 或者</span><br>sudo mkfs.ext3 rootfs.ext3<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>将文件拷贝到镜像中 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> tmpfs<br>sudo mount -o loop -t ext3 ./rootfs.ext3 tmpfs/ <br>sudo <span class="hljs-built_in">cp</span> -r rootfs/* tmpfs/<br>sudo umount tmpfs<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p> 其实这里除开上面提到的使用 <code>qemu-img</code> 这个命令之外，还可以使用 <code>dd</code> 命令来制作镜像文件。如下所示：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p tmpfs<br><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=rootfs.ext3 bs=1M count=512<br>mkfs.ext3 rootfs.ext3<br>sudo mount -o loop -t ext3 ./rootfs.ext3 tmpfs/ <br>sudo <span class="hljs-built_in">cp</span> -r rootfs/* tmpfs/<br>sudo umount tmpfs<br></code></pre></td></tr></table></figure>
+
+<p> 其实，这种方法和第一种方法差不多。</p>
+</li>
+<li><p>测试</p>
+<p> 这是最后一步，我们可以启动模拟器，并将镜像文件作为启动设备来启动系统。进行测试：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">qemu-system-arm\<br> -M vexpress-a9 \<br> -m 512M \<br> -kernel /path_to_kernel_dir/arch/arm/boot/zImage \<br> -dtb  /path_to_kernel_dir/arch/arm/boot/dts/vexpress-v2p-ca9.dtb\<br> -nographic \<br> -append <span class="hljs-string">&quot;root=/dev/mmcblk0  console=ttyAMA0&quot;</span> \<br> -sd rootfs.ext3<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="启动qemu"><a href="#启动qemu" class="headerlink" title="启动qemu"></a>启动qemu</h2><p>注意这里和上面的不同点，一个是 u 一个是 z</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">qemu-system-arm\<br> -M vexpress-a9 \<br> -m 512M \<br> -kernel /path_to_kernel_dir/arch/arm/boot/uImage \<br> -dtb  /path_to_kernel_dir/arch/arm/boot/dts/vexpress-v2p-ca9.dtb\<br> -nographic \<br> -append <span class="hljs-string">&quot;root=/dev/mmcblk0  console=ttyAMA0&quot;</span> \<br> -sd rootfs.ext3<br></code></pre></td></tr></table></figure>
+
+<p>参数解释：</p>
+<ul>
+<li>-M：指定模拟器的硬件平台，这里是 <code>vexpress-a9</code> 开发板。可以私用 <code>qemu-system-arm -M help</code> 查看所有支持的硬件平台。</li>
+<li>-m：指定模拟器的内存大小，这里是 <code>512M</code>。</li>
+<li>-kernel：指定内核文件，这里是 <code>uImage</code>。</li>
+<li>-dtb：指定设备树文件，这里是 <code>vexpress-v2p-ca9.dtb</code>。**这个设备树文件也是 Linux 内核自己提供的，比如说 arm 架构下的设备树文件存放在 <code>linux-6.1.46/arch/arm/boot/dts</code></li>
+<li>-nographic：不使用图形化界面，仅仅使用串口。</li>
+<li>-append：指定启动参数，这里是 <code>root=/dev/mmcblk0  console=ttyAMA0</code>，表示启动时挂载根文件系统 <code>/dev/mmcblk0</code>，串口输出到 <code>ttyAMA0</code>。</li>
+<li>-sd：指定 sd 卡设备，这里是用来指定启动设备，这里是 <code>rootfs.ext3</code>。</li>
+</ul>
+<h1 id="使用-QEMU-直接模拟一块开发板"><a href="#使用-QEMU-直接模拟一块开发板" class="headerlink" title="使用 QEMU 直接模拟一块开发板"></a>使用 QEMU 直接模拟一块开发板</h1><p>在上面的过程中，我们使用 QEMU 模拟了一块系统自带的开发板。但是 QEMU 的功能还远远不止如此。下面我们使用 QEMU 直接模拟一块开发板。使用 QEMU 来直接定制一块自己的开发板。</p>
+<h2 id="QEMU-编程基础"><a href="#QEMU-编程基础" class="headerlink" title="QEMU 编程基础"></a>QEMU 编程基础</h2><p>QEMU是一款开源的模拟器及虚拟机监管器(Virtual Machine Monitor, VMM)，通过动态二进制翻译来模拟CPU，并提供一系列的硬件模型，使guest os认为自己和硬件直接打交道，其实是同QEMU模拟出来的硬件打交道，QEMU再将这些指令翻译给真正硬件进行操作。</p>
+<h3 id="QOM-机制"><a href="#QOM-机制" class="headerlink" title="QOM 机制"></a>QOM 机制</h3><p>QOM——The QEMU Object Model</p>
+<p>QEMU提供了一套面向对象编程的模型——QOM，即QEMU Object Module，几乎所有的设备如CPU、内存、总线等都是利用这一面向对象的模型来实现的。</p>
+<p>QEMU对象模型提供了一个注册用户可创建类型并从这些类型实例化对象的框架。<br>其实也就是一种OOP IN C(C上实现面对对象)。一段面对对象的程序代码（C++语言）</p>
+<h2 id="准备好启动脚本——boot-scr"><a href="#准备好启动脚本——boot-scr" class="headerlink" title="准备好启动脚本——boot.scr"></a>准备好启动脚本——boot.scr</h2><h2 id="准备好启动参数——cmdline-txt"><a href="#准备好启动参数——cmdline-txt" class="headerlink" title="准备好启动参数——cmdline.txt"></a>准备好启动参数——cmdline.txt</h2><h2 id="准备好镜像文件——Image"><a href="#准备好镜像文件——Image" class="headerlink" title="准备好镜像文件——Image"></a>准备好镜像文件——Image</h2><h2 id="准备好启动设备——sdcard-img"><a href="#准备好启动设备——sdcard-img" class="headerlink" title="准备好启动设备——sdcard.img"></a>准备好启动设备——sdcard.img</h2><h2 id="准备好启动命令——qemu-system-arm"><a href="#准备好启动命令——qemu-system-arm" class="headerlink" title="准备好启动命令——qemu-system-arm"></a>准备好启动命令——qemu-system-arm</h2><h2 id="启动模拟器"><a href="#启动模拟器" class="headerlink" title="启动模拟器"></a>启动模拟器</h2><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAwMjQ1ODYyOQ==&chksm=9acb5473adbcdd656771483ef000e08d3bfb9f761c7f6c036cbbaae28c590593abab5f89e71f&idx=1&mid=2247483673&mpshare=1&scene=21&sharer_shareid=025223779ea46de7b8ccafe0bbfa3cc1&sharer_sharetime=1573647854905&sn=2df104549a462b36d46c828ca88e98e5&srcid=#wechat_redirect">一次搞定 Arm Linux 交叉编译</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.linmao.dev/joy/659/#%E5%88%B6%E4%BD%9C%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F">用qemu模拟器搭建arm运行环境</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/leacock1991/article/details/113735396">从0开始使用QEMU模拟ARM开发环境系列一览表</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/leacock1991/article/details/113704225">从0开始使用QEMU模拟ARM开发环境</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhaixue.cc/qemu/qemu-intro.html">宅学部落——QEMU模拟器使用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45090728/article/details/124355432">Qemu使用及常见开发板的模拟</a></li>
+<li><a target="_blank" rel="noopener" href="https://mshrimp.github.io/2019/08/18/Qemu%E6%90%AD%E5%BB%BAARM-vexpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83(%E4%BA%8C)----u-boot%E5%90%AF%E5%8A%A8kernel/">Qemu搭建ARM vexpress开发环境(二)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/94833e841742">Qemu搭建ARM vexpress开发环境(一)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8619a6739040">Qemu搭建ARM vexpress开发环境(二)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/cf46f7225db6">Qemu搭建ARM vexpress开发环境(三)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/aggresss/article/details/74834155">虚拟机就是开发板</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/nature_07/article/details/128607903">qemu使用uboot通过网络加载 linux kernel</a></li>
+</ul>
+<h1 id="参考资料——自定义开发板"><a href="#参考资料——自定义开发板" class="headerlink" title="参考资料——自定义开发板"></a>参考资料——自定义开发板</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://quard-star-tutorial.readthedocs.io/zh-cn/latest/ch3.html">QEMU 自定义 RISCV 开发板</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/QQxiaoming/quard_star_tutorial">QEMU 自定义 RISCV 开发板 Github链接</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/DreamTrue520/article/details/135703895">在WIN从零开始在QMUE上添加一块自己的开发板(一）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/DreamTrue520/article/details/135714894?spm=1001.2014.3001.5502">在WIN从零开始在QMUE上添加一块自己的开发板（二）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.giantbranch.cn/2020/01/05/QEMU%20%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%8F%8AQOM%28Qemu%20Object%20Model%29%E7%9A%84%E9%83%A8%E5%88%86%E7%9B%B8%E5%85%B3%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">QEMU原理</a></li>
+<li><a target="_blank" rel="noopener" href="https://yanglianoo.github.io/2023/06/14/QEMU%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%80%E5%8F%91%E6%9D%BF2-virt%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">QEMU 源码分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://arttnba3.cn/2022/07/15/VIRTUALIZATION-0X00-QEMU-PART-I/#0x00-%E4%B8%80%E5%88%87%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D">QEMU使用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.qemu.org/docs/master/devel/qom.html">QEMU 编程官方教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.micoder.cc/blog/2337.html">QEMU官方翻译资料(来自archwiki)</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>使用qemu模拟一块开发板</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/05/11/使用qemu模拟一块开发板/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年5月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/15/%E8%AE%B0%E7%9B%B8%E6%9C%BA%E9%A1%B9%E7%9B%AE%E7%A1%AC%E4%BB%B6%E9%87%87%E8%B4%AD%E4%B8%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" title="记相机项目硬件采购上遇到的问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">记相机项目硬件采购上遇到的问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/05/PCB%E8%AE%BE%E8%AE%A1%E4%B8%AD%E7%9A%84EMC%E9%97%AE%E9%A2%98/" title="PCB设计中EMC问题">
+                        <span class="hidden-mobile">PCB设计中EMC问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

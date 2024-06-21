@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="arm汇编中的常用指令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARM汇编指令简介">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/12/22/ARM%20%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="arm汇编中的常用指令">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/ne3kbwK.jpg">
+<meta property="article:published_time" content="2023-12-22T08:36:48.000Z">
+<meta property="article:modified_time" content="2023-12-30T10:08:55.638Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/ne3kbwK.jpg">
+  
+  
+  
+  <title>ARM汇编指令简介 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/ne3kbwK.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ARM汇编指令简介"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-22 16:36" pubdate>
+          2023年12月22日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ARM汇编指令简介</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>arm汇编中的常用指令</p>
+<span id="more"></span>
+
+<h1 id="ARM-汇编指令简介"><a href="#ARM-汇编指令简介" class="headerlink" title="ARM 汇编指令简介"></a>ARM 汇编指令简介</h1><p>ARM处理器是精简指令集计算 Reduced Instruction Set Computing (RISC)的一个实例。<br>ARM指令集是基于精简指令集计算机(RISC)设计的，其指令集的译码机制相对比较简单，ARMv7-A具有32bit的ARM指令集和16&#x2F;32bit的Thumb&#x2F;Thumb-2指令集，<strong>ARM指令集的优点是执行效率高但不足之处也很明显，就是代码密度相对低一些</strong>。而作为<strong>ARM指令集子集的Thumb指令集</strong>，代码密度相对比ARM指令高，而且坚持了ARM一贯的性能优但也有一个致命的缺点就是效率低。正所谓鱼和熊掌不可兼得，这也是数字逻辑电路设计所谓的时间和空间的问题；而Thumb-2指令集多为32bit的指令，对于上述的ARM指令和Thumb指令做了一个折中，代码执行效率和密度都相对比较适中，几乎所有的ARM指令都可以条件执行，而另外两者仅有部分才具备此功能，三种指令均可相互调用，而且指令之间状态切换开销很小，几乎可以忽略。  </p>
+<h2 id="一、ARM指令集格式"><a href="#一、ARM指令集格式" class="headerlink" title="一、ARM指令集格式"></a>一、ARM指令集格式</h2><p>基本格式： <code>&lt;opcode&gt; &#123;&lt;cond&gt;&#125; &#123;S&#125; &lt;Rd&gt;, &lt;Rn&gt;, &#123;&lt;opcode2&gt;&#125;</code><br>&lt; &gt; 尖括号里面的指令助记符是必须的，而{}花括号里面的是可选的。<br>.opcode：比如MOV，LDR<br>.cond：即Condition，执行条件，与CPSR的条件标志位对应。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312242321279.png" srcset="/img/loading.gif" lazyload>  </p>
+<p>.S：决定是否影响CPSR的值<br>.Rd：目标寄存器<br>.Rn：第一个操作数的寄存器<br>.opcode2：第二个操作数，可选，可以是立即数、寄存器、寄存器移位等  </p>
+<h2 id="二、ARM-寻址方式"><a href="#二、ARM-寻址方式" class="headerlink" title="二、ARM 寻址方式"></a>二、ARM 寻址方式</h2><ol>
+<li><p>立即寻址<br><code>mov r0, #1234</code><br>相当于：r0&#x3D;#1234。#开头，表示16进制时，以0x开头，如#0x1f。  </p>
+</li>
+<li><p>寄存器寻址<br><code>mov r0, r1</code><br>执行后，r0 &#x3D; r1。<br>NOP 操作通常为 <code>mov r0, r0</code>，对应的HEX为00 00 a0 e1</p>
+</li>
+<li><p>寄存器移位寻址</p>
+</li>
+</ol>
+<p>寄存器移位寻址支持以下5种移位操作：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">LSL</span>：逻辑左移，移位后寄存器空出的低位补<span class="hljs-number">0</span>；  <br><span class="hljs-attribute">LSR</span>：逻辑右移，移位后寄存器空出的高位补<span class="hljs-number">0</span>；  <br><span class="hljs-attribute">ASR</span>：算数右移，移位过程中，符号位保存不变，如果源操作数为正数，则移位后空出的高位补<span class="hljs-number">0</span>，否则补<span class="hljs-number">1</span>。  <br><span class="hljs-attribute">ROR</span>：循环右移，移位后，移出的低位，填入移位空出的高位。  <br><span class="hljs-attribute">RRX</span>：带扩展的循环右移，操作数右移一位，移位空出的高位，用C标志的值填充。  <br></code></pre></td></tr></table></figure>
+<p><code>mov r0, r1, lsl #2</code><br>相当于：r0 &#x3D; r1&lt;&lt;2 &#x3D; r1*4。  </p>
+<ol start="4">
+<li><p>寄存器间接寻址<br><code>ldr r0, [r1]</code> &#x2F;&#x2F; 取值<br>相当于：r0 &#x3D; *r1。  </p>
+</li>
+<li><p>基址寻址<br><code>ldr r0, [r1, #-4]</code>  将内存中的数据加载到寄存器中load to register<br>相当于：r0 &#x3D; *(r1 - 4)。<br>与之相对应的指令是<br><code>str r0 [r1, #-1]</code>   将寄存器中的数据加载到内存中</p>
+</li>
+<li><p>多寄存器寻址<br><code>lmdia r0, &#123;r1, r2, r3, r4&#125;</code><br>LDM 是数据加载指令，指令的后缀IA表示，每次执行完成加载操作后，R0寄存器的值自增1个字。<br>R1&#x3D;[R0], R2&#x3D;[R0+#4], R3&#x3D;[R0+#8], R4&#x3D;[R0+#12]<br>字表示一个32位的数值。  </p>
+</li>
+<li><p>堆栈寻址<br>它需要特定的指令完成：<br>LMDFA&#x2F;STMFA, LDMEA&#x2F;STMEA, LDMFD&#x2F;SDMFD, LDMED&#x2F;STMED。<br>LMD&#x2F;STM 表示多寄存器寻址，一次可以传送多个寄存器值。<br>FA&#x2F;EA&#x2F;FD&#x2F;ED ..参考指令集。<br><code>stmfd sp!, &#123;r1-r7, lr&#125;   @将 r1~r7, lr 压栈</code> 多用于保存子程序现场。<br><code>ldmfd sp!, &#123;r1~r7, lr&#125;   @将 r1~r7, lr 出栈，放入 r1~r7, lr</code> 多用于恢复子程序现场。  </p>
+</li>
+<li><p>块拷贝寻址<br>可实现连续地址数据从存储器的某一位置拷贝至另一位置。<br>LDMIA&#x2F;STMIA, LDMDA&#x2F;STMDA, LDMIB&#x2F;STMIB, LDMDB&#x2F;STMDB。<br>LDM&#x2F;SDM 表示多寄存器寻址，一次可以传送多个寄存器值。<br>IA, DA, IB, DB ..参考指令集。<br><code>ldmia r0!, &#123;r1-r3&#125;  @ 从r0指向的区域的值取出来，放到r1-r3中</code><br><code>stmia r0!, &#123;r1-r3&#125;  @ 将r1-r3的值取出来，放入r0指向的区域</code>    </p>
+</li>
+<li><p>相对寻址<br>相对寻址以PC的当前值为基址，与偏移值相加，得到最终的地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asm">bl .lc0<br>    ...<br>.lc0:<br>    ...<br></code></pre></td></tr></table></figure>
+<p>bl 直接跳到 .lc0 处。</p>
+</li>
+</ol>
+<h2 id="三、ARM汇编指令分类"><a href="#三、ARM汇编指令分类" class="headerlink" title="三、ARM汇编指令分类"></a>三、ARM汇编指令分类</h2><p>包括存储加载类指令集，数据处理类指令集，分支跳转类指令集，程序状态寄存器访问指令以及协处理器类指令集</p>
+<ol>
+<li><p>存储加载类<br>由于ARM处理器采用了统一编址技术，因而对外围I&#x2F;O，程序数据的访问都要通过加载&#x2F;存储(Load&#x2F;Store)指令来进行。ARM的加载&#x2F;存储指令(LDR，STR)是可以实现字，半字，无符号，有符号字节操作；<br>批量加载&#x2F;存储(LDM，STM)可以实现一条指令加载存储多个存储器的内容，加载效率大为提高，一般用来传递参数和复制数据，可以说是一般加载&#x2F;存储的加强版。<br>ARM采用RISC架构，CPU本身不能直接读取内存，而需要先将内存中内容加载入CPU中通用寄存器中才能被CPU处理，ldr&#x2F;str组合用来实现 ARM CPU和内存数据交换。<br>LDR：用于从内存中读取数据加载到内存中；比如 LDR R0, [R1] 表示将R1所指向的存储单元的内容加到R0寄存器中。<br>STR：将寄存器中的数据保存到内存单元；STR R0, [R1] 将R0寄存器里面的数据保存到R1所指向的内存中。<br>LDM：实现一块连续的内存单元的数据加载多个寄存器中。<br>STM：实现在多个寄存器的数据保存到一块连续的内存单元之中。<br>格式：<code>LDM/STM  &#123;cond&#125; &lt;mode&gt; Rn&#123;!&#125; &#123;reglist&#125; &#123;^&#125;</code><br>.cond：同上<br>.mode：地址变化模式共8种。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202312242321601.png" srcset="/img/loading.gif" lazyload><br>.Rn：基址寄存器，不允许是R15。<br>.!：感叹号表示是否将最后的地址存入Rn。<br>.Reglist：寄存器列表，按从小到大的顺序排列，当标号连续时可用’-‘连接，{R0-R3}，不连续时用逗号连接。<br>.”^”：(假如寄存器列表含有PC寄存器R15)表示指令执行后SPSR的值自动复制给CPSR，常用于从中断处理函数中返回。<br>反之，默认操作的是用户模式下的寄存器，并非当前特殊模式的寄存器。  </p>
+</li>
+<li><p>数据处理类指令集<br>包括数据传送指令MOV，算术逻辑运算符ADD，SUB，BIC，ORR，比较指令CMP，TST等<br>算术  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs asm">ADD op1+op2<br>ADC op1+op2+carry<br>SUB op1-op2+carry-1<br>ADR：ADR指令被编译器用一条ADD或者SUB进行替换，在ARM状态下，字对齐时加载范围是-1020~1020，字节或者半字对齐时是-255~255。<br>ADRL：被编译器用两条条ADD或者SUB进行替换，在ARM状态下，字对齐时加载范围是-256K~256K，字节或者半字对齐时是-64K~264K。<br>syntax : &lt;operation&gt; &#123;&lt;cond&gt;&#125;&#123;S&#125; Rd,Rn,operand<br>examples :<br>ADD r0,r1,r2<br>ADDS R0, R1, #1 @指令执行后可能会影响CPSR的条件标志位。<br>SUB R1,R2,#1<br>例：通过LDR伪指令，完成GPIO的配置功能,将0xE0200280赋给R1<br>LDR R1, =0xE0200280<br>LDR R0, =0x00001111<br>STR R0, [R1]<br>```  <br>比较  <br>``` asm<br>CMP op1-op2<br>TST op1 &amp; op2<br>TEQ op1 ^ op2<br>SWP &#123;cond&#125; &#123;B&#125; Rd, Rm, [Rn]：将Rn指向的内容加载到目标寄存器Rd，Rm为源寄存器，将该寄存器的数据存储到Rn指向的地址单元。<br>TST &#123;cond&#125; Rn, opcode2 ： 将Rn的值与opcode2进行按位与操作，根据结果更新CPSR标志位。<br>CMP &#123;cond&#125; Rn opcode2 ： 将Rn的值减opcode2,根据操作结果更新相应CPSR的标志位。以便后面的指令判断是否执行。<br>Syntax : &lt;operation&gt; &#123;&lt;cond&gt;&#125; Rn,Op<br>examples :<br>CMP R0,R1<br>CMP R0,#2<br></code></pre></td></tr></table></figure>
+<p>逻辑运算  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asm">AND op1,op2<br>EOR op1,op2<br>ORR op1,op2 #oxF@将R0的后4位置1（与&quot;1&quot;做或运算，实现置1功能），结果保存到R0<br>BIC R0, R2， #0xF@将R2的后4位置清零<br></code></pre></td></tr></table></figure>
+<p>移动  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asm">MOV op1,op2<br>syntax : &lt;Operation&gt;&#123;&lt;cond&gt;&#125;&#123;S&#125; Rn, Op2<br>Examples:<br>MOV r0, r1<br></code></pre></td></tr></table></figure></li>
+<li><p>分支跳转指令</p>
+</li>
+</ol>
+<p>当程序需要一些循环、过程（procedures）和函数的时候，会用到分支指令。<br>实现程序跳转的方法，还可以直接给PC寄存器直接赋值实现跳转。  </p>
+<p>B<br>Branch, 分支。<br>该指令不会影响LR寄存器。这意味着一旦我们跳转到子程序（subroutine），不能回溯（traceback）我们曾经在哪儿。这个类似于x86汇编中的JMP指令。  </p>
+<p><code>BNE LABEL</code><br>表示不为0时，则跳转到LABEL处执行。  </p>
+<p>BL<br>BL Branch with Link，带链接的分支。<br>该指令可以让子程序调用，通过LR保存的PC-4的地址，从子程序返回，只需简单的从LR还原PC的值：<code>mov pc, lr</code>。  </p>
+<p>BX 和 BLX<br>BX Branch with Exchange，带交换的分支。<br>BLX Branch with Link and Exchange，带链接和交换的分支。<br>BX和BLX指令用于THUMB模式中，暂时不关注。  </p>
+<ol start="4">
+<li>程序状态寄存器访问指令<br>通过MSR和MRS配合使用实现对PSR寄存器的访问，通过读-修改-写操作来实现开关中断，切换处理器模式。<br>.MRS：读程序状态寄存器指令，将PSR中的内容读入到寄存器中 <code>MRS &#123;cond&#125; Rd, PSR</code> 。<br>.MSR：写程序状态寄存器指令 <code>MSR &#123;cond&#125; psr_fields #immed_8MSR &#123;cond&#125; psr_fields, Rm</code>。field指位域，只有在特权模式下才能对PSR进行修改，例如切换到管理模式：<code>MSR CPSR_c #0xD3</code>,将0xD3写入CPSR的低8位，此时M[4:0]&#x3D;0b10011，进入管理模式。<br>用读-修改-写操作切换到管理模式  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asm">MRS R0, CPSR @读出CPSR的值<br>BIC R0, R0, #0x1F @清0<br>ORR R0, R0, #0xD3 @修改模式<br>MSR CPSR_cxsf, R0 @将修改后的值保存到CPSR<br></code></pre></td></tr></table></figure></li>
+<li>协处理器访问指令<br>协处理器CP15包含了16个32bit的寄存器，主要用于存储管理。<br>.MCR：ARM寄存器到协处理器的数据传送指令 <code>MCR &#123;cond&#125; P15, 0, Rd, CRn, CRm, &#123;opcode2&#125;</code><br>Rd：源寄存器<br>CRn：协处理器中的寄存器，目标寄存器，存放第一个操作数其编号为C0,C1….C15<br>.MRC：协处理器到ARM寄存器的数据传送指令<br>Rd：目标寄存器<br>CRn：协处理器中的寄存器，源寄存器，存放第一个操作数其编号为C0,C1….C15<br>CRm：附加的源寄存器，不需要其他信息时CRm为C0<br>opcode2：提供附加信息，若为空时，指定为0即可</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/arm/" class="category-chain-item">arm</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ARM汇编指令简介</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/12/22/ARM 汇编指令简介/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/12/22/ARM%20%E6%B1%87%E7%BC%96%E4%BC%AA%E6%8C%87%E4%BB%A4%E7%AE%80%E4%BB%8B/" title="ARM汇编伪指令简介">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ARM汇编伪指令简介</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/22/arm%E5%AE%B6%E6%97%8F/" title="arm家族">
+                        <span class="hidden-mobile">arm家族</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

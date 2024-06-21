@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux内存管理（1）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux内存管理(1)">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/05/linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-1/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="Linux内存管理（1）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="hhttps://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png">
+<meta property="article:published_time" content="2024-01-05T14:17:35.000Z">
+<meta property="article:modified_time" content="2024-01-05T14:22:01.498Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="hhttps://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png">
+  
+  
+  
+  <title>linux内存管理(1) - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('hhttps://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="linux内存管理(1)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-05 22:17" pubdate>
+          2024年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">linux内存管理(1)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Linux内存管理（1）</p>
+<span id="more"></span>
+
+<div id="article_content" class="article_content clearfix">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-044f2cf1dc.css">
+                <div id="content_views" class="htmledit_views">
+                    <p>&nbsp;</p> 
+<h2><a name="t0"></a>虚拟内存</h2> 
+<p>我们知道一个进程是与其他进程共享CPU和内存资源的。为了防止进程之间内存泄漏的问题，现代操作系统提供了一种对主存的抽象概念，即是虚拟内存（Virtual Memory）。<strong>虚拟内存为每个进程提供了一个一致的、私有的地址空间，它让每个进程产生了一种自己在独享主存的错觉（每个进程拥有一片连续完整的内存空间）</strong>。</p> 
+<p>因为使用虚拟地址可以带来诸多好处：</p> 
+<ol><li>在支持多进程的系统中，如果各个进程的镜像文件都使用物理地址，则在加载到同一物理内存空间的时候，可能发生冲突。</li><li>直接使用物理地址，不便于进行进程地址空间的隔离。</li><li>物理内存是有限的，在物理内存整体吃紧的时候，可以让多个进程通过分时复用的方法共享一个物理页面（某个进程需要保存的内容可以暂时swap到外部的disk/flash），这有点类似于多线程分时复用共享CPU的方式。</li></ol> 
+<p>既然使用虚拟地址，就涉及到将虚拟地址转换为物理地址的过程，也即CPU寻址。</p> 
+<h3 id="user-content-cpu-"><a name="t1"></a>CPU寻址</h3> 
+<p>内存通常被组织为一个由M个连续的字节大小的单元组成的数组，每个字节都有一个唯一的物理地址（Physical Address PA），作为到数组的索引。CPU访问内存最简单直接的方法就是使用物理地址，这种寻址方式被称为物理寻址。</p> 
+<p>现代处理器使用的是一种称为虚拟寻址（Virtual Addressing）的寻址方式。<span style="color:#f33b45;"><strong>使用虚拟寻址，CPU需要将虚拟地址翻译成物理地址，这样才能访问到真实的物理内存。它</strong>需要MMU（Memory Management Unit）和页表（page table）的共同参与。</span></p> 
+<h4><a name="t2"></a>MMU</h4> 
+<p>MMU是处理器/核（processer）中的一个硬件单元，通常每个核有一个MMU。<strong>它的功能是将虚拟地址转换为物理地址。MMU需要借助存放在内存中的页表(page table)来动态翻译虚拟地址，该页表由操作系统管理。</strong></p> 
+<p>MMU由两部分组成：TLB(Translation Lookaside Buffer)和table walk unit。</p> 
+<p><img alt="" src="https://img-blog.csdnimg.cn/img_convert/1d1f34f03d43a06efe6675bb1a8ea2b7.png" srcset="/img/loading.gif" lazyload width="241"></p> 
+<h4><a name="t3"></a><strong>Page Table</strong></h4> 
+<p>page table是每个进程独有的，是软件实现的，是存储在main memory（比如DDR）中的。所谓<strong>页表就是一个存放在物理内存中的数据结构，它记录了虚拟页与物理页的映射关系。</strong></p> 
+<p><strong>页表是一个元素为页表条目（Page Table Entry, PTE）的集合，每个虚拟页在页表中一个固定偏移量的位置上都有一个PTE</strong>。下面是PTE仅含有一个有效位标记的页表结构，该有效位代表这个虚拟页是否被缓存在物理内存中。</p> 
+<p><img alt="" height="424" src="https://img-blog.csdnimg.cn/img_convert/feb88f038a0774dfe18a1a640e8829d3.png" srcset="/img/loading.gif" lazyload width="540"></p> 
+<p>虚拟页<code>VP 0</code>、<code>VP 4</code>、<code>VP 6</code>、<code>VP 7</code>被缓存在物理内存中，虚拟页<code>VP 2</code>和<code>VP 5</code>被分配在页表中，但并没有缓存在物理内存，虚拟页<code>VP 1</code>和<code>VP 3</code>还没有被分配。</p> 
+<p>在进行动态内存分配时，例如<code>malloc()</code>函数或者其他高级语言中的<code>new</code>关键字，操作系统会在硬盘中创建或申请一段虚拟内存空间，并更新到页表（分配一个PTE，使该PTE指向硬盘上这个新创建的虚拟页）。</p> 
+<h4><a name="t4"></a>页命中</h4> 
+<p>如下图所示，MMU根据虚拟地址在页表中寻址到了<code>PTE 4</code>，该PTE的有效位为1，代表该虚拟页已经被缓存在物理内存中了，最终MMU得到了PTE中的物理内存地址（指向<code>PP 1</code>）。</p> 
+<p><img alt="" height="366" src="https://img-blog.csdnimg.cn/img_convert/3d2f9a7a09e800769fd1d027d11305ce.png" srcset="/img/loading.gif" lazyload width="529"></p> 
+<h4><a name="t5"></a>缺页</h4> 
+<p>如下图所示，MMU根据虚拟地址在页表中寻址到了<code>PTE 2</code>，该PTE的有效位为0，代表该虚拟页并没有被缓存在物理内存中。<strong>虚拟页没有被缓存在物理内存中（缓存未命中）被称为缺页。</strong></p> 
+<p><img alt="" height="561" src="https://img-blog.csdnimg.cn/img_convert/d4a85562bfa7cbbd165b1d8bdacddeaf.png" srcset="/img/loading.gif" lazyload width="810"></p> 
+<p>当CPU遇见缺页时会触发一个缺页异常，缺页异常将控制权转向操作系统内核，<span style="color:#f33b45;">然后调用内核中的缺页异常处理程序</span>，<span style="color:#f33b45;">该程序会选择一个牺牲页，如果牺牲页已被修改过，内核会先将它复制回硬盘</span>（采用写回机制而不是直写也是为了尽量减少对硬盘的访问次数），<span style="color:#f33b45;">然后再把该虚拟页覆盖到牺牲页的位置，并且更新PTE。</span></p> 
+<p><strong>当缺页异常处理程序返回时，它会重新启动导致缺页的指令，该指令会把导致缺页的虚拟地址重新发送给MMU</strong>。由于现在已经成功处理了缺页异常，所以最终结果是页命中，并得到物理地址。</p> 
+<p>这种在硬盘和内存之间传送页的行为称为页面调度（paging）：页从硬盘换入内存和从内存换出到硬盘。当缺页异常发生时，才将页面换入到内存的策略称为按需页面调度（demand paging），所有现代操作系统基本都使用的是按需页面调度的策略。</p> 
+<p><strong>虚拟内存跟CPU高速缓存（或其他使用缓存的技术）一样依赖于局部性原则</strong>。虽然处理缺页消耗的性能很多（毕竟还是要从硬盘中读取），而且程序在运行过程中引用的不同虚拟页的总数可能会超出物理内存的大小，但是<strong>局部性原则保证了在任意时刻，程序将趋向于在一个较小的活动页面（active page）集合上工作，这个集合被称为工作集（working set）</strong>。根据空间局部性原则（一个被访问过的内存地址以及其周边的内存地址都会有很大几率被再次访问）与时间局部性原则（一个被访问过的内存地址在之后会有很大几率被再次访问），只要将工作集缓存在物理内存中，接下来的地址翻译请求很大几率都在其中，<span style="color:#f33b45;">从而减少了额外的硬盘流量</span>。</p> 
+<p>如果一个程序没有良好的局部性，将会使工作集的大小不断膨胀，直至超过物理内存的大小，这时程序会产生一种叫做抖动（thrashing）的状态，页面会不断地换入换出，如此多次的读写硬盘开销，性能自然会十分“恐怖”。<strong>所以，想要编写出性能高效的程序，首先要保证程序的时间局部性与空间局部性。</strong></p> 
+<h4><a name="t6"></a>多级页表</h4> 
+<p>上面讨论的只是单页表，但在实际的环境中虚拟空间地址都是很大的（一个32位系统的地址空间有<code>2^32 = 4GB</code>，更别说64位系统了）。在这种情况下，使用一个单页表明显是效率低下的，而且非常占内存空间。</p> 
+<p><strong>常用方法是使用层次结构的页表</strong>。</p> 
+<p>假设我们的环境为一个32位的虚拟地址空间，它有如下形式：</p> 
+<ul><li> <p>虚拟地址空间被分为4KB的页，每个PTE都是4字节。</p> </li><li> <p>内存的前2K个页面分配给了代码和数据。</p> </li><li> <p>之后的6K个页面还未被分配。</p> </li><li> <p>再接下来的1023个页面也未分配，其后的1个页面分配给了用户栈。</p> </li></ul> 
+<p>下图是为该虚拟地址空间构造的二级页表层次结构（真实情况中多为四级或更多），一级页表（1024个PTE正好覆盖4GB的虚拟地址空间，同时每个PTE只有4字节，这样一级页表与二级页表的大小也正好与一个页面的大小一致都为4KB）的每个PTE负责映射虚拟地址空间中一个4MB的片（chunk），每一片都由1024个连续的页面组成。二级页表中的每个PTE负责映射一个4KB的虚拟内存页面。</p> 
+<p><img alt="" height="469" src="https://img-blog.csdnimg.cn/img_convert/0c32d5ffdb425520ef17c0139916d91c.png" srcset="/img/loading.gif" lazyload width="822"></p> 
+<p>这个结构看起来很像是一个<code>B-Tree</code>，这种层次结构有效的减缓了内存要求：</p> 
+<ul><li> <p>如果一个一级页表的一个PTE是空的，那么相应的二级页表也不会存在。这代表一种巨大的潜在节约（对于一个普通的程序来说，虚拟地址空间的大部分都会是未分配的）。</p> </li><li> <p>只有一级页表才总是需要缓存在内存中的，这样虚拟内存系统就可以在需要时创建、页面调入或调出二级页表（只有经常使用的二级页表才会被缓存在内存中），这就减少了内存的压力。</p> </li></ul> 
+<h4><a name="t7"></a>TLB</h4> 
+<p>表是被缓存在内存中的，尽管内存的速度相对于硬盘来说已经非常快了，但与CPU还是有所差距。<strong>为了防止每次地址翻译操作都需要去访问内存，CPU使用了高速缓存与TLB来缓存PTE。</strong>CPU会首先在TLB中查找，因为在TLB中找起来很快。TLB之所以快，一是因为它含有的entries的数目较少，二是TLB是集成进CPU的，它几乎可以按照CPU的速度运行。</p> 
+<p>TLB（Translation Lookaside Buffer, TLB）旁路缓冲器,或叫做页表缓存，它是<strong><span style="color:#f33b45;">MMU中的一个缓冲区。</span></strong></p> 
+<p>TLB命中：</p> 
+<p><img alt="" height="368" src="https://img-blog.csdnimg.cn/img_convert/d9172f502ec842ce42ec6f6491a27d3a.png" srcset="/img/loading.gif" lazyload width="681"></p> 
+<ul><li> <p>第一步，CPU将一个虚拟地址交给MMU进行地址翻译。</p> </li><li> <p>第二步和第三步，MMU通过TLB取得相应的PTE。</p> </li><li> <p>第四步，MMU通过PTE翻译出物理地址并将它发送给高速缓存/内存。</p> </li><li> <p>第五步，高速缓存返回数据到CPU（如果缓存命中的话，否则还需要访问内存）。</p> </li></ul> 
+<p>TLB未命中:</p> 
+<p><strong>当TLB未命中时，MMU必须从高速缓存/内存中取出相应的PTE，并将新取得的PTE存放到TLB（如果TLB已满会覆盖一个已经存在的PTE）。如下图：</strong></p> 
+<p><img alt="" height="336" src="https://img-blog.csdnimg.cn/img_convert/68434b70cc9ff19f148027942d6368d2.png" srcset="/img/loading.gif" lazyload width="621"></p> 
+<p>综上，整个cpu寻址的过程可以用下图表示：<br><img alt="" height="332" src="https://img-blog.csdnimg.cn/img_convert/ff279174a496bc9270bf0c37b0abdb3b.png" srcset="/img/loading.gif" lazyload width="555"></p> 
+<p><br> &nbsp;</p> 
+<p>如果在TLB中找到了含有该虚拟地址的entry（TLB hit），则可从该entry【1】中直接获取对应的物理地址，否则就不幸地TLB miss了，就得去查找当前进程的page table。这个时候，组成MMU的另一个部分table walk unit就被召唤出来了，这里面的table就是page table。</p> 
+<p>如果在page table中找到了该虚拟地址对应的entry的p（present）位是1，说明该虚拟地址对应的物理页面当前驻留在内存中，也就是page table hit。找到了还没完，接下来还有两件事要做：</p> 
+<ol><li>既然是因为在TLB里找不到才找到这儿来的，自然要更新TLB。</li><li>进行权限检测，包括可读/可写/可执行权限，user/supervisor模式权限等。如果没有正确的权限，将触发SIGSEGV（Segmantation Fault）。</li></ol> 
+<p>如果该虚拟地址对应的entry的p位是0，就会触发page fault（缺页中断），可能有这几种情况：</p> 
+<ol><li>这个虚拟地址被分配后还从来没有被access过（比如malloc之后还没有操作分配到的空间，则不会真正分配物理内存）。触发page fault后分配物理内存，也就是demand paging，有了确定的demand了之后才分，然后将p位置1。</li><li>对应的这个物理页面的内容被换出到外部的disk/flash了，这个时候page table entry里存的是换出页面在外部swap area里暂存的位置，可以将其换回物理内存，再次建立映射，然后将p位置1。</li></ol> 
+<p>如果这个虚拟地址在进程的page table中根本不存在，说明这个虚拟地址不在该进程的地址空间中，这时也会触发segmantation fault。</p> 
+<h2><a name="t8"></a>HugePage</h2> 
+<p>上面中提到使用多级页表的方式对于减少页表自身占用的内存空间确实是非常有效的。然而，为此付出的代价就是增加了地址转换过程中对内存的访问次数，进而增加了转换时间。那在除了前面介绍的TLB之外，还有哪些可以减少内存访问次数，加快地址转换的方法呢？HugePage即可以。</p> 
+<p>而HugePage它是使用较大的内存页来代替默认的4k大小，这就意味相同的物理内存，内存页的数量会更少，所以需要的page table（页表条目也会变少），同样TLB的条目数也会变少。<br> 好处是：<br> 节约了页表所占用的内存大小，并且地址转换变少。所以缺页中断变少，TLBmiss变少。从而提高了内存访问性能、TLB命中率，从整体上提高了系统的效率 。</p> 
+<p>另外，由于地址转换所需的信息一般保存在CPU的缓存中，huge page的使用让地址转换信息减少，从而减少了CPU缓存的使用，减轻了CPU缓存的压力，让CPU缓存能更多地用于应用程序的数据缓存，也能够在整体上提升系统的性能。</p> 
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35462323/article/details/111355107">https://blog.csdn.net/qq_35462323/article/details/111355107</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>linux内存管理(1)</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/01/05/linux内存管理-1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="软件设计原则">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">软件设计原则</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/03/intel%E5%AF%84%E5%AD%98%E5%99%A8/" title="intel寄存器">
+                        <span class="hidden-mobile">intel寄存器</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,663 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RTC前置知识UNIX时间戳 两种标准时间 闰秒：从上图可以知道，在UTC设置的9192631770周所用的时间和GMT标准中的1970-1-1-0-0-0一致的。但是由于地球自转速度越来越慢，所以需要通过差一个闰秒来解决这个问题。 C语言中的时间库  BKP简介 这个BKP实际上就是一组寄存器（备份数据寄存器x(BKP_DRx) (x &#x3D; 1 … 10) ），用于保存数据。其可以电源的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32中的RTC和BKP">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/11/stm32%E4%B8%AD%E7%9A%84RTC%E5%92%8CBKP/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="RTC前置知识UNIX时间戳 两种标准时间 闰秒：从上图可以知道，在UTC设置的9192631770周所用的时间和GMT标准中的1970-1-1-0-0-0一致的。但是由于地球自转速度越来越慢，所以需要通过差一个闰秒来解决这个问题。 C语言中的时间库  BKP简介 这个BKP实际上就是一组寄存器（备份数据寄存器x(BKP_DRx) (x &#x3D; 1 … 10) ），用于保存数据。其可以电源的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120014329.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120014838.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120016377.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120017010.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120040126.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120043197.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120046589.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120032535.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120046638.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120033988.png">
+<meta property="article:published_time" content="2024-02-11T14:14:42.000Z">
+<meta property="article:modified_time" content="2024-02-14T15:08:32.134Z">
+<meta property="article:author" content="Ysc">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120014329.png">
+  
+  
+  
+  <title>stm32中的RTC和BKP - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="stm32中的RTC和BKP"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-11 22:14" pubdate>
+          2024年2月11日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">stm32中的RTC和BKP</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="RTC前置知识"><a href="#RTC前置知识" class="headerlink" title="RTC前置知识"></a>RTC前置知识</h1><h2 id="UNIX时间戳"><a href="#UNIX时间戳" class="headerlink" title="UNIX时间戳"></a>UNIX时间戳</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120014329.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="两种标准时间"><a href="#两种标准时间" class="headerlink" title="两种标准时间"></a>两种标准时间</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120014838.png" srcset="/img/loading.gif" lazyload></p>
+<p>闰秒：从上图可以知道，在UTC设置的<code>9192631770</code>周所用的时间和GMT标准中的<code>1970-1-1-0-0-0</code>一致的。但是由于地球自转速度越来越慢，所以需要通过差一个闰秒来解决这个问题。</p>
+<h2 id="C语言中的时间库"><a href="#C语言中的时间库" class="headerlink" title="C语言中的时间库"></a>C语言中的时间库</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120016377.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120017010.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="BKP简介"><a href="#BKP简介" class="headerlink" title="BKP简介"></a>BKP简介</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120040126.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个BKP实际上就是一组寄存器（备份数据寄存器x(BKP_DRx) (x &#x3D; 1 … 10) ），用于保存数据。其可以电源的来源有<code>VDD</code>引脚和<code>VBAT</code>引脚。当<code>VDD</code>没有电的时候就会换到<code>VBAT</code>引脚，有电的时候就会使用<code>VDD</code>的电源，以减少对于<code>VBAT</code>电源的消耗。</p>
+<p>需要注意的是，<code>TANPER</code>引脚；RTC引脚输出RTC校准时钟、闹钟脉冲、秒脉冲；存储RTC时钟校准寄存器这个三个功能是不常用的功能，最常用的是存储应用数据。</p>
+<h1 id="BKP基本结构"><a href="#BKP基本结构" class="headerlink" title="BKP基本结构"></a>BKP基本结构</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120043197.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="BKP相关函数"><a href="#BKP相关函数" class="headerlink" title="BKP相关函数"></a>BKP相关函数</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_DeInit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//重初始化</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_TamperPinLevelConfig</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> BKP_TamperPinLevel)</span>;<span class="hljs-comment">//设置入侵事件的高低电平有效</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_TamperPinCmd</span><span class="hljs-params">(FunctionalState NewState)</span>;<span class="hljs-comment">//开启防入侵模式</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_ITConfig</span><span class="hljs-params">(FunctionalState NewState)</span>;<span class="hljs-comment">//中断配置</span><br><br><span class="hljs-comment">//下面这四个函数对应的就是BKP简介下图里的3 4 5 点</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_RTCOutputConfig</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> BKP_RTCOutputSource)</span>;<span class="hljs-comment">//选择RTC引脚输出RTC校准时钟、RTC闹钟脉冲或者秒脉冲</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_SetRTCCalibrationValue</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> CalibrationValue)</span>;<span class="hljs-comment">//设置 RTC 校准时钟</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_WriteBackupRegister</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> BKP_DR, <span class="hljs-type">uint16_t</span> Data)</span>;<span class="hljs-comment">//将用户数据写入指定的数据备份寄存器。</span><br><span class="hljs-type">uint16_t</span> <span class="hljs-title function_">BKP_ReadBackupRegister</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> BKP_DR)</span>;<span class="hljs-comment">//从指定的数据备份寄存器中读取数据</span><br><br><span class="hljs-comment">//状态、中断基本四兄弟</span><br>FlagStatus <span class="hljs-title function_">BKP_GetFlagStatus</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_ClearFlag</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br>ITStatus <span class="hljs-title function_">BKP_GetITStatus</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">BKP_ClearITPendingBit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<h1 id="RTC简介"><a href="#RTC简介" class="headerlink" title="RTC简介"></a>RTC简介</h1><p><strong>STM32的RTC外设（Real Time Clock），实质是一个掉电后还继续运行的定时器。</strong></p>
+<p>从定时器的角度来说，相对于通用定时器TIM外设，它十分简单，只有很纯粹的计时和触发中断的功能；但从掉电还继续运行的角度来说，它却是STM32中唯一一个具有如此强大功能的外设。 <strong>所以RTC外设的复杂之处并不在于它的定时功能，而在于它掉电还继续运行的特性。</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120046589.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="RTC基本结构"><a href="#RTC基本结构" class="headerlink" title="RTC基本结构"></a>RTC基本结构</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120032535.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120046638.png" srcset="/img/loading.gif" lazyload></p>
+<p>上图中灰色的区域是备份区域，也就是说这个范围内的寄存器中的值可以被BKP所保存。</p>
+<p><strong>余数寄存器是一个自减计数器</strong></p>
+<p>可以看到这个图中只有一个32位的计数器，这是由于stm32使用的是前面记载的<strong>秒计数器</strong>来记录时间的。需要使用的时候通过C语言中的time.h中的函数来进行转换。<code>time()</code>函数在stm32中不可以使用，因为stm32是一个脱网的系统。</p>
+<p>只有三个中断可以触发后面的控制寄存器，分别是：</p>
+<ul>
+<li>Second：秒中断</li>
+<li>Overflow：溢出中断，由于stm32的计数器是一个无符号数，所以unix时间戳会在2^32次方-1秒后溢出，2106年。</li>
+<li>Alarm：闹钟中断</li>
+</ul>
+<p>其中的定时器溢出事件无法被配置为中断。 若STM32原本处于待机状态，可由闹钟事件或WKUP事件(外部唤醒事件，属于EXTI模块，不属于RTC)使它退出待机模式。 闹钟事件是在计数器RTC_CNT的值等于闹钟寄存器RTC_ALR的值时触发的。</p>
+<h2 id="时钟源的选择"><a href="#时钟源的选择" class="headerlink" title="时钟源的选择"></a>时钟源的选择</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402120033988.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据RCC时钟树，可以看到RTC可以选择三种时钟源。一般我们都是使用<code>LSE OSC</code>这个时钟源，也就是<code>32.768khz</code>的这个。这个大小的时钟源一般都是用于RTC这个外设的。所以我们之后看到这个大小的时钟就应该要知道这很有可能是提供给RTC外设的。</p>
+<p>但是这还不是最重要的，最重要的是只有中间这个时钟源才支持<code>VBAT</code>引脚，其他的两个都没有这个引脚可以使用，所以要达到要求只有使用中间这个时钟源。</p>
+<h1 id="RTC相关函数"><a href="#RTC相关函数" class="headerlink" title="RTC相关函数"></a>RTC相关函数</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_ITConfig</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> RTC_IT, FunctionalState NewState)</span>;<span class="hljs-comment">//中断配置使能</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_EnterConfigMode</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//必须要先使用这个函数才可以更改RTC_PRL、RTC_CNT、RTC_ALR这三个寄存器。进入配置模式，这个函数一般不需要我们自己使用，而是Get__函数自己调用了。</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_ExitConfigMode</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//退出配置模式</span><br><span class="hljs-type">uint32_t</span>  <span class="hljs-title function_">RTC_GetCounter</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//获取计数器的值</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_SetCounter</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> CounterValue)</span>;<span class="hljs-comment">//设置计数器的值，其实就是设置计数器的初始时间</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_SetPrescaler</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> PrescalerValue)</span>;<span class="hljs-comment">//设置预分频器</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_SetAlarm</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> AlarmValue)</span>;<span class="hljs-comment">//设置闹钟</span><br><span class="hljs-type">uint32_t</span>  <span class="hljs-title function_">RTC_GetDivider</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//获取DIV余数寄存器中的值，这个函数的作用是为了获取比秒更加精细的时间，如ms、ns</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_WaitForLastTask</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//等待上一次写入完成</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_WaitForSynchro</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<span class="hljs-comment">//等待同步</span><br><br><span class="hljs-comment">//状态、中断基本四兄弟</span><br>FlagStatus <span class="hljs-title function_">RTC_GetFlagStatus</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> RTC_FLAG)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_ClearFlag</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> RTC_FLAG)</span>;<br>ITStatus <span class="hljs-title function_">RTC_GetITStatus</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> RTC_IT)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">RTC_ClearITPendingBit</span><span class="hljs-params">(<span class="hljs-type">uint16_t</span> RTC_IT)</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>在每一次使用了更改RTC_PRL、RTC_CNT、RTC_ALR寄存器的值的函数时，必须要在后面调用函数<code>RTC_WaitForLastTask()</code></li>
+<li>a</li>
+</ol>
+<p>实例：实际顺序就是根据上面的RTC基本结构的第一幅图来的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*开启时钟*/</span><br>RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);		<span class="hljs-comment">//开启PWR的时钟</span><br>RCC_APB1PeriphClockCmd(RCC_APB1Periph_BKP, ENABLE);		<span class="hljs-comment">//开启BKP的时钟</span><br><br><span class="hljs-comment">/*备份寄存器访问使能*/</span><br>PWR_BackupAccessCmd(ENABLE);							<span class="hljs-comment">//使用PWR开启对备份寄存器的访问</span><br><br><span class="hljs-keyword">if</span> (BKP_ReadBackupRegister(BKP_DR1) != <span class="hljs-number">0xA5A5</span>)			<span class="hljs-comment">//通过写入备份寄存器的标志位，判断RTC是否是第一次配置</span><br>														<span class="hljs-comment">//if成立则执行第一次的RTC配置</span><br>&#123;<br>	RCC_LSEConfig(RCC_LSE_ON);							<span class="hljs-comment">//开启LSE时钟</span><br>	<span class="hljs-keyword">while</span> (RCC_GetFlagStatus(RCC_FLAG_LSERDY) != SET);	<span class="hljs-comment">//等待LSE准备就绪</span><br>	<br>	RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);				<span class="hljs-comment">//选择RTCCLK来源为LSE</span><br>	RCC_RTCCLKCmd(ENABLE);								<span class="hljs-comment">//RTCCLK使能</span><br>	<br>	RTC_WaitForSynchro();								<span class="hljs-comment">//等待同步</span><br>	RTC_WaitForLastTask();								<span class="hljs-comment">//等待上一次操作完成</span><br>	<br>	RTC_SetPrescaler(<span class="hljs-number">32768</span> - <span class="hljs-number">1</span>);						<span class="hljs-comment">//设置RTC预分频器，预分频后的计数频率为1Hz</span><br>	RTC_WaitForLastTask();								<span class="hljs-comment">//等待上一次操作完成</span><br>	<br>	MyRTC_SetTime();									<span class="hljs-comment">//设置时间，调用此函数，全局数组里时间值刷新到RTC硬件电路</span><br>	<br>	BKP_WriteBackupRegister(BKP_DR1, <span class="hljs-number">0xA5A5</span>);			<span class="hljs-comment">//在备份寄存器写入自己规定的标志位，用于判断RTC是不是第一次执行配置</span><br>&#125;<br><span class="hljs-keyword">else</span>													<span class="hljs-comment">//RTC不是第一次配置</span><br>&#123;<br>	RTC_WaitForSynchro();								<span class="hljs-comment">//等待同步</span><br>	RTC_WaitForLastTask();								<span class="hljs-comment">//等待上一次操作完成</span><br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>stm32中的RTC和BKP</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/02/11/stm32中的RTC和BKP/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/14/stm32%E4%B8%AD%E7%9A%84flash/" title="stm32中的flash">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">stm32中的flash</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/05/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-%E8%BD%AC%E8%BD%BD/" title="正则表达式-转载">
+                        <span class="hidden-mobile">正则表达式-转载</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

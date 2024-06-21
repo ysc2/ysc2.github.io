@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！   1. pop 和 push常见的汇编指令源码    pop机器码 含义 push机器码 含义    5f pop edi 57 push edi   5e pop esi 56 push esi   5d pop ebp 55 push ebp   5c pop esp 54 pus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编中常见指令解释">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/09/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%B8%B8%E8%A7%81%E6%8C%87%E4%BB%A4%E8%A7%A3%E9%87%8A/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！   1. pop 和 push常见的汇编指令源码    pop机器码 含义 push机器码 含义    5f pop edi 57 push edi   5e pop esi 56 push esi   5d pop ebp 55 push ebp   5c pop esp 54 pus">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg">
+<meta property="article:published_time" content="2023-11-09T05:15:04.000Z">
+<meta property="article:modified_time" content="2024-01-03T14:37:54.575Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg">
+  
+  
+  
+  <title>汇编中常见指令解释 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/1586853771_daniel-leone-v7datklzzaw-unsplash-modded.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="汇编中常见指令解释"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-09 13:15" pubdate>
+          2023年11月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          53 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">汇编中常见指令解释</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><font color=#f00>这篇博文很有趣，竟然将hexo的content设置给冲垮了，感觉里面写了不可思议的东西，十分值得我去深挖！！！</font></p>
+<br>
+
+<h3 id="1-pop-和-push"><a href="#1-pop-和-push" class="headerlink" title="1. pop 和 push"></a>1. pop 和 push</h3><p>常见的汇编指令源码</p>
+<table>
+<thead>
+<tr>
+<th>pop机器码</th>
+<th>含义</th>
+<th>push机器码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5f</td>
+<td>pop edi</td>
+<td>57</td>
+<td>push edi</td>
+</tr>
+<tr>
+<td>5e</td>
+<td>pop esi</td>
+<td>56</td>
+<td>push esi</td>
+</tr>
+<tr>
+<td>5d</td>
+<td>pop ebp</td>
+<td>55</td>
+<td>push ebp</td>
+</tr>
+<tr>
+<td>5c</td>
+<td>pop esp</td>
+<td>54</td>
+<td>push esp</td>
+</tr>
+<tr>
+<td>5b</td>
+<td>pop ebx</td>
+<td>53</td>
+<td>push ebx</td>
+</tr>
+<tr>
+<td>5a</td>
+<td>pop edx</td>
+<td>52</td>
+<td>push edx</td>
+</tr>
+<tr>
+<td>59</td>
+<td>pop ecx</td>
+<td>51</td>
+<td>push ecx</td>
+</tr>
+<tr>
+<td>58</td>
+<td>pop eax</td>
+<td>50</td>
+<td>push eax</td>
+</tr>
+</tbody></table>
+<h3 id="2-call"><a href="#2-call" class="headerlink" title="2. call"></a>2. call</h3><pre><code class="hljs">
+call (short) eax
+1.将当前指令的下一条指令的地址压入栈中；
+2.JMP到EAX这个地址。
+</code></pre>
+
+<pre><code class="hljs">
+call (long) eax
+1.将CS压入栈中；
+2.将当前指令的下一条指令的地址压入栈中；
+2.JMP到EAX这个地址。
+</code></pre>
+
+<h3 id="3-retn-和-retf"><a href="#3-retn-和-retf" class="headerlink" title="3. retn 和 retf"></a>3. retn 和 retf</h3><pre><code class="hljs">
+retn
+1.将当前的ESP中指向的地址出栈；
+2.JMP到这个地址。
+</code></pre>
+
+<pre><code class="hljs">
+retn k
+1.将当前的ESP中指向的地址出栈；
+2.JMP到这个地址；
+3.弹出栈顶的k个字节的数据
+</code></pre>
+
+<pre><code class="hljs">
+retf
+1.将当前的ESP中指向的地址出栈给EIP；
+2.将当前的ESP中指向的地址出栈给CS；
+2.JMP到这个地址。
+</code></pre>
+
+<h3 id="4-jmp"><a href="#4-jmp" class="headerlink" title="4. jmp"></a>4. jmp</h3><pre><code class="hljs">
+<font color=#f00>jmp短跳</font>
+\xeb\xf6: 	jmp short $-8（其中$指代当前EIP）
+
+在Asm2MachineCode(x86)中如果要尝试jmp short $-8，是不可能实现的，但是我们可以：
+1. ImageBase（hex）设置为0012ff60 <font color=#f00>(此处为当前的EIP地址)</font>
+2. jmp short 0012FF58
+  </code></pre>
+
+<pre><code class="hljs">
+<font color=#f00>jmp长跳</font>
+\xE9\x2B\xFF\xFF\xFF\xFF: jmp 0x0012FF30
+
+在Asm2MachineCode(x86)中如果要尝试jmp short $-8，是不可能实现的，但是我们可以：
+1. ImageBase（hex）设置为0012ff58 <font color=#f00>(此处为当前的EIP地址)</font>
+2. jmp 0012FE88
+
+</code></pre>
+
+<h3 id="5-cmp"><a href="#5-cmp" class="headerlink" title="5. cmp"></a>5. cmp</h3><p>cmp op1, op2</p>
+<p>ZF&#x3D;1 这个简单，则说明两个数相等</p>
+<p>当无符号时：<br>CF&#x3D;1 则说明了有进位或借位，cmp是进行的减操作，故可以看出为借位，所以，此时oprd1&lt;oprd2<br>CF&#x3D;0 则说明了无借位，但此时要注意ZF是否为0，若为0，则说明结果不为0，故此时oprd1&gt;oprd2</p>
+<p>当有符号时：<br>若SF&#x3D;0，OF&#x3D;0 则说明了此时的值为正数，没有溢出，可以直观的看出，oprd1&gt;oprd2<br>若SF&#x3D;1，OF&#x3D;0 则说明了此时的值为负数，没有溢出，则为oprd1&lt;oprd2<br>若SF&#x3D;0，OF&#x3D;1 则说明了此时的值为正数，有溢出，可以看出oprd1&lt;oprd2<br>若SF&#x3D;1，OF&#x3D;1则说明了此时的值为负数，有溢出，可以看出oprd1&gt;oprd2</p>
+<p>最后两个可以作出这种判断的原因是，溢出的本质问题：<br>两数同为正，相加，值为负，则说明溢出<br>两数同为负，相加，值为正，则说明溢出<br>故有，正正得负则溢出，负负得正则溢出</p>
+<h3 id="6-leave"><a href="#6-leave" class="headerlink" title="6. leave"></a>6. leave</h3><p>其作用是删除函数的栈帧</p>
+<p>leave在32位汇编下相当于</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-keyword">mov</span> <span class="hljs-built_in">esp</span>,<span class="hljs-built_in">ebp</span>                                            <br><span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebp</span><br></code></pre></td></tr></table></figure>
+<h3 id="7-les"><a href="#7-les" class="headerlink" title="7. les"></a>7. les</h3><p>LES( load ES)指令的功能是：把内存中指定位置的双字操作数的低位字装入指令中指定的寄存器、高位字装入ES寄存器。</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scss">LES DSET，<span class="hljs-attribute">SRC</span><br>LES REG，MEM<br>DEST为<span class="hljs-built_in">destination</span>(目的地址)，<span class="hljs-attribute">SRC</span>为<span class="hljs-built_in">source</span>(源地址)；<br>REG为<span class="hljs-built_in">register</span>(CPU寄存器)，MEM为<span class="hljs-built_in">memory</span>(内存地址)。<br></code></pre></td></tr></table></figure>
+
+<p>DEST&#x3D;WORD PTR[SRC]</p>
+<p>ES&#x3D;WORD PTR[SRC+2]</p>
+<p>DEST赋值为SRC处双字的低位；</p>
+<p>ES赋值为SRC处双字的高位；</p>
+<h3 id="8-比较"><a href="#8-比较" class="headerlink" title="8. 比较"></a>8. 比较</h3><p>A（above）大于、B（below）小于、E（equal）等于，用于比较无符号数</p>
+<p>G（great）大于、L（less than）小于、E（equal）等于，用于比较带符号数</p>
+<p>其实这些地方也是漏洞点，有时候比较没有对是否有符号进行确定，所以可能会出问题。</p>
+<h3 id="9-lods-stos"><a href="#9-lods-stos" class="headerlink" title="9. lods&#x2F;stos"></a>9. lods&#x2F;stos</h3><p>lodsb指令，将esi指向的地址处的数据取出来赋给AL寄存器, esi&#x3D;esi+1；</p>
+<p>lodsw指令则取得是一个字。</p>
+<p>lodsd指令，取得是双字节，即mov eax，[esi]，esi&#x3D;esi+4；</p>
+<p>stosb指令，将AL寄存器的值取出来赋给edi所指向的地址处。mov [edi]，AL；edi&#x3D;edi+1；</p>
+<p>stosw指令去的是一个字。</p>
+<p>stosd指令，取得是双字节，mov [edi]，eax；edi&#x3D;edi+4；</p>
+<h1 id="数学指令"><a href="#数学指令" class="headerlink" title="数学指令"></a>数学指令</h1><p>add src, dest	<br>将 src 添加到 dest 。</p>
+<p>sub src, dest	<br>从 dest 中减去 src 。</p>
+<p>imul src, dest	<br>将 dest 乘以 src 。</p>
+<p>idiv divisor	Divide rdx:rax<br>将 rdx:rax 除以 divisor 。将商存储在 rax 中，并将余数存储在 rdx 中。</p>
+<p>shr reg	<br>shl reg<br>将 reg 向左或向右移动 cl 中的值（ rcx 的低 8 位）。</p>
+<p>ror src, dest	<br>将 dest 向左或向右循环 src 位。</p>
+<p>cmp src, dest	<br>设置与 dest 是否小于、等于或大于 src 相对应的标志</p>
+<h1 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h1><h2 id="endbr64"><a href="#endbr64" class="headerlink" title="endbr64"></a>endbr64</h2><p>如果我们使用gdb查看程序的汇编代码，我们会发现第一句往往是<code>endbr64</code>。这个语句实际上是一个安全语句。为了对付ROP、JOP、COP攻击技术。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/htJ73BQK5zRTReHRaAqwxg">https://mp.weixin.qq.com/s/htJ73BQK5zRTReHRaAqwxg</a></p>
+<h1 id="0x1-ARM64"><a href="#0x1-ARM64" class="headerlink" title="0x1. ARM64"></a>0x1. ARM64</h1><h2 id="mov"><a href="#mov" class="headerlink" title="mov"></a>mov</h2><p>传送指令：将立即数传送到寄存器&#x2F;内存单元，或互传内存单元和寄存器两者中的数据。</p>
+<p>例如：mov x0, #0x1 &#x2F; mov $0x1, %rdi 将立即数0x1移动到寄存器x0&#x2F;rdi中</p>
+<h2 id="mvn"><a href="#mvn" class="headerlink" title="mvn"></a>mvn</h2><p>该指令与mov唯一不同的是：需要对操作数进行按位取反。</p>
+<h2 id="str"><a href="#str" class="headerlink" title="str"></a>str</h2><p>store register. 将寄存器中的数据存到内存单元中。</p>
+<p>例如：str x0, [sp, #0x28] 将寄存器x0中的数据存到地址sp+0x28处</p>
+<h2 id="stp"><a href="#stp" class="headerlink" title="stp"></a>stp</h2><p>store pair of registers.</p>
+<p>例如：stp x29, x30, [sp, #0x70] 先将x29存到地址sp+0x70处，再将x30存到sp+0x78处 (Tip1)。</p>
+<p>{ %note info % }<br>Tip1: 64位下，寄存器大小为8bytes<br>{ %endnote% }</p>
+<h2 id="ldr"><a href="#ldr" class="headerlink" title="ldr"></a>ldr</h2><p>load register. 从内存中读取数据，存到寄存器中。</p>
+<p>例如：ldr x1, [sp, #0x30] 将内存地址sp+0x30处的数据加载到x1中。</p>
+<h2 id="ldp"><a href="#ldp" class="headerlink" title="ldp"></a>ldp</h2><p>load pair of registers.</p>
+<p>例如：ldp x29, x30, [sp, #0x70] 将内存地址sp+0x70处的数据加载到x29中，再将sp+0x78(Tip1)处的数据加载到x30中。</p>
+<h2 id="b"><a href="#b" class="headerlink" title="b"></a>b</h2><p>branch. 无条件跳转。</p>
+<p>例如：b 0x1b6b79cf8 跳转到0x1b6b79cf8处继续执行。</p>
+<h2 id="bl"><a href="#bl" class="headerlink" title="bl"></a>bl</h2><p>branch with link. 将下一条指令地址copy到lr中，然后跳转。由于保存了下一条指令地址(相对于pc)，所以可实现子程序的返回，而b只能单纯的实现跳转，不能实现子程序返回。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">   0x102b7d8a4 &lt;+160&gt;: bl   0x102bda450 ; symbol stub for: objc_msgSend<br>-&gt; 0x102b7d8a8 &lt;+164&gt;: adrp x0, 107<br></code></pre></td></tr></table></figure>
+
+<p>当程序执行完bl指令时，lr中的内容应该是是bl下一条指令的地址，即0x102b7d8a8。通过控制台查看lr中的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">fp = 0x000000016d2853c0<br>lr = 0x0000000102b7d8a8  `-[AppDelegate application:didFinishLaunchingWithOptions:] + 164 at AppDelegate.m:41:5<br>sp = 0x000000016d285350<br></code></pre></td></tr></table></figure>
+
+<h2 id="cbz"><a href="#cbz" class="headerlink" title="cbz"></a>cbz</h2><p>compare and branch on zero. 比较操作数是否为0，若为0则跳转。</p>
+<p>例如：cbz w24, 0x1b6b798f4 若w24 (x24寄存器低32位) 中的数据为0，则跳转到0x1b6b798f4处执行 (Note1)。</p>
+<p>Note1: 跳转地址需要在cbz&#x2F;cbnz指令之后的4~130字节内。</p>
+<h2 id="cbnz"><a href="#cbnz" class="headerlink" title="cbnz"></a>cbnz</h2><p>compare and branch on non-zero. 操作数不为0，则跳转。</p>
+<p>例如：cbnz w27, 0x1b73c9e2c 若w27中的数据不为0，则跳转到0x1b73c9e2c处执行 (Note1)。</p>
+<h2 id="lsl"><a href="#lsl" class="headerlink" title="lsl"></a>lsl</h2><p>logical shift left. 左移位。</p>
+<p>例如：str x0, [x1, x2, lsl #2] 将x2中的值左移两位，再加上x1中的值，得到的结果为一个内存地址，最后将x0中的数据存到该内存中。</p>
+<h2 id="lsr"><a href="#lsr" class="headerlink" title="lsr"></a>lsr</h2><p>logical shift right. 右移位。</p>
+<h2 id="cmp"><a href="#cmp" class="headerlink" title="cmp"></a>cmp</h2><p>compare. 比较两个数是否相等，首先将两个数相减，若差为0，则ZF (Tip2) 为1，即两者相等。</p>
+<p>cmp w8, #0x3 通过判断w8中的值与0x3的差值是否为0，即ZF (Tip2) 是否为1，来比较两者是否相等。</p>
+<p>Tip2: ZF是零标志位寄存器。它记录相关指令执行后，其结果是否为0。若结果为0，则ZF&#x3D;1；若结果为1，则ZF&#x3D;0。</p>
+<h2 id="adrp"><a href="#adrp" class="headerlink" title="adrp"></a>adrp</h2><p>form pc-relative address to 4KB page. 先将操作数左移12位，再将pc的低12位清零 (即3个十六进制位清零，得到一个页对齐地址)，最后两者相加，赋值给寄存器。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">   0x1b703f074 &lt;+44&gt;:  adrp   x20, 270332<br>-&gt; 0x1b703f078 &lt;+48&gt;:  ldr    x0, [x20, #0x7a0]<br></code></pre></td></tr></table></figure>
+
+<p>执行adrp时，先将操作数270332 (十六进制为0x41ffc) 左移12位得到0x41ffc000，再将pc (0x1b703f074) 低12清零得到 0x1b703f000，最后两者相加得到0x1f903b000赋值给x20。通过控制台查看x20中的内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">x19 = 0x000000016ef25fb0<br>x20 = 0x00000001f903b000  <br>x21 = 0x0000000281454380<br></code></pre></td></tr></table></figure>
+
+<h2 id="adr"><a href="#adr" class="headerlink" title="adr"></a>adr</h2><p>load a program-relative or register-relative address into a register. 是一条伪指令，遇到该指令时汇编器会生成一条add或sub指令，来计算pc和操作数的和或者差，最后将得到的结果，放在寄存器中。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs asm">; 生成加法指令，即x0 = 0x1022c3b08 + 0x2fc48 = 0x1022f3750<br>   0x1022c3b08 &lt;+108&gt;: adr x0, #0x2fc48  ; _MergedGlobals + 16<br>-&gt; 0x1022c3b0c &lt;+112&gt;: nop <br><br>; 生成减法指令，即x2 = 0x1022c3b10 - 0x390 = 0x1022c3780<br>   0x1022c3b10 &lt;+116&gt;: adr x2, #-0x390 ; initializeAvailabilityCheck<br>-&gt; 0x1022c3b14 &lt;+120&gt;: nop<br></code></pre></td></tr></table></figure>
+
+<h2 id="brk"><a href="#brk" class="headerlink" title="brk"></a>brk</h2><p>breakpoint instruction. 用于生成断点指令异常。</p>
+<h2 id="tbz"><a href="#tbz" class="headerlink" title="tbz"></a>tbz</h2><p>test branch zero. 测试位为0，则跳转。</p>
+<p>tbz w24, #0x6, 0x19307005c ; 即w24第6位，若为0，则跳转到0x19307005c执行</p>
+<p>w24 二级制数为：0b00000111000000000000100000000110</p>
+<h2 id="tbnz"><a href="#tbnz" class="headerlink" title="tbnz"></a>tbnz</h2><p>test branch no zero. 测试位不为0，则跳转。</p>
+<p>tbnz w24, #0x6, 0x19307005c ; 即w24第6位，若不为0，则跳转到0x19307005c执行</p>
+<p>w24 二级制数为：0b00000111000000000000100000000110</p>
+<h1 id="0x2-AT-T"><a href="#0x2-AT-T" class="headerlink" title="0x2. AT&amp;T"></a>0x2. AT&amp;T</h1><h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2><p>将指令后的两个数进行按位与操作，其结果影响ZF。通常用来判断某个数是否为0&#x2F;nil。</p>
+<p>例如：</p>
+<p>testq %rax, %rax ; 若%rax中的值为0，则ZF&#x3D;1；反之，ZF&#x3D;0，q表示四字长</p>
+<h2 id="sete"><a href="#sete" class="headerlink" title="sete"></a>sete</h2><p>取ZF中的值，放入目标寄存器中。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">testq %rax, %rax  ; 两个寄存器中的值按位与，结果影响ZF<br>sete  %r12        ; 若%rax和%rbx相等，即ZF=1，则将%r12设为1，反之设为0<br></code></pre></td></tr></table></figure>
+
+<h2 id="setne"><a href="#setne" class="headerlink" title="setne"></a>setne</h2><p>取ZF中的值，然后取反，再放入目标寄存器中。</p>
+<p>例如：setne %rax 若ZF&#x3D;1，则%rax设为0；反之设为1</p>
+<h2 id="je-jz"><a href="#je-jz" class="headerlink" title="je &#x2F; jz"></a>je &#x2F; jz</h2><p>je 和 jz这两条指令虽然名字不同，但做的事情都是一样的。即ZF&#x3D;1，则跳转。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asm">libobjc.A.dylib`objc_retain:<br>    0x7fff50bad350 &lt;+0&gt;:  testq  %rdi, %rdi      ; 判断%rdi中的值(第一个参数)是否为nil<br>    0x7fff50bad353 &lt;+3&gt;:  je     0x7fff50bad371  ; &lt;+33&gt; 若%rdi为nil，则跳转到0x7fff50bad371执行<br>    0x7fff50bad355 &lt;+5&gt;:  js     0x7fff50bad373  ; &lt;+35&gt;<br>-&gt;  0x7fff50bad357 &lt;+7&gt;:  movq   (%rdi), %rax<br></code></pre></td></tr></table></figure>
+<h2 id="jne-jnz"><a href="#jne-jnz" class="headerlink" title="jne &#x2F; jnz"></a>jne &#x2F; jnz</h2><p>jne 和 jnz这两条指令做的事情也都是一样的。即ZF&#x3D;0，则跳转。</p>
+<h2 id="js"><a href="#js" class="headerlink" title="js"></a>js</h2><p>jump if sign. 若结果为负数，即SF&#x3D;1，则进行跳转。</p>
+<p>SF: 符号标志位</p>
+<p>它记录相关指令执行后，其结果是否为负。若结果为负，则SF&#x3D;1；若为非负，则SF&#x3D;0。</p>
+<h2 id="nop"><a href="#nop" class="headerlink" title="nop"></a>nop</h2><p>no operation. 不执行任何操作。是一条单字节指令。 Opcode 90</p>
+<h2 id="ud2"><a href="#ud2" class="headerlink" title="ud2"></a>ud2</h2><p>undefined instruction. 该指令用于生成一个无效操作码。当CPU试图执行无效或未定义的操作码时，将发生无效的操作码异常。UD2指令除了引发无效的操作码异常外，与NOP指令相同。</p>
+<p>这里的异常是指CPU在发生“错误”时生成的。大多数情况下，有些异常并不是真正的错误，而是中断的一种类型。比如: Page Fault。异常分类如下：</p>
+<p>Faults (错误)：这些错误可以被纠正，程序可以像什么都没有发生一样继续运行。<br>Traps (陷阱)：陷阱指令执行后会立即被报告。<br>Aborts (终止)：一些严重的不可恢复的错误。</p>
+<h2 id="ret"><a href="#ret" class="headerlink" title="ret"></a>ret</h2><p>该指令用于子程序的返回。将栈顶数据(返回地址)弹出，赋值给 ip 寄存器，此时 sp 会增加一个内存单元大小，来释放栈空间。</p>
+<p>{ %note info % }<br>栈底 [ … | … , parameters, return address | previous frame pointer, %rbp ] 栈顶</p>
+<p>pop %rbp 👇</p>
+<p>栈底 [ … | … , parameters, return address ] 栈顶</p>
+<p>ret 👇</p>
+<p>栈底 [ … | … , parameters ] 栈顶</p>
+<p>caller release parameters 👇</p>
+<p>栈底 [ … | … ] 栈顶<br>{ %endnote% }</p>
+<h2 id="xor"><a href="#xor" class="headerlink" title="xor"></a>xor</h2><p>常常使用这个指令来判断两个地址中的数据是否一致：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asm">xor    %gs:0x14,%eax<br></code></pre></td></tr></table></figure>
+
+<h1 id="注"><a href="#注" class="headerlink" title="注"></a>注</h1><p><a target="_blank" rel="noopener" href="https://introspelliam.github.io/">本文章装载于此1</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.dongxin.online/assembly/assemblyinstructions.html#_0x1-arm64">本文章装载于此2</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B1%87%E7%BC%96/" class="category-chain-item">汇编</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>汇编中常见指令解释</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2023/11/09/汇编中常见指令解释/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/09/%E6%A0%88%E7%9A%84%E4%BB%8B%E7%BB%8D/" title="栈的介绍">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">栈的介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/09/%E6%B5%85%E6%9E%90%E5%A0%86%E7%9A%84%E7%94%B3%E8%AF%B7%E9%87%8A%E6%94%BE%E5%8F%8A%E7%9B%B8%E5%BA%94%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/" title="浅析堆的申请释放及相应保护机制">
+                        <span class="hidden-mobile">浅析堆的申请释放及相应保护机制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
