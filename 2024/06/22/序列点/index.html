@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
+    <meta name="description" content="c语言中的关于序列点的知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2023/11/16/%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E3%80%81%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E3%80%81%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E3%80%81%E7%BA%BF%E6%80%A7%E5%9C%B0%E5%9D%80%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/index.html">
+<meta property="og:title" content="序列点">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/06/22/%E5%BA%8F%E5%88%97%E7%82%B9/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="物理地址、虚拟地址、逻辑地址、线性地址之间的关系">
+<meta property="og:description" content="c语言中的关于序列点的知识点">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-sergei-a-2589456.jpg">
-<meta property="article:published_time" content="2023-11-16T08:13:46.000Z">
-<meta property="article:modified_time" content="2024-06-22T18:27:19.340Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8p93p.png">
+<meta property="article:published_time" content="2024-06-22T15:37:46.000Z">
+<meta property="article:modified_time" content="2024-06-22T18:05:53.649Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-sergei-a-2589456.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8p93p.png">
   
   
   
-  <title>物理地址、虚拟地址、逻辑地址、线性地址之间的关系 - Ysc Web</title>
+  <title>序列点 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-sergei-a-2589456.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8p93p.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="物理地址、虚拟地址、逻辑地址、线性地址之间的关系"></span>
+            <span id="subtitle" data-typed-text="序列点"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-16 16:13" pubdate>
-          2023年11月16日 下午
+        <time datetime="2024-06-22 23:37" pubdate>
+          2024年6月22日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k 字
+          1.2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          13 分钟
+          11 分钟
         
       </span>
     
@@ -270,61 +270,47 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">物理地址、虚拟地址、逻辑地址、线性地址之间的关系</h1>
+            <h1 id="seo-header">序列点</h1>
             
             
               <div class="markdown-body">
                 
-                <p>物理地址、虚拟地址、逻辑地址、线性地址之间的关系</p>
+                <p>c语言中的关于序列点的知识点</p>
 <span id="more"></span>
 
-<h1 id="什么是物理地址"><a href="#什么是物理地址" class="headerlink" title="什么是物理地址"></a>什么是物理地址</h1><p>在计算机中，机械硬盘使用非常广泛。通过机械硬盘的结构，我们可以知道物理地址是如何来的。</p>
-<p>机械硬盘将几个磁盘连接在一起，每一个磁盘都可以看作一个个同心圆组成的，每一个同心圆被称之为一个<strong>磁道</strong>，每一个<strong>磁道</strong>又被划分为一个个<strong>扇区</strong>，所以<strong>扇区</strong>是磁盘上的最小存储单位。<strong>扇区</strong>常常又被称之为<strong>数据块</strong>（一个数据块通常大小为512byte）。通过给这些<strong>数据块</strong>来编号，这就是物理地址。</p>
-<h2 id="物理地址的由来"><a href="#物理地址的由来" class="headerlink" title="物理地址的由来"></a>物理地址的由来</h2><p>物理地址由<strong>内存控制器</strong>生成，然后传递给内存中的存储单元。当处理器需要访问内存中的数据时，它将请求发送到内存控制器，内存控制器会根据物理地址找到对应的存储单元，并将其中的数据返回给处理器。</p>
-<h1 id="什么是虚拟地址"><a href="#什么是虚拟地址" class="headerlink" title="什么是虚拟地址"></a>什么是虚拟地址</h1><p><strong>虚拟地址是CPU保护模式下的一个概念</strong>，保护模式是80286系列和之后的x86兼容CPU操作模式，在CPU引导完操作系统内核后，操作系统内核会进入一种CPU保护模式，也叫虚拟内存管理，在这之后的程序在运行时都处于虚拟内存当中。</p>
-<h2 id="为什么需要使用虚拟地址"><a href="#为什么需要使用虚拟地址" class="headerlink" title="为什么需要使用虚拟地址"></a>为什么需要使用虚拟地址</h2><ol>
-<li>安全，不直接使用物理地址。避免了直接将底层暴露出来</li>
-<li>方便管理，在多进程的计算机中，直接使用物理内存不方便程序员管理。</li>
-<li>更适合多进程。虚拟地址有远远大于物理地址的容量。</li>
-</ol>
-<h1 id="物理地址和虚拟地址之间的转换"><a href="#物理地址和虚拟地址之间的转换" class="headerlink" title="物理地址和虚拟地址之间的转换"></a>物理地址和虚拟地址之间的转换</h1><h2 id="从宏观上来看："><a href="#从宏观上来看：" class="headerlink" title="从宏观上来看："></a>从宏观上来看：</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161641181.png" srcset="/img/loading.gif" lazyload></p>
-<p>从上面可以看到虚拟地址和物理地址之间的转换路径。</p>
-<blockquote>
-<p>首先通过查询TLB（转址旁路缓存，TLB中存储了上次进行地址转换使用过的转换关系），如果没有对应的地址的转换关系的话，就直接进行转换。否则直接访问内存。</p>
-</blockquote>
-<h2 id="如何进行转换的？"><a href="#如何进行转换的？" class="headerlink" title="如何进行转换的？"></a>如何进行转换的？</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161652458.png" srcset="/img/loading.gif" lazyload><br>通过上面的图，可以看到具体的转换过程。</p>
-<blockquote>
-<p>需要注意的是，如果开启了换页机制则，需要将线性地址转换为物理地址，如果没有开启换页机制则线性地址直接就是物理地址。不需要转换。</p>
-</blockquote>
-<h1 id="程序运行中的各地址转换"><a href="#程序运行中的各地址转换" class="headerlink" title="程序运行中的各地址转换"></a>程序运行中的各地址转换</h1><p>在程序中，我们使用的偏移地址，这个偏移地址是相对于段来说的。<br>那么偏移地址如何转换成为一个物理地址？</p>
-<h2 id="偏移地址的组成"><a href="#偏移地址的组成" class="headerlink" title="偏移地址的组成"></a>偏移地址的组成</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161757109.png" srcset="/img/loading.gif" lazyload></p>
-<p>通过上面的图可以知道，偏移地址是由<strong>段选择符+段内偏移值</strong>组成的。</p>
-<p>段选择符的组成：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161808553.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="序列点"><a href="#序列点" class="headerlink" title="序列点"></a>序列点</h1><p>在 C&#x2F;C++ 中，需要有序列点。这个序列点的作用就是用来帮助编译器确定各个表达式的求值顺序的。</p>
+<p>在 C&#x2F;C++ 中，一下的地方会被添加一个<strong>序列点</strong>：</p>
 <ul>
-<li><p>TI标识了使用LDT还是GDT</p>
+<li><p>&amp;&amp;（逻辑与）、||（逻辑或）、逗号运算符的左操作数与右操作数求值之间（前两者是短路求值的一部分）。例如，表达式*p++ !&#x3D; 0 &amp;&amp; <em>q++ !&#x3D; 0，子表达式</em>p++ !&#x3D; 0的副作用都会在试图访问q之前完成。</p>
 </li>
-<li><p>索引号就是段描述符表中的索引</p>
+<li><p>三元条件运算符的第一个操作数之后，第二或第三操作数之前。例如，表达式a &#x3D; (<em>p++) ? (<em>p++) : 0在第一个</em>p++之后存在顺序点，因而在第二个</em>p++求值之前已经做完一次自增。</p>
 </li>
-<li><p>整体的转换流程如图所示：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161807827.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li>根据段选择符中的TI位确定使用GDT还是LDT，再根据寄存器获取要使用的段描述符表的地址</li>
-<li>段选择符的前13位是段描述符表中的索引，据此得到段描述符，这样就取到了段的基地址Base</li>
-<li>Base + offset就是要转换的线性地址了</li>
-</ol>
+<li><p>完整表达式结束处。包括表达式语句（如赋值a &#x3D; b;），返回语句，if、switch、while、do-while语句的控制表达式，for语句的3个表达式。</p>
+</li>
+<li><p>函数调用时的函数入口点。函数实参的求值顺序未指定，但顺序点意味着这些实参求值的副作用在进入函数时都已经完成。表达式f(i++) + g(j++) + h(k++)，调用f(), g(), h()的顺序未指定，i, j, k的自增顺序也未指定。函数调用f(a,b,c)的实参列表不是逗号运算符，a, b, c的求值顺序未指定。</p>
+</li>
+<li><p>函数返回时，在返回值已经复制到调用上下文。（仅C++标准指出这一顺序点[6])</p>
+</li>
+<li><p>初始化的结束。例如，声明int a &#x3D; 5;中的对5求值之后。</p>
+</li>
+<li><p>初始化列表的以逗号分割的各个初始化值，严格遵照从左至右求值。例如：int a[3] &#x3D; {i++,j–,foo(101)};注意，此处不是逗号运算符。（从C++11标准指出这一顺序点）</p>
+</li>
+<li><p>在声明序列的每个声明（declarator）之间。例如，int x &#x3D; a++, y &#x3D; a++的两次a++求值之间。[7]注意，此例不是逗号运算符。</p>
 </li>
 </ul>
-<h2 id="线性地址"><a href="#线性地址" class="headerlink" title="线性地址"></a>线性地址</h2><p>线性地址是逻辑地址转换成物理地址的中间层，CPU的MMU（内存管理单元）负责将线性地址转换成物理地址。</p>
-<p>为了节省空间，引入了页目录和页表的概念，每个进程都有自己的页目录，它的地址存储在CPU的寄存器中。<br>以32位机为例。一个32位的线性地址被分为3部分：</p>
-<p>页目录索引（10位）<br>页表索引（10位）<br>偏移（12位）</p>
-<p>转换的过程：</p>
-<p>从CPU寄存器cr3中获取到页目录地址（操作系统在调度进程的时候，负责将页目录地址放入寄存器）<br>根据线性地址的页目录索引部分，去页目录中找到页表<br>根据线性地址的页表索引部分，找到页的起始地址<br>起始地址 + 偏移，就得到了物理地址</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311161820121.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>虚拟地址是一个宽泛的概念，<strong>其可以是偏移地址、也可以是线性地址</strong>，总之不是物理地址的地址一般称之为虚拟地址。</p>
-<p>程序员编程（逻辑地址）&lt;—通过算法–&gt;操作系统（虚拟地址）&lt;—通过内存管理单元–&gt;物理元件（物理地址）</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://blog.timd.cn/virtual-address/">http://blog.timd.cn/virtual-address/</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fengxing999/p/11022872.html">https://www.cnblogs.com/fengxing999/p/11022872.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://wiki.osdev.org/GDT_Tutorial">https://wiki.osdev.org/GDT_Tutorial</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bjbz_cxy/article/details/78508795">https://blog.csdn.net/bjbz_cxy/article/details/78508795</a></p>
+<p><strong>在上面提到的序列点中，在两个序列点之间的对象不可以出现不确定的顺序。其实就是同一个对象的求值的顺序必须要是确定的。</strong></p>
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> a=<span class="hljs-number">41</span>; a++ &amp; <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, a);<br></code></pre></td></tr></table></figure>
+
+<p>这个例子是一个<strong>未定义的表达式</strong>，这个例子的序列点在 <code>a=41</code> 后面有一个，在 <code>printf</code> 后面有一个。所以就导致了 <code>a++</code> 和 <code>printf</code> 的执行顺序未定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> a=<span class="hljs-number">41</span>; <span class="hljs-keyword">if</span> (a++ &lt; <span class="hljs-number">42</span>) <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, a);<br></code></pre></td></tr></table></figure>
+
+<p>上面这个例子是正确的，而不是未定义的表达式。因为 <code>if</code> 语句结束的后面是有一个序列点的，所以 <code>a++</code> 的自增操作在 <code>if</code> 语句的条件判断之前完成。然后在 <code>printf</code> 后面又有一个序列点，所以这个 <code>a</code> 的求值的顺序是确定的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br>a = a++;<br></code></pre></td></tr></table></figure>
+
+<p>上面这个例子是错误的，是一个具有未定义行为的表达式。在 <code>a = a++</code> 这里只有一个序列点，所以到底是先进行 <code>=</code> 还是先 <code>++</code> 这是不确定的。所以导致了这个表达式的行为未定义。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%A1%BA%E5%BA%8F%E7%82%B9">WikiPedia</a></li>
+</ul>
 
                 
               </div>
@@ -343,7 +329,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  <a href="/categories/c/" class="category-chain-item">c</a>
   
   
 
@@ -370,8 +356,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>物理地址、虚拟地址、逻辑地址、线性地址之间的关系</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2023/11/16/物理地址、虚拟地址、逻辑地址、线性地址之间的关系/</div>
+      <div>序列点</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/06/22/序列点/</div>
     </div>
     <div class="license-meta">
       
@@ -383,7 +369,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月16日</div>
+          <div>2024年6月22日</div>
         </div>
       
       
@@ -415,18 +401,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/17/stm32%E4%B8%AD%E7%9A%84%E4%BD%8D%E5%B8%A6/" title="stm32中的位带">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">stm32中的位带</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/16/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" title="常见的开源协议总结">
-                        <span class="hidden-mobile">常见的开源协议总结</span>
+                      <a href="/2024/06/22/hexo%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" title="hexo的使用记录">
+                        <span class="hidden-mobile">hexo的使用记录</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

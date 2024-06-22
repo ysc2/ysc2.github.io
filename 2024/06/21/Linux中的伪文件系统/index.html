@@ -24,7 +24,7 @@
 <meta property="og:description" content="关于Linux中的伪文件系统的相关笔记">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-21T13:51:00.000Z">
-<meta property="article:modified_time" content="2024-06-21T21:34:25.003Z">
+<meta property="article:modified_time" content="2024-06-22T18:16:43.826Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.1k 字
+          4.7k 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          35 分钟
+          39 分钟
         
       </span>
     
@@ -329,6 +329,60 @@
 <td>查看和管理系统中的大页信息</td>
 </tr>
 </tbody></table>
+<table>
+<thead>
+<tr>
+<th>伪文件系统</th>
+<th>常用挂载点</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>procfs</td>
+<td><code>/proc</code></td>
+<td>查看和操作进程相关的信息和配置</td>
+</tr>
+<tr>
+<td>sysfs</td>
+<td><code>/sys</code></td>
+<td>查看和操作系统相关的信息和配置</td>
+</tr>
+<tr>
+<td>configfs</td>
+<td><code>/sys/kernel/config</code></td>
+<td>创建、管理和删除内核对象</td>
+</tr>
+<tr>
+<td>debugfs</td>
+<td><code>/sys/kernel/debug</code></td>
+<td>用于内核状态调试</td>
+</tr>
+<tr>
+<td>cgroupfs</td>
+<td><code>/sys/fs/cgroup</code></td>
+<td>用于管理系统中的 cgroup</td>
+</tr>
+<tr>
+<td>hugetlbfs</td>
+<td><code>/dev/hugepages</code></td>
+<td>查看和管理系统中的大页信息</td>
+</tr>
+<tr>
+<td>devtmpfs</td>
+<td><code>/dev</code></td>
+<td>动态管理设备文件</td>
+</tr>
+<tr>
+<td>tmpfs</td>
+<td><code>/dev/shm</code>, <code>/run</code>, <code>/tmp</code></td>
+<td>基于内存的临时文件存储</td>
+</tr>
+<tr>
+<td>securityfs</td>
+<td><code>/sys/kernel/security</code></td>
+<td>提供安全模块信息</td>
+</tr>
+</tbody></table>
 <p>用户和应用程序可以通过 <code>proc</code> 得到系统的信息（大多数虚拟文件可以使用文件查看命令如cat、more或者less进行查看，有些文件信息表述的内容可以一目了然，但也有文件的信息却不怎么具有可读性。不过，这些可读性较差的文件在使用一些命令如apm、free、lspci或top查看时却可以有着不错的表现），并可以改变内核的某些参数。由于系统的信息，如进程是动态改变的，所以用户或应用程序读取proc文件时，proc文件系统是动态从系统内核读出所需信息并提交的。下面列出的这些文件或子文件夹，并不是都是在你的系统中存在，这取决于你的内核配置和装载的模块。另外，在&#x2F;proc下还有三个很重要的目录：net、scsi和sys。 sys目录是可写的，可以通过它来访问或修改内核的参数，而 net和scsi 则依赖于内核配置。例如：如果系统不支持scsi，则scsi 目录不存在。<br>c</p>
 <h2 id="proc伪文件系统"><a href="#proc伪文件系统" class="headerlink" title="&#x2F;proc伪文件系统"></a>&#x2F;proc伪文件系统</h2><p>这个伪文件系统被挂载在 <code>/proc</code> 目录下，它包含了系统的运行信息，如系统的环境变量、进程信息、内存使用情况等。</p>
 <p>&#x2F;proc下大部分文件是只读的，很多系统工具通过&#x2F;proc获取信息，比如：</p>
@@ -349,8 +403,24 @@
 <li><a target="_blank" rel="noopener" href="http://m.w3capi.com/mcms/content/id/62/cid/27.html">Linux中的 proc 目录有什么用</a></li>
 <li><a target="_blank" rel="noopener" href="https://caosiyang.github.io/posts/2021/08/01/linux-filesystem-proc/">Linux系统目录之&#x2F;proc</a></li>
 </ul>
-<h2 id="sys伪文件系统"><a href="#sys伪文件系统" class="headerlink" title="&#x2F;sys伪文件系统"></a>&#x2F;sys伪文件系统</h2><p>Linux 2.6以后的内核引入了sysfs文件系统，sysfs被看成是与proc、devfs和devpty同类别的文件系统，该文件系统是一个虚拟的文件系统，它可以产生一个包括所有系统硬件的层级视图，与提供进程和状态信息的proc文件系统十分类似。sysfs把连接在系统上的设备和总线组织成为一个分级的文件，它们可以由用户空间存取，向用户空间导出内核数据结构以及它们的属性。sysfs的一个目的就是展示设备驱动模型中各组件的层次关系，其顶级目录包括block、bus、dev、devices、class、fs、kernel、power和firmware等。</p>
-<p>block目录包含所有的块设备；devices目录包含系统所有的设备，并根据设备挂接的总线类型组织成层次结构；bus目录包含系统中所有的总线类型；class目录包含系统中的设备类型（如网卡设备、声卡设备、输入设备等）。</p>
+<h2 id="sys伪文件系统"><a href="#sys伪文件系统" class="headerlink" title="&#x2F;sys伪文件系统"></a>&#x2F;sys伪文件系统</h2><p>Linux 2.6以后的内核引入了sysfs文件系统，sysfs被看成是与proc、devfs和devpty同类别的文件系统，该文件系统是一个虚拟的文件系统，它可以产生一个包括所有系统硬件的层级视图，与提供进程和状态信息的proc文件系统十分类似。</p>
+<p><strong>sysfs把连接在系统上的设备和总线组织成为一个分级的文件，它们可以由用户空间存取，向用户空间导出内核数据结构以及它们的属性。</strong></p>
+<p>sysfs的一个目的就是展示设备驱动模型中各组件的层次关系。</p>
+<p>其顶级目录包括block、bus、dev、devices、class、fs、kernel、power和firmware等。</p>
+<ul>
+<li>block目录包含所有的块设备；</li>
+<li>devices目录包含系统所有的设备，并根据设备挂接的总线类型组织成层次结构；</li>
+<li>bus目录包含系统中所有的总线类型；</li>
+<li>class目录包含系统中的设备类型（如网卡设备、声卡设备、输入设备等）。</li>
+</ul>
+<p>主要的目录结构：</p>
+<ul>
+<li>&#x2F;sys&#x2F;class&#x2F;:<br>包含系统中各类设备的分类，如 block（块设备）、net（网络设备）等。</li>
+<li>&#x2F;sys&#x2F;devices&#x2F;:<br>按照设备的物理连接层次结构展示设备信息。</li>
+<li>&#x2F;sys&#x2F;bus&#x2F;:<br>按照总线类型分类设备信息，如 pci、usb 等。</li>
+<li>&#x2F;sys&#x2F;module&#x2F;:<br>包含已加载的内核模块的信息及其参数。</li>
+</ul>
+<h3 id="使用sysfs"><a href="#使用sysfs" class="headerlink" title="使用sysfs"></a>使用sysfs</h3><p>sysfs 作为一个伪文件系统，就是用来告诉计算机的使用者计算机的相关信息的。</p>
 
                 
               </div>
