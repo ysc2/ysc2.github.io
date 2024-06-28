@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-liudmyla-shalimova-18286209.jpg">
 <meta property="article:published_time" content="2023-11-22T11:20:38.000Z">
-<meta property="article:modified_time" content="2024-06-23T15:44:09.113Z">
+<meta property="article:modified_time" content="2024-06-24T16:40:14.822Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          20k 字
+          44k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          164 分钟
+          370 分钟
         
       </span>
     
@@ -761,15 +761,426 @@ g:双字
 -d &lt;directory&gt;
 加入一个源文件的搜索路径。默认搜索路径是环境变量中PATH所定义的路径。
 </code></pre>
-<h2 id="多线程调试"><a href="#多线程调试" class="headerlink" title="多线程调试"></a>多线程调试</h2><h3 id="多线程调试——参考资料"><a href="#多线程调试——参考资料" class="headerlink" title="多线程调试——参考资料"></a>多线程调试——参考资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://ivanzz1001.github.io/records/post/cplusplus/2018/08/19/cpluscplus-gdbusage_part2#12-gdb%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4">GDB调试多线程及多进程</a></li>
-<li></li>
+<h2 id="多线程调试"><a href="#多线程调试" class="headerlink" title="多线程调试"></a>多线程调试</h2><p>GDB 是支持多线程调试的，下面我们通过一个例子来展示如何使用 GDB 进行调试。</p>
+<p>本文档主要参看«Debugging with GDB» <code>Tenth Edition, for gdb version 8.0.1</code>，本节我们主要讲述一下使用GDB来调试多线程及多进程程序。</p>
+<h2 id="1-调试多线程"><a href="#1-调试多线程" class="headerlink" title="1. 调试多线程"></a>1. 调试多线程</h2><h3 id="1-1-概念介绍"><a href="#1-1-概念介绍" class="headerlink" title="1.1 概念介绍"></a>1.1 概念介绍</h3><p>在有一些操作系统上，比如GNU&#x2F;Linux与Solaris，一个进程可以有多个执行线程。线程的精确语义因操作系统不同而有一些区别，但一般来说一个程序的线程类似与多进程，除了多线程是共享同一个地址空间之外。另一方面，每一个线程都有其自己的寄存器(registers)和执行栈(execution stack)，并可能拥有其自己的私有内存。</p>
+<p>GDB提供了如下的一些<code>facilities</code>来用于支持多线程的调试：</p>
+<ul>
+<li><p>新线程的自动通知</p>
+</li>
+<li><p><strong>thread thread_id</strong>: 用于在线程之间切换的命令</p>
+</li>
+<li><p><strong>info threads</strong>: 用于查询当前存在的线程信息</p>
+</li>
+<li><p><strong>thread apply [thread-id-list] [all] args</strong>: 对一系列的线程应用某一个命令</p>
+</li>
+<li><p>thread-specific breakpoints</p>
+</li>
+<li><p><strong>set print thread-events</strong>: 控制是否打印线程启动、退出消息</p>
+</li>
+<li><p><strong>set libthread-db-search-path path</strong>: 假如默认的选择不兼容当前程序的话，让用户选择使用那个<code>thread-db</code></p>
+</li>
 </ul>
-<h1 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h1><h2 id="使用-GDB-查看程序的栈空间"><a href="#使用-GDB-查看程序的栈空间" class="headerlink" title="使用 GDB 查看程序的栈空间"></a>使用 GDB 查看程序的栈空间</h2><p>由于我们并不知道一个程序的栈空间有多大，所以我们在查看栈空间的时候只好去猜测一个数字。使用命令 <code>x</code> 来查看栈空间。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br></code></pre></td></tr></table></figure>
+<p>上面的<code>线程调试facility</code>使得你可以在程序运行期间观察到所有的线程，但是无论在什么时候只要被gdb接管控制权，只会有一个线程处于focus状态。该线程被称为<code>current thread</code>。GDB调试命令都是以当前线程(current thread)的视角来显示程序信息。</p>
+<p>当GDB在程序中检测到有一个新的线程，其都会打印该线程在目标系统的标识信息，格式为<code>[New systag]</code>, 这里<code>systag</code>是一个线程标识，其具体的形式可能依系统不同而有些差异。例如在GNU&#x2F;Linux操作系统上，当GDB检测到有一个新的线程时，你可能会看到：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">[<span class="hljs-keyword">New</span> <span class="hljs-keyword">Thread</span> <span class="hljs-number">0</span>x41e02940 (LWP <span class="hljs-number">25582</span>)]<br></code></pre></td></tr></table></figure>
 
-<h2 id="使用-GDB-查看程序的栈空间——参考资料"><a href="#使用-GDB-查看程序的栈空间——参考资料" class="headerlink" title="使用 GDB 查看程序的栈空间——参考资料"></a>使用 GDB 查看程序的栈空间——参考资料</h2><ul>
+<p>相反，在一些其他的系统上，<code>systag</code>可能只是一个很简单的标识，例如<code>process 368</code>。</p>
+<p>用于调试目的，GDB会用其自己的线程号与每一个“线程inferior”相关联。在同一个<code>inferior</code>下，所有线程之间的标识号都是唯一的；但是不同<code>inferior</code>下，线程之间的标识号则可能不唯一。你可以通过<code>inferior-num.thread-num</code>语法来引用某一个<code>inferior</code>中的指定线程（这被称为<code>qualified Thread ID</code>)。例如，线程<code>2.3</code>引用<code>inferior 2</code>中线程number为2的线程。假如你省略<code>inferior number</code>的话，则GDB默认引用的是当前<code>inferior</code>中的线程。</p>
+<p>在你创建第二个<code>inferior</code>之前，GDB并不会在<code>thread IDs</code>部分显示<code>inferior number</code>。</p>
+<p>有一些命令接受以空格分割的<code>thread ID</code>列表作为参数，一个列表元素可以是：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-number">1</span>) &#x27;info threads&#x27; 命令显示的&#x27;thread ID&#x27;可能包含inferior标识符，也可能不包括。例如： &#x27;2.1&#x27;或者&#x27;1&#x27;<br><br><span class="hljs-number">2</span>) 指定线程数范围，格式为 &#x27;inf.thr1-thr2&#x27; 或者 &#x27;thr1-thr2&#x27;。例如： &#x27;1.2-4&#x27;或&#x27;2-4&#x27;<br><br><span class="hljs-number">3</span>) 一个 &#x27;inferior&#x27;中的所有线程，可以通过&#x27;*&#x27;通配符来指定。格式为 &#x27;inf.*&#x27;或者 &#x27;*&#x27;。前者指定某个inferior中的所有线程；<br>  后者指定当前inferior中的所有线程<br></code></pre></td></tr></table></figure>
+
+<p>例如，假如当前的<code>inferior</code>是1，<code>inferior 7</code>有一个线程，其ID为<code>7.1</code>，则线程列表<code>1 2-3 4.5 6.7-9 7.*</code>表示<code>inferior 1</code>中的线程1至线程3，<code>inferior 4</code>中的线程5，<code>inferior 6</code>中的线程7至线程9， 以及<code>inferior 7</code>中的所有线程。</p>
+<p>从GDB的视角来看，一个进程至少有一个线程。换句话说，GDB会为程序的主线程指定一个<code>thread number</code>，即使在该程序并不是多线程的情况下。参看如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello,world!\n&quot;</span>);<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0x0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编译调试：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-meta"># gdb -q ./test</span><br>Reading symbols from /root/workspace/test...done.<br>(gdb) list<br><span class="hljs-number">1</span>       <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-number">2</span>       <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-number">3</span><br><span class="hljs-number">4</span>       <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span></span><br><span class="hljs-function">5       </span>&#123;<br><span class="hljs-number">6</span>               <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello,world!\n&quot;</span>);<br><span class="hljs-number">7</span><br><span class="hljs-number">8</span>               <span class="hljs-keyword">return</span> <span class="hljs-number">0x0</span>;<br><span class="hljs-number">9</span>       &#125;<br>(gdb) b <span class="hljs-number">6</span><br>Breakpoint <span class="hljs-number">1</span> at <span class="hljs-number">0x40053c</span>: file test.c, line <span class="hljs-number">6.</span><br>(gdb) r<br>Starting program: /root/workspace/./test <br><br>Breakpoint <span class="hljs-number">1</span>, <span class="hljs-built_in">main</span> (argc=<span class="hljs-number">1</span>, argv=<span class="hljs-number">0x7fffffffe638</span>) at test.c:<span class="hljs-number">6</span><br><span class="hljs-number">6</span>               <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello,world!\n&quot;</span>);<br>Missing separate debuginfos, use: debuginfo-install glibc<span class="hljs-number">-2.17</span><span class="hljs-number">-157.</span>el7.<span class="hljs-built_in">x86_64</span><br>(gdb) info inferiors<br>  Num  Description       Executable        <br>* <span class="hljs-number">1</span>    process <span class="hljs-number">26158</span>     /root/workspace/./<span class="hljs-built_in">test</span> <br>(gdb) info threads<br>  Id   Target Id         Frame <br>* <span class="hljs-number">1</span>    process <span class="hljs-number">26158</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-built_in">main</span> (argc=<span class="hljs-number">1</span>, argv=<span class="hljs-number">0x7fffffffe638</span>) at test.c:<span class="hljs-number">6</span><br>(gdb) <br></code></pre></td></tr></table></figure>
+
+<p>假如GDB检测到程序是多线程的，假如某个线程在断点处暂停时，其就会打印出该线程的ID及线程的名称：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Thread</span> <span class="hljs-number">2</span> <span class="hljs-string">&quot;client&quot;</span> hit Breakpoint <span class="hljs-number">1</span>, send_message () at client.c:<span class="hljs-number">68</span><br></code></pre></td></tr></table></figure>
+
+<p>相似的，当程序收到一个信号之后，其会打印如下的信息：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-built_in">Thread</span> <span class="hljs-number">1</span> <span class="hljs-string">&quot;main&quot;</span> <span class="hljs-variable">received</span> <span class="hljs-variable">signal</span> <span class="hljs-variable">SIGINT</span><span class="hljs-operator">,</span> <span class="hljs-built_in">Interrupt</span><span class="hljs-operator">.</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-GDB线程相关命令"><a href="#1-2-GDB线程相关命令" class="headerlink" title="1.2 GDB线程相关命令"></a>1.2 GDB线程相关命令</h3><ul>
+<li><strong>info threads [thread-id-list]</strong>: 用于显示一个或多个线程的信息。假如并未指定参数的话，则显示所有线程的信息。你可以指定想要显示的线程列表。GDB会按如下方式显示每一个线程：</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> 由GDB指定的每一个线程的thread number<br><br><span class="hljs-bullet">2.</span> 由GDB指定的全局thread number(假如指定了&#x27;-gid&#x27;选项的话）<br><br><span class="hljs-bullet">3.</span> 目标系统的线程标识符(systag)<br><br><span class="hljs-bullet">4.</span> 线程名称。线程的名称可以由用户指定，在某一些情况下也可以由程序自身指定<br><br><span class="hljs-bullet">5.</span> 该线程的当前stack frame信息<br><br>注意： &#x27;<span class="hljs-emphasis">*&#x27;指示的线程表示为当前线程</span><br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs tap">(gdb) info threads<br>Id Target Id Frame<br>*<span class="hljs-number"> 1 </span>process<span class="hljs-number"> 35 </span>thread<span class="hljs-number"> 13 </span>main (argc=1, argv=0x7ffffff8)<br>2 process<span class="hljs-number"> 35 </span>thread<span class="hljs-number"> 23 </span>0x34e5 in sigpause ()<br>3 process<span class="hljs-number"> 35 </span>thread<span class="hljs-number"> 27 </span>0x34e5 in sigpause ()<br>at threadtest.c:68<br></code></pre></td></tr></table></figure>
+
+<p>假如当前你正在调试多个<code>inferiors</code>，则GDB会使用限定的<code>inferior-num.thread-num</code>这样的格式来显示<code>thread IDs</code>。否则的话，则只会显示<code>thread-num</code>。</p>
+<p><strong>这里的 <code>inferiors</code> 表示一个什么意思？其实就是当下 GDB 正在调试的这个程序，在GDB中，调试器本身被称为<code>&quot;superior&quot;</code>，而它所控制的程序则被称为<code>&quot;inferior&quot;</code>。</strong></p>
+<p>假如指定了<code>-gid</code>选项，那么在执行<code>info threads</code>命令时就会显示每一个线程的<code>global thread ID</code>:</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs tap">(gdb) info threads<br>Id GId Target Id Frame<br>1.1<span class="hljs-number"> 1 </span>process<span class="hljs-number"> 35 </span>thread<span class="hljs-number"> 13 </span>main (argc=1, argv=0x7ffffff8)<br>1.2<span class="hljs-number"> 3 </span>process<span class="hljs-number"> 35 </span>thread<span class="hljs-number"> 23 </span>0x34e5 in sigpause ()<br>1.3<span class="hljs-number"> 4 </span>process<span class="hljs-number"> 35 </span>thread<span class="hljs-number"> 27 </span>0x34e5 in sigpause ()<br>* 2.1<span class="hljs-number"> 2 </span>process<span class="hljs-number"> 65 </span>thread<span class="hljs-number"> 1 </span>main (argc=1, argv=0x7ffffff8)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>thread thread-id</strong>: 使<code>thread-id</code>所指定的线程为当前线程。该命令的参数<code>thread-id</code>是GDB所指定的<code>thread ID</code>，即上面<code>info threads</code>命令显示的第一列。通过此命令切换之后，GDB会打印你所选中的线程的系统标识和当前的栈帧信息：</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arduino">(gdb) thread <span class="hljs-number">2</span><br>[Switching to thread <span class="hljs-number">2</span> (Thread <span class="hljs-number">0xb7fdab70</span> (LWP <span class="hljs-number">12747</span>))]<br>#<span class="hljs-number">0</span> <span class="hljs-built_in">some_function</span> (ignore=<span class="hljs-number">0x0</span>) at example.c:<span class="hljs-number">8</span><br><span class="hljs-number">8</span> <span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;hello\n&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>类似于在创建线程时打印出的<code>[New ...]</code>这样的消息，<code>Switching to</code>后面的消息打印也依赖于你所使用的系统</p>
+<ul>
+<li><p><code>thread apply [thread-id-list | all [-ascending]] command</code>: 本命令允许你在一个或多个线程上应用指定的<code>command</code>。如果要在所有线程上按降序的方式应用某个<code>command</code>，那么使用 ‘thread apply all command’; 如果要在所有线程上按升序的方式应用某个<code>command</code>，那么使用’thread apply all -ascending command’;</p>
+</li>
+<li><p><strong>thread name [name]</strong>: 本命令用于为当前线程指定一个名称。假如并未指定参数的话，那么任何已存在的由用户指定的名称都将被移除。命名后线程的名称会出现在<code>info threads</code>的显示信息中。</p>
+</li>
+<li><p><strong>thread find [regexp]</strong>: 用于查询名称或<code>systag</code>匹配查询表达式的线程。例如：</p>
+</li>
+</ul>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs lasso">(gdb) <span class="hljs-keyword">thread</span> find <span class="hljs-number">26688</span><br><span class="hljs-keyword">Thread</span> <span class="hljs-number">4</span> has target id ’<span class="hljs-keyword">Thread</span> <span class="hljs-number">0x41e02940</span> (LWP <span class="hljs-number">26688</span>)’<br>(gdb) info <span class="hljs-keyword">thread</span> <span class="hljs-number">4</span><br>Id Target Id Frame<br><span class="hljs-number">4</span> <span class="hljs-keyword">Thread</span> <span class="hljs-number">0x41e02940</span> (LWP <span class="hljs-number">26688</span>) <span class="hljs-number">0x00000031ca6cd372</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">select</span> ()<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>set libthread-db-search-path [path]</strong>: 假如本变量被设置，那么GDB将会使用所设置的路径(路径目录之间以’:’分割)来查找<code>libthread_db</code>。假如执行此命令时，并不指定path，那么将会被重置为默认值（在GNU&#x2F;Linux及Solaris系统下默认值为<code>$sdir:$pdir</code>，即系统路径和当前进程所加载线程库的路径)。而在内部，默认值来自于<code>LIBTHREAD_DB_SEARCH_PATH</code>宏定义。</li>
+</ul>
+<p>在GNU&#x2F;Linux以及Solaris操作系统上，GDB使用该辅助<code>libthread_db</code>库来获取inferior中线程的信息。GDB会使用’libthread-db-search-path’来搜索<code>libthread_db</code>。假如’set auto-load libthread-db’被启用的话，GDB首先会搜索该inferior所加载的线程调试库。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs powershell">在使用libth<span class="hljs-built_in">read-db</span><span class="hljs-literal">-search-path</span>搜索libthread_db时，有两个特定的路径： <span class="hljs-variable">$sydir</span>、<span class="hljs-variable">$pdir</span><br><br><span class="hljs-number">1</span>) <span class="hljs-variable">$sdir:</span> 搜索共享库的默认的系统路径。本路径是唯一不需要通过<span class="hljs-string">&#x27;set auto-load libthread_db&#x27;</span>命令来启用的<br><br><span class="hljs-number">2</span>） <span class="hljs-variable">$pdir:</span> 指示inferior <span class="hljs-keyword">process</span>加载libpthread库的位置<br></code></pre></td></tr></table></figure>
+
+<p>假如在上述目录中找到了<code>libpthread_db</code>库，那么GDB就会尝试用当前inferior process来初始化。假如初始化失败的话（一般在libpthread_db与libpthread版本不匹配的情况），GDB就会卸载该libpthread_db，然后尝试继续从下一个路径搜索libpthread_db。假如最后都没有找到适合的版本，GDB会打印相应的警告信息，接着线程调试将会被禁止。</p>
+<p>注意： 本命令只在一些特定的平台上可用。</p>
+<ul>
+<li><p><strong>show libpthread-db-search-path</strong>: 用于显示当前<code>libpthread_db</code>的搜索路径</p>
+</li>
+<li><p><strong>set debug libpthread-db &#x2F; show debug libpthread-db</strong>: 用于启用或关闭<code>libpthread-db</code>相关的事件信息的打印。1为启用， 0为关闭。</p>
+</li>
+<li><p><strong>set scheduler-locking mode</strong>: 用于设置<code>锁定线程的模式</code>(scheduler locking mode)。其适用于程序正常执行、record mode以及重放模式。</p>
+</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-number">1</span>) <span class="hljs-keyword">mode</span>为off时，则不锁定任何线程，即所有线程在任何时间都可以被执行； <br><br><span class="hljs-number">2</span>) <span class="hljs-keyword">mode</span>为<span class="hljs-keyword">on</span>时，则锁定其他线程，只有当前线程执行； <br><br><span class="hljs-number">3</span>) <span class="hljs-keyword">mode</span>为step时,则当在进行单步调试(single-stepping)时只有当前线程会运行，其他的线程将不会获得运行的机会，这样就可以使得调试的焦点<br>   只集中于当前线程。但是假如执行的时<span class="hljs-string">&#x27;continue&#x27;</span>、<span class="hljs-string">&#x27;until&#x27;</span>、<span class="hljs-string">&#x27;finish&#x27;</span>这样的非单步调试命令的话，则其他的线程也会运行。<br><br>一般来说，除非一个线程在其运行时间片内遇到断点(breakpoint)，否则GDB一般并不会从当前调试线程切换到该线程。<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>show scheduler-locking</strong>: 用于显示当前的锁定模式</li>
+</ul>
+<h3 id="1-3-多线程调试示例"><a href="#1-3-多线程调试示例" class="headerlink" title="1.3 多线程调试示例"></a>1.3 多线程调试示例</h3><ul>
+<li><strong>示例源代码</strong></li>
+</ul>
+<p>如下是我们所采用的调试示例源代码<code>test.c</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs string">#include &lt;stdio.h&gt; #include &lt;unistd.h&gt; #include &lt;pthread.h&gt; int a = 0; int b = 0; static void * pthread_run1(void *arg) &#123; int runflag = 1; while(runflag) &#123; a++; sleep(1); &#125; pthread_exit((void *)a); return NULL; &#125; static void * pthread_run2(void *arg) &#123; int runflag = 1; while(runflag) &#123; b++; sleep(1); &#125; pthread_exit((void *)b); return NULL; &#125; int main(int argc,char *argv[]) &#123; pthread_t tid1, tid2; int retval_1, retval_2; pthread_create(&amp;tid1, NULL, pthread_run1, NULL); pthread_create(&amp;tid2, NULL, pthread_run2, NULL); pthread_join(tid1,(void *)&amp;retval_1); pthread_join(tid2,(void *)&amp;retval_2); printf(&quot;retval_1: %d\n&quot;, retval_1); printf(&quot;retval_2: %d\n&quot;, retval_2); return 0x0; &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>编译运行</strong></li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># gcc -c -g test.c gcc -c -g test.c -Wno-int-to-pointer-cast</span><br><span class="hljs-comment"># gcc -o test test.o -lpthread</span><br><br><span class="hljs-comment"># ps -aL | grep test</span><br> <span class="hljs-attribute">40900</span>  <span class="hljs-number">40900</span> pts/<span class="hljs-number">0</span>    <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> test<br> <span class="hljs-attribute">40900</span>  <span class="hljs-number">40901</span> pts/<span class="hljs-number">0</span>    <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> test<br> <span class="hljs-attribute">40900</span>  <span class="hljs-number">40902</span> pts/<span class="hljs-number">0</span>    <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> test<br></code></pre></td></tr></table></figure>
+
+<p>然后我们再通过如下命令查看主线程和两个子线程之间的关系：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># pstree -p 40900</span><br><span class="hljs-built_in">test</span>(40900)─┬─&#123;<span class="hljs-built_in">test</span>&#125;(40901)<br>            └─&#123;<span class="hljs-built_in">test</span>&#125;(40902)<br><br></code></pre></td></tr></table></figure>
+
+<p>再接着通过<code>pstack</code>来查看线程栈结构：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">pstack 40900</span><br>Thread 3 (Thread 0x7fd44f426700 (LWP 40901)):<br><span class="hljs-meta prompt_">#</span><span class="language-bash">0  0x00007fd44f4e566d <span class="hljs-keyword">in</span> nanosleep () from /lib64/libc.so.6</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">1  0x00007fd44f4e5504 <span class="hljs-keyword">in</span> <span class="hljs-built_in">sleep</span> () from /lib64/libc.so.6</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">2  0x0000000000400757 <span class="hljs-keyword">in</span> pthread_run1 (arg=0x0) at test.c:14</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">3  0x00007fd44f7efdc5 <span class="hljs-keyword">in</span> start_thread () from /lib64/libpthread.so.0</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">4  0x00007fd44f51e73d <span class="hljs-keyword">in</span> <span class="hljs-built_in">clone</span> () from /lib64/libc.so.6</span><br>Thread 2 (Thread 0x7fd44ec25700 (LWP 40902)):<br><span class="hljs-meta prompt_">#</span><span class="language-bash">0  0x00007fd44f4e566d <span class="hljs-keyword">in</span> nanosleep () from /lib64/libc.so.6</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">1  0x00007fd44f4e5504 <span class="hljs-keyword">in</span> <span class="hljs-built_in">sleep</span> () from /lib64/libc.so.6</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">2  0x0000000000400794 <span class="hljs-keyword">in</span> pthread_run2 (arg=0x0) at test.c:30</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">3  0x00007fd44f7efdc5 <span class="hljs-keyword">in</span> start_thread () from /lib64/libpthread.so.0</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">4  0x00007fd44f51e73d <span class="hljs-keyword">in</span> <span class="hljs-built_in">clone</span> () from /lib64/libc.so.6</span><br>Thread 1 (Thread 0x7fd44fc0c740 (LWP 40900)):<br><span class="hljs-meta prompt_">#</span><span class="language-bash">0  0x00007fd44f7f0ef7 <span class="hljs-keyword">in</span> pthread_join () from /lib64/libpthread.so.0</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">1  0x00000000004007ff <span class="hljs-keyword">in</span> main (argc=1, argv=0x7ffdbfa69a38) at test.c:46</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>GDB调试多线程程序</strong></li>
+</ul>
+<p>1） 启动gdb调试，并在上述代码<code>a++</code>处加上断点</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stata"># gdb -q ./<span class="hljs-keyword">test</span><br>Reading symbols from /root/workspace/<span class="hljs-keyword">test</span>...done.<br>(gdb) b <span class="hljs-keyword">test</span>.c:14 <br>Breakpoint 1 at 0x400749: <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 13.<br></code></pre></td></tr></table></figure>
+
+<p>2） 运行并查看inferiors及threads信息</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs x86asm">(gdb) r<br>Starting program: /root/workspace/./<span class="hljs-keyword">test</span> <br>[Thread debugging using libthread_db enabled]<br>Using host libthread_db library <span class="hljs-string">&quot;/lib64/libthread_db.so.1&quot;</span>.<br>[New Thread <span class="hljs-number">0x7ffff77ff700</span> (LWP <span class="hljs-number">41362</span>)]<br>[Switching to Thread <span class="hljs-number">0x7ffff77ff700</span> (LWP <span class="hljs-number">41362</span>)]<br><br>Breakpoint <span class="hljs-number">1</span>, pthread_run1 (arg=<span class="hljs-number">0x0</span>) <span class="hljs-meta">at</span> <span class="hljs-keyword">test</span><span class="hljs-number">.</span>c:<span class="hljs-number">13</span><br><span class="hljs-number">13</span>                      a++<span class="hljs-comment">;</span><br>Missing separate debuginfos, use: debuginfo-install glibc-<span class="hljs-number">2.17</span>-<span class="hljs-number">157.</span>el7<span class="hljs-number">.</span>x86_64<br>(gdb) info inferiors<br>  Num  Description       Executable        <br>* <span class="hljs-number">1</span>    process <span class="hljs-number">41788</span>     /root/workspace/./<span class="hljs-keyword">test</span> <br>(gdb) info threads<br>  Id   Target Id         Frame <br>  <span class="hljs-number">3</span>    Thread <span class="hljs-number">0x7ffff6ffe700</span> (LWP <span class="hljs-number">41793</span>) <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-number">0x00007ffff7835480</span> <span class="hljs-keyword">in</span> sigprocmask () from /lib64/libc<span class="hljs-number">.</span>so<span class="hljs-number">.6</span><br>* <span class="hljs-number">2</span>    Thread <span class="hljs-number">0x7ffff77ff700</span> (LWP <span class="hljs-number">41792</span>) <span class="hljs-string">&quot;test&quot;</span> pthread_run1 (arg=<span class="hljs-number">0x0</span>) <span class="hljs-meta">at</span> <span class="hljs-keyword">test</span><span class="hljs-number">.</span>c:<span class="hljs-number">14</span><br>  <span class="hljs-number">1</span>    Thread <span class="hljs-number">0x7ffff7fe3740</span> (LWP <span class="hljs-number">41788</span>) <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-number">0x00007ffff7bc9ef7</span> <span class="hljs-keyword">in</span> pthread_join () from /lib64/libpthread<span class="hljs-number">.</span>so<span class="hljs-number">.0</span><br></code></pre></td></tr></table></figure>
+
+<p>从上面我们看到当前停在我们设置的断点处。</p>
+<p>接着我们执行如下：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs gams">(gdb) s<br><span class="hljs-number">15</span>                      <span class="hljs-built_in">sleep</span>(<span class="hljs-number">1</span>);<br>(gdb) s<br><span class="hljs-number">12</span>              <span class="hljs-keyword">while</span>(runflag)<br>(gdb) s<br><br>Breakpoint <span class="hljs-number">1</span>, pthread_run1 (arg=<span class="hljs-number">0x0</span>) at test.c:<span class="hljs-number">14</span><br><span class="hljs-number">14</span>                      a++;<br>(gdb) s<br><span class="hljs-number">15</span>                      <span class="hljs-built_in">sleep</span>(<span class="hljs-number">1</span>);<br>(gdb) s<br><span class="hljs-number">12</span>              <span class="hljs-keyword">while</span>(runflag)<br>(gdb) p b<br><span class="hljs-meta"><span class="hljs-keyword">$1</span> = 4</span><br></code></pre></td></tr></table></figure>
+
+<p>上面我们看到当我们在单步调试<code>pthread_run1</code>的时候，<code>pthread_run2</code>也在执行。但是当我们暂停在断点处时，<code>pthread_run2</code>是不在执行的。</p>
+<p>如果我们想在调试一个线程时，其他线程暂停执行，那么可以使用<code>set scheduler-locking on</code>来锁定。例如：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs stata"># gdb -q ./<span class="hljs-keyword">test</span><br>Reading symbols from /root/workspace/<span class="hljs-keyword">test</span>...done.<br>(gdb) b <span class="hljs-keyword">test</span>.c:14<br>Breakpoint 1 at 0x400742: <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 14.<br>(gdb) r<br>Starting <span class="hljs-keyword">program</span>: /root/workspace/./<span class="hljs-keyword">test</span> <br>[Thread debugging using libthread_db enabled]<br>Using host libthread_db library <span class="hljs-string">&quot;/lib64/libthread_db.so.1&quot;</span>.<br>[New Thread 0x7ffff77ff700 (LWP 41951)]<br>[Switching to Thread 0x7ffff77ff700 (LWP 41951)]<br><br>Breakpoint 1, pthread_run1 (arg=0x0) at <span class="hljs-keyword">test</span>.c:14<br>14                      a++;<br>Missing <span class="hljs-keyword">separate</span> debuginfos, <span class="hljs-keyword">use</span>: debuginfo-install glibc-2.17-157.el7.x86_64<br>(gdb) <span class="hljs-keyword">set</span> scheduler-locking <span class="hljs-keyword">on</span><br>(gdb) p b<br><span class="hljs-variable">$1</span> = 0<br>(gdb) s<br>15                      <span class="hljs-keyword">sleep</span>(1);<br>(gdb) s<br>s<br>12              <span class="hljs-keyword">while</span>(runflag)<br>(gdb) s<br><br>Breakpoint 1, pthread_run1 (arg=0x0) at <span class="hljs-keyword">test</span>.c:14<br>14                      a++;<br>(gdb) s<br>15                      <span class="hljs-keyword">sleep</span>(1);<br>(gdb) s<br>12              <span class="hljs-keyword">while</span>(runflag)<br>(gdb) s<br><br>Breakpoint 1, pthread_run1 (arg=0x0) at <span class="hljs-keyword">test</span>.c:14<br>14                      a++;<br>(gdb) s<br>15                      <span class="hljs-keyword">sleep</span>(1);<br>(gdb) s<br>12              <span class="hljs-keyword">while</span>(runflag)<br>(gdb) s<br><br>Breakpoint 1, pthread_run1 (arg=0x0) at <span class="hljs-keyword">test</span>.c:14<br>14                      a++;<br>(gdb) s<br>15                      <span class="hljs-keyword">sleep</span>(1);<br>(gdb) s<br>12              <span class="hljs-keyword">while</span>(runflag)<br>(gdb) p b<br><span class="hljs-variable">$2</span> = 0<br>(gdb)<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-调试多进程"><a href="#2-调试多进程" class="headerlink" title="2. 调试多进程"></a>2. 调试多进程</h2><h3 id="2-1-基本概念"><a href="#2-1-基本概念" class="headerlink" title="2.1 基本概念"></a>2.1 基本概念</h3><p>在大多数系统上，GDB对于通过<code>fork()</code>函数创建的子进程的调试都没有专门的支持。当一个程序fork()之后，GDB会继续调试父进程，而子进程仍会畅通无阻的运行。假如你在代码的某个部分设置了断点，然后子进程执行到该位置时，则子进程会受到一个<code>SIGTRAP</code>信号并导致子进程退出（除非子进程catch了该信号）。</p>
+<p>然而，假如你想要调试子进程的话，也有一种相对简单的取巧方法。就是在执行完fork之后，在进入子进程代码时调用<code>sleep()</code>方法。这里可以根据某个环境变量是否设置或者某个文件是否存在来决定是否进入<code>sleep()</code>，这样就可以使得我们在非调试状态下避免休眠。当子进程进入sleep状态时，我们就可以通过<code>ps</code>命令查看到子进程的进程ID。接着可以通过使用GDB并attach到该子进程，然后就可以像调试普通程序一样进行调试了。</p>
+<p>在有一些系统上，GDB对使用<code>fork()</code>或<code>vfork()</code>函数创建的子进程的调试提供了支持。在GNU&#x2F;Linux平台上，从内核<code>2.5.46</code>版本开始该特性就被支持。</p>
+<p>默认情况下，当一个程序forks之后，GDB会继续调试父进程，而对子进程没有任何的影响。</p>
+<p>假如你想要跟随子进程而不是父进程，那么可以使用<code>set follow-fork-mode</code>命令：</p>
+<ul>
+<li><strong>set follow-fork-mode mode</strong>: 设置GDB调试器如何对<code>fork</code>或者<code>vfork</code>进行响应。参数<code>mode</code>的取值可以为</li>
+</ul>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">parent:</span> 表示跟随父进程。这是默认情况<br><br><span class="hljs-symbol">child:</span> 表示跟随子进程<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>show follow-fork-mode</strong>: 显示当前的跟随模式</li>
+</ul>
+<p>在Linux上，假如<code>parent</code>进程与<code>child</code>进程都想要调试的话，那么可以使用<code>set detach-on-fork</code>命令。</p>
+<ul>
+<li><strong>set detach-on-fork mode</strong>: 用于告诉GDB在fork()之后是否分离其中的一个进程，或者同时保持对他们的控制。mode可取值为</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">on</span>: 子进程或者父进程将会被分离（取决于follow-fork-<span class="hljs-keyword">mode</span>),使得该进程可以独立的运行。这是默认值<br><br>off: 子进程和父进程都会在GDB的控制之下。其中一个进程（取决于follow-fork-<span class="hljs-keyword">mode</span>)可以像平常那样进行调试，而另一个进程处于挂起状态<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>show detach-on-fork</strong>: 用于显示<code>detach-on-fork</code>模式的值</li>
+</ul>
+<p>假如你选择设置<code>detach-on-fork</code>的值为off，那么GDB将会将会保持对所有fork进程的控制（也包括内部fork)。你可以通过使用<code>info inferiors</code>命令来查看当前处于GDB控制之下的进程，并使用<code>inferior</code>命令来进行切换。</p>
+<p>如果要退出对其中一个fork进程的调试，你可以通过使用<code>detach inferiors</code>命令来使得该进程独立的运行，或者通过<code>kill inferiors</code>命令来将该进程杀死。</p>
+<p>假如你使用GDB来调试子进程，并且是在执行完<code>vfork</code>再调用<code>exec</code>，那么GDB会调试该新的target直到遇到第一个breakpoint。另外，假如你在orginal program的main函数中设置了断点，那么在子进程的main函数中也会保持有该断点。</p>
+<p>在有一些系统上，当子进程是通过<code>vfork()</code>函数产生的，那么在完成<code>exec</code>调用之前，你将不能对父进程或子进程进行调试。</p>
+<p>假如在执行完<code>exec</code>调用之后，你通过运行<code>run</code>命令，那么该新的<code>target</code>将会重启。如果要重启父进程的话，使用<code>file</code>命令并将参数设置为<code>parent executable name</code>。默认情况下，当一个exec执行完成之后，GDB会丢弃前一个可执行镜像的符号表。你可以通过<code>set follow-exec-mode</code>命令来改变这一行为：</p>
+<ul>
+<li><strong>set follow-exec-mode mode</strong>: 当程序调用<code>exec</code>之后，GDB相应的行为。<code>exec</code>调用会替换一个进程的镜像。mode取值可以为：</li>
+</ul>
+<p>1） new: GDB会创建一个新的inferior，并将该进程重新绑定到新的inferior。在执行<code>exec</code>之前的所运行的程序可以通过重启原先的inferior(original inferior)来进行 重启。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs string">(gdb) info inferiors<br>(gdb) info inferior<br>Id Description Executable<br>* 1 &lt;null&gt; prog1<br>(gdb) run<br>process 12020 is executing new program: prog2<br>Program exited normally.<br>(gdb) info inferiors<br>Id Description Executable<br>1 &lt;null&gt; prog1<br>* 2 &lt;null&gt; prog2<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>same: GDB会将exec之后的新镜像加载到同一个<code>inferior</code>中,以替换原来的镜像。在执行exec之后如果要重启该inferior，那么可以通过运行<code>run</code>命令。这是默认模式。例如：</li>
+</ol>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs routeros">(gdb) <span class="hljs-built_in">info</span> inferiors<br>Id Description Executable<br>* 1 &lt;<span class="hljs-literal">null</span>&gt; prog1<br>(gdb) <span class="hljs-built_in">run</span><br>process 12020 is executing new program: prog2<br>Program exited normally.<br>(gdb) <span class="hljs-built_in">info</span> inferiors<br>Id Description Executable<br>* 1 &lt;<span class="hljs-literal">null</span>&gt; prog2<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-调试示例"><a href="#2-2-调试示例" class="headerlink" title="2.2 调试示例"></a>2.2 调试示例</h3><ul>
+<li><strong>调试子进程</strong></li>
+</ul>
+<p>1） 示例源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc,<span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>        <span class="hljs-type">pid_t</span> pid;<br><br>        pid = fork();<br><br>        <span class="hljs-keyword">if</span>(pid &lt; <span class="hljs-number">0</span>)<br>        &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid &gt; <span class="hljs-number">0</span>)<br>        &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello,world!\n&quot;</span>);<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0x0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>调试步骤</li>
+</ol>
+<p>首先执行下面的命令进行编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># gcc -g -c test.c</span><br><span class="hljs-comment"># gcc -o test test.o</span><br></code></pre></td></tr></table></figure>
+
+<p>在调试多进程程序时，GDB默认会追踪处理父进程。例如：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs stata"># gdb -q ./<span class="hljs-keyword">test</span><br>Reading symbols from /root/workspace/<span class="hljs-keyword">test</span>...done.<br>(gdb) start<br>Temporary breakpoint 1 at 0x40058c: <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 10.<br>Starting <span class="hljs-keyword">program</span>: /root/workspace/./<span class="hljs-keyword">test</span> <br><br>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe638) at <span class="hljs-keyword">test</span>.c:10<br>10              pid = fork();<br>Missing <span class="hljs-keyword">separate</span> debuginfos, <span class="hljs-keyword">use</span>: debuginfo-install glibc-2.17-157.el7.x86_64<br>(gdb) <span class="hljs-keyword">n</span><br>Detaching after fork from child process 52320.<br>hello,world!<br>12              <span class="hljs-keyword">if</span>(pid &lt; 0)<br>(gdb) <span class="hljs-keyword">n</span><br>16              <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid &gt; 0)<br>(gdb) <span class="hljs-keyword">n</span><br>18                      <span class="hljs-keyword">return</span> 1;<br>(gdb) <span class="hljs-keyword">n</span><br>23      &#125;<br>(gdb) <span class="hljs-keyword">n</span><br>0x00007ffff7a3db35 <span class="hljs-keyword">in</span> __libc_start_main () from /lib64/libc.<span class="hljs-keyword">so</span>.6<br></code></pre></td></tr></table></figure>
+
+<p>上面我们看到，子进程很快就打印出了<code>hello,world!</code>,说明GDB并没有控制住子进程。而在父进程中，我们通过单步执行到第18行的return，然后父进程返回退出。</p>
+<p>如果要调试子进程，要使用如下的命令: <code>set follow-fork-mode child</code>。例如：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs stata"># gdb -q ./<span class="hljs-keyword">test</span><br>Reading symbols from /root/workspace/<span class="hljs-keyword">test</span>...done.<br>(gdb) start<br>Temporary breakpoint 1 at 0x40058c: <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 10.<br>Starting <span class="hljs-keyword">program</span>: /root/workspace/./<span class="hljs-keyword">test</span> <br><br>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe638) at <span class="hljs-keyword">test</span>.c:10<br>10              pid = fork();<br>Missing <span class="hljs-keyword">separate</span> debuginfos, <span class="hljs-keyword">use</span>: debuginfo-install glibc-2.17-157.el7.x86_64<br>(gdb) <span class="hljs-keyword">set</span> follow-fork-mode child<br>(gdb) show follow-fork-mode<br>Debugger response to a <span class="hljs-keyword">program</span> call of fork or vfork is <span class="hljs-string">&quot;child&quot;</span>.<br>(gdb) <span class="hljs-keyword">n</span><br>[New process 52457]<br>[Switching to process 52457]<br>12              <span class="hljs-keyword">if</span>(pid &lt; 0)<br>(gdb) <span class="hljs-keyword">n</span><br>16              <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid &gt; 0)<br>(gdb) <span class="hljs-keyword">n</span><br>20              printf(<span class="hljs-string">&quot;hello,world!\n&quot;</span>);<br>(gdb) <span class="hljs-keyword">n</span><br>hello,world!<br>22              <span class="hljs-keyword">return</span> 0x0;<br>(gdb) <span class="hljs-keyword">n</span><br>23      &#125;<br></code></pre></td></tr></table></figure>
+
+<p>上面我们看到程序执行到第20行： 子进程打印出<code>hello,world!</code>.</p>
+<ul>
+<li><strong>同时调试父进程和子进程</strong></li>
+</ul>
+<p>1） 示例源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>    <span class="hljs-type">pid_t</span> pid;<br><br>    pid = fork();<br>    <span class="hljs-keyword">if</span> (pid &lt; <span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Parent\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>调试步骤</li>
+</ol>
+<p>首先通过执行下面的命令执行编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># gcc -g -c test.c</span><br><span class="hljs-comment"># gcc -o test test.o</span><br></code></pre></td></tr></table></figure>
+
+<p>从前面我们知道，GDB默认情况下只会追踪父进程的运行，而子进程会独立运行，GDB不会控制。</p>
+<p>如果同时调试父进程和子进程，可以使用<code>set detach-on-fork off</code>(默认值是on)命令，这样GDB就能同时调试父子进程，并且在调试一个进程时，另一个进程处于挂起状态。例如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment"># gdb -q ./test</span><br>Reading symbols from <span class="hljs-regexp">/root/</span>workspace/test...done.<br>(gdb) show detach-on-fork<br>Whether gdb will detach the child of a fork is on.<br>(gdb) set detach-on-fork off<br>(gdb) start<br>Temporary breakpoint <span class="hljs-number">1</span> at <span class="hljs-number">0</span>x4005cc: file test.c, line <span class="hljs-number">8</span>.<br>Starting program: <span class="hljs-regexp">/root/</span>workspace<span class="hljs-regexp">/./</span>test <br><br>Temporary breakpoint <span class="hljs-number">1</span>, main (argc=<span class="hljs-number">1</span>, argv=<span class="hljs-number">0</span>x7fffffffe638) at test.c:<span class="hljs-number">8</span><br><span class="hljs-number">8</span>           pid = fork();<br>Missing separate debuginfos, use: debuginfo-install glibc-<span class="hljs-number">2.17</span>-<span class="hljs-number">157</span>.el7.x86_64<br>(gdb) n<br>[New process <span class="hljs-number">53415</span>]<br><span class="hljs-number">9</span>           <span class="hljs-keyword">if</span> (pid &lt; <span class="hljs-number">0</span>)<br>Missing separate debuginfos, use: debuginfo-install glibc-<span class="hljs-number">2.17</span>-<span class="hljs-number">157</span>.el7.x86_64<br>(gdb) info inferiors<br>  Num  Description       Executable        <br>  <span class="hljs-number">2</span>    process <span class="hljs-number">53415</span>     <span class="hljs-regexp">/root/</span>workspace<span class="hljs-regexp">/./</span>test <br>* <span class="hljs-number">1</span>    process <span class="hljs-number">52646</span>     <span class="hljs-regexp">/root/</span>workspace<span class="hljs-regexp">/./</span>test <br>(gdb) n<br><span class="hljs-number">13</span>          <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>)<br>(gdb) n<br><span class="hljs-number">15</span>              printf(<span class="hljs-string">&quot;Parent\n&quot;</span>);<br>(gdb) n<br>Parent<br><span class="hljs-number">16</span>              <span class="hljs-keyword">exit</span>(<span class="hljs-number">0</span>);<br>(gdb) n<br>[Inferior <span class="hljs-number">1</span> (process <span class="hljs-number">52646</span>) exited normally]<br>(gdb) n<br>The program is not being run.<br>(gdb) info inferiors<br>  Num  Description       Executable        <br>  <span class="hljs-number">2</span>    process <span class="hljs-number">53415</span>     <span class="hljs-regexp">/root/</span>workspace<span class="hljs-regexp">/./</span>test <br>* <span class="hljs-number">1</span>    &lt;null&gt;            <span class="hljs-regexp">/root/</span>workspace<span class="hljs-regexp">/./</span>test <br>(gdb) inferior <span class="hljs-number">2</span><br>[Switching to inferior <span class="hljs-number">2</span> [process <span class="hljs-number">53415</span>] (<span class="hljs-regexp">/root/</span>workspace<span class="hljs-regexp">/./</span>test)]<br>[Switching to thread <span class="hljs-number">2</span> (process <span class="hljs-number">53415</span>)] <br><span class="hljs-comment">#0  0x00007ffff7ada74c in fork () from /lib64/libc.so.6</span><br>(gdb) bt<br><span class="hljs-comment">#0  0x00007ffff7ada74c in fork () from /lib64/libc.so.6</span><br><span class="hljs-comment">#1  0x00000000004005d1 in main (argc=1, argv=0x7fffffffe638) at test.c:8</span><br>(gdb) n<br>Single stepping until <span class="hljs-keyword">exit</span> from <span class="hljs-keyword">function</span> fork,<br>which has no line number information.<br>main (argc=<span class="hljs-number">1</span>, argv=<span class="hljs-number">0</span>x7fffffffe638) at test.c:<span class="hljs-number">9</span><br><span class="hljs-number">9</span>           <span class="hljs-keyword">if</span> (pid &lt; <span class="hljs-number">0</span>)<br>(gdb) n<br><span class="hljs-number">13</span>          <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>)<br>(gdb) n<br><span class="hljs-number">18</span>          printf(<span class="hljs-string">&quot;Child\n&quot;</span>);<br>(gdb) n<br>Child<br><span class="hljs-number">19</span>          return <span class="hljs-number">0</span>;<br>(gdb) <br></code></pre></td></tr></table></figure>
+
+<p>上面在使用<code>set detach-on-fork off</code>命令之后，使用<code>info inferiors</code>命令查看进程状态，可以看到父进程处在被GDB调试的状态（前面显示<code>*</code>表示正在被调试）。当父进程退出后，用<code>inferior infno</code>切换到子进程去调试。</p>
+<p>此外，如果想让父子进程同时运行，可以使用<code>set schedule-multiple on</code>(默认值为off)命令，仍以上述代码为例：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs stata"># gdb -q ./<span class="hljs-keyword">test</span><br>Reading symbols from /root/workspace/<span class="hljs-keyword">test</span>...done.<br>(gdb) <span class="hljs-keyword">set</span> detach-<span class="hljs-keyword">on</span>-fork off<br>(gdb) <span class="hljs-keyword">set</span> schedule-multiple <span class="hljs-keyword">on</span><br>(gdb) start<br>Temporary breakpoint 1 at 0x4005cc: <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 8.<br>Starting <span class="hljs-keyword">program</span>: /root/workspace/./<span class="hljs-keyword">test</span> <br><br>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe638) at <span class="hljs-keyword">test</span>.c:8<br>8           pid = fork();<br>Missing <span class="hljs-keyword">separate</span> debuginfos, <span class="hljs-keyword">use</span>: debuginfo-install glibc-2.17-157.el7.x86_64<br>(gdb) <span class="hljs-keyword">n</span><br>[New process 54810]<br>Child<br>[process 54810 exited]<br>9           <span class="hljs-keyword">if</span> (pid &lt; 0)<br>Missing <span class="hljs-keyword">separate</span> debuginfos, <span class="hljs-keyword">use</span>: debuginfo-install glibc-2.17-157.el7.x86_64<br>(gdb)<br></code></pre></td></tr></table></figure>
+
+<p>可以看到打印出了<code>Child</code>，证明子进程也在运行了。</p>
+<h2 id="3-设置用于返回的书签"><a href="#3-设置用于返回的书签" class="headerlink" title="3. 设置用于返回的书签"></a>3. 设置用于返回的书签</h2><p>在许多操作系统上，GDB能够将程序的运行状态保存为snapshot，这被称为<code>checkpoint</code>，后续我们就可以通过相应的命令返回到该checkpoint。</p>
+<p>回退到一个<code>checkpoint</code>，会使得所有发生在该checkpoint之后的操作都会被做undo。这包括内存的修改、寄存器的修改、甚至是系统的状态（有一些限制）。事实上，类似于回到保存checkpoint的时间点。</p>
+<p>因此，当你在单步调试程序，并且认为快接近有错误的代码点时，你就可以先保存一个checkpoint。然后，你继续进行调试，假如碰巧错过了该关键代码段，这时你就可以回退到该checkpoint并从该位置继续进行调试，而不用完全从头开始来调试整个程序。</p>
+<p>要使用<code>checkpoint/restart</code>方法来进行调试的话，需要用到如下命令：</p>
+<ul>
+<li><p><strong>checkpoint</strong>: 将调试程序的当前执行状态保存为一个snapshot。本命令不携带任何参数，但是其实GDB内部对于每一个checkpoint都会指定一个整数ID，这有些类似于breakpoint ID.</p>
+</li>
+<li><p><strong>info checkpoints</strong>: 列出当前调试session所保存的checkpoints。对于每一个checkpoint，都会有如下信息被列出</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">Checkpoint</span> ID<br>Process ID<br>Code Address<br>Source <span class="hljs-type">line</span>, <span class="hljs-keyword">or</span> label<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>restart checkpoint-id</strong>: 重新装载<code>checkpoint-id</code>位置的程序状态。所有的程序变量、寄存器、栈帧等都会被恢复为在保存该checkpoint时的状态。实际上，GDB类似于将时间拨回到保存该checkpoint的时间点。</li>
+</ul>
+<p>注意，对于breakpoints、GDB variables、command history等，在执行恢复到某个checkpoint时并不会受到影响。一般来说，checkpoint只存储调试程序的信息，而并不存储调试器本身的信息。</p>
+<ul>
+<li><strong>delete checkpoint checkpoint-id</strong>: 删除以前保存的某个checkpoint</li>
+</ul>
+<p>返回到前一个保存的checkpoint时，将会恢复该调试程序的用户状态，也会恢复一部分的操作系统状态，包括文件指针。恢复时，并不会对一个文件中的数据执行<code>un-write</code>操作，但是会将文件指针恢复到原来的位置，因此之前所写的数据可以被<code>overwritten</code>。对于那些以读模式打开的文件，文件指针将会恢复到原来所读的位置。</p>
+<p>当然，对于那些已经发送到打印机（或其他外部设备）的字符将不能够<code>snatched back</code>，而对于从外部设备（例如串口设备）接收到字符则从内部程序缓冲中移除，但是并不能<code>push back</code>回串行设备的pipeline中。相似的，对于文件的数据发生了实质性的更改这一情况，也是不能进行恢复。</p>
+<p>然而，即使有上面的这些限制，你还是可以返回到checkpoint处开始进行调试，此时可能还可以调试一条不同的执行路径。</p>
+<p>最后，当你回退到checkpoint时，程序会回退到上次保存时的状态，但是进程ID会发生改变。每一个checkpoint都会有一个唯一的进程ID，并且会与原来程序的进程ID不同。假如你所调试的程序在本地保存了进程ID的话，则可能会出现一些潜在的问题。</p>
+<h3 id="3-1-使用checkpoint的潜在优势"><a href="#3-1-使用checkpoint的潜在优势" class="headerlink" title="3.1 使用checkpoint的潜在优势"></a>3.1 使用checkpoint的潜在优势</h3><p>在有一些系统上，比如GNU&#x2F;Linux，通常情况下由于安全原因每一个新进程的地址空间都是随机的。这就使得几乎不太可能在一个绝对的地址上设置一个breakpoint或者watchpoint，因为在程序下一次重启时，程序中symbol的绝对路径可能发生改变。</p>
+<p>然而一个checkpoint，等价于一个进程拷贝。因此假如你在main的开始就创建一个checkpoint，后续返回到该checkpoint而不是重启程序，这就可以避免受到重启程序地址随机这一情况的影响。通过返回checkpoint，可以使得程序的<code>symbols</code>仍保持在原来的位置</p>
+<h3 id="3-2-checkpoint使用示例"><a href="#3-2-checkpoint使用示例" class="headerlink" title="3.2 checkpoint使用示例"></a>3.2 checkpoint使用示例</h3><p><strong>1） 示例程序</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">func</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">static</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>    ++i;<br><br>    <span class="hljs-keyword">if</span> (i == <span class="hljs-number">2</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">func3</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> func();<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">func2</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> func();<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">func1</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> func();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span> ret = <span class="hljs-number">0</span>;<br><br>    ret += func1();<br>    ret += func2();<br>    ret += func3();<br><br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>2) 调试技巧</strong></p>
+<p>首先采用如下的命令编译程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># gcc -g -c test.c</span><br><span class="hljs-comment"># gcc -o test test.o</span><br></code></pre></td></tr></table></figure>
+
+<p>下面我们进行调试，在<code>ret += func1()</code>前保存一个checkpoint:</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs stata"># gdb -q ./<span class="hljs-keyword">test</span><br>Reading symbols from /root/workspace/<span class="hljs-keyword">test</span>...done.<br>(gdb) start<br>Temporary breakpoint 1 at 0x400551: <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 32.<br>Starting <span class="hljs-keyword">program</span>: /root/workspace/./<span class="hljs-keyword">test</span> <br><br>Temporary breakpoint 1, main () at <span class="hljs-keyword">test</span>.c:32<br>32          int <span class="hljs-keyword">ret</span> = 0;<br>Missing <span class="hljs-keyword">separate</span> debuginfos, <span class="hljs-keyword">use</span>: debuginfo-install glibc-2.17-157.el7.x86_64<br>(gdb) <span class="hljs-keyword">n</span><br>34          <span class="hljs-keyword">ret</span> += func1();<br>(gdb) checkpoint<br>checkpoint: fork returned pid 68595.<br>(gdb) info checkpoints<br>  1 process 68595 at 0x400558, <span class="hljs-keyword">file</span> <span class="hljs-keyword">test</span>.c, <span class="hljs-keyword">line</span> 34<br><span class="hljs-comment">* 0 process 68591 (main process) at 0x400558, file test.c, line 34</span><br></code></pre></td></tr></table></figure>
+
+<p>然后使用<code>next</code>步进，并每次调用完毕，打印ret的值：</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">(gdb) n<br><span class="hljs-number">35</span>          <span class="hljs-keyword">ret</span> += func2()<span class="hljs-comment">;</span><br>(gdb) p <span class="hljs-keyword">ret</span><br>$<span class="hljs-number">1</span> = <span class="hljs-number">0</span><br>(gdb) n<br><span class="hljs-number">36</span>          <span class="hljs-keyword">ret</span> += func3()<span class="hljs-comment">;</span><br>(gdb) p <span class="hljs-keyword">ret</span><br>$<span class="hljs-number">2</span> = <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>结果发现，在调用<code>func2()</code>后，ret的值变为了1。可是此时，我们已经错过了调试<code>fun2()</code>的机会。如果没有<code>checkpoint</code>，就需要再次从头调试了。对于这个问题从头调试很容易，但是对于很难复现的bug可能就会比较困难了。</p>
+<p>下面我们使用checkpoint恢复：</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs vhdl">(gdb) info checkpoints<br>  <span class="hljs-number">1</span> <span class="hljs-keyword">process</span> <span class="hljs-number">68595</span> at <span class="hljs-number">0</span>x400558, <span class="hljs-keyword">file</span> test.c, <span class="hljs-literal">line</span> <span class="hljs-number">34</span><br>* <span class="hljs-number">0</span> <span class="hljs-keyword">process</span> <span class="hljs-number">68591</span> (main <span class="hljs-keyword">process</span>) at <span class="hljs-number">0</span>x400572, <span class="hljs-keyword">file</span> test.c, <span class="hljs-literal">line</span> <span class="hljs-number">36</span><br>(gdb) restart <span class="hljs-number">1</span><br>Switching <span class="hljs-keyword">to</span> <span class="hljs-keyword">process</span> <span class="hljs-number">68595</span><br>#<span class="hljs-number">0</span>  main () at test.c:<span class="hljs-number">34</span><br><span class="hljs-number">34</span>          ret += func1();<br></code></pre></td></tr></table></figure>
+
+<p>上面我们看到，GDB恢复到了保存checkpoint时的状态了。上面<code>restart 1</code>中1为checkpoint的ID号。</p>
+<p>从上面我们看出checkpoint的用法很简单，但是很有用。就是在平时的简单的bug修复中，也可以加快我们的调试速度，毕竟减少了不必要的重现bug的时间。</p>
+<h3 id="多线程调试——参考资料"><a href="#多线程调试——参考资料" class="headerlink" title="多线程调试——参考资料"></a>多线程调试——参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://ivanzz1001.github.io/records/post/cplusplus/2018/08/19/cpluscplus-gdbusage_part2#12-gdb%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4">GDB调试多线程及多进程</a></li>
+<li><a target="_blank" rel="noopener" href="https://ivanzz1001.github.io/records/post/cplusplus/2018/08/19/cpluscplus-gdbusage_part2#21-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">原文</a></li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><h3 id="使用-GDB-查看程序的栈空间"><a href="#使用-GDB-查看程序的栈空间" class="headerlink" title="使用 GDB 查看程序的栈空间"></a>使用 GDB 查看程序的栈空间</h3><p>由于我们并不知道一个程序的栈空间有多大，所以我们在查看栈空间的时候只好去猜测一个数字。使用命令 <code>x</code> 来查看栈空间。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) p <span class="hljs-variable">$sp</span><br><span class="hljs-variable">$7</span> = (void *) 0x7fffffffe270<br>(gdb) x/40x <span class="hljs-variable">$sp</span><br></code></pre></td></tr></table></figure>
+
+<p>查看 $sp 寄存器的值，然后查看栈空间的前 40 行。结果如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406242053588.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><code>x</code> 是红色字体，并且起始地址是 <code>0x7fffffffe27c</code></li>
+<li><code>heap_string</code> 是蓝色字体，起始地址是 <code>0x7fffffffe280</code></li>
+<li><code>stack_string</code> 是紫色字体，起始地址是 <code>0x7fffffffe28e</code></li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406242055325.png" srcset="/img/loading.gif" lazyload></p>
+<p>这些字节实际上应该是从右向左读：因为 x86 是小端模式，因此，heap_string 中所存放的内存地址 <code>0x5555555592a0</code></p>
+<h3 id="使用-GDB-查看程序的栈空间——参考资料"><a href="#使用-GDB-查看程序的栈空间——参考资料" class="headerlink" title="使用 GDB 查看程序的栈空间——参考资料"></a>使用 GDB 查看程序的栈空间——参考资料</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://linux.cn/article-13550-1.html">原文</a></li>
+</ul>
+<h3 id="热调试程序"><a href="#热调试程序" class="headerlink" title="热调试程序"></a>热调试程序</h3><p>热调试程序，是指在程序运行过程中，不用重新编译程序，而是通过 GDB 的命令，实时修改程序的源代码，并立即生效。</p>
+<p>热调试的关键在于 GDB 的一种语法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">commad command_number<br><br><span class="hljs-built_in">command</span><br><br>end<br></code></pre></td></tr></table></figure>
+
+<p>下面使用一个例子来说明热调试的用法：</p>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>程序调试时，你是否遇到过下面几种情况：</p>
+<p>1、经过定位，终于找到了程序中的一个BUG，满心欢喜地以为找到了root cause，便迫不及待地修改源码，然后重新编译，重新部署。但验证时却发现，真正的问题并没有解决，代码中还隐藏着更多的问题。</p>
+<p>2、调试时，我们找到代码中一个可疑的地方，但是不能100%确定这真的就是个BUG。要想确定，只能修改源码、重新编译、重新部署，然后重新运行验证。</p>
+<p>3、已经找到了root cause，但不确定解决方案是否能正常工作，为了验证，不得不反复地修改代码、编译、部署。</p>
+<p>对于大型项目，编译过程可能需要几十分钟，甚至几个小时，部署过程则更为复杂漫长！可想而知，如果调试过程中，不得不反复的修改源码，然后重新编译和部署，会是一项多么繁琐和浪费时间的事情！</p>
+<p>那么，有没有一种更高效的调试手段，可以避免反复修改代码和编译呢？</p>
+<p>当然有！本文将介绍一种GDB调试技巧，可以一边调试，一边修复Bug，可以在不修改代码、不重新编译的前提下即可修复BUG，验证我们的解决方案，大幅提高调试效率！</p>
+<h3 id="本文预期效果"><a href="#本文预期效果" class="headerlink" title="本文预期效果"></a>本文预期效果</h3><p>如下图，冒泡排序程序中，有三个BUG：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250036299.png" srcset="/img/loading.gif" lazyload></p>
+<p>冒泡排序示例</p>
+<p>图中已经把三个BUG都标注了出来。正常编译运行时，程序执行结果如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250037605.png" srcset="/img/loading.gif" lazyload></p>
+<p>程序执行异常</p>
+<p>不过是普通方式执行，还是在GDB中执行，程序都异常终止，无法得到正常结果。</p>
+<p>但是，利用本文介绍的调试技巧，可以利用GDB给这个程序制作一个“热补丁”，在不修改代码、不重新编译的前提下，解决掉程序中的三个BUG，让程序正常执行，并得到预期结果！</p>
+<p>最终效果，如下图所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250037517.png" srcset="/img/loading.gif" lazyload></p>
+<p>打上“热补丁”后，程序正常执行</p>
+<p>是不是很有趣呢？下面开始介绍！</p>
+<h3 id="GDB-Breakpoint-Command-Lists"><a href="#GDB-Breakpoint-Command-Lists" class="headerlink" title="GDB Breakpoint Command Lists"></a>GDB Breakpoint Command Lists</h3><p>GDB支持断点触发后，自动执行用户预设的一组调试命令。使用方法：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">commands [bp_id...]<br>  <span class="hljs-keyword">command</span><span class="hljs-title">-list</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ul>
+<li><p>commands是GDB内置关键字</p>
+</li>
+<li><p>bp_id是断点的ID，也就是info命令显示出来的断点Num，可以指定多个，也可以不指定。当不指定时，默认只对最近一次设置的那个断点有效。</p>
+</li>
+<li><p>command-list是用户预设的一组命令，当bp_id指定的断点被触发时，GDB会自动执行这些命令。</p>
+</li>
+<li><p>end表示结束。</p>
+</li>
+</ul>
+<p>这个功能适用于各种类型的断点，如breakpoint、watchpoint、catchpoint等。</p>
+<h3 id="适用场景举例"><a href="#适用场景举例" class="headerlink" title="适用场景举例"></a>适用场景举例</h3><p>利用GDB breakpoint commands lists这个特性可以做很多有趣的事情，本文仅列举其中的几个。</p>
+<p>1、随时随地printf，不需修改代码和重新编译</p>
+<p>看过我之前文章的朋友，应该还记得，我介绍过GDB的动态打印(Dynamic Printf)功能，可以用dprintf命令在代码的任意地方添加动态打印断点，并自动执行格式化打印操作，从而无需修改代码和重新编译就可以在代码中任意增加日志打印信息。</p>
+<p>利用GDB breakpoint commands lists功能，可以实现一样的功能，而且除了打印之外，还可以做其它更多的操作，比如dump内存，dump寄存器等。</p>
+<p>2、修改代码执行逻辑，避免修改代码和重新编译</p>
+<p>在GDB中可以做很多有趣的事情，比如修改变量、修改寄存器、调用函数等，结合breakpoint command list功能，可以在调试的同时，修改程序执行逻辑，给程序打上“热补丁”。从而可以在调试过程中，快速修复Bug，避免重新修改代码和重新编译，大大提高程序调试的效率！</p>
+<p>这是本文重点讲解的场景，稍后会演示如何利用这个功能，在GDB调试的过程中修复掉上文冒泡排序程序中的三个Bug。</p>
+<p>3、实现自动化调试，提高调试效率</p>
+<p>这个功能，结合GDB支持的脚本功能，以及自定义命令功能，可以实现调试自动化。</p>
+<p>这涉及到GDB的很多其它知识，篇幅有限，不再展开讨论，以后更新专门文章讲解！感兴趣的童鞋，不妨右上角关注一下！</p>
+<h3 id="给冒泡排序打上“热补丁”"><a href="#给冒泡排序打上“热补丁”" class="headerlink" title="给冒泡排序打上“热补丁”"></a>给冒泡排序打上“热补丁”</h3><p>现在，我们利用GDB breakpoint command lists功能，给文中的冒泡排序程序打上“热补丁”，演示如何在不修改源码、不重新编译的前提下，解决掉程序中的3个BUG。</p>
+<p>再看一下示例程序：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250037628.png" srcset="/img/loading.gif" lazyload></p>
+<p>编译一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc -g bubble.c -o bubble<br></code></pre></td></tr></table></figure>
+
+<p>先用GDB加载运行一下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250038083.png" srcset="/img/loading.gif" lazyload></p>
+<p>程序运行异常，符合我们的预期。</p>
+<p>下面我们依次解决冒泡排序程序中的3个BUG。</p>
+<p>1、解决第一个BUG</p>
+<p>先解决第22行的BUG，也就是传递给了bubble_sort()错误的数组长度。</p>
+<p>我们知道，在x64上，函数参数优先采用寄存器传递。那么，我们有这么几种方式可以选择：</p>
+<ol>
+<li><p>把断点设置在bubble_sort()入口第一条指令，然后直接修改存放数组长度n的那个寄存器中的值。</p>
+</li>
+<li><p>把断点设置在bubble_sort()入口处(不必是第一条指令)，在第7行for循环之前，把存放数组长度的变量n的值改掉。</p>
+</li>
+<li><p>把断点设置在main()函数第22行，也就是调用bubble_sort()的地方，然后以正确的参数手动调用bubble_sort()函数，并利用GDB的jump命令，跳过第22行代码的执行。</p>
+</li>
+</ol>
+<p>考虑到有些童鞋对x64 CPU不是非常了解，或者对GDB的jump命令不熟悉，我们采用第2种方式。而且，这种方式也更简单通用。</p>
+<p>我们先给bubble_sort()函数设置断点，然后利用commands命令预设一条命令，把变量n的值修改为10。命令如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">b bubble_sort<br>commands 1<br>  <span class="hljs-built_in">set</span> var <span class="hljs-attribute">n</span>=10<br>end<br></code></pre></td></tr></table></figure>
+
+<p>设置完之后，用run命令开始运行程序。结果如下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250038065.png" srcset="/img/loading.gif" lazyload></p>
+<p>bubble_sort()处的断点被触发后，程序暂停，用print命令查看变量n的值，已经被修改成了正确的值：10。</p>
+<p>可见，我们的设置是有效的。</p>
+<p>断点触发后，让程序自动恢复执行</p>
+<p>那么，在bubble_sort()处断点被触发，变量n的值被修改之后，如何让程序自动恢复执行呢？</p>
+<p>很简单，只需要在预设的命令中添加一个continue命令就可以了。为了证明我们的设置确实是生效的，我们在修改变量n的前后，各添加一个格式化打印语句，把变量n的值打印出来：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs perl">b bubble_sort<br>commands <span class="hljs-number">1</span><br>  <span class="hljs-keyword">printf</span> <span class="hljs-string">&quot;The original value of n is %d\n&quot;</span>,n<br>  set var n=<span class="hljs-number">10</span><br>  <span class="hljs-keyword">printf</span> <span class="hljs-string">&quot;Current value of n is %d\n&quot;</span>,n<br>  <span class="hljs-keyword">continue</span><br>end<br></code></pre></td></tr></table></figure>
+
+<p>结果如下图：</p>
+<p><img src="https://static.mianbaoban-assets.eet-china.com/xinyu-images/MBXY-CR-8bbc0c9878362133fdf3764fd6c7e00e.png" srcset="/img/loading.gif" lazyload></p>
+<p>解决第一个BUG</p>
+<p>从运行结果可以看出，断点被触发后，我们预设的语句被正确执行，变量n的值被修改为10，然后程序自动恢复执行。</p>
+<p>到此，第一个BUG已经解决了。</p>
+<p>2、解决第二个BUG</p>
+<p>下面，我们解决第7行代码中的数组访问越界错误：数组的元素个数是n，但是bubble_sort()中第一个for循环的终止条件是i&lt;&#x3D;n，明显会造成访问越界，正确的条件应该是i&lt;n。</p>
+<p>要解决这个BUG也很简单，只需要在执行第8行代码之前，判断如果i的值等于n，就跳出循环。对于这个简单的程序，我们直接从bubble_sort()函数return就可以了。</p>
+<p>命令如下：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs perl">b <span class="hljs-number">8</span> <span class="hljs-keyword">if</span> i==n<br>command <span class="hljs-number">2</span><br>  <span class="hljs-keyword">printf</span> <span class="hljs-string">&quot;i = %d, n = %d\n&quot;</span>,i,n<br>  <span class="hljs-keyword">return</span><br>  <span class="hljs-keyword">continue</span><br>end<br></code></pre></td></tr></table></figure>
+
+<p>在第8行设置条件断点，当i&#x3D;&#x3D;n时断点被触发，然后自动把i和n的值打印出来，再行return命令，从bubble_sort()返回，然后continue命令自动恢复程序执行。</p>
+<p>执行结果如下图：</p>
+<p><img src="https://static.mianbaoban-assets.eet-china.com/xinyu-images/MBXY-CR-385f0804b368696199899d2fed814aa8.png" srcset="/img/loading.gif" lazyload></p>
+<p>解决第二个BUG</p>
+<p>3、解决第三个BUG</p>
+<p>下面，解决最后一个BUG，第23行数组访问越界错误。</p>
+<p>命令如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">b</span> <span class="hljs-number">24</span> if i==<span class="hljs-number">10</span><br><span class="hljs-attribute">commands</span> <span class="hljs-number">3</span><br>  <span class="hljs-attribute">printf</span> <span class="hljs-string">&quot;i=%d, exit from for loop!\n&quot;</span>,i<br>  <span class="hljs-attribute">jump</span> <span class="hljs-number">26</span><br>  <span class="hljs-attribute">continue</span><br><span class="hljs-attribute">end</span><br></code></pre></td></tr></table></figure>
+
+<p>与第二个BUG类似，在第24行设置条件断点，当&#x3D;&#x3D;10时触发断点，然后退出循环，让程序跳转到第26行继续执行。</p>
+<p>执行结果如下图所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250036068.png" srcset="/img/loading.gif" lazyload></p>
+<p>解决第三个BUG</p>
+<p>从图中可以看出，三个断点全部被触发，并且预设的命令都正常执行。</p>
+<p>我们终于得到了正确的执行结果！</p>
+<p>虽然，现在程序可以正常执行了，但是每次手动输入命令还是比较麻烦的。我之前文章介绍过，GDB支持调试脚本，从脚本中加载并执行调试命令。</p>
+<p>下面，我们利用GDB脚本，来制作我们的“热补丁”脚本。</p>
+<h3 id="制作“热补丁”脚本"><a href="#制作“热补丁”脚本" class="headerlink" title="制作“热补丁”脚本"></a>制作“热补丁”脚本</h3><p>我们把上文中用来解决三个BUG的命令保存在一个脚本文件中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vi bubble.fix<br></code></pre></td></tr></table></figure>
+
+<p>脚本内容如下图：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250035784.png" srcset="/img/loading.gif" lazyload></p>
+<p>bubble.fix 热补丁脚本</p>
+<p>bubble.fix脚本中的命令，与上文在GDB中直接输入的命令有几个区别：</p>
+<ol>
+<li><p>删除了格式化打印信息。</p>
+</li>
+<li><p>删除了commands后面的断点ID。上文讲过，commands后面的断点ID可以省略，表示对最近一次设置的断点有效。为了让脚本更加通用，每个commands都紧跟在break命令之后，因此直接省略了断点ID。</p>
+</li>
+</ol>
+<p>GDB的脚本可以通过两种方式执行：</p>
+<ol>
+<li><p>启动GDB时，用-x参数指定要执行的脚本文件。</p>
+</li>
+<li><p>启动GDB后，执行source命令执行指定的脚本。</p>
+</li>
+</ol>
+<p>下面，我们用第二种方式演示一下，如下图所示：</p>
+<p><img src="https://static.mianbaoban-assets.eet-china.com/xinyu-images/MBXY-CR-3cfe2e1634c4ef52bc7a7c0c1546dab8.png" srcset="/img/loading.gif" lazyload></p>
+<p>执行bubble.fix脚本</p>
+<p>使用source命令加载并执行bubble.fix，然后用run命令执行程序，三个断点均被触发，且预设的命令全部被正确执行，最后程序运行正常，得到期望的结果！</p>
+<p>我们现在可以利用我们制作的“热补丁”脚本，在不修改代码、不重新编译和部署的前提下，成功修复程序中的BUG！是不是很有趣呢？</p>
+<p>不过，做到这种程度，还不算完美！</p>
+<p>尽管得到了正确的结果，但程序执行时，总是会打印我们设置的断点信息，看起来还是有些视觉干扰的。</p>
+<p>最后，我们来解决这个问题，让我们的“热补丁”更加完美！</p>
+<h3 id="优化“热补丁”脚本，隐藏断点信息"><a href="#优化“热补丁”脚本，隐藏断点信息" class="headerlink" title="优化“热补丁”脚本，隐藏断点信息"></a>优化“热补丁”脚本，隐藏断点信息</h3><p>在预设的命令中，如果第一条命令是silent，断点被触发的打印信息会被屏蔽掉。</p>
+<p>我们把bubble.fix做些修改，把silent命令加进去，如下图所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250035195.png" srcset="/img/loading.gif" lazyload></p>
+<p>最终版bubble.fix 脚本</p>
+<p>然后，重新执行一下：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406250035322.png" srcset="/img/loading.gif" lazyload></p>
+<p>这样，看起来，清爽多了！</p>
+<p>到此，我们终于实现了本文的目标：一边debug，一边修复BUG，避免反复修改代码、重新编译和部署、提高调试效率！</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>本文重点介绍了如何利用GDB breakpoint command lists功能，制作“调试热补丁”，修改代码BUG。还可以利用这个功能，快速验证我们的猜想和解决方案，避免反复修改代码和重新编译。</p>
+<p>巧用GDB breakpoint command lists功能，可以做很多有趣的事情，如实现调试自动化，提高调试效率等。</p>
+<h3 id="热补丁——参考资料"><a href="#热补丁——参考资料" class="headerlink" title="热补丁——参考资料"></a>热补丁——参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.eet-china.com/mp/a91230.html">原文</a></li>
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html">https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html</a></p>
@@ -791,6 +1202,16 @@ g:双字
 <li><p><a target="_blank" rel="noopener" href="https://web.mit.edu/gnu/doc/html/gdb_7.html">Mit的 GDB 教程</a></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/TUI-Commands.html">GDB 官方教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://moss.cs.iit.edu/cs351/gdb-inferiors.html">GDB Inferior Tutorial</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/snow_5288/article/details/72982594">gdb调试多进程与多线程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/wizardforcel/gdb-tips-100/146771">100个gdb小技巧</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://blog.jobbole.com/107759/">gdb 调试入门，大牛写的高质量指南</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-23629988-id-2943273.html">GDB技巧：使用checkpoint解决难以复现的Bug</a></p>
 </li>
 </ul>
 

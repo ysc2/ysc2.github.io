@@ -1,0 +1,695 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Lazy-Nvim 配置指南">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lazy-Nvim的使用">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/06/26/Lazy-Nvim%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="Lazy-Nvim 配置指南">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-yxo5qk.jpg">
+<meta property="article:published_time" content="2024-06-26T05:41:19.000Z">
+<meta property="article:modified_time" content="2024-06-26T13:29:05.664Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-yxo5qk.jpg">
+  
+  
+  
+  <title>Lazy-Nvim的使用 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-yxo5qk.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Lazy-Nvim的使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-26 13:41" pubdate>
+          2024年6月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Lazy-Nvim的使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Lazy-Nvim 配置指南</p>
+<span id="more"></span>
+
+
+<h1 id="Nvim"><a href="#Nvim" class="headerlink" title="Nvim"></a>Nvim</h1><p>Nvim 是在 Vim 基础上开发的，它是一款功能强大的文本编辑器。相较于 Vim<br>来说，Nvim 具有更高的性能，更好的用户体验，更强大的插件生态系统。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>可以通过 <code>apt-get</code> 等安装命令来进行安装，同时可以直接编译源码安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get install nvim<br><span class="hljs-comment"># 直接通过 apt-get 安装的版本可能不是最新版本，可以从 GitHub 下载最新版本的源码进行安装</span><br><br>curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz<br>sudo <span class="hljs-built_in">rm</span> -rf /opt/nvim<br>sudo tar -C /opt -xzf nvim-linux64.tar.gz<br><span class="hljs-comment"># 将下面这个命令添加到 ~/.bashrc 文件中，如果你是使用 bash 的话，zsh 同理。</span><br><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;<span class="hljs-variable">$PATH</span>:/opt/nvim-linux64/bin&quot;</span><br><span class="hljs-comment"># 如果想要 root 用户可以使用的话需要在 /root/.bashrc 文件中添加上面的命令。需要注意的是，除非你在 /root 目录下也有一份配置文件，否则你在以管理员身份登录的时候使用的 nvim 是默认配置的。</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="Lazy-Nvim"><a href="#Lazy-Nvim" class="headerlink" title="Lazy-Nvim"></a>Lazy-Nvim</h1><blockquote>
+<p>LazyVim 是由 💤 lazy.nvim 驱动的 Neovim 配置，可以容易地自定义并扩展您的配置。</p>
+</blockquote>
+<p>它的特点是：</p>
+<ul>
+<li>将你的 Neovim 变成一个完整的 IDE</li>
+<li>使用 lazy.nvim 轻松自定义并扩展你的配置</li>
+<li>速度很快</li>
+<li>对 options、autocmds 和 keymaps 进行合理地默认设置</li>
+<li>预先配置了大量的插件，可随时使用。</li>
+</ul>
+<h2 id="字体的安装"><a href="#字体的安装" class="headerlink" title="字体的安装"></a>字体的安装</h2><p>由于 Lazy-Nvim 使用了大量的图标，因此我们需要安装一些字体，否则会出现乱码的现象。</p>
+<ol>
+<li>首先下载好字体资源，去<a target="_blank" rel="noopener" href="https://www.nerdfonts.com/">这个网站下载</a></li>
+<li>完成下面的命令<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 如果直接在官网下载了压缩包，可以直接解压到 /usr/share/fonts/ 目录下</span><br>wget -c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip<br><br>sudo unzip SourceCodePro -d /usr/share/fonts/SourceCodePro<br><br><span class="hljs-built_in">cd</span> /usr/share/fonts/SourceCodePro<br>sudo mkfontscale <span class="hljs-comment"># 生成核心字体信息</span><br>sudo mkfontdir <span class="hljs-comment"># 生成字体文件夹</span><br>sudo fc-cache -fv <span class="hljs-comment"># 刷新系统字体缓存</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>还有一种安装字体的方式，在下载好字体之后将 <code>ttf</code> 文件放在 <code>~/</code> 目录下，然后打开系统的文件夹管理器，双击 <code>ttf</code> 文件，选择安装字体即可。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406261455901.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>需要注意，安装好字体之后必须要在终端设置中进行更换才可以正常使用，否则会出现乱码的情况。</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406261454263.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://lazyvim-github-io.vercel.app/zh-Hans/keymaps">https://lazyvim-github-io.vercel.app/zh-Hans/keymaps</a></li>
+<li><a target="_blank" rel="noopener" href="https://fanlumaster.github.io/2023/11/25/Lazyvim-configure-from-scratch/">https://fanlumaster.github.io/2023/11/25/Lazyvim-configure-from-scratch/</a></li>
+<li><a target="_blank" rel="noopener" href="https://martinlwx.github.io/zh-cn/config-neovim-from-scratch/">https://martinlwx.github.io/zh-cn/config-neovim-from-scratch/</a></li>
+<li><a target="_blank" rel="noopener" href="https://martins3.github.io/My-Linux-Config/docs/nvim.html#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E8%AF%A5%E4%BD%BF%E7%94%A8-neovim-%E8%80%8C%E4%B8%8D%E6%98%AF-vim">https://martins3.github.io/My-Linux-Config/docs/nvim.html#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E8%AF%A5%E4%BD%BF%E7%94%A8-neovim-%E8%80%8C%E4%B8%8D%E6%98%AF-vim</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/SR-Program/p/15773546.html">https://www.cnblogs.com/SR-Program/p/15773546.html</a></li>
+</ul>
+<h2 id="字体安装——参考资料"><a href="#字体安装——参考资料" class="headerlink" title="字体安装——参考资料"></a>字体安装——参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://linux.cn/article-13992-1.html">https://linux.cn/article-13992-1.html</a></li>
+</ul>
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><h3 id="Vim在图形环境下全屏产生黑边"><a href="#Vim在图形环境下全屏产生黑边" class="headerlink" title="Vim在图形环境下全屏产生黑边"></a>Vim在图形环境下全屏产生黑边</h3><p>在终端中运行Vim或运行GVim都会遇到这个问题，当窗口全屏时，左右和底部可能会出现边框，这个边框在终端中的Vim表现为 <code>Terminal</code> 的背景颜色。下图为 <code>SpaceVim+Neovim+Terminal</code> 的全屏效果</p>
+<p>出现这个问题的原因是 <code>Terminal</code> 中运行的全屏应用受限于屏幕显示多少行多少列都是固定的。正如在普通窗口显示终端的情况下，当调整窗口高度时，终端只能调整为行高的整数倍。水平方向也是，宽度只能为字符宽度的整数倍。而这个字符宽度和高度受限于字体，字体大小，屏幕分辨率。当屏幕宽度高度不能成为字符宽度高度的整数倍时，系统就会使用 <code>Terminal</code> 的主题颜色覆盖不够分配的行。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>解决这个问题的方案有两种：</p>
+<ul>
+<li>在终端配置文件中调节<strong>字体的大小</strong></li>
+<li>将终端背景颜色改为和 Nvim 主题配色一致</li>
+</ul>
+<h3 id="Vim在图形环境下全屏产生黑边——参考资料"><a href="#Vim在图形环境下全屏产生黑边——参考资料" class="headerlink" title="Vim在图形环境下全屏产生黑边——参考资料"></a>Vim在图形环境下全屏产生黑边——参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhuxiaoxi/p/8536456.html">原文</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Lazy-Nvim的使用</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/06/26/Lazy-Nvim的使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年6月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/26/Vmware-tools%E5%AE%89%E8%A3%85/" title="Vmware-tools安装">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Vmware-tools安装</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/06/24/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E8%B5%84%E6%BA%90/" title="网络安全资源">
+                        <span class="hidden-mobile">网络安全资源</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
