@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/930dfaf3b9e7c47cf06d007f47e28e3bf9098442.jpg">
 <meta property="article:published_time" content="2023-11-29T11:09:55.000Z">
-<meta property="article:modified_time" content="2024-06-26T13:24:08.395Z">
+<meta property="article:modified_time" content="2024-06-29T03:30:06.862Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          17k 字
+          18k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          139 分钟
+          147 分钟
         
       </span>
     
@@ -312,7 +312,14 @@
 <li><p>:e# 回到刚才编辑的文件</p>
 </li>
 </ul>
-<h1 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h1><p>引用Vim官方解释，缓冲区是一个文件的内容占用的那部分Vim内存：</p>
+<h1 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h1><p>缓冲区之间跳转最常用的方式便是 <code>Ctrl+^</code>（不需要按下Shift）来切换当前缓冲区和上一个缓冲区。 另外，还提供了很多跳转命令：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-meta">:ls, :buffers</span>       列出所有缓冲区<br>:bn[ext]            下一个缓冲区<br>:bp[revious]        上一个缓冲区<br>:b &#123;number, expression&#125;     跳转到指定缓冲区<br>:b接受缓冲区编号，或者部分文件名。例如：<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>:b2</code>将会跳转到编号为2的缓冲区，如果你正在用 <code>:ls</code> 列出缓冲区，这时只需要输入编号回车即可。</li>
+<li><code>:b exa</code> 将会跳转到最匹配exa的文件名，比如 <code>example.html</code> ，模糊匹配打开文件正是Vim缓冲区的强大之处。</li>
+</ul>
+<p>引用Vim官方解释，缓冲区是一个文件的内容占用的那部分Vim内存：</p>
 <blockquote>
 <p>A buffer is an area of Vim’s memory used to hold text read from a file. In addition, an empty buffer with no associated file can be created to allow the entry of text. –vim.wikia</p>
 </blockquote>
@@ -340,6 +347,9 @@
 <p>当你使用:q关闭文件时？是否看到过1 more file to edit的警告？那就是缓冲区中的文件。</p>
 </blockquote>
 <h2 id="缓冲区之间的移动"><a href="#缓冲区之间的移动" class="headerlink" title="缓冲区之间的移动"></a>缓冲区之间的移动</h2><p>我们可以用4条命令来遍历缓冲区列表。<code>:bprev</code> 和 <code>:bnext</code> 在列表中反向或正向移动，每次移动一项；而 <code>:bfirst</code> 和 <code>:blast</code> 则分别跳到列表的开头和结尾。</p>
+<p>还可以使用以下命令来进行缓冲区的跳转：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs vim">:<span class="hljs-keyword">b</span> <span class="hljs-symbol">&lt;Tab&gt;</span>       <span class="hljs-comment">&quot; 显示所有Buffer中的文件</span><br>:<span class="hljs-keyword">b</span> car<span class="hljs-symbol">&lt;Tab&gt;</span>    <span class="hljs-comment">&quot; 显示 car.c car.h</span><br>:<span class="hljs-keyword">b</span> *car<span class="hljs-symbol">&lt;Tab&gt;</span>   <span class="hljs-comment">&quot; 显示 car.c jetcar.c car.h jetcar.h</span><br>:<span class="hljs-keyword">b</span> .h<span class="hljs-symbol">&lt;Tab&gt;</span>     <span class="hljs-comment">&quot; 显示 vehicle.h car.h jet.h jetcar.h</span><br>:<span class="hljs-keyword">b</span> .<span class="hljs-keyword">c</span><span class="hljs-symbol">&lt;Tab&gt;</span>     <span class="hljs-comment">&quot; 显示 vehicle.c car.c jet.c jetcar.c</span><br>:<span class="hljs-keyword">b</span> <span class="hljs-keyword">ar</span>.<span class="hljs-keyword">c</span><span class="hljs-symbol">&lt;Tab&gt;</span>   <span class="hljs-comment">&quot; 显示 car.c jetcar.c</span><br>:<span class="hljs-keyword">b</span> <span class="hljs-keyword">j</span>*<span class="hljs-keyword">c</span><span class="hljs-symbol">&lt;Tab&gt;</span>    <span class="hljs-comment">&quot; 显示 jet.c jetcar.c jetcar.h</span><br></code></pre></td></tr></table></figure>
+<p><strong>需要注意，<code>:b</code> 和 <code>&lt;Tab&gt;</code> 之间是需要有一个空格的</strong></p>
 <h2 id="缓冲区的删除"><a href="#缓冲区的删除" class="headerlink" title="缓冲区的删除"></a>缓冲区的删除</h2><p><code>:bdelete N1 N2 N3</code> <code>:N,M bdelete</code>注意：删除一个缓冲区并不会影响缓冲区所关联的文件，而只是简单地把该文件在内存中的映像删掉。如果我们想删除编号5～10（包含5和10）的缓冲区，可以执行 :5,10bd；然而，如果想要保留编号为8的缓冲区的话，那么就只能用 :bd 5 6 7 9 10 了。</p>
 <h2 id="缓冲区相关命令"><a href="#缓冲区相关命令" class="headerlink" title="缓冲区相关命令"></a>缓冲区相关命令</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404282045741.png" srcset="/img/loading.gif" lazyload></p>
 <h1 id="标签页"><a href="#标签页" class="headerlink" title="标签页"></a>标签页</h1><p><strong>标签页是容纳一些窗口的容器</strong></p>
@@ -387,7 +397,19 @@ gT            go to previous tab
 当N为空时，当前标签页会被移到结尾
 当N为123时，当前标签页会被移到123标签页
 </code></pre>
-<h1 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h1><h2 id="常用的窗口操作"><a href="#常用的窗口操作" class="headerlink" title="常用的窗口操作"></a>常用的窗口操作</h2><ul>
+<h1 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h1><p><code>sfind</code> 可以打开在 <code>Vim PATH</code> 中的任何文件。这当然需要我们设置 <code>PATH</code>，一个通用的做法是在 <code>~/.vimrc</code> 中添加：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-comment">&quot; 将当前工作路径设为Vim PATH</span><br><span class="hljs-keyword">set</span> path=$PWD/**<br></code></pre></td></tr></table></figure>
+
+<p>同时 <code>sfind</code> 命令和窗口命令同时使用：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">:<span class="hljs-keyword">vertical</span> <span class="hljs-keyword">rightbelow</span> <span class="hljs-keyword">sfind</span> <span class="hljs-keyword">file</span>.txt<br></code></pre></td></tr></table></figure>
+
+<p>上述命令：</p>
+<ul>
+<li><code>vertical</code> 打开一个垂直分割的窗口</li>
+<li><code>rightbelow</code> 指定窗口的位置：右下角</li>
+<li><code>sfind</code> 打开 <code>file.txt</code> 文件</li>
+</ul>
+<h2 id="常用的窗口操作"><a href="#常用的窗口操作" class="headerlink" title="常用的窗口操作"></a>常用的窗口操作</h2><ul>
 <li><p>CTRL‑W ] 分割窗口并跳转到光标下的标签</p>
 </li>
 <li><p>CTRL‑W f 分割窗口并编辑光标下的<strong>文件名</strong> (file)</p>
@@ -403,17 +425,12 @@ gT            go to previous tab
 <p><code>：vsplit </code>  创建全新的垂直分割的窗口，同样是显示和当前窗口同一个文件内容。可以简写为 <code>vsp + 窗口名</code></p>
 <p><strong>注意，如果直接在命令行中输入 <code>:split</code> <code>:vsplit</code>，所打开的窗口中的内容和原来的窗口中的内容是一样的。</strong></p>
 <h2 id="窗口的关闭"><a href="#窗口的关闭" class="headerlink" title="窗口的关闭"></a>窗口的关闭</h2><p>有4种关闭窗口的方式，分别是：离开（quit）、关闭（close）、隐藏（hide）、关闭其他窗口</p>
-<p>^代表Ctrl键<br>^Wq，离开当前窗口<br>^Wc，关闭当前的窗口<br>^Wo，关闭当前窗口以外的所有窗口</p>
-<h2 id="窗口切换"><a href="#窗口切换" class="headerlink" title="窗口切换"></a>窗口切换</h2><p>ctrl w + hjkl 光标在各个窗口之间切换</p>
-<p><strong>Ctrl + w + w：这个命令会在所有窗口中循环移动</strong></p>
-<p>Ctrl + w + t：移动到最左上角的窗口</p>
-<p>Ctrl + w + b：移动到最右下角的窗口</p>
-<p>Ctrl + w + p：移动到前一个访问的窗口</p>
-<h3 id="窗口移动"><a href="#窗口移动" class="headerlink" title="窗口移动"></a>窗口移动</h3><p>Ctrl + w + r：向右或向下方交换窗口，而Ctrl + w + R则和它方向相反。</p>
-<p>光标会随着窗口而移动</p>
-<p>Ctrl + w + x：交换同列或同行的窗口的位置。vim默认交换当前窗口的与它下一个窗口的位置，如果下方没有窗口，则试着与上一个窗口交换位置。亦可在此命令前加上数量，与制定的窗口交换位置。</p>
-<h3 id="窗口移动并且改变布局"><a href="#窗口移动并且改变布局" class="headerlink" title="窗口移动并且改变布局"></a>窗口移动并且改变布局</h3><p>注：下面的第三个字母都是大写，按玩Ctrl + w之后，按shif + 相应的字母。后面用^代替Ctrl<br>Ctrl + w + K ：移动当前窗口至屏幕顶端，并占用全部宽度<br>^WJ： 移动窗口至屏幕底端，并占用全部宽度<br>^WH：移动窗口至屏幕左端，并占用全部高度<br>^WL：移动窗口至屏幕右端，并占用全部高度</p>
-<p>^WT ：移动窗口至屏新的现有分页</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cos">^代表Ctrl键<br><span class="hljs-symbol">^Wq</span>，离开当前窗口<br><span class="hljs-symbol">^Wc</span>，关闭当前的窗口<br><span class="hljs-symbol">^Wo</span>，关闭当前窗口以外的所有窗口<br><br></code></pre></td></tr></table></figure>
+<h2 id="窗口切换"><a href="#窗口切换" class="headerlink" title="窗口切换"></a>窗口切换</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs css">ctrl w + hjkl 光标在各个窗口之间切换<br><br>**Ctrl + w + w：这个命令会在所有窗口中循环移动**<br><br>Ctrl + w + t：移动到最左上角的窗口<br><br>Ctrl + w + <span class="hljs-selector-tag">b</span>：移动到最右下角的窗口<br><br>Ctrl + w + <span class="hljs-selector-tag">p</span>：移动到前一个访问的窗口<br></code></pre></td></tr></table></figure>
+
+<h3 id="窗口移动"><a href="#窗口移动" class="headerlink" title="窗口移动"></a>窗口移动</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs powershell">Ctrl + w + <span class="hljs-built_in">r</span>：向右或向下方交换窗口，而Ctrl + w + <span class="hljs-built_in">R</span>则和它方向相反。<br><br>光标会随着窗口而移动<br><br>Ctrl + w + x：交换同列或同行的窗口的位置。vim默认交换当前窗口的与它下一个窗口的位置，如果下方没有窗口，则试着与上一个窗口交换位置。亦可在此命令前加上数量，与制定的窗口交换位置。<br></code></pre></td></tr></table></figure>
+
+<h3 id="窗口移动并且改变布局"><a href="#窗口移动并且改变布局" class="headerlink" title="窗口移动并且改变布局"></a>窗口移动并且改变布局</h3><figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cos">注：下面的第三个字母都是大写，按玩Ctrl + <span class="hljs-keyword">w</span>之后，按shif + 相应的字母。后面用^代替Ctrl<br>Ctrl + <span class="hljs-keyword">w</span> + <span class="hljs-keyword">K</span> ：移动当前窗口至屏幕顶端，并占用全部宽度<br><span class="hljs-symbol">^WJ</span>： 移动窗口至屏幕底端，并占用全部宽度<br><span class="hljs-symbol">^WH</span>：移动窗口至屏幕左端，并占用全部高度<br><span class="hljs-symbol">^WL</span>：移动窗口至屏幕右端，并占用全部高度<br><br><span class="hljs-symbol">^WT</span> ：移动窗口至屏新的现有分页<br></code></pre></td></tr></table></figure>
 <h3 id="行和列的调整"><a href="#行和列的调整" class="headerlink" title="行和列的调整"></a>行和列的调整</h3><pre><code class="hljs">:res(ize)+num 把当前窗口高度增加num行
 
 :res(ize)-num 把当前窗口高度减少num行
@@ -769,6 +786,7 @@ gT 跳转到上一个标签页。
 <p><a target="_blank" rel="noopener" href="http://www.uinio.com/Linux/Vim/#%E5%AE%8F%E5%BD%95%E5%88%B6">http://www.uinio.com/Linux/Vim/#%E5%AE%8F%E5%BD%95%E5%88%B6</a></p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://blog.itpub.net/8225414/viewspace-944533/">Vim快捷键</a></li>
+<li><a target="_blank" rel="noopener" href="https://harttle.land/2015/11/17/vim-buffer.html#header-0">优秀Vim教程-Harttle</a></li>
 </ul>
 
                 

@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-matthew-montrone-1324803.jpg">
 <meta property="article:published_time" content="2024-01-20T14:13:40.000Z">
-<meta property="article:modified_time" content="2024-06-21T21:02:59.761Z">
+<meta property="article:modified_time" content="2024-07-04T20:24:37.588Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
@@ -233,7 +233,7 @@
         
         
         
-          138 分钟
+          144 分钟
         
       </span>
     
@@ -278,7 +278,7 @@
                 <p>转载一篇优秀的文章——关于KiCad。</p>
 <span id="more"></span> 
 
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>对于国内的中小型电子企业而言，<strong>Allegro</strong>、<strong>Pads</strong>、<strong>Altium Designer</strong> 等商业 EDA 工具的授权费用过于昂贵，且大部分只提供 Windows 操作系统版本，缺乏相应的跨平台支持。在电子信息技术行业版权问题充分受到重视的今天，一款易于使用并且受到厂商广泛支持的开源 <strong>EDA</strong> 工具，对于硬件电子工程师而言尤为重要。本文介绍的 <a target="_blank" rel="noopener" href="https://kicad-pcb.org/"><strong>KiCad</strong></a> 就是一款基于 <a target="_blank" rel="noopener" href="https://www.kicad.org/about/licenses/"><strong>GNU GPL v3</strong></a> 开源许可协议的跨平台 <strong>EDA</strong> 电子设计自动化工具集，其能够处理多达 <strong>32</strong> 个铜层、<strong>14</strong> 个技术层、<strong>4</strong> 个辅助层的 PCB 电路板，并且生成加工制造所需要的<code>网表</code>、<code>物料清单</code>、<code>光绘文件</code>、<code>钻孔文件</code>、<code>元件放置文件</code>。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于国内的中小型电子企业而言，<strong>Allegro</strong>、<strong>Pads</strong>、<strong>Altium Designer</strong> 等商业 EDA 工具的授权费用过于昂贵，且大部分只提供 Windows 操作系统版本，缺乏相应的跨平台支持。在电子信息技术行业版权问题充分受到重视的今天，一款易于使用并且受到厂商广泛支持的开源 <strong>EDA</strong> 工具，对于硬件电子工程师而言尤为重要。本文介绍的 <a target="_blank" rel="noopener" href="https://kicad-pcb.org/"><strong>KiCad</strong></a> 就是一款基于 <a target="_blank" rel="noopener" href="https://www.kicad.org/about/licenses/"><strong>GNU GPL v3</strong></a> 开源许可协议的跨平台 <strong>EDA</strong> 电子设计自动化工具集，其能够处理多达 <strong>32</strong> 个铜层、<strong>14</strong> 个技术层、<strong>4</strong> 个辅助层的 PCB 电路板，并且生成加工制造所需要的<code>网表</code>、<code>物料清单</code>、<code>光绘文件</code>、<code>钻孔文件</code>、<code>元件放置文件</code>。</p>
 <p><a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/KiCad_Tutorial/logo.png"><img src="http://www.uinio.com/Electronics/KiCad_Tutorial/logo.png" srcset="/img/loading.gif" lazyload></a></p>
 <p>自 2018 年 07 月 22 日发布 <strong>KiCad 5.0</strong> 版本以后，历经了三年时间，终于在 2021 年 12 月 25 发布了全新的 <strong>KiCad 6.0</strong> 版本，新版本采用了全新的用户交互界面，带来全新<strong>原理图编辑器</strong>、<strong>PCB 编辑器</strong>、<strong>3D 查看器</strong>的同时，还增加了更为丰富的 <strong>DRC 设计规则</strong>约束，并且提供了对于<strong>中文语言</strong>的良好支持。全文最早基于 <strong>5.0</strong> 版本写作，鉴于官方已经升级至功能更为完善的 <strong>6.0</strong> 版本，所以基于官方新版的 <a target="_blank" rel="noopener" href="https://docs.kicad.org/6.0/en/getting_started_in_kicad/getting_started_in_kicad.html"><strong>《Getting Started in KiCad》</strong></a> 对本文进行了全面的重写。</p>
 <h2 id="KiCad-6-简介"><a href="#KiCad-6-简介" class="headerlink" title="KiCad 6 简介"></a>KiCad 6 简介</h2><p>本文涉及的 <strong>KiCad</strong> 工程源文件，已经全部共享至笔者的 <strong>Github</strong> 项目 <a target="_blank" rel="noopener" href="https://github.com/uinika/abrams">Abrams</a>，欢迎大家 <code>Clone</code> 或者 <code>Fork</code>。类似于其它的 <strong>EDA</strong> 电子设计自动化工具，<strong>KiCad</strong> 同样将 PCB 电路板的绘制过程划分为<strong>原理图</strong>（<strong>Schematic</strong> [skiːˈmætɪk]，电路的符号表示）与<strong>电路板</strong>（<strong>PCB</strong>，Printed Circuit Board，原理图的物理实现）两个部分，并且分别提供了独立的<strong>原理图&#x2F;符号编辑器</strong>，以及<strong>电路板&#x2F;封装编辑器</strong>：</p>
@@ -664,6 +664,34 @@
 <li>E.C.O. 2，</li>
 <li>Drawings</li>
 </ul>
+<h1 id="KIcad计算器的使用"><a href="#KIcad计算器的使用" class="headerlink" title="KIcad计算器的使用"></a>KIcad计算器的使用</h1><p>KiCad计算器是KiCad中一个非常有用的工具，它可以帮助我们快速计算一些电路设计中的相关参数。</p>
+<h2 id="稳压器计算"><a href="#稳压器计算" class="headerlink" title="稳压器计算"></a>稳压器计算</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407031054266.png" srcset="/img/loading.gif" lazyload></p>
+<p>在选择了稳压器的相关计算之后，我们可以看到有两种稳压器的选择。我们只需要选择需要的即可。注意下面的计算公式，实际上该计算器的数据就是通过这个公式计算得出的。</p>
+<p>下面我们看到右边有几个参数的设置处，边上有圆圈，选择哪个表示我们需要计算哪个参数。</p>
+<p>如果我们需要使用参数 Iadj 的话则需要添加一个稳压器，然后选择 Iadj 对应的圆圈，然后输入对应的参数。这样就可以将 Iadj 参数算入其中了。</p>
+<p><strong>其实对于一般的稳压器的制造厂家来说一般都会提供相关的推荐值，我们可以直接通过推荐值来使用该稳压器即可。</strong></p>
+<h1 id="拼版"><a href="#拼版" class="headerlink" title="拼版"></a>拼版</h1><p>具有三种拼版方式：</p>
+<ol>
+<li>V-Groove</li>
+<li>Soild Tab</li>
+<li>Breakawau Tab</li>
+</ol>
+<p>拼版中需要注意的问题：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032143921.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032147038.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="V-Groove"><a href="#V-Groove" class="headerlink" title="V-Groove"></a>V-Groove</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032132744.png" srcset="/img/loading.gif" lazyload></p>
+<p>上面这张图中，特点的前三点即为优点，剩下的两点即为缺点。</p>
+<h2 id="Solid-Tab"><a href="#Solid-Tab" class="headerlink" title="Solid Tab"></a>Solid Tab</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032134684.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="Breakaway-Tab"><a href="#Breakaway-Tab" class="headerlink" title="Breakaway Tab"></a>Breakaway Tab</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032137475.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032142020.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上图可以知道，在放置孔的时候需要将孔放置在靠近 PCB 的一边，而不是放置在耗材的一边。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407032149852.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意：</p>
+<ul>
+<li>单排过孔</li>
+<li>双排过孔</li>
+</ul>
+<p>所位于的地方是不一样的。</p>
 <h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="什么是Mark点"><a href="#什么是Mark点" class="headerlink" title="什么是Mark点"></a>什么是Mark点</h2><p>Mark点的主要作用使用用来定位使用的，根据其定位的对象的不同可以分为一下几种Mark点：</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202405051832135.png" srcset="/img/loading.gif" lazyload>- </p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202405051834706.png" srcset="/img/loading.gif" lazyload></p>
@@ -678,8 +706,18 @@
 <h2 id="PWR-FLAG符号"><a href="#PWR-FLAG符号" class="headerlink" title="PWR_FLAG符号"></a>PWR_FLAG符号</h2><p><code>PWR_FLAG</code> 这个符号是 <code>KiCad</code> 所独有，用来标注电路板电力来源的虚拟符号。</p>
 <p><strong>所以不是电路板的电源来源就不需要进行标注</strong></p>
 <h2 id="网络类"><a href="#网络类" class="headerlink" title="网络类"></a>网络类</h2><p>不管是在原理图中还是 <code>PCB</code> 文件中都可以设置网络类，并且<strong>这两者是相同的</strong>。当由这些原理图源文件导入到PCB之后，这些网络类指示器所对应的信息将用于在PCB中创建相应的网络类。</p>
+<h2 id="如何为原理图添加封装"><a href="#如何为原理图添加封装" class="headerlink" title="如何为原理图添加封装"></a>如何为原理图添加封装</h2><p>右键原理图-&gt;属性-&gt;封装设置-&gt;添加封装</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407030955942.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="元器件位置布局参考"><a href="#元器件位置布局参考" class="headerlink" title="元器件位置布局参考"></a>元器件位置布局参考</h2><ol>
+<li>首先摆放好机械定位元器件，如：固定点、Mark点等等</li>
+<li>第二摆放好电气插件，如：USB接口、各种调试接口</li>
+<li>第三摆放好主要的 IC </li>
+<li>摆放好 IC 附属的元器件，如：电阻、电容、电感等等。注意，小的电容离 IC 近。</li>
+</ol>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/KiCad_Tutorial/#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8E%9F%E7%90%86%E5%9B%BE%E7%AC%A6%E5%8F%B7https://www.uinio.com/Electronics/KiCad_Tutorial/">KiCad 6.0 电路设计小书</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=mVfdvcEsasI&list=PLOpgBhTFknI7k6krj8tnejliXU4l5ccp4&index=8">Youtube中文视频教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.eetree.cn/doc/66">电子森林教程</a></li>
 </ul>
 
                 

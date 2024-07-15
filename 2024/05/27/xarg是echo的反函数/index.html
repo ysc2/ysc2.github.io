@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-jxqeqp.jpg">
 <meta property="article:published_time" content="2024-05-27T15:03:07.000Z">
-<meta property="article:modified_time" content="2024-05-27T15:15:49.150Z">
+<meta property="article:modified_time" content="2024-06-29T03:38:24.683Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          167 字
+          764 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          2 分钟
+          7 分钟
         
       </span>
     
@@ -283,12 +283,32 @@
 <li><code>echo</code> 命令是将命令的参数转化为 stdin</li>
 <li><code>xarg</code> 命令是将 stdin 转化为命令的参数</li>
 </ul>
-<p>举个例子：</p>
+<p><strong>xargs命令的作用，是将标准输入转为命令行参数。</strong><br>举个例子：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> | xargs <span class="hljs-built_in">echo</span> | <span class="hljs-variable">$CMD</span> <span class="hljs-comment">#等同于echo | $CMD。</span><br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$DATA</span> | xargs <span class="hljs-variable">$CMD</span> <span class="hljs-comment">#等同于$CMD $DATA。</span><br></code></pre></td></tr></table></figure>
 
+<h1 id="xarg命令的参数"><a href="#xarg命令的参数" class="headerlink" title="xarg命令的参数"></a>xarg命令的参数</h1><p><code>xarg</code> 命令有很多参数，常用的参数如下：</p>
+<ul>
+<li><code>-a file</code> 从文件中读入作为 <code>stdin</code></li>
+<li><code>-e flag</code> ，注意有的时候可能会是 <code>-E</code>，flag必须是一个以空格分隔的标志，当xargs分析到含有flag这个标志的时候就停止。</li>
+<li><code>-p</code> 当每次执行一个argument的时候询问一次用户。</li>
+<li><code>-n num</code> 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。</li>
+<li><code>-t</code> 表示先打印命令，然后再执行。</li>
+<li><code>-i</code> 或者是<code>-I</code>，这得看linux支持了，将xargs的每项名称，一般是一行一行赋值给 {}，可以用 {} 代替。</li>
+<li><code>-r no-run-if-empty</code> 当xargs的输入为空的时候则停止xargs，不用再去执行了。</li>
+<li><code>-s num</code> 命令行的最大字符数，指的是 xargs 后面那个命令的最大命令行字符数。</li>
+<li><code>-L num</code> 从标准输入一次读取 num 行送给 command 命令。</li>
+<li><code>-l</code> 同 <code>-L</code> 。</li>
+<li><code>-d delim</code> 分隔符，默认的xargs分隔符是回车，argument的分隔符是空格，这里修改的是xargs的分隔符。</li>
+<li><code>-x exit</code>的意思，主要是配合-s使用。。</li>
+<li><code>-P</code> 修改最大的进程数，默认是1，为0时候为as many as it can ，这个例子我没有想到，应该平时都用不到的吧。</li>
+</ul>
+<h1 id="xarg的用法"><a href="#xarg的用法" class="headerlink" title="xarg的用法"></a>xarg的用法</h1><p>xarg的基本用法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">somecommand |xargs -item  <span class="hljs-built_in">command</span><br></code></pre></td></tr></table></figure>
 
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://dhashe.com/xargs-is-the-inverse-function-of-echo.html">原文</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/08/xargs-tutorial.html">阮一峰的网络日志</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-xargs.html">菜鸟教程</a></li>
 </ul>
 
                 

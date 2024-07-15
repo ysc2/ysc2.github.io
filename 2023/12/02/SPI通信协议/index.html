@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/evening1_22.jpg">
 <meta property="article:published_time" content="2023-12-02T08:53:00.000Z">
-<meta property="article:modified_time" content="2024-05-03T09:32:58.506Z">
+<meta property="article:modified_time" content="2024-07-04T19:36:48.021Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1k 字
+          1.2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          9 分钟
+          11 分钟
         
       </span>
     
@@ -278,7 +278,9 @@
                 <p>总结stm32中的SPI通信</p>
 <span id="more"></span>
 
-<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>SPI通信协议有四根线组成：CS(NSS、SS)、SCK、SDI、SDO  。主要应用在EEPROM、FLASH、实时时钟、AD转换器上，以及数字信号处理器和数字信号解码器之间。</p>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>SPI的工作方式与串行通信略有不同 - 它使用同步数据总线而不是异步数据总线。考虑到这一点，它使用单独的数据线和时钟，使接收端和发送端彼此保持完美同步。时钟是一个振荡信号，它告诉接收器何时对数据线上的位进行采样。这是时钟信号的上升沿或下降沿。当接收器检测到该边沿时，它将立即查看数据线以读取下一个位。SPI受欢迎的一个原因是，接收硬件可以是一个简单的移位寄存器，比异步串行通信所需的UART更简单、更便宜。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202407050336911.png" srcset="/img/loading.gif" lazyload></p>
+<p>SPI通信协议有四根线组成：CS(NSS、SS)、SCK、SDI、SDO  。主要应用在EEPROM、FLASH、实时时钟、AD转换器上，以及数字信号处理器和数字信号解码器之间。</p>
 <p>基本特点：</p>
 <ol>
 <li>全双工</li>
