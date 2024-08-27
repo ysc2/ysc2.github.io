@@ -224,15 +224,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/06/22/%E5%B8%B8%E8%A7%81%E7%9A%84shell%E9%A1%B9%E7%9B%AE/" target="_blank">
-          常见的shell项目
+        <a href="/2024/08/17/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E4%B9%8B%E7%BA%BF%E7%A8%8B-%E4%B8%80/" target="_blank">
+          Linux系统编程之线程(一)
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/06/22/%E5%B8%B8%E8%A7%81%E7%9A%84shell%E9%A1%B9%E7%9B%AE/" target="_blank">
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/17/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E4%B9%8B%E7%BA%BF%E7%A8%8B-%E4%B8%80/" target="_blank">
         <div>
-          记载一些常见的shell项目，包括bash、zsh、fish、Nushell、csh等。
+          前言我们知道进程是操作系统管理资源的基本单位，而线程又是进程的一部分。所以我们可以说线程是操作系统管理资源的最小单位。 线程相较于进程来说还是有很多好处的：  线程消耗的资源要少于进程 程序逻辑和控制方式简单  同时其也有相应的缺点：  线程之间的同步和通信复杂 由于处于多个进程之下所以，线程的内存大小受到了限制 一个线程的崩溃可能影响到整个程序的稳定性  什么是线程池？。线程池是一种线程的管理方
         </div>
       </a>
 
@@ -240,8 +240,212 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-06-22 02:13" pubdate>
-              2024-06-22
+            <time datetime="2024-08-17 18:53" pubdate>
+              2024-08-17
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/" target="_blank">
+          Linux下的进程通信方式之System_V共享内存
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/" target="_blank">
+        <div>
+          共享内存是 IPC 三种通信方式中，性能最好的一种。其允许两个或以上的进程通过访问一块公共的内存空间(通常称为段)来达到通信的方式。 由于一个共享内存段会成为一个进程的用户空间内存的一部分，所以这种通信方式是无需内核参与的。这也是共享内存这种通信方式和消息队列、信号量的巨大不同。后两者是需要将数据从用户空间复制到内核空间的。 另一方面，共享内存这种 IPC机制不由内核控制意味着通常需要通过某些同步
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-17 14:34" pubdate>
+              2024-08-17
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" target="_blank">
+          Linux下的进程通信方式之System_V消息队列
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" target="_blank">
+        <div>
+          消息队列：允许进程之间使用以消息的形式传输数据。虽然消息队列在某些地方和管道|FIFO类似，但是仍然存在者显著的差别。 消息队列的特点有：  用来引用消息队列的句柄是一个由 msgget()调用返回的标识符。这些标识符与 UNIX系统上大多数其他形式的 I&#x2F;O所使用的文件描述符是不同的。  每次在读取数据的时候，读取的单位只能是以整条消息为单位的读取，无法像管道那样想一次读取多少数据就可
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-17 03:36" pubdate>
+              2024-08-17
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V_IPC/" target="_blank">
+          
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V_IPC/" target="_blank">
+        <div>
+          前言IPC 中文名称之为：进程间通行方式。同时在Linux中具有两种不同标准的 IPC ：  System IPC POSIX IPC  我们首先对于 System IPC 进行学习。 IPC主要包含了下面这中通信方式：  消息队列用来在进程之间传递消息，允许进程之间交换消息。 信号量允许多个进程同步它们的动作，用以同步进程对于共享资源的访问。 共享内存使得多个进程能够共享内存（即同被映射到多个进
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-17 03:32" pubdate>
+              2024-08-17
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/16/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93/" target="_blank">
+          Linux下的进程通信方式之有名管道
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/16/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93/" target="_blank">
+        <div>
+          前言我们知道，对于匿名管道来说，其只可以用于具有共同祖先的两个进程中。所以出现了有名管道，它可以用于没有血缘关系的进程间通信。 有名管道的特点是：  FIFO是以命名文件的形式存在，而不是打开的文件描述符，所以在对它进行读写操作之前必须先打开它。而且，对于FIFO来说，传递给open函数的第一个参数一定是一个FIFO的路径名，而不是一个文件名。  非阻塞 I&#x2F;O我们知道，如果打开一个另一
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-16 14:51" pubdate>
+              2024-08-16
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/15/stm32%E4%B9%8BMap%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90/" target="_blank">
+          stm32之Map文件分析
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/15/stm32%E4%B9%8BMap%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90/" target="_blank">
+        <div>
+          前言事实上，在 MDK 编译过程生成的文件种类数量达到了 11 种类型：.axf、.crf、.d、.dep、.hex、.lnp、.lst、.o、.htm、bulild_log.htm 和.map。   对于我们来说重要的是 Map 文件，它是用来显示程序的内存布局的。我们用来调试程序是有益的。 在 Keil 种打卡 Map 文件的方法：  双击工程名可以直接打开 Map 文件。 在 Output
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-15 21:40" pubdate>
+              2024-08-15
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/08/10/Anaconda%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/caoyuan.jpg" srcset="/img/loading.gif" lazyload alt="Anaconda的配置使用">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/10/Anaconda%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/" target="_blank">
+          Anaconda的配置使用
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/08/10/Anaconda%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/" target="_blank">
+        <div>
+          Anaconda 的基本使用方法
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-10 14:36" pubdate>
+              2024-08-10
             </time>
           </div>
         
@@ -256,8 +460,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/shell/" class="category-chain-item">shell</a>
+  <a href="/categories/Python/" class="category-chain-item">Python</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/Python/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
   
 
       </span>
@@ -285,15 +496,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/06/21/Linux%E4%B8%AD%E7%9A%84%E4%BC%AA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" target="_blank">
-          Linux中的伪文件系统
+        <a href="/2024/07/30/Linux%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%B1%87%E6%80%BB-%E8%BD%AC/" target="_blank">
+          Linux内核学习资料汇总-转
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/06/21/Linux%E4%B8%AD%E7%9A%84%E4%BC%AA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" target="_blank">
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/07/30/Linux%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%B1%87%E6%80%BB-%E8%BD%AC/" target="_blank">
         <div>
-          关于Linux中的伪文件系统的相关笔记
+          Awesome Linux kernelLinux 内核相关的有趣资源，欢迎补充。     文章合集 「Linux 核心設計」系列講座 :star: :star: :star: :star: :star: LoyenWang :star: :star: :star: :star: :star: wowotech :star: :star: :star: :star: :star: linux in
         </div>
       </a>
 
@@ -301,8 +512,80 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-06-21 21:51" pubdate>
-              2024-06-21
+            <time datetime="2024-07-30 21:32" pubdate>
+              2024-07-30
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/07/21/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B/" target="_blank">
+          系统编程-进程
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/07/21/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B/" target="_blank">
+        <div>
+          6.7 环境列表每一个进程都会有一组关于“名称-值”的字符串数组，这个数组称之为环境列表。其中的“名字”称之为环境变量。 子进程可以一次性的继承父进程的环境列表，子进程在被父进程创建之后复制了父进程的环境列表之后，子进程的进程列表就是独立的了。子进程创建后，父、子进程均可更改各自的环境变量，且这些变更对对方而言不再可见。 通过 Linux 专有的 /proc/PID/environ 文件检查任一进
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-07-21 21:17" pubdate>
+              2024-07-21
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/07/15/%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E6%9B%B4%E6%94%B9%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%81%9C%E6%AD%A2Windows%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-gpgp67.png" srcset="/img/loading.gif" lazyload alt="如何通过更改注册表来实现停止Windows自动更新">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/07/15/%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E6%9B%B4%E6%94%B9%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%81%9C%E6%AD%A2Windows%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0/" target="_blank">
+          如何通过更改注册表来实现停止Windows自动更新
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/07/15/%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E6%9B%B4%E6%94%B9%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%81%9C%E6%AD%A2Windows%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0/" target="_blank">
+        <div>
+          如何通过更改注册表来实现停止Windows自动更新？
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-07-15 21:04" pubdate>
+              2024-07-15
             </time>
           </div>
         
@@ -317,558 +600,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  <a href="/categories/Windows/" class="category-chain-item">Windows</a>
   
   
     <span>></span>
     
-  <a href="/categories/linux/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  <a href="/categories/Windows/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
   
   
 
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/06/21/SMP%E3%80%81NUMA%E3%80%81MPP%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%BB%8B%E7%BB%8D/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exl88k.png" srcset="/img/loading.gif" lazyload alt="SMP、NUMA、MPP体系结构介绍">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/06/21/SMP%E3%80%81NUMA%E3%80%81MPP%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%BB%8B%E7%BB%8D/" target="_blank">
-          SMP、NUMA、MPP体系结构介绍
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/06/21/SMP%E3%80%81NUMA%E3%80%81MPP%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%BB%8B%E7%BB%8D/" target="_blank">
-        <div>
-          转载SMP、NUMA、MPP体系结构介绍
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-06-21 21:40" pubdate>
-              2024-06-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/06/16/%E5%85%B3%E4%BA%8ESTM%E7%B3%BB%E5%88%97%E8%8A%AF%E7%89%87%E6%8D%9F%E5%9D%8F%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wekvmp.jpg" srcset="/img/loading.gif" lazyload alt="关于STM系列芯片损坏的问题">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/06/16/%E5%85%B3%E4%BA%8ESTM%E7%B3%BB%E5%88%97%E8%8A%AF%E7%89%87%E6%8D%9F%E5%9D%8F%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank">
-          关于STM系列芯片损坏的问题
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/06/16/%E5%85%B3%E4%BA%8ESTM%E7%B3%BB%E5%88%97%E8%8A%AF%E7%89%87%E6%8D%9F%E5%9D%8F%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank">
-        <div>
-          总结一些关于STM系列芯片损坏的问题，希望能帮助到大家。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-06-16 15:36" pubdate>
-              2024-06-16
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%A1%AC%E4%BB%B6/" class="category-chain-item">硬件</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/06/09/shell%E8%84%9A%E6%9C%AC%E4%B8%ADecho%E6%98%BE%E7%A4%BA%E5%B8%A6%E9%A2%9C%E8%89%B2%E7%9A%84%E5%86%85%E5%AE%B9/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-joel-gundi-18854560.jpg" srcset="/img/loading.gif" lazyload alt="shell脚本中echo显示带颜色的内容">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/06/09/shell%E8%84%9A%E6%9C%AC%E4%B8%ADecho%E6%98%BE%E7%A4%BA%E5%B8%A6%E9%A2%9C%E8%89%B2%E7%9A%84%E5%86%85%E5%AE%B9/" target="_blank">
-          shell脚本中echo显示带颜色的内容
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/06/09/shell%E8%84%9A%E6%9C%AC%E4%B8%ADecho%E6%98%BE%E7%A4%BA%E5%B8%A6%E9%A2%9C%E8%89%B2%E7%9A%84%E5%86%85%E5%AE%B9/" target="_blank">
-        <div>
-          对于 shell 脚本中 echo 打印出带颜色的显示内容进行总结
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-06-09 23:30" pubdate>
-              2024-06-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/shell/" class="category-chain-item">shell</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/06/09/Linux%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%B3%BB%E7%BB%9F/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-m36829.png" srcset="/img/loading.gif" lazyload alt="Linux中的初始化系统">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/06/09/Linux%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%B3%BB%E7%BB%9F/" target="_blank">
-          Linux中的初始化系统
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/06/09/Linux%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%B3%BB%E7%BB%9F/" target="_blank">
-        <div>
-          总结常见的 Linux 系统的初始化系统，包括 sysvinit、UpStart、systemd。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-06-09 23:29" pubdate>
-              2024-06-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/05/28/rcS%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-exrx9k.png" srcset="/img/loading.gif" lazyload alt="rcS文件的分析">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/28/rcS%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90/" target="_blank">
-          rcS文件的分析
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/05/28/rcS%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90/" target="_blank">
-        <div>
-          记录一下 rcS 文件的分析。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-28 01:19" pubdate>
-              2024-05-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/05/27/xarg%E6%98%AFecho%E7%9A%84%E5%8F%8D%E5%87%BD%E6%95%B0/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-jxqeqp.jpg" srcset="/img/loading.gif" lazyload alt="xarg是echo的反函数">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/27/xarg%E6%98%AFecho%E7%9A%84%E5%8F%8D%E5%87%BD%E6%95%B0/" target="_blank">
-          xarg是echo的反函数
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/05/27/xarg%E6%98%AFecho%E7%9A%84%E5%8F%8D%E5%87%BD%E6%95%B0/" target="_blank">
-        <div>
-          如何立即 xarg 命令
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-27 23:03" pubdate>
-              2024-05-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/bash/" class="category-chain-item">bash</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/bash/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/05/25/%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E7%8B%AC%E7%89%B9%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wek3jx.jpg" srcset="/img/loading.gif" lazyload alt="使用自己独特的大模型">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/25/%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E7%8B%AC%E7%89%B9%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B/" target="_blank">
-          使用自己独特的大模型
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/05/25/%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E7%8B%AC%E7%89%B9%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B/" target="_blank">
-        <div>
-          如何使用大模型平台开发出自定义的问答机器人？
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-25 02:09" pubdate>
-              2024-05-25
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Ai/" class="category-chain-item">Ai</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/05/24/%E8%AE%B0%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84PCB%E8%AE%BE%E8%AE%A1%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wekvmp.jpg" srcset="/img/loading.gif" lazyload alt="记项目中的PCB设计遇到的问题">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/05/24/%E8%AE%B0%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84PCB%E8%AE%BE%E8%AE%A1%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank">
-          记项目中的PCB设计遇到的问题
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/05/24/%E8%AE%B0%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84PCB%E8%AE%BE%E8%AE%A1%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank">
-        <div>
-          对照相机这个项目中的 PCB 设计，记录一下遇到的问题和解决方法。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-05-24 17:03" pubdate>
-              2024-05-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
-  
   
 
       </span>
@@ -894,7 +634,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/#board">23</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/#board">25</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

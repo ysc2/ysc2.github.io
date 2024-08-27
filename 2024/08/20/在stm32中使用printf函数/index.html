@@ -1,0 +1,635 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="两种方法在 Stm32 中使用 printf 函数有两种方法：  微库法 代码法  不管什么方法，都不需要使用半主机模式。 所谓的半主机模式就是指：通过仿真器实现开发板在电脑上的输入和输出。 微库法这个方法就是在 Keil5 中 Target 中选择使用 MicroLib。  如果使用这种方法，则只需要重定向一个 fputc 函数即可。 1234567int fputc(int ch, FILE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在stm32中使用printf函数">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/08/20/%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8printf%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="两种方法在 Stm32 中使用 printf 函数有两种方法：  微库法 代码法  不管什么方法，都不需要使用半主机模式。 所谓的半主机模式就是指：通过仿真器实现开发板在电脑上的输入和输出。 微库法这个方法就是在 Keil5 中 Target 中选择使用 MicroLib。  如果使用这种方法，则只需要重定向一个 fputc 函数即可。 1234567int fputc(int ch, FILE">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408201134633.png">
+<meta property="article:published_time" content="2024-08-20T03:27:38.000Z">
+<meta property="article:modified_time" content="2024-08-20T03:44:50.170Z">
+<meta property="article:author" content="Ysc">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408201134633.png">
+  
+  
+  
+  <title>在stm32中使用printf函数 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="在stm32中使用printf函数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-20 11:27" pubdate>
+          2024年8月20日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">在stm32中使用printf函数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="两种方法"><a href="#两种方法" class="headerlink" title="两种方法"></a>两种方法</h1><p>在 Stm32 中使用 printf 函数有两种方法：</p>
+<ul>
+<li>微库法</li>
+<li>代码法</li>
+</ul>
+<p><strong>不管什么方法，都不需要使用半主机模式。</strong></p>
+<p>所谓的半主机模式就是指：通过仿真器实现开发板在电脑上的输入和输出。</p>
+<h2 id="微库法"><a href="#微库法" class="headerlink" title="微库法"></a>微库法</h2><p>这个方法就是在 Keil5 中 Target 中选择使用 MicroLib。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408201134633.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果使用这种方法，则只需要重定向一个 fputc 函数即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span><br>&#123;<br>    <span class="hljs-keyword">while</span> ((USART1-&gt;SR &amp; <span class="hljs-number">0X40</span>) == <span class="hljs-number">0</span>);               <span class="hljs-comment">/* 等待上一个字符发送完成 */</span><br><br>    USART1-&gt;DR = (<span class="hljs-type">uint8_t</span>)ch;                       <span class="hljs-comment">/* 将要发送的字符 ch 写入到DR寄存器 */</span><br>    <span class="hljs-keyword">return</span> ch;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样就可以使用 printf 函数了。</p>
+<h2 id="代码法"><a href="#代码法" class="headerlink" title="代码法"></a>代码法</h2><p>就是通过 USART 这个外设，来实现原来的函数 printf 的功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* 如果使用os,则包括下面的头文件即可 */</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> SYS_SUPPORT_OS</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;os.h&quot;</span>                               <span class="hljs-comment">/* os 使用 */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-comment">/******************************************************************************************/</span><br><span class="hljs-comment">/* 加入以下代码, 支持printf函数, 而不需要选择use MicroLIB */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> 1</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> (__ARMCC_VERSION &gt;= 6010050)                    <span class="hljs-comment">/* 使用AC6编译器时 */</span></span><br>__asm(<span class="hljs-string">&quot;.global __use_no_semihosting\n\t&quot;</span>);          <span class="hljs-comment">/* 声明不使用半主机模式 */</span><br>__asm(<span class="hljs-string">&quot;.global __ARM_use_no_argv \n\t&quot;</span>);            <span class="hljs-comment">/* AC6下需要声明main函数为无参数格式，否则部分例程可能出现半主机模式 */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><span class="hljs-comment">/* 使用AC5编译器时, 要在这里定义__FILE 和 不使用半主机模式 */</span><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> import(__use_no_semihosting)</span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">FILE</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> handle;<br>    <span class="hljs-comment">/* Whatever you require here. If the only file you are using is */</span><br>    <span class="hljs-comment">/* standard output using printf() for debugging, no file handling */</span><br>    <span class="hljs-comment">/* is required. */</span><br>&#125;;<br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-comment">/* 不使用半主机模式，至少需要重定义_ttywrch\_sys_exit\_sys_command_string函数,以同时兼容AC6和AC5模式 */</span><br><span class="hljs-type">int</span> _ttywrch(<span class="hljs-type">int</span> ch)<br>&#123;<br>    ch = ch;<br>    <span class="hljs-keyword">return</span> ch;<br>&#125;<br><br><span class="hljs-comment">/* 定义_sys_exit()以避免使用半主机模式 */</span><br><span class="hljs-type">void</span> _sys_exit(<span class="hljs-type">int</span> x)<br>&#123;<br>    x = x;<br>&#125;<br><br><span class="hljs-type">char</span> *_sys_command_string(<span class="hljs-type">char</span> *cmd, <span class="hljs-type">int</span> len)<br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-comment">/* FILE 在 stdio.h里面定义. */</span><br>FILE __stdout;<br><br><span class="hljs-comment">/* 重定义fputc函数, printf函数最终会通过调用fputc输出字符串到串口 */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span><br>&#123;<br>    <span class="hljs-keyword">while</span> ((USART1-&gt;SR &amp; <span class="hljs-number">0X40</span>) == <span class="hljs-number">0</span>);               <span class="hljs-comment">/* 等待上一个字符发送完成 */</span><br><br>    USART1-&gt;DR = (<span class="hljs-type">uint8_t</span>)ch;                       <span class="hljs-comment">/* 将要发送的字符 ch 写入到DR寄存器 */</span><br>    <span class="hljs-keyword">return</span> ch;<br>&#125;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-comment">/***********************************************END*******************************************/</span><br></code></pre></td></tr></table></figure>
+
+<p>下面是对于 USART 的配置。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">if</span> USART_EN_RX                                     <span class="hljs-comment">/* 如果使能了接收 */</span></span><br><br><span class="hljs-comment">/* 接收缓冲, 最大USART_REC_LEN个字节. */</span><br><span class="hljs-type">uint8_t</span> g_usart_rx_buf[USART_REC_LEN];<br><br><span class="hljs-comment">/*  接收状态</span><br><span class="hljs-comment"> *  bit15，      接收完成标志</span><br><span class="hljs-comment"> *  bit14，      接收到0x0d</span><br><span class="hljs-comment"> *  bit13~0，    接收到的有效字节数目</span><br><span class="hljs-comment">*/</span><br><span class="hljs-type">uint16_t</span> g_usart_rx_sta = <span class="hljs-number">0</span>;<br><br><span class="hljs-type">uint8_t</span> g_rx_buffer[RXBUFFERSIZE];                  <span class="hljs-comment">/* HAL库使用的串口接收缓冲 */</span><br><br>UART_HandleTypeDef g_uart1_handle;                  <span class="hljs-comment">/* UART句柄 */</span><br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief       串口X初始化函数</span><br><span class="hljs-comment"> * @param       baudrate: 波特率, 根据自己需要设置波特率值</span><br><span class="hljs-comment"> * @note        注意: 必须设置正确的时钟源, 否则串口波特率就会设置异常.</span><br><span class="hljs-comment"> *              这里的USART的时钟源在sys_stm32_clock_init()函数中已经设置过了.</span><br><span class="hljs-comment"> * @retval      无</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">usart_init</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> baudrate)</span><br>&#123;<br>    g_uart1_handle.Instance = USART_UX;                         <span class="hljs-comment">/* USART1 */</span><br>    g_uart1_handle.Init.BaudRate = baudrate;                    <span class="hljs-comment">/* 波特率 */</span><br>    g_uart1_handle.Init.WordLength = UART_WORDLENGTH_8B;        <span class="hljs-comment">/* 字长为8位数据格式 */</span><br>    g_uart1_handle.Init.StopBits = UART_STOPBITS_1;             <span class="hljs-comment">/* 一个停止位 */</span><br>    g_uart1_handle.Init.Parity = UART_PARITY_NONE;              <span class="hljs-comment">/* 无奇偶校验位 */</span><br>    g_uart1_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;        <span class="hljs-comment">/* 无硬件流控 */</span><br>    g_uart1_handle.Init.Mode = UART_MODE_TX_RX;                 <span class="hljs-comment">/* 收发模式 */</span><br>    HAL_UART_Init(&amp;g_uart1_handle);                             <span class="hljs-comment">/* HAL_UART_Init()会使能UART1 */</span><br>    <br>    <span class="hljs-comment">/* 该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以及接收缓冲接收最大数据量 */</span><br>    HAL_UART_Receive_IT(&amp;g_uart1_handle, (<span class="hljs-type">uint8_t</span> *)g_rx_buffer, RXBUFFERSIZE);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief       UART底层初始化函数</span><br><span class="hljs-comment"> * @param       huart: UART句柄类型指针</span><br><span class="hljs-comment"> * @note        此函数会被HAL_UART_Init()调用</span><br><span class="hljs-comment"> *              完成时钟使能，引脚配置，中断配置</span><br><span class="hljs-comment"> * @retval      无</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_UART_MspInit</span><span class="hljs-params">(UART_HandleTypeDef *huart)</span><br>&#123;<br>    GPIO_InitTypeDef gpio_init_struct;<br>    <span class="hljs-keyword">if</span>(huart-&gt;Instance == USART_UX)                             <span class="hljs-comment">/* 如果是串口1，进行串口1 MSP初始化 */</span><br>    &#123;<br>        USART_UX_CLK_ENABLE();                                  <span class="hljs-comment">/* USART1 时钟使能 */</span><br>        USART_TX_GPIO_CLK_ENABLE();                             <span class="hljs-comment">/* 发送引脚时钟使能 */</span><br>        USART_RX_GPIO_CLK_ENABLE();                             <span class="hljs-comment">/* 接收引脚时钟使能 */</span><br><br>        gpio_init_struct.Pin = USART_TX_GPIO_PIN;               <span class="hljs-comment">/* TX引脚 */</span><br>        gpio_init_struct.Mode = GPIO_MODE_AF_PP;                <span class="hljs-comment">/* 复用推挽输出 */</span><br>        gpio_init_struct.Pull = GPIO_PULLUP;                    <span class="hljs-comment">/* 上拉 */</span><br>        gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;          <span class="hljs-comment">/* 高速 */</span><br>        gpio_init_struct.Alternate = USART_TX_GPIO_AF;          <span class="hljs-comment">/* 复用为USART1 */</span><br>        HAL_GPIO_Init(USART_TX_GPIO_PORT, &amp;gpio_init_struct);   <span class="hljs-comment">/* 初始化发送引脚 */</span><br><br>        gpio_init_struct.Pin = USART_RX_GPIO_PIN;               <span class="hljs-comment">/* RX引脚 */</span><br>        gpio_init_struct.Alternate = USART_RX_GPIO_AF;          <span class="hljs-comment">/* 复用为USART1 */</span><br>        HAL_GPIO_Init(USART_RX_GPIO_PORT, &amp;gpio_init_struct);   <span class="hljs-comment">/* 初始化接收引脚 */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> USART_EN_RX</span><br>        HAL_NVIC_EnableIRQ(USART_UX_IRQn);                      <span class="hljs-comment">/* 使能USART1中断通道 */</span><br>        HAL_NVIC_SetPriority(USART_UX_IRQn, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>);              <span class="hljs-comment">/* 抢占优先级3，子优先级3 */</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief       Rx传输回调函数</span><br><span class="hljs-comment"> * @param       huart: UART句柄类型指针</span><br><span class="hljs-comment"> * @retval      无</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_UART_RxCpltCallback</span><span class="hljs-params">(UART_HandleTypeDef *huart)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(huart-&gt;Instance == USART_UX)             <span class="hljs-comment">/* 如果是串口1 */</span><br>    &#123;<br>        <span class="hljs-keyword">if</span>((g_usart_rx_sta &amp; <span class="hljs-number">0x8000</span>) == <span class="hljs-number">0</span>)      <span class="hljs-comment">/* 接收未完成 */</span><br>        &#123;<br>            <span class="hljs-keyword">if</span>(g_usart_rx_sta &amp; <span class="hljs-number">0x4000</span>)         <span class="hljs-comment">/* 接收到了0x0d */</span><br>            &#123;<br>                <span class="hljs-keyword">if</span>(g_rx_buffer[<span class="hljs-number">0</span>] != <span class="hljs-number">0x0a</span>) <br>                &#123;<br>                    g_usart_rx_sta = <span class="hljs-number">0</span>;         <span class="hljs-comment">/* 接收错误,重新开始 */</span><br>                &#125;<br>                <span class="hljs-keyword">else</span> <br>                &#123;<br>                    g_usart_rx_sta |= <span class="hljs-number">0x8000</span>;   <span class="hljs-comment">/* 接收完成了 */</span><br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">else</span>                                <span class="hljs-comment">/* 还没收到0X0D */</span><br>            &#123;<br>                <span class="hljs-keyword">if</span>(g_rx_buffer[<span class="hljs-number">0</span>] == <span class="hljs-number">0x0d</span>)<br>                &#123;<br>                    g_usart_rx_sta |= <span class="hljs-number">0x4000</span>;<br>                &#125;<br>                <span class="hljs-keyword">else</span><br>                &#123;<br>                    g_usart_rx_buf[g_usart_rx_sta &amp; <span class="hljs-number">0X3FFF</span>] = g_rx_buffer[<span class="hljs-number">0</span>] ;<br>                    g_usart_rx_sta++;<br>                    <span class="hljs-keyword">if</span>(g_usart_rx_sta &gt; (USART_REC_LEN - <span class="hljs-number">1</span>))<br>                    &#123;<br>                        g_usart_rx_sta = <span class="hljs-number">0</span>;     <span class="hljs-comment">/* 接收数据错误,重新开始接收 */</span><br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <br>        HAL_UART_Receive_IT(&amp;g_uart1_handle, (<span class="hljs-type">uint8_t</span> *)g_rx_buffer, RXBUFFERSIZE);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief       串口1中断服务函数</span><br><span class="hljs-comment"> * @param       无</span><br><span class="hljs-comment"> * @retval      无</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">USART_UX_IRQHandler</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123; <br><span class="hljs-meta">#<span class="hljs-keyword">if</span> SYS_SUPPORT_OS                              <span class="hljs-comment">/* 使用OS */</span></span><br>    OSIntEnter();    <br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br>    HAL_UART_IRQHandler(&amp;g_uart1_handle);       <span class="hljs-comment">/* 调用HAL库中断处理公用函数 */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> SYS_SUPPORT_OS                              <span class="hljs-comment">/* 使用OS */</span></span><br>    OSIntExit();<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>&#125;<br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>在stm32中使用printf函数</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/08/20/在stm32中使用printf函数/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/21/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B9%8BPOSIX-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="Linux下的进程通信之POSIX-消息队列">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux下的进程通信之POSIX-消息队列</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/19/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BPOSIX-%E4%BF%A1%E5%8F%B7%E9%87%8F/" title="Linux下的进程通信方式之POSIX-信号量">
+                        <span class="hidden-mobile">Linux下的进程通信方式之POSIX-信号量</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

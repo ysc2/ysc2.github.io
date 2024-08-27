@@ -1,0 +1,1588 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="自本世纪六十年代开始，数字半导体技术席卷了全球电子工业，伴随工艺与制程的持续演进，高频高速电子信号的处理需求愈加旺盛，电子技术的发展重心逐步由模拟时代，过渡至全面的数字化阶段。虽然模拟电路以及分立式电子元器件的使用频率逐年下降，但是在电磁兼容性处理、开关电源设计等场景当中，传统的模拟电子技术以及相关分立式元器件依然扮演着不可或缺的角色。  本文定位为一篇导论性质的文章，用于帮助当前开发团队里的嵌入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模拟与数字电子技术入门读物">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/08/23/%E6%A8%A1%E6%8B%9F%E4%B8%8E%E6%95%B0%E5%AD%97%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8%E8%AF%BB%E7%89%A9/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="自本世纪六十年代开始，数字半导体技术席卷了全球电子工业，伴随工艺与制程的持续演进，高频高速电子信号的处理需求愈加旺盛，电子技术的发展重心逐步由模拟时代，过渡至全面的数字化阶段。虽然模拟电路以及分立式电子元器件的使用频率逐年下降，但是在电磁兼容性处理、开关电源设计等场景当中，传统的模拟电子技术以及相关分立式元器件依然扮演着不可或缺的角色。  本文定位为一篇导论性质的文章，用于帮助当前开发团队里的嵌入">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.uinio.com/Electronics/Getting_Started/logo.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232215037.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232214071.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213350.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213064.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213677.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213883.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232212732.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232212417.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232212438.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232211987.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232211558.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232211033.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210428.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210380.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210082.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210869.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209246.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209137.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209140.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209986.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232208955.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232207727.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232207033.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232207565.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/alternating-current.gif">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232206362.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232205006.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232205222.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232204781.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232204171.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232204294.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232202920.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232201300.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232201644.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232200542.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232159033.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232200830.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232200026.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232159151.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232158406.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232158858.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232158205.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232157549.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232157710.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/circuit-symbol.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232155852.png">
+<meta property="article:published_time" content="2024-08-23T13:16:07.000Z">
+<meta property="article:modified_time" content="2024-08-23T14:23:00.571Z">
+<meta property="article:author" content="Ysc">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://www.uinio.com/Electronics/Getting_Started/logo.png">
+  
+  
+  
+  <title>模拟与数字电子技术入门读物 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="模拟与数字电子技术入门读物"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-23 21:16" pubdate>
+          2024年8月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          20k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          165 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">模拟与数字电子技术入门读物</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>自本世纪六十年代开始，数字半导体技术席卷了全球电子工业，伴随工艺与制程的持续演进，高频高速电子信号的处理需求愈加旺盛，电子技术的发展重心逐步由模拟时代，过渡至全面的数字化阶段。虽然模拟电路以及分立式电子元器件的使用频率逐年下降，但是在电磁兼容性处理、开关电源设计等场景当中，传统的模拟电子技术以及相关分立式元器件依然扮演着不可或缺的角色。</p>
+<p><a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/logo.png"><img src="http://www.uinio.com/Electronics/Getting_Started/logo.png" srcset="/img/loading.gif" lazyload></a></p>
+<p>本文定位为一篇<strong>导论</strong>性质的文章，用于帮助当前开发团队里的嵌入式软件工程师，快速了解模拟数字电子技术相关的术语与概念，因此行文中并不涉及各类电路原理的深入数学分析，仅仅言简意赅的汇总了日常工作相关的模拟、数字电路知识。文章中的部分公式与原理图摘取自<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Wikipedia"><strong>Wikipedia 维基百科</strong></a>，写作过程当中参考了<strong>《Understanding Basic Electronics》</strong>第 2 版一书。</p>
+<h2 id="基本概念与公式"><a href="#基本概念与公式" class="headerlink" title="基本概念与公式"></a>基本概念与公式</h2><h3 id="电路的三类状态"><a href="#电路的三类状态" class="headerlink" title="电路的三类状态"></a>电路的三类状态</h3><ul>
+<li><strong>通路&#x2F;回路</strong>：指电流通过元器件或者用电器后流回电源的通路，通常是指闭合电路。</li>
+<li><strong>断短&#x2F;开路</strong>：电路中两点之间无电流通过（_开关没有闭合或导线未连接_）或者连接了阻抗值&#x2F;电阻值非常大的导体，即整个电路处于断开的状态。</li>
+<li><strong>短路</strong>：短路是指电路或电路中的一部分被短接。如负载与电源两端被导线连接在一起，就称为短路，短路时电源提供的电流将比通路时提供的电流大得多，一般情况下不允许短路，如果短路，严重时会烧坏电源或设备。</li>
+</ul>
+<h3 id="电子技术常用数量级单位"><a href="#电子技术常用数量级单位" class="headerlink" title="电子技术常用数量级单位"></a>电子技术常用数量级单位</h3><p>数量级是<strong>国际单位制</strong>当中衡量数量的尺度与大小级别的单位，同样也适用于表达电子技术所涉及单位的数量级，《中华人民共和国法定计量单位》当中规定了与国际数量级单位相对应的中文命名，具体对应关系请参见下表：</p>
+<table>
+<thead>
+<tr>
+<th>中文词头</th>
+<th>英文缩写</th>
+<th>英文前缀</th>
+<th>进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>尧</strong></td>
+<td><strong>Y</strong></td>
+<td>Yotta</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>泽</strong></td>
+<td><strong>Z</strong></td>
+<td>Zetta</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>艾</strong></td>
+<td><strong>E</strong></td>
+<td>Exa</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>拍</strong></td>
+<td><strong>P</strong></td>
+<td>Peta</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>太</strong></td>
+<td><strong>T</strong></td>
+<td>Tera</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>吉</strong></td>
+<td><strong>G</strong></td>
+<td>Giga</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>兆</strong></td>
+<td><strong>M</strong></td>
+<td>Mega</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>千</strong></td>
+<td><strong>k</strong></td>
+<td>kilo</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>百</strong></td>
+<td><strong>h</strong></td>
+<td>hecta</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>十</strong></td>
+<td><strong>da</strong></td>
+<td>deca</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>分</strong></td>
+<td><strong>d</strong></td>
+<td>deci</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>厘</strong></td>
+<td><strong>c</strong></td>
+<td>centi</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>毫</strong></td>
+<td><strong>m</strong></td>
+<td>milli</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>微</strong></td>
+<td><strong>μ</strong></td>
+<td>micro</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>纳</strong></td>
+<td><strong>n</strong></td>
+<td>nano</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>皮</strong></td>
+<td><strong>p</strong></td>
+<td>pico</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>飞</strong></td>
+<td><strong>f</strong></td>
+<td>femto</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>阿</strong></td>
+<td><strong>a</strong></td>
+<td>atto</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>仄</strong></td>
+<td><strong>z</strong></td>
+<td>zepto</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>幺</strong></td>
+<td><strong>y</strong></td>
+<td>yocto</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="电流-Current-kvr-ə-nt"><a href="#电流-Current-kvr-ə-nt" class="headerlink" title="电流 Current [&#39;kʌr(ə)nt]"></a>电流 <code>Current [&#39;kʌr(ə)nt]</code></h3><p>自由电子的定向运动产生电流，其方向与自由电子运动的方向相反，电流用字母<strong>I</strong>表示，基本单位是<strong>安培 A</strong>。</p>
+<pre><code class="hljs">电流I(安培) = 电荷Q(库仑) / 时间t(秒)
+</code></pre>
+<blockquote>
+<p>1 秒内通过导体横截面的电荷量为 1 库仑。</p>
+</blockquote>
+<h3 id="电压-Voltage-voltɪdʒ"><a href="#电压-Voltage-voltɪdʒ" class="headerlink" title="电压 Voltage [&#39;voltɪdʒ]"></a>电压 <code>Voltage [&#39;voltɪdʒ]</code></h3><p>高、低电位之间的电位差称为电压，用字母<strong>U</strong>表示，基本单位是<strong>伏特 V</strong>。</p>
+<pre><code class="hljs">电压V(伏特) = 电荷Q(库仑) * 电功W(焦耳)
+</code></pre>
+<blockquote>
+<p>1 库仑电荷做 1 焦耳的功形成的电位差等于 1 伏特。</p>
+</blockquote>
+<h3 id="电阻-Resistor-rɪ-zɪstə"><a href="#电阻-Resistor-rɪ-zɪstə" class="headerlink" title="电阻 Resistor [rɪ&#39;zɪstə]"></a>电阻 <code>Resistor [rɪ&#39;zɪstə]</code></h3><p>用来限制通过其所连支路的电流大小，电阻用字母<strong>R</strong>表示，基本单位为<strong>欧姆 Ω</strong>。电阻值通常与_温度_、_材料_、_长度_、_导体横截面积_有关，主要物理特性是将电能转换为热能，因此可以认为它是一个耗能元件，在电路中通常起到<strong>分压</strong>、<strong>分流</strong>作用。</p>
+<pre><code class="hljs">电阻R(欧) = 电阻率ρ(欧·厘米) * [ 长度L(厘米) / 横截面积S(平方厘米) ]
+</code></pre>
+<ul>
+<li><strong>限流电阻</strong>：用来限制电阻所在支路电流的大小。</li>
+<li><strong>上拉电阻</strong>：输入端口未连接设备或处于高阻抗时，用于保证输入信号为指定逻辑电平。</li>
+<li><strong>下拉电阻</strong>：接地连接从而使逻辑信号保持在接近 0 伏特状态。</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232215037.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="欧姆定律-Ohm-s-law"><a href="#欧姆定律-Ohm-s-law" class="headerlink" title="欧姆定律 Ohm&#39;s law"></a>欧姆定律 <code>Ohm&#39;s law</code></h3><p>通过某段导体的电流跟该段导体两端的电压成正比，电阻成反比。</p>
+<table><tbody><tr><td><pre><span>1</span><br></pre></td><td><pre><span>电压V(伏) = 电流I(安) *　电阻R(欧)</span><br></pre></td></tr></tbody></table>
+
+<h3 id="电功与电功率"><a href="#电功与电功率" class="headerlink" title="电功与电功率"></a>电功与电功率</h3><p><strong>电功</strong>是指消耗电能的_多少_，<strong>电功率</strong>是指消耗电能的_快慢_。</p>
+<h4 id="电功-Electric-work"><a href="#电功-Electric-work" class="headerlink" title="电功 Electric work"></a>电功 <code>Electric work</code></h4><p>电流所做的功叫做电功，用大写字母<strong>W</strong>表示，基本单位是<strong>焦耳 J</strong>。</p>
+<pre><code class="hljs">电压V(伏) = 电流I(安) *　电阻R(欧)
+</code></pre>
+<h4 id="电功率-Electric-power"><a href="#电功率-Electric-power" class="headerlink" title="电功率 Electric power"></a>电功率 <code>Electric power</code></h4><p>表示消耗电能快慢的物理量，用字母<strong>P</strong>表示，基本单位是<strong>瓦特 w</strong>。</p>
+<pre><code class="hljs">电功W(焦) = 电功率P(瓦特) * 时间t(秒)
+</code></pre>
+<h3 id="基尔霍夫定律-Kirchhoff-s-law"><a href="#基尔霍夫定律-Kirchhoff-s-law" class="headerlink" title="基尔霍夫定律 Kirchhoff&#39;s law"></a>基尔霍夫定律 <code>Kirchhoff&#39;s law</code></h3><ul>
+<li><strong>电流定律</strong>：流向某一结点的电流之和恒等于该结点流出的电流之和（_流入流出结点的电流相等_）。</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232214071.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><strong>电压定律</strong>：某回路的电源电压恒等于各电阻之上的压降之和（_回路中的电压总和是零_）。</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213350.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="电容-Capacitor-kə-paesɪtə"><a href="#电容-Capacitor-kə-paesɪtə" class="headerlink" title="电容 Capacitor [kə&#39;pæsɪtə]"></a>电容 <code>Capacitor [kə&#39;pæsɪtə]</code></h3><p>一种可以容纳电荷的储能元件，由 2 块金属电极之间夹 1 层绝缘电介质构成，用字母<strong>C</strong>表示，基本单位是<strong>法拉第 F</strong>。</p>
+<pre><code class="hljs">电容C(法) = 电荷Q(库) / 电极间的电压V(伏)
+</code></pre>
+<blockquote>
+<p>选取电容时要注意其耐压值（_即临界电压，过大电压会导致电容器损坏_）。</p>
+</blockquote>
+<p>电容器在开发板主要有如下几个作用：</p>
+<ul>
+<li><strong>耦合</strong>，充放电的特性可以阻止直流电通过，但是允许交流电通过，即通交隔直。</li>
+<li><strong>滤波</strong>，将一定频段内的信号从总信号中去除。</li>
+<li><strong>去耦</strong>，防止前后电路电流大小变化时，在供电电路中形成的电流波动对电路正常工作产生影响。</li>
+</ul>
+<blockquote>
+<p>数字电路当中，所有 IO 器件的 VCC 和 GND 之间（_包括电源_）都会放置一个 <code>0.1uF</code> 的去耦电容。</p>
+</blockquote>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213064.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="电感-Inductor-ɪn-dvktə"><a href="#电感-Inductor-ɪn-dvktə" class="headerlink" title="电感 Inductor [ɪn&#39;dʌktə]"></a>电感 <code>Inductor [ɪn&#39;dʌktə]</code></h3><p><strong>电感</strong>是通过电流改变产生电动势，从而抵抗电流改变的一种特性，其基本单位是<code>亨利H</code>，可由线圈的直径、长度、横截面积、线圈数等计算元件的电感量。而<strong>电感器</strong>是将电能转化为磁能存储起来的元件，具有一定的电感，一般由骨架、绕组线圈、屏蔽罩、封装材料、磁心或铁心等组成。电感器元件依据外观和功能的不同会有不同的名称：</p>
+<ul>
+<li><strong>线圈</strong>（_Coil [kɔɪl]_）：漆包线绕制为多圈状，作为电磁铁和变压器中使用的电感。</li>
+<li><strong>扼流圈</strong>（_Choke [tʃəʊk]_）：对高频提供较大电阻，通过直流或低频的电流，因而称为扼流圈。</li>
+<li><strong>绕组</strong>（_Winding [‘waɪndɪŋ]_）：配合铁磁性材料，安装在变压器、电动机、发电机中使用的较大电感。</li>
+<li><strong>磁珠</strong>（_Bead [biːd]_）：导线穿越磁性物质，而无线圈状，常充当高频滤波作用的小电感，依据外观称为磁珠。</li>
+</ul>
+<p>电感的计算方式与电阻类似，<strong>串联时逐个相加，并联时总电感的倒数等于各个电感的倒数之和</strong>。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213677.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="基本串-并联电路"><a href="#基本串-并联电路" class="headerlink" title="基本串&#x2F;并联电路"></a>基本串&#x2F;并联电路</h2><h3 id="串联电路-series-sɪəriːz"><a href="#串联电路-series-sɪəriːz" class="headerlink" title="串联电路 series [&#39;sɪəriːz]"></a>串联电路 <code>series [&#39;sɪəriːz]</code></h3><p>多个电路元件沿着单一路径互相连接，每个连接点最多只连接 2 个元件，这种连接方式被称为<strong>串联</strong>。串联电路电源<strong>输出的电流等于通过每个元件的电流，输出的电压等于各个元件两端电压的代数之和</strong>。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232213883.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="电阻串联"><a href="#电阻串联" class="headerlink" title="电阻串联"></a>电阻串联</h4><p>下图将个电阻器串联在一起，并将电源连接于串联电路的两端。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232212732.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E6%AC%A7%E5%A7%86%E5%AE%9A%E5%BE%8B">欧姆定律</a>，第个电阻器两端的电压等于通过的电流乘以其电阻，即。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电流定律</a>，从电源给出的电流等于通过每一个电阻器的电流，即。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电流定律</a>，电源两端的电压等于所有电阻器两端的电压的代数和，即。所以，个电阻器串联的等效电阻。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E6%AC%A7%E5%A7%86%E5%AE%9A%E5%BE%8B">欧姆定律</a>，电流源两端的电压等于给出的电流乘以等效电阻，即。</p>
+<h4 id="电容串联"><a href="#电容串联" class="headerlink" title="电容串联"></a>电容串联</h4><p>下图当中将个电容器串联在一起，并将电源连接于串联电路的两端。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232212417.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据电容定义，通过个电容器的电流，等于其电容乘以其两端的电压变化率，即。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电流定律</a>，电源（_直流或者交流电_）释放的电流等于通过每一个电容器的电流，也即。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电压定律</a>，电源两端电压等于所有电容器两端电压的代数之和，即。由此电源两端的电压变化率为。所以，个电容器串联后的<strong>等效电容</strong>与每个电容的关系为。</p>
+<blockquote>
+<p>电容器的<strong>漏电阻</strong>（_leakage resistance_）是指在两个电容极板上添加电压后所呈现的电阻值，通常电容器生产厂家会标注其漏电阻最低值，但是实际值可能与最低值相差较多，因而无法确定每个电容器承受的工作电压，降低电路可靠性。这种情况下，可以给每个电容器并联一个电阻器，从而有效增加漏电流，降低电容器两端电压。</p>
+</blockquote>
+<h4 id="电感串联"><a href="#电感串联" class="headerlink" title="电感串联"></a>电感串联</h4><p>下面图片示意了将个电感串联到一起的效果。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232212438.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据前面所述的方法，可以计算出多个电感器的等效电感；</p>
+<blockquote>
+<p>由于电感器产生的磁场会与其邻近电感器的缠绕线圈发生耦合，从而产生<strong>互感</strong>。等效电感是所有自感与互感的代数总和，但需要注意互感的磁场方向与电感器是否相同，从而进行相应的增减运算。</p>
+</blockquote>
+<h3 id="并联电路-parallel-paerəlel"><a href="#并联电路-parallel-paerəlel" class="headerlink" title="并联电路 parallel [&#39;pærəlel]"></a>并联电路 <code>parallel [&#39;pærəlel]</code></h3><p>多个电路元件的两端分别连接于两个节点，这种连接方式称为<strong>并联</strong>。并联电路电源<strong>输出的电流等于通过每个元件的电流的代数之和，输出的电压等于每个元件两端的电压</strong>。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232211987.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>注意：</strong>串联分压，并联分流。</p>
+</blockquote>
+<h4 id="电阻并联"><a href="#电阻并联" class="headerlink" title="电阻并联"></a>电阻并联</h4><p>如下图所示，个电阻器并联在一起，然后将电源连接到该并联电路的两端。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232211558.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E6%AC%A7%E5%A7%86%E5%AE%9A%E5%BE%8B">欧姆定律</a>，第个电阻器两端的电压等于通过的电流乘以其电阻，即。按照<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电压定律</a>，电源两端的电压等于每一个电阻器两端的电压，即。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电流定律</a>，从电源流出的电流等于通过每一个电阻器的电流代数之和，即。因而，个电阻器并联的<strong>等效电阻</strong>与每个电阻器的关系为。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E6%AC%A7%E5%A7%86%E5%AE%9A%E5%BE%8B">欧姆定律</a>，电源两端的电压等于其电流乘以等效电阻。</p>
+<h4 id="电容并联"><a href="#电容并联" class="headerlink" title="电容并联"></a>电容并联</h4><p>如下图所示，个电容器并联在一起，现将电源连接于该并联电路两端。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232211033.png" srcset="/img/loading.gif" lazyload></p>
+<p>由电容的定义可知，通过第个电容器的电流等于其电容乘以两端电压的变化率，即。按照<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电压定律</a>，电源两端的电压等于每一个电容器两端的电压，即。根据<a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%9F%BA%E5%B0%94%E9%9C%8D%E5%A4%AB%E5%AE%9A%E5%BE%8B">基尔霍夫电流定律</a>，电源流出的电流等于通过每一个电容器电流的代数之和，即。所以，个电容器并联的等效电容。</p>
+<h4 id="电感并联"><a href="#电感并联" class="headerlink" title="电感并联"></a>电感并联</h4><p>下面展示的图当中，个电感器并联在一起。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210428.png" srcset="/img/loading.gif" lazyload></p>
+<p>类似上面所述的方法，可以计算出其等效电感与每个电感器的关系为。</p>
+<blockquote>
+<p>上述方程描述的是个电感器无互感并联的理想状态，实际环境下，临近电感器之间的磁场会发生耦合。因此，对于具有三个或三个以上电感的并联电路，必需考虑到每个电感器本身的<strong>自感</strong>和互相之间的<strong>互感</strong>。</p>
+</blockquote>
+<h2 id="半导体元件"><a href="#半导体元件" class="headerlink" title="半导体元件"></a>半导体元件</h2><h3 id="二极管-Diode-daɪəʊd"><a href="#二极管-Diode-daɪəʊd" class="headerlink" title="二极管 Diode [&#39;daɪəʊd]"></a>二极管 <code>Diode [&#39;daɪəʊd]</code></h3><p>以硅（或锗）作为基板，将掺杂了磷和砷的<strong>N</strong>egative 型半导体（_电子不足，空穴较多_）和掺杂了硼和镓的<strong>P</strong>ositive 型半导体（_电子多余_）结合在一起，就称为二极管（_PN 结_）。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210380.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>二极管具有单向导电性（_单向导通_），因此具备整流作用，即让电流只朝一个方向运动。</p>
+</blockquote>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210082.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="三极管-Triode-traɪəʊd"><a href="#三极管-Triode-traɪəʊd" class="headerlink" title="三极管 Triode [&#39;traɪəʊd]"></a>三极管 <code>Triode [&#39;traɪəʊd]</code></h3><p>三极管也称为<strong>双极性晶体管</strong>（_bipolar transistor_），全称叫做<strong>双极性结型晶体管</strong>（_bipolar junction transistor_），缩写为<strong>BJT</strong>，因为种具有三个终端，所以俗称为三极管。将<strong>P 型</strong>、<strong>N 型</strong>半导体做成三明治状从而形成<strong>NPN 结</strong>与<strong>PNP 结</strong>，中间的那层称为基级<code>Base</code>，两侧的称为发射级<code>Emitter</code>或集电极<code>Collector</code>，即<strong>三极管</strong>，也称为<strong>双极性结型晶体管</strong>。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232210869.png" srcset="/img/loading.gif" lazyload></p>
+<p>三极管具有如下 3 种工作状态：</p>
+<ol>
+<li><strong>截止状态</strong>：当发射极电压<strong>小于</strong>PN 结导通电压，基极电流为零，集电极和发射极的电流都为零，此时三极管失去了电流放大作用，集电极和发射极之间相当于开关的断开状态。</li>
+<li><strong>放大状态</strong>：当发射极电压<strong>大于</strong>PN 结导通电压，并处于某一恰当值时，三极管发射结正向偏置，集电结反向偏置，此时基极电流对集电极电流起着控制作用，使三极管具有电流放大作用（放大倍数 β&#x3D;ΔIc&#x2F;ΔIb）。</li>
+<li><strong>饱和导通</strong>：当发射极电压<strong>大于</strong>PN 结导通电压，并当基极电流增大到一定程度时，集电极电流不再随着基极电流的增大而增大，而是处于某个确定值的附近不再变化，此时三极管失去电流放大作用，集电极与发射极之间电压很小，相当于开关的导通状态。</li>
+</ol>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209246.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="晶闸管-Thyristor-θaɪ-rɪstə"><a href="#晶闸管-Thyristor-θaɪ-rɪstə" class="headerlink" title="晶闸管 Thyristor [θaɪ&#39;rɪstə]"></a>晶闸管 <code>Thyristor [θaɪ&#39;rɪstə]</code></h3><p>晶闸管是<strong>晶体闸流管</strong>的简称，又被称为<strong>可控硅整流器</strong>，泛指具有四层及以上交错 PN 层的半导体元件，具体可分为单向晶闸管、双向晶闸管、可关断晶闸管等种类。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209137.png" srcset="/img/loading.gif" lazyload></p>
+<p>晶闸管是一种开关元件，具有<strong>可控的</strong>单向导电性（_与之相比，普通的二极管只是一个单向导电器件_）。晶闸管具有以小电流或电压控制大电流电压的作用，广泛用于无触点开关、可控整流、逆变、调光、调压、调速等。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209140.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>晶闸管只能工作在开关状态，而场效应管既可以工作在开关状态也可以工作在放大状态。</p>
+</blockquote>
+<h3 id="场效应管-Field-Effect-Tube-tjuːb"><a href="#场效应管-Field-Effect-Tube-tjuːb" class="headerlink" title="场效应管 Field Effect Tube [tjuːb]"></a>场效应管 <code>Field Effect Tube [tjuːb]</code></h3><p>场效应管（<em>缩写：FET_）是一种通过电场效应控制电流的电子元件，也称为<strong>单极性晶体管</strong>。它依靠电场去控制导电沟道形状，能够控制半导体材料中某种类型载流子的沟道导电性。主要分为<strong>结型场效应管</strong>（_junction FET，简称 JFET</em>)和<strong>金属-氧化物半导体场效应管</strong>（_metal-oxide semiconductor FET，简称 MOS-FET_）两种类型，可应用于放大、阻抗变换、可变电阻、电子开关。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232209986.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>场效应管是电压控制元件，栅极基本不获取电流；而普通晶体管是电流控制元件，基极必须获取一定电流。</p>
+</blockquote>
+<h3 id="绝缘栅双极晶体管-Insulated-ˈɪnsjuleɪtɪd-Gate-Bipolar-baɪ-pəʊlə-Transistor"><a href="#绝缘栅双极晶体管-Insulated-ˈɪnsjuleɪtɪd-Gate-Bipolar-baɪ-pəʊlə-Transistor" class="headerlink" title="绝缘栅双极晶体管 Insulated [ˈɪnsjuleɪtɪd] Gate Bipolar [baɪ&#39;pəʊlə] Transistor"></a>绝缘栅双极晶体管 <code>Insulated [ˈɪnsjuleɪtɪd] Gate Bipolar [baɪ&#39;pəʊlə] Transistor</code></h3><p>绝缘栅双极晶体管（_缩写：IGBT_），由三极管 BJT 和场效应管 MOS 组成，是一种使用电压驱动的功率半导体器件，具有自关断特性，即功能类似于一个非通即断的开关。IGBT 不能放大电压，导通时可视为导线，断开时可视为开路。</p>
+<p>三极管导通电阻小，但是驱动电流大；场效应管导通电阻大，但是驱动电流小；IGBT 则结合两者优点，不仅驱动电流小，导通电阻也较低。IGBT 是能源转换与传输的核心器件，主要用于电动车辆、铁路动车组的交流电机输出控制。采用 IGBT 进行功率转换，可以提高用电效率和质量，更加高效节能。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232208955.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>IGBT 和 MOSFET 都是目前半导工业比较主流的两款功率器件。</p>
+</blockquote>
+<h3 id="晶振-Crystal-Oscillator"><a href="#晶振-Crystal-Oscillator" class="headerlink" title="晶振 Crystal &#x2F; Oscillator"></a>晶振 Crystal &#x2F; Oscillator</h3><p>晶振通常分为<strong>无源晶振</strong>（_crystal，晶体_）和<strong>有源晶振</strong>两种类型（_oscillator，振荡器_）。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232207727.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>有源晶振：一个完整的谐振振荡器，利用石英晶体的压电效应起振，因此仅需要外部供电，而无需外接其它器件即可主动产生振荡频率，并且能够提供高精度的频率基准，信号质量比无源晶振信号更好。有源晶振通常拥有 VCC 引脚、GND 引脚、晶振输出引脚、未使用的悬空引脚（有时也作为使能引脚）4 个引脚。</li>
+<li>无源晶振：自身无法振荡，需要接入芯片内部的振荡电路才能振荡，信号质量和精度相对有源晶振较差，但是价格更便宜。无源晶振两侧通常会放置两个电容，容值选取在 10pF~40pF 之间，如果数据手册无明确要求，根据经验值通常选取 20pF 的电容。无源晶振有 2 或 3 个引脚，其中 3 引脚晶振的中间引脚通常连接至晶振外壳，使用时需要连接到 GND，而两侧的引脚作用相同，使用时无正负之分。</li>
+</ul>
+<blockquote>
+<p>无源晶振可以直接连接至单片机的两个引脚，有源晶振仅需要连接至单片机的晶振输入引脚，而输出引脚可以选择不接。</p>
+</blockquote>
+<h2 id="基础模拟电路"><a href="#基础模拟电路" class="headerlink" title="基础模拟电路"></a>基础模拟电路</h2><h3 id="电磁兼容性-EMC"><a href="#电磁兼容性-EMC" class="headerlink" title="电磁兼容性 EMC"></a>电磁兼容性 EMC</h3><p><strong>EMC</strong>（_Electro Magnetic [mæg’netɪk] Compatibility_）电磁兼容性，指设备和系统能在电磁环境中符合要求的运行，并且不会对其它设备产生超出承受范围的电磁干扰，EMC 主要包含下面两个方面的指标：</p>
+<ol>
+<li><strong>EMI</strong>（_Electro Magnetic Interference [ɪntə’fɪər(ə)ns]_）电磁干扰，指设备和系统在自身工作过程中，产生的电磁波对本身及外部其它设备造成的干扰。测试项包括：<code>RE辐射</code>、<code>CE传导干扰</code>、<code>Harmonic谐波</code>、<code>Flicker闪烁</code>。</li>
+<li><strong>EMS</strong>（_Electro Magnetic Susceptibility [sə,septɪ’bɪlɪtɪ]_）电磁敏感度，指设备抗电磁干扰的敏感程度，越敏感的设备，越容易受到干扰。测试项包括：<code>ESD静电</code>、<code>EFT瞬态脉冲干扰</code>、<code>DIP电压跌落</code>、<code>CS传导抗干扰</code>、<code>RS辐射抗干扰</code>、<code>Surge浪涌</code>、<code>PMS工频磁场抗扰度</code>。</li>
+</ol>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232207033.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p><strong>因为 EMI，所以有 EMC；EMS 符合标准，才能实现 EMC。</strong></p>
+</blockquote>
+<h3 id="交流电-直流电"><a href="#交流电-直流电" class="headerlink" title="交流电&amp;直流电"></a>交流电&amp;直流电</h3><p>直流电流（<strong>DC</strong>，Direct Current）：方向、大小保持不变的电流称为直流电流，直流电流与时间的关系在坐标轴当中体现为一条与时间轴平行的直线。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232207565.png" srcset="/img/loading.gif" lazyload></p>
+<p>交流电流（<strong>AC</strong>，Alternating Current）：大小和方向都发生周期性变化的电流，通常波形为正弦曲线（家庭用电），此外还有三角形波、正方形波等。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/alternating-current.gif" srcset="/img/loading.gif" lazyload></p>
+<h3 id="频率Frequency"><a href="#频率Frequency" class="headerlink" title="频率Frequency"></a>频率<code>Frequency</code></h3><p>频率是事件在单位时间内重复发生的次数，通常以符号<code>f</code>或<code>v</code>表示，单位是<strong>赫兹</strong>（_Hertz_）简写为<code>Hz</code>。</p>
+<pre><code class="hljs">1赫兹 = 1次/秒
+</code></pre>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232206362.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="相位Phase-feɪz"><a href="#相位Phase-feɪz" class="headerlink" title="相位Phase [feɪz]"></a>相位<code>Phase [feɪz]</code></h3><p><strong>相位</strong>是用来描述电子信号波形变化的量，通常以<code>度</code>为单位，当信号波形周期性变化时，波形循环一周即为<code>360度</code>。<strong>相位差</strong>是指两个信号之间的相位之差。</p>
+<h3 id="RC-RL-LC-RLC-电路"><a href="#RC-RL-LC-RLC-电路" class="headerlink" title="RC&#x2F;RL&#x2F;LC&#x2F;RLC 电路"></a>RC&#x2F;RL&#x2F;LC&#x2F;RLC 电路</h3><p>电阻器<strong>R</strong>、电容器<strong>C</strong>、电感元件<strong>L</strong>这 3 种基本线性集成电路元件可以用来组成 4 种不同的电路：<code>RC电路</code>、<code>RL电路</code>、<code>LC电路</code>、<code>RLC电路</code>，电路名称源于其所使用的元件英文缩写。</p>
+<h4 id="RC-电路"><a href="#RC-电路" class="headerlink" title="RC 电路"></a>RC 电路</h4><p>电阻-电容电路，又称为 RC 滤波器或相移电路，最简单的 RC 电路由一个电容器和一个电阻器组成，称为一阶 RC 电路。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232205006.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="RL-电路"><a href="#RL-电路" class="headerlink" title="RL 电路"></a>RL 电路</h4><p>电阻-电感电路，也称为 RL 滤波器，是最简单的无限脉冲响应电子滤波器。由一个电阻器和一个电感元件串联或并联组成，并由电压源驱动。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232205222.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="LC-电路"><a href="#LC-电路" class="headerlink" title="LC 电路"></a>LC 电路</h4><p>电感-电容电路，也称为谐振电路或调谐电路，LC 电路既能产生特定频率的信号，也能从更复杂信号中分离出特定频率信号。用于振荡器、滤波器、调谐器、混频器电路当中，是无线电设备中的关键部件。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232204781.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="RLC-电路"><a href="#RLC-电路" class="headerlink" title="RLC 电路"></a>RLC 电路</h4><p>电阻-电感-电容电路，常用来作为带通滤波器或带阻滤波器，RLC 电路中的电压或电流是一个二阶微分方程的解，因此也被称为二阶电路。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232204171.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="整流电路Rectification-rektɪfɪ-keɪʃən"><a href="#整流电路Rectification-rektɪfɪ-keɪʃən" class="headerlink" title="整流电路Rectification [,rektɪfɪ&#39;keɪʃən]"></a>整流电路<code>Rectification [,rektɪfɪ&#39;keɪʃən]</code></h3><p>将交流电能转换为直流电能的电路，主要由变压器、整流主电路（_整流二极管_）、滤波器组成。经过整流之后的电压不是交流电压，而是一种同时包含有直流电压和交流电压的混合电压，习惯上称为<strong>单向脉动性直流电压</strong>。</p>
+<h3 id="逆变电路Inverter-ɪn-vɜːtə"><a href="#逆变电路Inverter-ɪn-vɜːtə" class="headerlink" title="逆变电路Inverter [ɪn&#39;vɜːtə]"></a>逆变电路<code>Inverter [ɪn&#39;vɜːtə]</code></h3><p>逆变电路可以将直流电转变为交流电，其作用与整流电路相反，可用于构成各种交流电源，在工业中用途广泛。</p>
+<h3 id="滤波电路Filter"><a href="#滤波电路Filter" class="headerlink" title="滤波电路Filter"></a>滤波电路<code>Filter</code></h3><p>主要用于去除信号中不需的成分或增强所需的部分，即对电子信号中特定的波段频率进行滤除，信号中较高频率能够通过的滤波器称为<strong>高通滤波器</strong>，而较低频率能够通过的滤波器称为<strong>低通滤波器</strong>。</p>
+<h3 id="放大电路Amplifier-aemplɪfaɪə"><a href="#放大电路Amplifier-aemplɪfaɪə" class="headerlink" title="放大电路Amplifier [&#39;æmplɪfaɪə]"></a>放大电路<code>Amplifier [&#39;æmplɪfaɪə]</code></h3><p>放大电路也称为<strong>放大器</strong>，其输出信号的波形与输入信号一致，但具有更大的振幅，是一种使用较为广泛的电子电路，是构成复杂电子电路的基本单元电路。<strong>放大</strong>是指将输入的微弱信号（_变化的电压、电流等_）放大到所需幅度值并且与输入信号变化规律一致，即进行不失真的放大，仅增加信号的输出功率。实际的放大电路通常由信号源、晶体三极管构成的放大器、负载组成。</p>
+<p>放大器电路按照功能可分为如下类型：</p>
+<ul>
+<li>电压放大器：将较小的输入<code>电压</code>放大为较大的输出<code>电压</code>。</li>
+<li>电流放大器：将较小的输入<code>电流</code>放大为较大的输出<code>电流</code>。</li>
+<li>互导放大器：将变化的输入<code>电压</code>转换为相应的输出<code>电流</code>。</li>
+<li>互阻放大器：将变化的输入<code>电流</code>转换为相应的输出<code>电压</code>。</li>
+</ul>
+<p>放大器电路按照用途可分为如下类型：</p>
+<ul>
+<li>功率放大器：简称<strong>功放</strong>，指给定失真率条件下，能产生最大<strong>功率</strong>输出以驱动某一负载（_例如：扬声器_）的放大器。</li>
+<li>运算放大器：简称<strong>运放</strong>，具有非常高的放大倍数（_最高可达数十万倍_），通常以集成 IC 的形式存在，早期应用于模拟计算机用来实现数学运算，因而称为运算放大器。</li>
+</ul>
+<h3 id="谐振电路Resonant-rez-ə-nənt"><a href="#谐振电路Resonant-rez-ə-nənt" class="headerlink" title="谐振电路Resonant [&#39;rez(ə)nənt]"></a>谐振电路<code>Resonant [&#39;rez(ə)nənt]</code></h3><p>由电感<strong>L</strong>和电容<strong>C</strong>组成的，可以在一个或若干个频率上发生谐振现象的电路，称为谐振电路。移动通信电路当中，谐振电路用来从诸多信号中选取指定的信号，并抑制或过滤其它信号。</p>
+<blockquote>
+<p>包含电容、电感、电阻的无源一端口网络，端口可能呈现容性、感性、电阻性。当端口的电压和电流出现同相位，电路呈现电阻性时称为<strong>谐振</strong>现象。谐振实质是电容中电场能与电感中磁场能相互转换，此消彼涨，电场能与磁场能的总和保持不变，电源不必与电容或电感往返转换能量，只需供给电路中电阻所消耗的电能。</p>
+</blockquote>
+<h3 id="反馈电路Feedback"><a href="#反馈电路Feedback" class="headerlink" title="反馈电路Feedback"></a>反馈电路<code>Feedback</code></h3><p>将电路的输出信号有选择的返回到输入当中，这个过程称之为反馈。反馈根据输出相位的不同，分为<strong>正反馈</strong>和<strong>负反馈</strong>：</p>
+<ul>
+<li>负反馈：与输入信号的相位相反，稳定输出信号。</li>
+<li>正反馈：与输入信号的相位相同，信号产生叠加，输出信号逐渐变大，最终发生振荡。</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232204294.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="振荡电路Oscillation-ɒsɪ-leɪʃn"><a href="#振荡电路Oscillation-ɒsɪ-leɪʃn" class="headerlink" title="振荡电路Oscillation [,ɒsɪ&#39;leɪʃn]"></a>振荡电路<code>Oscillation [,ɒsɪ&#39;leɪʃn]</code></h3><p><strong>振荡电流</strong>是一种大小和方向都随周期发生变化并且频率很高的交变电流，能产生振荡电流的电路称为<strong>振荡电路</strong>。振荡电流无法通过线圈在磁场中转动产生，只能使用振荡电路产生。无线通信射频信号的产生，嵌入式硬件电路时钟信号的调整等都是常见的振荡器产生交流信号的例子。</p>
+<h3 id="电源表示符号"><a href="#电源表示符号" class="headerlink" title="电源表示符号"></a>电源表示符号</h3><ol>
+<li><strong>VDD</strong>：<code>D=device</code>，表示器件, 即器件内部的工作电压；</li>
+<li><strong>VCC</strong>：<code>C=circuit</code>，表示电路, 即接入电路的电压；</li>
+<li><strong>VSS</strong>：<code>S=series</code>，表示公共连接的意思，通常指电路公共接地端电压；</li>
+<li><strong>GND</strong>：<code>Ground</code>代表接地，在嵌入式电路当中实际是指电源负极，而并非真正的接电。</li>
+</ol>
+<blockquote>
+<p>电路图表示场效应管或 COMS 器件时，会称 VDD 为漏极 VSS 为源极，这里的 VDD 和 VSS 是指元件引脚，而非供电电压。</p>
+</blockquote>
+<h3 id="开关电源-线性电源"><a href="#开关电源-线性电源" class="headerlink" title="开关电源&#x2F;线性电源"></a>开关电源&#x2F;线性电源</h3><p>嵌入式系统当中的各种电子元件与外设主要依靠直流电源进行驱动，因为一套稳定可靠的电源对于嵌入式系统极为重要，直流电源主要分为<strong>开关电源</strong>与<strong>线性电源</strong>两大类。</p>
+<p><strong>开关电源</strong>（_Switching Power Supply_）：使用电子开关器件（_晶体管、场效应管、可控硅闸流管等_），通过控制电路使开关器件的通断时间，使其对输入的电压进行脉冲调制，从而实现 DC&#x2F;AC 或者 DC&#x2F;DC 电压转换，以及输出电压可调与自动稳压。</p>
+<p><strong>线性电源</strong>（_Linear Power Supply_）：先将交流电经过变压器降低电压幅值，再经过整流电路整流后得到脉冲直流电，后经滤波得到带有微小波纹电压的直流电压。</p>
+<blockquote>
+<p>开关电源与线性电源两者的主要区别在于：线性电源的电压反馈电路工作在线性（<strong>放大</strong>）状态，而开关电源的电子开关器件则是工作在饱和与截止（<strong>开关</strong>）状态。线性电源技术很成熟的稳定，波纹较小，干扰和噪声较小，制作成本较低，但是工作在 50Hz 工频下其体积较大效率偏低（_转换效率仅 80%左右_）。开关电源体积较小，输出纹波相对较大，但是结构简单效率高（_转换效率 90%以上_）在很多场合已经替代了线性电源，是未来电源发展的趋势。</p>
+</blockquote>
+<h2 id="数制与码制"><a href="#数制与码制" class="headerlink" title="数制与码制"></a>数制与码制</h2><h3 id="数制"><a href="#数制" class="headerlink" title="数制"></a>数制</h3><p>数制是用一组固定符号和统一规则来表示数值的方法，通常包含基数和位权两个基本要素。其中<strong>基数</strong>是指使用数码的个数，例如：二进制的基数为<code>2</code>，十进制的基数为<code>10</code>。<strong>位权</strong>是指数制某位所表示的数值权重的大小，例如：十进制数<code>123</code>，<code>1</code>的位权是<code>100</code>，<code>2</code>的位权是<code>10</code>，<code>3</code>的位权是<code>1</code>。二进制数<code>1011</code>，从左至右<code>1</code>、<code>0</code>、<code>1</code>、<code>1</code>的位权依次是<code>8</code>、<code>4</code>、<code>2</code>、<code>1</code>。常用的数制有<strong>二</strong>、<strong>八</strong>、<strong>十</strong>、<strong>十六</strong>四种进制，书写时可以在相应数值尾部添加字母<strong>B</strong>、<strong>O</strong>、<strong>D</strong>、<strong>H</strong>或者下标<strong>2</strong>、<strong>8</strong>、<strong>10</strong>、<strong>16</strong>进行标识，计算机传输和保存数据通常使用的是<strong>二进制</strong>。</p>
+<h4 id="进制"><a href="#进制" class="headerlink" title="进制"></a>进制</h4><ul>
+<li>十进制：<strong>Decimal</strong> <code>[&#39;desɪm(ə)l]</code> 缩写为<strong>DEC</strong>，十进制数使用<code>0</code>到<code>9</code>共十个数码进行表示，计数基数为 10 逢十进一。</li>
+<li>二进制：<strong>Binary</strong> <code>[&#39;baɪnərɪ]</code> 缩写为<strong>BIN</strong>，十进制数使用<code>0</code>和<code>1</code>共两个数码来表示，计数基数为 2 逢二进一。</li>
+<li>八进制：<strong>Octal</strong> <code>[&#39;ɒkt(ə)l]</code> 缩写为<strong>OCT</strong>，十进制数使用<code>0</code>到<code>7</code>八个数码进行表示，计数基数为 8 逢八进一。</li>
+<li>十六进制：<strong>Hexadecimal</strong> <code>[,heksə&#39;desɪm(ə)l]</code> 缩写为<strong>HEX</strong>，十进制数使用<code>0</code>到<code>9</code>和<code>A</code>到<code>F</code>共十个数码进行表示，计数基数为 16 逢十进一。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>数制</th>
+<th>符号</th>
+<th>字符</th>
+<th>进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制</td>
+<td>B</td>
+<td><code>0</code>、<code>1</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>八进制</td>
+<td>O</td>
+<td><code>0</code>、<code>1</code>、<code>2</code>、<code>3</code>、<code>4</code>、<code>5</code>、<code>6</code>、<code>7</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>十进制</td>
+<td>D</td>
+<td><code>0</code>、<code>1</code>、<code>2</code>、<code>3</code>、<code>4</code>、<code>5</code>、<code>6</code>、<code>7</code>、<code>8</code>、<code>9</code></td>
+<td>10</td>
+</tr>
+<tr>
+<td>十六进制</td>
+<td>H</td>
+<td><code>0</code>、<code>1</code>、<code>2</code>、<code>3</code>、<code>4</code>、<code>5</code>、<code>6</code>、<code>7</code>、<code>8</code>、<code>9</code>、<code>A</code>、<code>B</code>、<code>C</code>、<code>D</code>、<code>E</code>、<code>F</code></td>
+<td>16</td>
+</tr>
+</tbody></table>
+<p>目前的嵌入式微处理器普遍采用 8 位、16 位、32 位的二进制数据并行计算，而它们可以分别用 2 位、4 位、8 位的十六进制数表示，因此使用 16 进制书写程序更加方便与简洁。下面的表格，将会列出不同进制数值之间的对照：</p>
+<table>
+<thead>
+<tr>
+<th>十进制 Decimal</th>
+<th>二进制 Binary</th>
+<th>八进制 Octal</th>
+<th>十六进制 Hexadecimal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>00</code></td>
+<td><code>0 0 0 0</code></td>
+<td><code>00</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>01</code></td>
+<td><code>0 0 0 1</code></td>
+<td><code>01</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>02</code></td>
+<td><code>0 0 1 0</code></td>
+<td><code>02</code></td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>03</code></td>
+<td><code>0 0 1 1</code></td>
+<td><code>03</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>04</code></td>
+<td><code>0 1 0 0</code></td>
+<td><code>04</code></td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>05</code></td>
+<td><code>0 1 0 1</code></td>
+<td><code>05</code></td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>06</code></td>
+<td><code>0 1 1 0</code></td>
+<td><code>06</code></td>
+<td><code>6</code></td>
+</tr>
+<tr>
+<td><code>07</code></td>
+<td><code>0 1 1 1</code></td>
+<td><code>07</code></td>
+<td><code>7</code></td>
+</tr>
+<tr>
+<td><code>08</code></td>
+<td><code>1 0 0 0</code></td>
+<td><code>10</code></td>
+<td><code>8</code></td>
+</tr>
+<tr>
+<td><code>09</code></td>
+<td><code>1 0 0 1</code></td>
+<td><code>11</code></td>
+<td><code>9</code></td>
+</tr>
+<tr>
+<td><code>10</code></td>
+<td><code>1 0 1 0</code></td>
+<td><code>12</code></td>
+<td><code>A</code></td>
+</tr>
+<tr>
+<td><code>11</code></td>
+<td><code>1 0 1 1</code></td>
+<td><code>13</code></td>
+<td><code>B</code></td>
+</tr>
+<tr>
+<td><code>12</code></td>
+<td><code>1 1 0 0</code></td>
+<td><code>14</code></td>
+<td><code>C</code></td>
+</tr>
+<tr>
+<td><code>13</code></td>
+<td><code>1 1 0 1</code></td>
+<td><code>15</code></td>
+<td><code>D</code></td>
+</tr>
+<tr>
+<td><code>14</code></td>
+<td><code>1 1 1 0</code></td>
+<td><code>16</code></td>
+<td><code>E</code></td>
+</tr>
+<tr>
+<td><code>15</code></td>
+<td><code>1 1 1 1</code></td>
+<td><code>17</code></td>
+<td><code>F</code></td>
+</tr>
+</tbody></table>
+<h4 id="二-➜-十转换"><a href="#二-➜-十转换" class="headerlink" title="二 ➜ 十转换"></a>二 ➜ 十转换</h4><p>将二进制展开后，将各项的值按照十进制数相加，即可得到相应的十进制数值。例如：下面例子中二进制数<code>(1011.01)B</code>转换为十进制数的结果为<code>(11.25)D</code>。</p>
+<h4 id="十-➜-二转换"><a href="#十-➜-二转换" class="headerlink" title="十 ➜ 二转换"></a>十 ➜ 二转换</h4><p>对于十进制数的整数部分，将十进制数除以<code>2</code>之后，用所得到的商再反复除以<code>2</code>，直至余数为<code>0</code>时为止，每次得到的余数即为二进制数整数部分每一位的数值。对于十进制数的小数部分，则可以将该小数乘以<code>2</code>，直至乘积小数部分全部为<code>0</code>为止，每次得到乘积的整数部分即为该二进制数小数部分每一位的数值。例如：下面例子中十进制数<code>(213)D</code>转换为二进制数的结果为<code>(10101010.1101)B</code>。</p>
+<pre><code class="hljs">// 首先，处理整数部分
+213 ÷ 2 = 106 余  1
+106 ÷ 2 = 53  余  0
+ 53 ÷ 2 = 26  余  1
+ 26 ÷ 2 = 13  余  0
+ 13 ÷ 2 = 6   余  1
+  6 ÷ 2 = 3   余  0
+  3 ÷ 2 = 1   余  1
+  1 ÷ 2 = 0.5 余  0
+// 然后，处理小数部分
+0.8125 × 2 = 1.6250  整数部分 1
+0.6250 × 2 = 1.2500  整数部分 1
+0.2500 × 2 = 0.5000  整数部分 0
+0.5000 × 2 = 1.0000  整数部分 1
+</code></pre>
+<h4 id="二-➜-十六转换"><a href="#二-➜-十六转换" class="headerlink" title="二 ➜ 十六转换"></a>二 ➜ 十六转换</h4><p>由于 4 位二进制数拥有个状态，其进位输出正好为逢十六进一，因而只需要将二进制数的整数部分<strong>从低位到高位</strong>、小数部分<strong>从高位到低位</strong>每 4 个二进制数分为一组，每组都转换为相应的十六进制值，最后组合起来的的结果即为最终的十六进制数。例如：下面例子中二进制数<code>(010111011110.11010010)B</code>转换为十六进制数的结果为<code>(5DE.B2)H</code>。</p>
+<pre><code class="hljs">0101 1101 1110 . 1101 0010
+↓    ↓    ↓      ↓    ↓
+5    D    E    . B    2
+</code></pre>
+<h4 id="十六-➜-二转换"><a href="#十六-➜-二转换" class="headerlink" title="十六 ➜ 二转换"></a>十六 ➜ 二转换</h4><p>将上面二进制转换十六进制数值的过程逆转过来，即十六进制数的每一位使用等值的 4 位二进制数代替。例如：下面例子十六进制数<code>(C1B.C6)H</code>转换为二进制数的结果为<code>(110000011011.11000110)B</code>。</p>
+<pre><code class="hljs">C    1    B    . C    6
+↓    ↓    ↓      ↓    ↓
+1100 0001 1011 . 1100 0110
+</code></pre>
+<h4 id="二-➜-八转换"><a href="#二-➜-八转换" class="headerlink" title="二 ➜ 八转换"></a>二 ➜ 八转换</h4><p>转换方式与二转十六进制类似，将二进制数的整数部分<strong>从低位到高位</strong>、小数部分<strong>从高位到低位</strong>每 3 个二进制数分为一组，每组都转换为相应的八进制值，组合后即为最后的八进制结果。例如：下面例子二进制数<code>(011110.010111)B</code>转换为八进制数的结果为<code>(36.27)O</code>。</p>
+<pre><code class="hljs">    011  110 .  010  111
+↓    ↓      ↓    ↓
+3    6   .  2    7
+</code></pre>
+<h4 id="八-➜-二转换"><a href="#八-➜-二转换" class="headerlink" title="八 ➜ 二转换"></a>八 ➜ 二转换</h4><p>同样的，将二转八进制的过程逆转，即八进制数的每一位都使用等值的 4 位二进制数代替。例如：下面例子八进制数<code>(52.43)O</code>转换为二进制数结果为<code>(101010.100011)B</code>。</p>
+<pre><code class="hljs">5    2   .  4    3
+↓    ↓      ↓    ↓
+101  010 .  100  011
+</code></pre>
+<h4 id="十六-➜-十转换"><a href="#十六-➜-十转换" class="headerlink" title="十六 ➜ 十转换"></a>十六 ➜ 十转换</h4><p>将十六进制数按照<strong>位权</strong>进行展开，然后将各项数值按照十进制数相加，最后得到的结果即为十进制数。例如：下面例子十六进制数<code>(2A.7F)H</code>转换为十进制的结果为<code>(13.625)D</code>。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232202920.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="十-➜-十六转换"><a href="#十-➜-十六转换" class="headerlink" title="十 ➜ 十六转换"></a>十 ➜ 十六转换</h4><p>一种方法是先将十进制数转换为二进制数，然后再将得到的二进制数转换为等值的十六进制数。另外一种方式则是将十进制数除以<code>16</code>取余，直到商为<code>0</code>为止，然后将余数<strong>从下往上组合</strong>即为转换后的十六进制结果。例如：下面例子十进制数<code>(150)D</code>转换为十六进制的结果为<code>(96)H</code>。</p>
+<pre><code class="hljs">    150 ÷ 16 = 144 余  6
+    9 ÷ 16 = 0   余  9
+</code></pre>
+<blockquote>
+<p>十进制转八进制的方式也类似，只是此时十进制数需要除以的是数值<code>8</code>，然后从下至上进行取余即可。</p>
+</blockquote>
+<h3 id="码制"><a href="#码制" class="headerlink" title="码制"></a>码制</h3><p>码制是计算机存储、传输数据所使用的编码规则；其中原码、反码、补码是计算机设备保存数值类型数据的编码方式，ASCII 与 Unicode 属于保存字符类型数据的编码格式；而 BCD 编码、格雷码则主要用于设备之间的数据传输以及转换。</p>
+<h4 id="bit-与-Byte"><a href="#bit-与-Byte" class="headerlink" title="bit 与 Byte"></a>bit 与 Byte</h4><ul>
+<li><strong>bit 比特</strong>：二进制中的一位，数字信息的最小单位。其中缩略词<code>kb</code>（_kilobit_）表示千比特。</li>
+<li><strong>Byte 字节</strong>：1 字节（_Byte_）&#x3D; 8 比特（_bit_）。其中缩略词<code>KB</code>（_kilobyte_）表示千字节。</li>
+</ul>
+<h4 id="原码、反码、补码"><a href="#原码、反码、补码" class="headerlink" title="原码、反码、补码"></a>原码、反码、补码</h4><p>二进制数前增加一个符号位来标识正负（符号位为<code>0</code>表示<code>+</code>正数，符号位是<code>1</code>表示<code>-</code>负数），这样的二进制数称为<strong>原码</strong>。如果原码为<strong>正数</strong>，则原码与其反码和补码相同。如果原码为<strong>负数</strong>，则将原码除符号位之外按位取反，所得的新二进制数称为该原码的<strong>反码</strong>，反码基础上再加<code>1</code>即为该原码的<strong>补码</strong>。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232201300.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h4><p>字符编码（Character encoding）是对于特定字符集内字符的一种编码方式，以便于在计算机中存储或者通过网络进行传输，ASCII 和 Unicode 是目前计算机当中使用较为广泛的<strong>字符编码</strong>格式。</p>
+<h5 id="ASCII-码"><a href="#ASCII-码" class="headerlink" title="ASCII 码"></a>ASCII 码</h5><p>ASCII（_[ˈæski]，American Standard Code for Information Interchange，美国信息交换标准代码_）是一套主要用于显示现代美国英语的计算机编码系统，由 7 位二进制编码组成，共有 128 个，其中包括表示数字<code>0</code>到<code>9</code>的十个代码、大小写英文字母的 52 个代码、34 个符号代码以及 34 个控制代码，即仅能显示 26 个基本拉丁字母、阿拉伯数字、英式标点符号，具体的编码情况请见下表：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232201644.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="Unicode-码"><a href="#Unicode-码" class="headerlink" title="Unicode 码"></a>Unicode 码</h5><p>Unicode（_统一字符编码_）能够对世界上大部分文字系统进行了编码，使得多国文字的处理和呈现更加简单。Unicode 标准至今仍在不断修订，最新版本为 2018 年 6 月 5 日公布的<code>11.0.0</code>。Unicode 通常使用 2 个字节（即 16 个位）来表示一个字符，并且能够完整兼容 ASCII 码（高位补<code>0</code>即可）。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232200542.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="二-十进制编码"><a href="#二-十进制编码" class="headerlink" title="二-十进制编码"></a>二-十进制编码</h4><p>二-十进制编码（BCD，Binary-Coded Decimal）是一种<strong>十进制数字</strong>的编码格式，十进制数 0 至 9 拥有十个状态，至少需要 4 位二进制代码来表示（_4 位二进制代码共有十六种状态，即从<code>0000</code>到<code>1111</code>_），具体取这二进制当中的哪十种状态与 0 至 9 的十进制数对应，常用的有如下几种编码方式：</p>
+<ul>
+<li><strong>8421 码</strong>：最为常用的一种<strong>BCD 码</strong>，各位的权值分别为<code>8</code>-<code>4</code>-<code>2</code>-<code>1</code>。</li>
+<li><strong>余 3 码</strong>：由 8421 码的每个编码组加<code>3</code>（_<code>0011</code>_）形成，常用于 BCD 码运算电路。</li>
+<li><strong>2421 码</strong>：有权，从高位到低位的权值分别为<code>2</code>-<code>4</code>-<code>2</code>-<code>1</code>，其<code>0</code>和<code>9</code>、<code>1</code>和<code>8</code>、<code>2</code>和<code>7</code>、<code>3</code>和<code>6</code>、<code>4</code>和<code>5</code>互为反码。</li>
+<li><strong>5211 码</strong>：有权，从高位到低位的权值分别为<code>5</code>-<code>2</code>-<code>1</code>-<code>1</code>，5211 码每一位的权与 8421 码十进制计数器 4 个触发器输出脉冲的分频比相对应，这对于某些数字电路的设计非常有用。</li>
+<li><strong>余 3 循环码</strong>：位权可变，每一位的<code>1</code>在不同代码中代表不同的值，主要特点是两个代码之间仅有一位的状态不同。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>十进数</th>
+<th>8421 码</th>
+<th>余 3 码</th>
+<th>2421 码</th>
+<th>5211 码</th>
+<th>余 3 循环码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>位权</strong></td>
+<td><strong><code>8 4 2 1</code></strong></td>
+<td>-——–</td>
+<td><strong><code>2 4 2 1</code></strong></td>
+<td><strong><code>5 2 1 1</code></strong></td>
+<td>-——–</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td><code>0 0 0 0</code></td>
+<td><code>0 0 1 1</code></td>
+<td><code>0 0 0 0</code></td>
+<td><code>0 0 0 0</code></td>
+<td><code>0 0 1 0</code></td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><code>0 0 0 1</code></td>
+<td><code>0 1 0 0</code></td>
+<td><code>0 0 0 1</code></td>
+<td><code>0 0 0 1</code></td>
+<td><code>0 1 1 0</code></td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td><code>0 0 1 0</code></td>
+<td><code>0 1 0 1</code></td>
+<td><code>0 0 1 0</code></td>
+<td><code>0 1 0 0</code></td>
+<td><code>0 1 1 1</code></td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td><code>0 0 1 1</code></td>
+<td><code>0 1 1 0</code></td>
+<td><code>0 0 1 1</code></td>
+<td><code>0 1 0 1</code></td>
+<td><code>0 1 0 1</code></td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td><code>0 1 0 0</code></td>
+<td><code>0 1 1 1</code></td>
+<td><code>0 1 0 0</code></td>
+<td><code>0 1 1 1</code></td>
+<td><code>0 1 0 0</code></td>
+</tr>
+<tr>
+<td><code>5</code></td>
+<td><code>0 1 0 1</code></td>
+<td><code>1 0 0 0</code></td>
+<td><code>1 0 1 1</code></td>
+<td><code>1 0 0 0</code></td>
+<td><code>1 1 0 0</code></td>
+</tr>
+<tr>
+<td><code>6</code></td>
+<td><code>0 1 1 0</code></td>
+<td><code>1 0 0 1</code></td>
+<td><code>1 1 0 0</code></td>
+<td><code>1 0 0 1</code></td>
+<td><code>1 1 0 1</code></td>
+</tr>
+<tr>
+<td><code>7</code></td>
+<td><code>0 1 1 1</code></td>
+<td><code>1 0 1 0</code></td>
+<td><code>1 1 0 1</code></td>
+<td><code>1 1 0 0</code></td>
+<td><code>1 1 1 1</code></td>
+</tr>
+<tr>
+<td><code>8</code></td>
+<td><code>1 0 0 0</code></td>
+<td><code>1 0 1 1</code></td>
+<td><code>1 1 1 0</code></td>
+<td><code>1 1 0 1</code></td>
+<td><code>1 1 1 0</code></td>
+</tr>
+<tr>
+<td><code>9</code></td>
+<td><code>1 0 0 1</code></td>
+<td><code>1 1 0 0</code></td>
+<td><code>1 1 1 1</code></td>
+<td><code>1 1 1 1</code></td>
+<td><code>1 0 1 0</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>BCD 码的优点在于格式转换容易，十进制数值表达精度较高；缺点是增加了电路进行算术运算的复杂度，并且存储效率较低。</p>
+</blockquote>
+<h4 id="格雷码"><a href="#格雷码" class="headerlink" title="格雷码"></a>格雷码</h4><p>格雷码（Gray Code）又称为循环码，属于可靠性编码，是一种错误最小化的编码方式。早期主要用于通信，目前主要用于模数转换。格雷码的优点在于编码顺序变化，不会因为个别位的瞬态变化而导致信号出错。例如，下面表格中第 4 行的二进制代码<code>0011</code>转换为第 5 行的<code>0100</code>时，如果最右边一位的状态变化慢于其它两位，则会在瞬间出现一个<code>0101</code>的中间状态，从而影响电路和信号的正常工作。但是如果改用第 4 行的格雷码<code>0010</code>向第 5 行的<code>0110</code>转换，由于发生变化的只有一位，因此并不会产生类似的中间状态，进而保证电路的正常工作以及信号的完整性。</p>
+<table>
+<thead>
+<tr>
+<th>编码顺序</th>
+<th>二进制代码</th>
+<th>格雷码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>0</code></td>
+<td><code>0 0 0 0</code></td>
+<td><code>0 0 0 0</code></td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><code>0 0 0 1</code></td>
+<td><code>0 0 0 1</code></td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td><code>0 0 1 0</code></td>
+<td><code>0 0 1 1</code></td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td><code>0 0 1 1</code></td>
+<td><code>0 0 1 0</code></td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td><code>0 1 0 0</code></td>
+<td><code>0 1 1 0</code></td>
+</tr>
+<tr>
+<td><code>5</code></td>
+<td><code>0 1 0 1</code></td>
+<td><code>0 1 1 1</code></td>
+</tr>
+<tr>
+<td><code>6</code></td>
+<td><code>0 1 1 0</code></td>
+<td><code>0 1 0 1</code></td>
+</tr>
+<tr>
+<td><code>7</code></td>
+<td><code>0 1 1 1</code></td>
+<td><code>0 1 0 0</code></td>
+</tr>
+<tr>
+<td><code>8</code></td>
+<td><code>1 0 0 0</code></td>
+<td><code>1 1 0 0</code></td>
+</tr>
+<tr>
+<td><code>9</code></td>
+<td><code>1 0 0 1</code></td>
+<td><code>1 1 0 1</code></td>
+</tr>
+<tr>
+<td><code>10</code></td>
+<td><code>1 0 1 0</code></td>
+<td><code>1 1 1 1</code></td>
+</tr>
+<tr>
+<td><code>11</code></td>
+<td><code>1 0 1 1</code></td>
+<td><code>1 1 1 0</code></td>
+</tr>
+<tr>
+<td><code>12</code></td>
+<td><code>1 1 0 0</code></td>
+<td><code>1 0 1 0</code></td>
+</tr>
+<tr>
+<td><code>13</code></td>
+<td><code>1 1 0 1</code></td>
+<td><code>1 0 1 1</code></td>
+</tr>
+<tr>
+<td><code>14</code></td>
+<td><code>1 1 1 0</code></td>
+<td><code>1 0 0 1</code></td>
+</tr>
+<tr>
+<td><code>15</code></td>
+<td><code>1 1 1 1</code></td>
+<td><code>1 0 0 0</code></td>
+</tr>
+</tbody></table>
+<h4 id="奇偶校验位"><a href="#奇偶校验位" class="headerlink" title="奇偶校验位"></a>奇偶校验位</h4><p>奇偶校验位（parity bit）用来表达一组二进制编码中<code>0</code>或<code>1</code>的个数是奇数还是偶数，是一种简单有效的错误检测方式。</p>
+<h2 id="逻辑门"><a href="#逻辑门" class="headerlink" title="逻辑门"></a>逻辑门</h2><p>逻辑门是大规模数字集成电路的基本构成单元，主要由晶体管组成，通过输入高、低电平得到相应的电平结果，从而实现逻辑运算。逻辑门常用的表示法有<strong>ANSI&#x2F;IEEE</strong>（_美国国家标准协会&#x2F;电机电子工程师学会_）和<strong>IEC</strong>（_国际电工委员会_）两种，如下面表格所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232159033.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232200830.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232200026.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="数字电路概念"><a href="#数字电路概念" class="headerlink" title="数字电路概念"></a>数字电路概念</h2><h3 id="高阻态"><a href="#高阻态" class="headerlink" title="高阻态"></a>高阻态</h3><p>高阻抗状态（_High impedance_）表示电路中的某个节点具有相对电路中其它点更高的阻抗，电路分析时通常将高阻态作为开路理解。即可以将其视为输出&#x2F;输入电阻极大，极限状态可以认为是悬空（_断路_）的状态，高阻态通常使用字母<strong>Z</strong>表示。</p>
+<h3 id="三态门"><a href="#三态门" class="headerlink" title="三态门"></a>三态门</h3><p>数字电路中的三态逻辑（_Three-state logic_）是指其输出既可以是代表<code>0</code>和<code>1</code>的高低电平，也可以是其特有的高阻抗状态（_相当于隔断状态，电阻极大，类似于开路_）。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232159151.png" srcset="/img/loading.gif" lazyload></p>
+<p>具有高电平、低电平、高阻态三种状态的元器件称为三态器件，三态器件都通过一个控制使能端 B 来控制整个三态门电路的通断。当使能端高电平有效时，三态器件可以正常的<code>0</code>或<code>1</code>输出，当使能端低电平无效时，三态电路将会输出高阻态。</p>
+<table>
+<thead>
+<tr>
+<th>输入端 A</th>
+<th>使能端 B</th>
+<th>输出端 C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>0</code></td>
+<td><code>1</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><code>1</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td><code>0</code></td>
+<td><code>Z</code></td>
+</tr>
+</tbody></table>
+<h3 id="CMOS-与-TTL-电平"><a href="#CMOS-与-TTL-电平" class="headerlink" title="CMOS 与 TTL 电平"></a>CMOS 与 TTL 电平</h3><p>TTL 电路的工作电平称为<u>TTL 电平</u>，CMOS 电路的工作电平称为<u>CMOS 电平</u>。TTL 和 CMOS 是目前最主要的两种逻辑门集成电路，TTL 电路是电流控制器件，而 CMOS 电路是电压控制器件。TTL 速度较快，CMOS 速度慢但省电成本更低。但是近几年伴随 CMOS 技术的进步，其速度已经逐步超越 TTL。相对而言，TTL 目前发展比较缓慢，主要用于制作一些简单的数字电路。</p>
+<ul>
+<li><strong>互补金属氧化物半导体</strong>（_CMOS，Complementary Metal-Oxide-Semiconductor_）是电压控制的一种放大器件，是组成 CMOS 数字集成电路的基本单元，生产工艺是在硅质晶圆上制作 NMOS（_n-type MOSFET_）和 PMOS（_p-type MOSFET_）基本元件，是硅芯片制作的主流技术。<strong>TTL 电平标准</strong>为输出（<code>低&lt;0.8V，高&gt;2.4V</code>）、输入（<code>低&lt;1.2V，高&gt;2.0V</code>），输入低于 1.2V 为低电平，高于 2.0V 为高电平，输入低电平时噪声容限为(0.8-0)&#x2F;2&#x3D;0.4V，高电平时噪声容限为(5-2.4)&#x2F;2&#x3D;1.3V。</li>
+<li><strong>晶体管-晶体管逻辑半导体</strong>（_TTL，Transistor-Transistor Logic_）主要由电阻器和晶体管组成，最早由德州仪器开发，当前的生产厂家沿用了德州仪器的编码命名规则，比如常用的 74 系列逻辑芯片。<strong>CMOS 电平标准</strong>为输出（<code>低&lt;0.1×Vcc，高&gt;0.9×Vcc</code>）、输入（<code>低&lt;0.3×Vcc，高&gt;0.7×Vcc</code>），因为 CMOS 电源通常采用 12V，则输入低于 3.6V 为低电平，噪声容限为 1.8V；高于 3.5V 为高电平，噪声容限高为 1.8V，相比 TTL 噪声容限更高。</li>
+</ul>
+<h3 id="组合-时序逻辑电路"><a href="#组合-时序逻辑电路" class="headerlink" title="组合&#x2F;时序逻辑电路"></a>组合&#x2F;时序逻辑电路</h3><ul>
+<li><strong>组合逻辑电路</strong>（_Combinational Logic Circuit_），其任一时刻的稳态输出仅与该时刻输入的变量取值有关，而与该时刻之前输入的变量取值无关。组合电路主要由各种逻辑门（<code>半加器</code>、<code>全加器</code>、<code>半减器</code>、<code>全减器</code>、<code>数据选择器</code>、<code>数据分配器</code>、<code>编码器</code>、<code>译码器</code>）组成，电路中没有记忆元件和反馈线。</li>
+<li><strong>时序逻辑电路</strong>（_Sequential Logic Circuit_）任意时刻的稳态输出不仅取决于当前输入，还与前一时刻输入的状态有关，换而言之，时序逻辑电路必须拥有特定的储存元件来保存前一次的输入状态。因此，时序逻辑电路除包含有组合逻辑电路以外，还必须含拥有存储信息能力的电路（<code>触发器</code>、<code>寄存器</code>、<code>计数器</code>）。</li>
+</ul>
+<h2 id="微控制器技术"><a href="#微控制器技术" class="headerlink" title="微控制器技术"></a>微控制器技术</h2><h3 id="GPIO"><a href="#GPIO" class="headerlink" title="GPIO"></a>GPIO</h3><p><strong>通用输入输出</strong>（_General-purpose input&#x2F;output_），功能类似于 8051 单片机的 P0 到 P3 口，引脚输出的高低电平可由开发人员读写相应寄存器进行控制。该接口有时也称为<strong>总线扩展器</strong>，当开发板接口不够用时，可以通过转接板将其扩展为<code>I²C</code>、<code>SPI</code>等其它串行接口。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232158406.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h3><p>嵌入式微处理器通常是根据时间片串行处理任务，因此对于外围 IO 设备的访问也是串行的（_即单一时间内处理器只能访问一个外设_）。</p>
+<p><strong>总线</strong>（_Bus_）是嵌入式微处理器连接外围 IO 设备的一条公共信号线，外围 IO 设备之间通过地址进行区分，因此总线又分为数据总线（_Data Bus_）、地址总线（_Address Bus_）、控制总线（_Control Bus_）。通常情况下，个人电脑 PC 的三类总线是分开的，但是 51 系列单片机复用了地址总线与数据总线（_总线某些时刻的信号表示数据而另一些时刻表示地址_）。<strong>总线带宽</strong>是指单位时间内可以传输的数据总量，等于总线位宽与工作频率的乘积。例如 64 位 800MHz 的前端总线，其数据传输率等于<code>64bit × 800MHz ÷ 8Byte = 6.4GB/s</code>。</p>
+<p>总线通常具有如下两种数据传输方式：</p>
+<ul>
+<li><strong>并行通信</strong>：各数据位在多条线上以字或字节为单位同时进行传输，优点是速度快，缺点是通信线路较多因而成本较高，不宜进行远距离传输。常见的并行总线有：<code>VGA</code>、<code>DVI</code>、<code>HDMI</code>。</li>
+<li><strong>串行通信</strong>：数据依次逐位在一条数据线上进行传递，每一位数据占据一个固定的时间长度，优点是适宜远距离通信，缺点是传输效率相对较低。常见的串行总线有：<code>I²C</code>、<code>SPI</code>、<code>USB</code>、<code>SATA</code>。</li>
+</ul>
+<p>串行通信的数据传输<strong>方式</strong>分为<code>同步</code>、<code>异步</code>两种：</p>
+<ul>
+<li><strong>同步</strong>：连续串行传送数据的通信方式，每次只传送一帧信息，每帧信息包含有<code>同步字符</code>、<code>数据字符</code>、<code>校验字符</code>。其中<code>同步字符</code>位于帧开头，用于确认数据字符的开始；数据字符在同步字符之后，个数没有限制，由所需传输的数据块长度来决定；校验字符通常为 1 到 2 个，用于接收端对接收到的字符序列进行正确性校验。同步通信要求发送时钟和接收时钟保持严格的同步。</li>
+<li><strong>异步</strong>：数据逐帧进行传输，工作时钟相互独立，需要保证双方具有相同的波特率。帧与帧之间的时间间隔任意，间隙为高电平。异步通信的每帧数据都拥有固定格式，双方按照即定格式发送和接收，硬件结构比同步通信简单，还能利用校验位检测错误，嵌入式微处理器中广泛采用异步通信方式。</li>
+</ul>
+<p>串行通信的数据传输<strong>方向</strong>分为<code>单双工</code>、<code>半双工</code>、<code>全双工</code>三种：</p>
+<ul>
+<li><strong>单双工</strong>：数据只能由 A 发送至 B；</li>
+<li><strong>半双工</strong>：A 和 B 之间能够互相发送，但是不能在两个方向同时传送，每次只能一个设备发送另一个设备接收；</li>
+<li><strong>全双工</strong>：允许 AB 双方同时进行发送和接收。</li>
+</ul>
+<p><strong>波特率</strong>用来代表串行通信的传输速率，代表串口通信过程中二进制数据位的速率，即每发送一位二进制数据的持续时间。<br>    &gt;&gt;</p>
+<h3 id="I²C"><a href="#I²C" class="headerlink" title="I²C"></a>I²C</h3><p><strong>集成电路总线</strong>（_Inter-Integrated Circuit_），是由 PHILIPS 公司开发的两线式、多主从架构的同步串行通信总线，I²C 总线硬件上由时钟总线（_SCL_）和数据总线（_SDA_）两条线构成，SCL 时钟线负责收发双方的时钟节拍，SDA 数据线则负责传输数据。Linux 已经将 I²C 总线列入其内核模块的支持，可以通过<code>/usr/include/linux/i2c.h</code>查找其说明。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232158858.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>I²C 主要用于板内通信，例如微处理器与外围芯片的通信。</p>
+</blockquote>
+<h3 id="UART"><a href="#UART" class="headerlink" title="UART"></a>UART</h3><p><strong>通用异步收发传输器</strong>（_Universal Asynchronous Receiver&#x2F;Transmitter_）是异步串行通信接口的总称，包括<code>RS232</code>、<code>RS449</code>、<code>RS423</code>、<code>RS422</code>、<code>RS485</code>等接口标准规范和总线标准规范。台式电脑串行接口默认采用<code>RS232</code>规范，笔记本上可以通过 USB 转串口工具进行代替。串口通信时，收发双方必须保持相同的波特率。</p>
+<p>51 系列单片机提供<code>P3.0</code>引脚（_RXD，串行数据接收引脚_）和<code>P3.1</code>引脚（_TXD，串行数据发送引脚_）进行 UART 串行通信，下图当中通过 2 块 MCU 的 RXD 和 TXD 对应连接实现了相互之间的通信。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232158205.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>UART 通常用于板间设备间的通信，例如单片机与电脑或者设备与设备之间。</p>
+</blockquote>
+<h3 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h3><p><strong>串行外设接口</strong>（_Serial Peripheral Interface Bus_），是一种应用于单片机系统中的全双工同步串行通信接口规范，类似于 I²C 总线。该接口首先由 Motorola 开发，然后发展为行业规范，典型应用包括 SD 卡和液晶显示屏。 SPI 设备之间使用全双工模式通信，包含一个主机和多个从机。主机产生待读写的帧数据，多个从机通过一条片选线路来决定哪个设备来响应主机的请求，标准 SPI 由 4 根连接导线组成：</p>
+<ol>
+<li><strong>SCLK</strong>（_Serial Clock_）：时钟信号，由主机发出，与 I²C 总线的 SCL 功能类似。</li>
+<li><strong>MOSI</strong>（_Master Output,Slave Input_）：主机<strong>向</strong>从机发送指令和数据的通道。</li>
+<li><strong>MISO</strong>（_Master Input,Slave Output_）：主机<strong>读取</strong>从机状态和数据的通道。</li>
+<li><strong>SS</strong>（_Slave Selected_）：从设备片选使能信号，通常低电位有效。如果从设备低电位有效，拉低该引脚从设备就会被选中。</li>
+</ol>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232157549.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>某些场景下，可以将标准 SPI 剪裁至<strong>2 线</strong>或<strong>3 线</strong>进行通信，例如主机只向从机发送数据但不需要从机回复数据的时候可以省略 MISO，或者系统只拥有一个主机一个从机的时候，从机的片选可以固定为使能状态，则 SSEL 可以取消。</p>
+</blockquote>
+<h3 id="时钟-机器-指令周期"><a href="#时钟-机器-指令周期" class="headerlink" title="时钟&#x2F;机器&#x2F;指令周期"></a>时钟&#x2F;机器&#x2F;指令周期</h3><p><strong>时钟周期</strong>：时序中最小的时间单位，计算的方法是<code>1/时钟源频率</code>，例如采用<code>12MHz</code>晶振的 8051 单片机系统，其时钟周期为<code>1/12</code>秒。 <strong>机器周期</strong>：单片机系统完成一个操作的最小时间单位，主要针对汇编语言而言，汇编语言程序每条语句的执行时间总是机器周期的整数倍。C 语言程序语句执行时间并不确定，只能通过开发手册提供的公式进行计算；例如标准 8051 单片机架构<code>1</code>个机器周期等于<code>12</code>个时钟周期，即<code>12*(1/12)</code>。对于其它运行速度更快的单片机系统，<code>1</code>个机器周期可能等于<code>1</code>个或<code>4</code>个时钟周期。 <strong>指令周期</strong>：时序中的最大时间单位，是指取出一条指令并分析执行的时间，一般由若干个机器周期组成。传统 8051 单片机的指令周期是单周期指令，即<code>指令周期 = 机器周期</code>，目前新推出的单片机已经不分频并且保持单指令周期，即<code>指令周期 = 机器周期 = 时钟周期</code>。</p>
+<h3 id="时序"><a href="#时序" class="headerlink" title="时序"></a>时序</h3><p>嵌入式微处理器的时序是指<strong>执行指令时所发出控制信号的时间序列</strong>，本质是一系列具有时间顺序的脉冲信号。CPU 发出的时序用于控制片内资源，也用于控制片外的存储器以及 I&#x2F;O 端口，后者对于硬件电路分析极为重要，了解 IC 芯片的操作时序是嵌入式编程的一项重要工作内容。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232157710.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="片选"><a href="#片选" class="headerlink" title="片选"></a>片选</h3><ul>
+<li><strong>总线元器件的片选</strong>：嵌入式系统中许多元器件都挂载在一条总线上，如果需要对指定的元器件进行访问，就需要一个使能信号来告知元器件该信号是传递给哪个的。这个信号就叫做片选信号<strong>CS</strong>（_Chip Select_）、<strong>CE</strong>(<em>Chip Enable</em>)、<strong>SS</strong>(<em>Slave Select</em>)。数字电路当中，开路输入管脚通常呈现为高电平，因此片选信号多数情况下是一个低电平。</li>
+<li><strong>存储芯片的片选</strong>：存储器往往要是由一定数量的芯片构成，微处理器要实现对存储单元的访问，首先要选择存储芯片，即进行<strong>片选</strong>；然后再从选中的存储芯片依据地址码选中相应存储单元进行数据的存取，这称为<strong>字选</strong>。片内的字选是由 CPU 送出的 N 条低位地址线完成，地址线连接到全部存储芯片的地址输入端，而片选信号则大多是通过高位地址译码后产生的。</li>
+</ul>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>寄存器（_Register_）是中央处理器内部的组成部分，存储速度极快。可用来暂存指令、数据、地址，中央处理器控制部件中包含有<code>指令寄存器</code>和<code>程序计数器</code>两类寄存器，中央处理器算术及逻辑部件中包含的寄存器主要是有<code>累加器</code>。</p>
+<h3 id="译码器"><a href="#译码器" class="headerlink" title="译码器"></a>译码器</h3><p>译码器（_Decoder_）是一种<strong>多输入多输出</strong>的组合逻辑电路，负责将二进制代码翻译为特定的逻辑电平。译码器主要分为<strong>通用译码器</strong>（_较少输入变为较多输出，例如线译码器和 8421BCD 译码器_）、<strong>数字显示译码器</strong>（_将二进制数转换成对应的七段码，用于驱动 LED 或 LCD_）两大类。</p>
+<h3 id="缓冲器"><a href="#缓冲器" class="headerlink" title="缓冲器"></a>缓冲器</h3><p>缓冲寄存器（_Buffer_），分为输入和输出两种类型，输入缓冲寄存器的作用是暂时存放外设发送过来的数据，便于嵌入式处理器取用；输出缓冲寄存器则暂时存放处理器发送给外设的数据。缓冲寄存器可以协调并缓冲高速工作的 CPU 与慢速工作的 IO 外设，以实现数据传送的同步。因为缓冲器直接挂载至数据总线，因而必须具备三态输出功能。</p>
+<h3 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h3><p>锁存器（_Latch_）可以将信号暂时保存并维持特定的电平状态，从而能够去记录二进制数字信号<code>0</code>和<code>1</code>。4 位锁存器可以存储<code>4Byte</code>数据，8 位锁存器可以存储<code>8Byte</code>数据。</p>
+<h3 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h3><p>触发器（<em>Flip-flop_）是一个拥有记忆功能并且具备 2 个稳定状态（</em><code>0</code>和<code>1</code>_）的信息存储器件，是构成多种时序电路的基本逻辑单元。数字电路中的存储单元常常需要在同一时刻进行协同工作，因此每个存储单元都使用时钟脉冲（_CLK_）作为控制信号，只有其才能触发电路开始工作并根据输入信号进行相应输出，这种时钟信号触发工作的存储单元电路即触发器。而上面描述的锁存器，是不需要时钟信号进行控制的。</p>
+<h3 id="比较器"><a href="#比较器" class="headerlink" title="比较器"></a>比较器</h3><p>比较器（_Comparator_）是通过比较两个输入端的电流或电压的大小，在输出端输出不同电压结果的电子元件。常用于模数转换电路中，可以将比较器理解为一个只有 1 位的 ADC 模&#x2F;数转换器。</p>
+<h2 id="原理图常用缩写"><a href="#原理图常用缩写" class="headerlink" title="原理图常用缩写"></a>原理图常用缩写</h2><p>下面的表格列出了电路原理图当中常用的英文缩写：</p>
+<table>
+<thead>
+<tr>
+<th>英文缩写</th>
+<th>英文缩写</th>
+<th>英文缩写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CS</strong>：<code>Chip Select</code>，片选</td>
+<td><strong>RST</strong>：<code>Reset</code>，重启</td>
+<td><strong>TP</strong>：<code>Touch Panel</code>，触摸屏</td>
+</tr>
+<tr>
+<td><strong>INT</strong>：<code>Interrupt</code>，中断</td>
+<td><strong>PD</strong>：<code>Power Down</code>，断电</td>
+<td><strong>CLK</strong>：<code>Clock</code>，时钟</td>
+</tr>
+<tr>
+<td><strong>CTRL</strong>：<code>Control</code>，控制</td>
+<td><strong>SW</strong>：<code>Switch</code>，开关</td>
+<td><strong>PWM</strong>：<code>Pulse Width Modulation</code>，脉冲宽度调制</td>
+</tr>
+<tr>
+<td><strong>FB</strong>：<code>Feedback</code>，反馈</td>
+<td><strong>A&#x2F;D</strong>：<code>Analog/Digital</code>，模拟和数字的</td>
+<td><strong>D</strong>：<code>DATA</code>，数据</td>
+</tr>
+<tr>
+<td><strong>A</strong>：<code>Address</code>，地址线</td>
+<td><strong>TX&#x2F;RX</strong>：<code>Transmit/Receive</code>，发送和接收</td>
+<td><strong>P&#x2F;N</strong>：<code>Positive/Negative</code>，正和负</td>
+</tr>
+<tr>
+<td><strong>L&#x2F;R</strong>：<code>Left/Right</code>，常用于音频线区分左右</td>
+<td><strong>BB</strong>：<code>Baseband</code>，基带处理器</td>
+<td><strong>P</strong>：<code>Pin</code>，引脚</td>
+</tr>
+<tr>
+<td><strong>BAT</strong>：<code>Battery</code>，电池</td>
+<td><strong>CHG</strong>：<code>Charge</code>，充电</td>
+<td><strong>CAM</strong>：<code>Camera</code>，摄像头</td>
+</tr>
+</tbody></table>
+<h2 id="常用电路符号"><a href="#常用电路符号" class="headerlink" title="常用电路符号"></a>常用电路符号</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/circuit-symbol.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="线规"><a href="#线规" class="headerlink" title="线规"></a>线规</h2><p><strong>线规</strong>是导线截面尺寸的规范，中国采用的是公制线规，目前国际上通用的线规有 <strong>AWG</strong>、<strong>SWG</strong>、<strong>BWG</strong>：</p>
+<ol>
+<li><strong>美制线规（AWG，American Wire Gauge）</strong>：是一种区分<strong>导线直径</strong>的标准，也被称为 <strong>Brown &amp; Sharpe</strong> 线规，这种标准化线规于 <code>1857</code> 年开始在美国使用，单位 <code>AWG</code> 前面的数值（例如：<code>24AWG</code>、<code>26AWG</code>）表示的是导线形成最后直径前所要经过的孔的数量，数值越大导线经过的孔就越多，导线的直径也就越小；</li>
+<li><strong>标准线规（SWG，Standard Wire Guage）</strong>：也称为<strong>英制线规</strong>，属于电线电缆行业的标准；</li>
+<li><strong>伯明翰线规（BWG，Birmingham Wire Gauge）</strong>：指的是材料的厚度或者线径；</li>
+</ol>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408232155852.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="无线通信术语"><a href="#无线通信术语" class="headerlink" title="无线通信术语"></a>无线通信术语</h2><ul>
+<li><strong>频谱</strong>：频谱是频率谱密度的简称，是频率的分布曲线；</li>
+<li><strong>时域</strong>：描述的是<strong>信号</strong>与<strong>时间</strong>的关系；</li>
+<li><strong>频域</strong>：描述的是<strong>信号</strong>与<strong>频率</strong>的关系；</li>
+<li><strong>带宽</strong>：通过信号的<strong>频谱图</strong>可以观察到其所包含的频率成分，将信号所包含<strong>谐波</strong>的最高与最低频率之差，即该信号所拥有的频率范围；</li>
+<li><strong>基带</strong>：由信源所发射的未经调制的原始信号，所固有的频率带宽，称为<strong>基本频带</strong>，简称为<strong>基带</strong>；</li>
+<li><strong>频带</strong>：对基带信号进行调制之后所占用的频率带宽；</li>
+<li><strong>载波</strong>：是一种在频率、幅度、相位方面被调制，以用于传输数据的电磁波，单位为赫兹 <code>Hz</code>；</li>
+<li><strong>信道</strong>：信号传输的通道；</li>
+<li><strong>调制</strong>：将各种<code>数字基带信号</code>转换成适于信道传输的<code>数字调制信号</code>；</li>
+<li><strong>解调</strong>：在接收端将收到的<code>数字频带信号</code>还原为<code>数字基带信号</code>；</li>
+<li><strong>扩频</strong>：将传输信号的频谱打散到较其原始带宽更宽的一种通信技术，防止干扰与窃听；</li>
+<li><strong>跳频</strong>：是指用伪随机码序列进行频移键控，使载波频率不断跳变而扩展频谱的一种方法；</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：无线信号的频率越低，穿透能力越强；</p>
+</blockquote>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://www.uinio.com/Electronics/Getting_Started/#%E5%B8%B8%E7%94%A8%E7%94%B5%E8%B7%AF%E7%AC%A6%E5%8F%B7">模拟与数字电子技术入门读物</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>模拟与数字电子技术入门读物</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/08/23/模拟与数字电子技术入门读物/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/24/Stm32%E4%B8%AD%E7%9A%84%E4%B8%B2%E5%8F%A3%E6%80%BB%E7%BB%93/" title="Stm32中的串口总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Stm32中的串口总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/21/Linux%E4%B8%AD%E7%9A%84%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" title="Linux中的守护进程">
+                        <span class="hidden-mobile">Linux中的守护进程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -221,24 +221,18 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1477).png" srcset="/img/loading.gif" lazyload alt="segmentation和保护模式（三）">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
+    <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89/" target="_blank">
-          segmentation和保护模式（三）
+        <a href="/2024/01/18/FreeRTOS-5-%E4%BF%A1%E5%8F%B7%E9%87%8F/" target="_blank">
+          FreeRTOS-5-信号量
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89/" target="_blank">
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/18/FreeRTOS-5-%E4%BF%A1%E5%8F%B7%E9%87%8F/" target="_blank">
         <div>
-          分段模式和保护模式（二）
+          前言在FreeRTOS中，信号量是使用队列来实现的。我们后面会看到所有的信号量的相关函数都是对于队列函数的封装。 信号量的分类在FreeRTOS中有四种信号量：  二值信号量 互斥信号量 递归信号量 计数信号量  每一种信号量都有其使用的范围。 二值信号量其实就是Linux中的二元信号量，在FreeRTOS中又称之为二进制信号量。在概念上，可以将二进制信号量理解为一个长度为一的队列。该队列可以在任
         </div>
       </a>
 
@@ -246,8 +240,113 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-02 01:34" pubdate>
-              2024-01-02
+            <time datetime="2024-01-18 21:04" pubdate>
+              2024-01-18
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/16/FreeRTOS-4-%E8%BD%AF%E4%BB%B6%E5%AE%9A%E6%97%B6%E5%99%A8%E7%AE%A1%E7%90%86/" target="_blank">
+          FreeRTOS-4-软件定时器管理
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/16/FreeRTOS-4-%E8%BD%AF%E4%BB%B6%E5%AE%9A%E6%97%B6%E5%99%A8%E7%AE%A1%E7%90%86/" target="_blank">
+        <div>
+          概述软件计时器用于调度功能在将来的设定时间执行，或以固定频率定期执行。由软件定时器执行的函数称为软件定时器的回调函数。 软件计时器由FreeRTOS内核实现，并受FreeRTOS内核的控制。它们不需要硬件支持，也与硬件计时器或硬件计数器无关。 软件计时器功能是可选的。要包括软件计时器功能，请执行以下操作:  将FreeRTOS源文件FreeRTOS&#x2F;Source&#x2F;timers.
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-16 20:35" pubdate>
+              2024-01-16
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/15/FreeRTOS-3-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" target="_blank">
+          FreeRTOS-3-消息队列
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/15/FreeRTOS-3-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" target="_blank">
+        <div>
+          队列FreeRTOS中队列也可以称之为消息队列。在FreeRTOS中长用来进行数据传输。队列提供了  从任务到任务 中断到任务 任务到中断三种消息的传递方向。  任务能够从队列中读取消息，当队列中的消息为空时，读取消息的任务将被阻塞。用户还可以指定阻塞的任务时间xTicksToWait，在这段时间中，如果队列为空，该任务将保持阻塞状态以等待队列数据有效。当队列中有新消息时，被阻塞的任务会被唤醒并处
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-15 00:28" pubdate>
+              2024-01-15
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/01/10/bash%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1-%E5%88%9D%E5%A7%8B%E5%8C%96/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6497).png" srcset="/img/loading.gif" lazyload alt="bash源码分析(1)--初始化">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/10/bash%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1-%E5%88%9D%E5%A7%8B%E5%8C%96/" target="_blank">
+          bash源码分析(1)--初始化
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/01/10/bash%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1-%E5%88%9D%E5%A7%8B%E5%8C%96/" target="_blank">
+        <div>
+          主要是bash的main函数中的内容
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-10 21:59" pubdate>
+              2024-01-10
             </time>
           </div>
         
@@ -262,15 +361,342 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/Linux/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="category-chain-item">内存管理</a>
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
   
   
 
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/01/10/c%E5%AE%9E%E7%8E%B0%E7%83%AD%E5%8A%A0%E8%BD%BD/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6536).png" srcset="/img/loading.gif" lazyload alt="c实现热加载">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/10/c%E5%AE%9E%E7%8E%B0%E7%83%AD%E5%8A%A0%E8%BD%BD/" target="_blank">
+          c实现热加载
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/01/10/c%E5%AE%9E%E7%8E%B0%E7%83%AD%E5%8A%A0%E8%BD%BD/" target="_blank">
+        <div>
+          stm32中常见的三种延时函数总结
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-10 14:00" pubdate>
+              2024-01-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/08/Stm32%E4%B8%AD%E7%9A%84FSMC%E6%80%BB%E7%BB%93/" target="_blank">
+          FSMC总结
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/08/Stm32%E4%B8%AD%E7%9A%84FSMC%E6%80%BB%E7%BB%93/" target="_blank">
+        <div>
+          0 基础知识FSMC：Flexible Static Memory Controller的缩写，译为灵活的静态存储控制器。它可以用于驱动包括SRAM、NOR FLASH以及NAND FLSAH类型的存储器，不能驱动如SDRAM这种动态的存储器。它的不足在于不可以驱动动态存储器。但是如果具有FMC这个外设，则可以支持控制SDRAM存储器。 由于fsmc是映射在stm32内存中的，所以其和sram、f
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-08 15:59" pubdate>
+              2024-01-08
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/07/%E8%A7%A6%E6%91%B8%E7%94%BB%E6%9D%BF/" target="_blank">
+          触摸画板
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/07/%E8%A7%A6%E6%91%B8%E7%94%BB%E6%9D%BF/" target="_blank">
+        <div>
+          0.0 触摸屏的分类以及基本原理触控画板被划为电阻触控板和电容触控板, 相对来说，电阻屏造价便宜，能适应较恶劣的环境，但它只支持单点触控(一次只能检测面板上的一个触摸位置)，触摸时需要一定的压力， 使用久了容易造成表面磨损，影响寿命；而电容屏具有支持多点触控、检测精度高的特点，电容屏通过与导电物体产生的电容效应来检测触摸动作， 只能感应导电物体的触摸，湿度较大或屏幕表面有水珠时会影响电容屏的检测效
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-07 23:27" pubdate>
+              2024-01-07
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/01/07/FreeRTOS-2-%E4%BB%BB%E5%8A%A1/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6607).png" srcset="/img/loading.gif" lazyload alt="FreeRTOS(2)-任务">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/07/FreeRTOS-2-%E4%BB%BB%E5%8A%A1/" target="_blank">
+          FreeRTOS(2)-任务
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/01/07/FreeRTOS-2-%E4%BB%BB%E5%8A%A1/" target="_blank">
+        <div>
+          这是FreeRTOS系列学习文章的第二节，主要是关于FreeRTOS的任务相关的知识点。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-07 00:24" pubdate>
+              2024-01-07
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/FreeRTOS/" class="category-chain-item">FreeRTOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/01/06/FreeRtOs-1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6694).png" srcset="/img/loading.gif" lazyload alt="FreeRtOs(1)-基础知识">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/06/FreeRtOs-1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" target="_blank">
+          FreeRtOs(1)-基础知识
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/01/06/FreeRtOs-1-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" target="_blank">
+        <div>
+          这是FreeRTOS系列学习文章的第一节，主要是关于FreeRTOS的前置知识点。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-06 23:52" pubdate>
+              2024-01-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/FreeRTOS/" class="category-chain-item">FreeRTOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(6666).png" srcset="/img/loading.gif" lazyload alt="软件设计原则">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">
+          软件设计原则
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/01/05/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">
+        <div>
+          软件设计原则的总结
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-01-05 22:23" pubdate>
+              2024-01-05
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
   
 
       </span>
@@ -285,637 +711,6 @@
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1497).png" srcset="/img/loading.gif" lazyload alt="segmentation和保护模式（二）">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89/" target="_blank">
-          segmentation和保护模式（二）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89/" target="_blank">
-        <div>
-          分段模式和保护模式（二）
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-02 01:33" pubdate>
-              2024-01-02
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/Linux/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="category-chain-item">内存管理</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/4x-leaf-teal_01.jpg" srcset="/img/loading.gif" lazyload alt="segmentation和保护模式（一）">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" target="_blank">
-          segmentation和保护模式（一）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/01/02/segmentation%E5%92%8C%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" target="_blank">
-        <div>
-          分段机制和保护模式之间的关系
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-02 01:29" pubdate>
-              2024-01-02
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/Linux/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="category-chain-item">内存管理</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/01/01/x86-64%E7%9A%84%E5%87%A0%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3940).png" srcset="/img/loading.gif" lazyload alt="x86-64的几种运行模式">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/01/01/x86-64%E7%9A%84%E5%87%A0%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/" target="_blank">
-          x86-64的几种运行模式
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/01/01/x86-64%E7%9A%84%E5%87%A0%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/" target="_blank">
-        <div>
-          x86-64的几种运行模式的总结
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-01-01 00:00" pubdate>
-              2024-01-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/12/31/%E5%B8%B8%E8%A7%81%E7%9A%84cpu%E6%9E%B6%E6%9E%84/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1787).png" srcset="/img/loading.gif" lazyload alt="常见的cpu架构">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/12/31/%E5%B8%B8%E8%A7%81%E7%9A%84cpu%E6%9E%B6%E6%9E%84/" target="_blank">
-          常见的cpu架构
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/12/31/%E5%B8%B8%E8%A7%81%E7%9A%84cpu%E6%9E%B6%E6%9E%84/" target="_blank">
-        <div>
-          x86 IA-32 IA-64和x86-64之间的关系
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-12-31 23:20" pubdate>
-              2023-12-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/12/31/Linux%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1553).png" srcset="/img/loading.gif" lazyload alt="Linux中的栈缓冲区溢出">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/12/31/Linux%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" target="_blank">
-          Linux中的栈缓冲区溢出
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/12/31/Linux%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" target="_blank">
-        <div>
-          总结Linux中的栈缓冲区溢出漏洞的缓解方法
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-12-31 14:55" pubdate>
-              2023-12-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/linux/%E5%AE%89%E5%85%A8/" class="category-chain-item">安全</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/12/30/%E5%85%B3%E4%BA%8ELex%E5%92%8CYacc/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(3999).png" srcset="/img/loading.gif" lazyload alt="关于Lex和Yacc">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/12/30/%E5%85%B3%E4%BA%8ELex%E5%92%8CYacc/" target="_blank">
-          关于Lex和Yacc
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/12/30/%E5%85%B3%E4%BA%8ELex%E5%92%8CYacc/" target="_blank">
-        <div>
-          关于Lex和Yacc知识点总结
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-12-30 18:10" pubdate>
-              2023-12-30
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/12/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E7%BD%91%E7%AB%99/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-markus-winkler-15484964.jpg" srcset="/img/loading.gif" lazyload alt="常用的知识点网站">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/12/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E7%BD%91%E7%AB%99/" target="_blank">
-          常用的知识点网站
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/12/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E7%BD%91%E7%AB%99/" target="_blank">
-        <div>
-          记载一些现在没有用到，但是之后可能会用的网页
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-12-30 17:42" pubdate>
-              2023-12-30
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/linux/%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" class="category-chain-item">问题总结</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/12/29/c22%E3%80%81c11%E3%80%81c99%E4%B9%8B%E9%97%B4%E7%9A%84%E7%A0%94%E7%A9%B6/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(1864).png" srcset="/img/loading.gif" lazyload alt="c语言标准的研究">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/12/29/c22%E3%80%81c11%E3%80%81c99%E4%B9%8B%E9%97%B4%E7%9A%84%E7%A0%94%E7%A9%B6/" target="_blank">
-          c语言标准的研究
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/12/29/c22%E3%80%81c11%E3%80%81c99%E4%B9%8B%E9%97%B4%E7%9A%84%E7%A0%94%E7%A9%B6/" target="_blank">
-        <div>
-          总结各主要c标准之间的关系和C语言的知识点
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-12-29 23:51" pubdate>
-              2023-12-29
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/12/29/%E5%AF%B9%E4%BA%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%A0%94%E7%A9%B6-uftrace/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/%E9%85%B7%E5%AE%89%20%E8%92%B2%E8%8D%89%E7%A3%90%E7%9F%B3%20%20(620).png" srcset="/img/loading.gif" lazyload alt="对于开源项目的研究--uftrace">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/12/29/%E5%AF%B9%E4%BA%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%A0%94%E7%A9%B6-uftrace/" target="_blank">
-          对于开源项目的研究--uftrace
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/12/29/%E5%AF%B9%E4%BA%8E%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%A0%94%E7%A9%B6-uftrace/" target="_blank">
-        <div>
-          总结开源项目 uftrace 中的编程技巧
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-12-29 16:07" pubdate>
-              2023-12-29
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%8E%9F%E5%88%9B/">#原创</a>
             
           </div>
         
@@ -927,7 +722,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/11/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/#board">13</a><a class="page-number" href="/page/14/#board">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/#board">23</a><a class="extend next" rel="next" href="/page/13/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/11/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/#board">13</a><a class="page-number" href="/page/14/#board">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/#board">25</a><a class="extend next" rel="next" href="/page/13/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
