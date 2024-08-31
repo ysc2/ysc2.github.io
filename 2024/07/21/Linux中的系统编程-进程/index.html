@@ -16,24 +16,21 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一个关于系统编程的杂物间">
+    <meta name="description" content="6.7 环境列表每一个进程都会有一组关于“名称-值”的字符串数组，这个数组称之为环境列表。其中的“名字”称之为环境变量。 子进程可以一次性的继承父进程的环境列表，子进程在被父进程创建之后复制了父进程的环境列表之后，子进程的进程列表就是独立的了。子进程创建后，父、子进程均可更改各自的环境变量，且这些变更对对方而言不再可见。 通过 Linux 专有的 &#x2F;proc&#x2F;PID&#x2F;environ 文件检查任一进">
 <meta property="og:type" content="article">
-<meta property="og:title" content="系统编程杂项">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/05/03/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E6%9D%82%E9%A1%B9/index.html">
+<meta property="og:title" content="系统编程-进程">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/07/21/Linux%E4%B8%AD%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="一个关于系统编程的杂物间">
+<meta property="og:description" content="6.7 环境列表每一个进程都会有一组关于“名称-值”的字符串数组，这个数组称之为环境列表。其中的“名字”称之为环境变量。 子进程可以一次性的继承父进程的环境列表，子进程在被父进程创建之后复制了父进程的环境列表之后，子进程的进程列表就是独立的了。子进程创建后，父、子进程均可更改各自的环境变量，且这些变更对对方而言不再可见。 通过 Linux 专有的 &#x2F;proc&#x2F;PID&#x2F;environ 文件检查任一进">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-jxj2km.jpg">
-<meta property="article:published_time" content="2024-05-03T09:20:58.000Z">
-<meta property="article:modified_time" content="2024-06-21T21:31:00.769Z">
+<meta property="article:published_time" content="2024-07-21T13:17:35.000Z">
+<meta property="article:modified_time" content="2024-08-28T16:02:56.075Z">
 <meta property="article:author" content="Ysc">
-<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-jxj2km.jpg">
   
   
   
-  <title>系统编程杂项 - Ysc Web</title>
+  <title>系统编程-进程 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +190,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-jxj2km.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="系统编程杂项"></span>
+            <span id="subtitle" data-typed-text="系统编程-进程"></span>
           
         </div>
 
@@ -210,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-05-03 17:20" pubdate>
-          2024年5月3日 下午
+        <time datetime="2024-07-21 21:17" pubdate>
+          2024年7月21日 晚上
         </time>
       </span>
     
@@ -222,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          27 字
+          780 字
         
       </span>
     
@@ -233,7 +230,7 @@
         
         
         
-          1 分钟
+          7 分钟
         
       </span>
     
@@ -270,20 +267,40 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">系统编程杂项</h1>
+            <h1 id="seo-header">系统编程-进程</h1>
             
             
               <div class="markdown-body">
                 
-                <p>一个关于系统编程的杂物间</p>
-<span id="more"></span>
-
-
-<h1 id="系统编程"><a href="#系统编程" class="headerlink" title="系统编程"></a>系统编程</h1><ol>
-<li>系统编程所包含的内容：<ol>
-<li><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/741560-20161111110447389-916094989.png" srcset="/img/loading.gif" lazyload></li>
+                <h2 id="6-7-环境列表"><a href="#6-7-环境列表" class="headerlink" title="6.7 环境列表"></a>6.7 环境列表</h2><p>每一个进程都会有一组关于“名称-值”的字符串数组，这个数组称之为环境列表。其中的“名字”称之为环境变量。</p>
+<p><strong>子进程可以一次性的继承父进程的环境列表，子进程在被父进程创建之后复制了父进程的环境列表之后，子进程的进程列表就是独立的了。子进程创建后，父、子进程均可更改各自的环境变量，且这些变更对对方而言不再可见。</strong></p>
+<p>通过 Linux 专有的 <code>/proc/PID/environ</code> 文件检查任一进程的环境列表，每一个<code>“NAME=value”</code> 对都以空字节终止。</p>
+<h2 id="进程标识符"><a href="#进程标识符" class="headerlink" title="进程标识符"></a>进程标识符</h2><p>首先进程标识符的特点：</p>
+<ol>
+<li>唯一性：每个进程都有一个唯一的进程标识符。</li>
+<li>可重用性：虽然进程标识符是唯一的，但是它可以被回收并分配给新的进程。</li>
 </ol>
-</li>
+<p>特殊的进程标识符：</p>
+<ol>
+<li>0：表示调度进程，它负责调度其他进程。</li>
+<li>1：表示“ini”进程，它是所有进程的祖先。并且其是一个用户态进程，但是使用管理员的权限运行。同时也是系统中所有孤儿进程的再生父亲。</li>
+</ol>
+<h2 id="关于函数-fork"><a href="#关于函数-fork" class="headerlink" title="关于函数 fork()"></a>关于函数 fork()</h2><p>这个函数失败的原因一般有两种：</p>
+<ol>
+<li>超过了系统可以拥有的最大进程数限制。</li>
+<li>超过了用户可以创建的最大进程数限制。</li>
+</ol>
+<p>fork() 函数主要两种用法：</p>
+<ol>
+<li>父进程和子进程执行不同的代码段，这种就是父进程调用 fork，使得子进程去处理请求，而父进程则继续等待下一个服务请求。</li>
+<li>一个进程要执行一个不同的程序，一般都是 fork+exec 的方式。</li>
+</ol>
+<h2 id="关于函数-vfork"><a href="#关于函数-vfork" class="headerlink" title="关于函数 vfork()"></a>关于函数 vfork()</h2><p>这个函数已经被 SUSV4 完全删除，在 SUSV3 中也被标记为弃用，所以对于可移植的程序来说，不应该再使用它。</p>
+<p>vfork() 函数的特点：</p>
+<ol>
+<li>和 fork 不同的是，这个函数明确标识子进程优先执行（而 fork 没有这样的要求），在子进程调用 exec 或者 exit 之后父进程会恢复运行。所以如果在运行 exec exit 之前有依赖于父进程的操作则会导致<strong>死锁</strong></li>
+<li>这个函数其实就是 fork+exec</li>
+<li>这个函数在父进程的内存空间中执行，在它使用 exec exit 之前</li>
 </ol>
 
                 
@@ -293,34 +310,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" class="category-chain-item">系统编程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
-      
-    </div>
   
 </div>
 
@@ -330,8 +319,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>系统编程杂项</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/05/03/系统编程杂项/</div>
+      <div>系统编程-进程</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/07/21/Linux中的系统编程-进程/</div>
     </div>
     <div class="license-meta">
       
@@ -343,7 +332,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年5月3日</div>
+          <div>2024年7月21日</div>
         </div>
       
       
@@ -375,9 +364,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/05/05/PCB%E8%AE%BE%E8%AE%A1%E4%B8%AD%E7%9A%84EMC%E9%97%AE%E9%A2%98/" title="PCB设计中EMC问题">
+                      <a href="/2024/07/30/Linux%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%B1%87%E6%80%BB-%E8%BD%AC/" title="Linux内核学习资料汇总-转">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">PCB设计中EMC问题</span>
+                        <span class="hidden-mobile">Linux内核学习资料汇总-转</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -385,8 +374,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/04/29/bash%E6%B3%A8%E6%84%8F%E7%82%B9/" title="bash注意点">
-                        <span class="hidden-mobile">bash注意点</span>
+                      <a href="/2024/07/15/%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E6%9B%B4%E6%94%B9%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%81%9C%E6%AD%A2Windows%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0/" title="如何通过更改注册表来实现停止Windows自动更新">
+                        <span class="hidden-mobile">如何通过更改注册表来实现停止Windows自动更新</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

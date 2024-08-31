@@ -224,6 +224,39 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2024/08/27/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/" target="_blank">
+          Linux系统中的常用的系统函数
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/27/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/" target="_blank">
+        <div>
+          进程环境首先我们需要知道退出函数： 123456#incldue &lt;stdlib.h&gt;void exit(int status);void _Exit(int status);#include &lt;unistd.h&gt;void _exit(int status);//这个函数不会进行清理操作  这里需要注意的是 exit() 函数是退出进程，return 语句是返回函数 pth
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-27 16:48" pubdate>
+              2024-08-27
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2024/08/24/Stm32%E4%B8%AD%E7%9A%84%E4%B8%B2%E5%8F%A3%E6%80%BB%E7%BB%93/" target="_blank">
           Stm32中的串口总结
         </a>
@@ -538,39 +571,6 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E4%BF%A1%E5%8F%B7/" target="_blank">
         <div>
           第二十章——信号的基本概念20.1 信号的概念和概述信号是进程之间通信的一种方式，有时也称之为软中断。 一个（具有合适权限的）进程能够向另一进程发送信号。信号的这一用法可作为一种同步技术，甚至是进程间通信（IPC）的原始形式。进程也可以向自身发送信号。 信号可以分为两大类：  有内核向进程通知事件的信号，构成了所谓的标准信号。在 Linux 中标准型号的的编号从 1~31 共 31 个。 第二类型
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-08-17 21:06" pubdate>
-              2024-08-17
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V%E4%BF%A1%E5%8F%B7%E9%87%8F/" target="_blank">
-          Linux下的进程通信方式之System_V信号量
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BSystem_V%E4%BF%A1%E5%8F%B7%E9%87%8F/" target="_blank">
-        <div>
-          对于每个信号量来说，都用一个结构体： 12345struct semid ds &#123;struct ipc_perm sem_perm;/* Ownership and permissions */time_t           sem_otime:/* Time of last semop() */time_t         sem_ctime;/* Time of last chan
         </div>
       </a>
 
