@@ -16,21 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="0.0 触摸屏的分类以及基本原理触控画板被划为电阻触控板和电容触控板, 相对来说，电阻屏造价便宜，能适应较恶劣的环境，但它只支持单点触控(一次只能检测面板上的一个触摸位置)，触摸时需要一定的压力， 使用久了容易造成表面磨损，影响寿命；而电容屏具有支持多点触控、检测精度高的特点，电容屏通过与导电物体产生的电容效应来检测触摸动作， 只能感应导电物体的触摸，湿度较大或屏幕表面有水珠时会影响电容屏的检测效">
+    <meta name="description" content="总结触摸屏的基本原理和在 stm32 中的使用方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="触摸画板">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/07/%E8%A7%A6%E6%91%B8%E7%94%BB%E6%9D%BF/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="0.0 触摸屏的分类以及基本原理触控画板被划为电阻触控板和电容触控板, 相对来说，电阻屏造价便宜，能适应较恶劣的环境，但它只支持单点触控(一次只能检测面板上的一个触摸位置)，触摸时需要一定的压力， 使用久了容易造成表面磨损，影响寿命；而电容屏具有支持多点触控、检测精度高的特点，电容屏通过与导电物体产生的电容效应来检测触摸动作， 只能感应导电物体的触摸，湿度较大或屏幕表面有水珠时会影响电容屏的检测效">
+<meta property="og:description" content="总结触摸屏的基本原理和在 stm32 中的使用方法">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401072346450.png">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401072346310.png">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401252210078.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-43wgg9.jpg">
 <meta property="article:published_time" content="2024-01-07T15:27:48.000Z">
-<meta property="article:modified_time" content="2024-01-25T14:10:29.706Z">
+<meta property="article:modified_time" content="2024-09-12T08:15:40.643Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401072346450.png">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-43wgg9.jpg">
   
   
   
@@ -194,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-43wgg9.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -223,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          996 字
+          1k 字
         
       </span>
     
@@ -276,7 +275,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="0-0-触摸屏的分类以及基本原理"><a href="#0-0-触摸屏的分类以及基本原理" class="headerlink" title="0.0 触摸屏的分类以及基本原理"></a>0.0 触摸屏的分类以及基本原理</h1><p>触控画板被划为电阻触控板和电容触控板, 相对来说，电阻屏造价便宜，能适应较恶劣的环境，但它只支持单点触控(一次只能检测面板上的一个触摸位置)，触摸时需要一定的压力， 使用久了容易造成表面磨损，影响寿命；而电容屏具有支持多点触控、检测精度高的特点，电容屏通过与导电物体产生的电容效应来检测触摸动作， 只能感应导电物体的触摸，湿度较大或屏幕表面有水珠时会影响电容屏的检测效果。</p>
+                <p>总结触摸屏的基本原理和在 stm32 中的使用方法</p>
+<span id="more"></span>
+
+<h1 id="0-0-触摸屏的分类以及基本原理"><a href="#0-0-触摸屏的分类以及基本原理" class="headerlink" title="0.0 触摸屏的分类以及基本原理"></a>0.0 触摸屏的分类以及基本原理</h1><p>触控画板被划为电阻触控板和电容触控板, 相对来说，电阻屏造价便宜，能适应较恶劣的环境，但它只支持单点触控(一次只能检测面板上的一个触摸位置)，触摸时需要一定的压力， 使用久了容易造成表面磨损，影响寿命；而电容屏具有支持多点触控、检测精度高的特点，电容屏通过与导电物体产生的电容效应来检测触摸动作， 只能感应导电物体的触摸，湿度较大或屏幕表面有水珠时会影响电容屏的检测效果。</p>
 <p>区分电阻屏与电容屏最直接的方法就是使用绝缘物体点击屏幕，因为电阻屏通过压力能正常检测触摸动作， 而该绝缘物体无法影响电容屏所检测的信号，因而无法检测到触摸动作。目前电容式触摸屏被大部分应用在智能手机、平板电脑等电子设备中， 而在汽车导航、工控机等设备中电阻式触摸屏仍占主流。</p>
 <h2 id="0-1-电阻屏"><a href="#0-1-电阻屏" class="headerlink" title="0.1 电阻屏"></a>0.1 电阻屏</h2><p>现在我们了解一下电阻屏的主要原理. </p>
 <p>电阻式的触摸屏结构见图 电阻式触摸屏结构。它主要由表面硬涂层、两个ITO层、间隔点以及玻璃底层构成， 这些结构层都是透明的，整个触摸屏覆盖在液晶面板上，透过触摸屏可看到液晶面板。表面涂层起到保护作用， 玻璃底层起承载的作用，而两个ITO层是触摸屏的关键结构，它们是涂有铟锡金属氧化物的导电层。 两个ITO层之间使用间隔点使两层分开，当触摸屏表面受到压力时，表面弯曲使得上层ITO与下层ITO接触，在触点处连通电路。</p>
@@ -294,6 +296,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 

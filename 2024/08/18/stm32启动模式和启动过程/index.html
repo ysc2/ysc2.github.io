@@ -16,25 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="启动模式 从上图中我们可以知道，首先是需要从 0x00000000 和 0x00000004 地址处读取 MSP 和 PC 的值，然后根据 PC 的值跳转到对应的程序执行。 但是，芯片厂商是可以将这两个地址映射的其他地址上面的，所以就导致下面出现的几种不同的启动模式。 对于 F1 系列的芯片来说，具有三种启动模式：  BooT1为：x BooT0为 0 时的主闪存存储器 &lt;最主要的&gt;">
+    <meta name="description" content="Stm32 启动模式和启动过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stm32启动模式和启动过程">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/08/18/stm32%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="启动模式 从上图中我们可以知道，首先是需要从 0x00000000 和 0x00000004 地址处读取 MSP 和 PC 的值，然后根据 PC 的值跳转到对应的程序执行。 但是，芯片厂商是可以将这两个地址映射的其他地址上面的，所以就导致下面出现的几种不同的启动模式。 对于 F1 系列的芯片来说，具有三种启动模式：  BooT1为：x BooT0为 0 时的主闪存存储器 &lt;最主要的&gt;">
+<meta property="og:description" content="Stm32 启动模式和启动过程">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/15004505bfbdd15098e69c61b606f0b0.jpg">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/58306fd9c616595c966d5731160609af.jpg">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408181905243.png">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408181834410.png">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/e6a25f80bdba0de573ba30ab23a5bde6.jpg">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408181851680.png">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408181854079.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-6drlmx.jpg">
 <meta property="article:published_time" content="2024-08-18T11:24:19.000Z">
-<meta property="article:modified_time" content="2024-08-18T11:24:38.420Z">
+<meta property="article:modified_time" content="2024-09-12T08:09:59.488Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/15004505bfbdd15098e69c61b606f0b0.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-6drlmx.jpg">
   
   
   
@@ -198,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-6drlmx.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -227,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          873 字
+          887 字
         
       </span>
     
@@ -280,7 +275,9 @@
             
               <div class="markdown-body">
                 
-                <h1 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/15004505bfbdd15098e69c61b606f0b0.jpg" srcset="/img/loading.gif" lazyload></p>
+                <p>Stm32 启动模式和启动过程</p>
+<span id="more"></span>
+<h1 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/15004505bfbdd15098e69c61b606f0b0.jpg" srcset="/img/loading.gif" lazyload></p>
 <p>从上图中我们可以知道，首先是需要从 <code>0x00000000</code> 和 <code>0x00000004</code> 地址处读取 <code>MSP</code> 和 <code>PC</code> 的值，然后根据 <code>PC</code> 的值跳转到对应的程序执行。</p>
 <p><strong>但是，芯片厂商是可以将这两个地址映射的其他地址上面的，所以就导致下面出现的几种不同的启动模式。</strong></p>
 <p>对于 F1 系列的芯片来说，具有三种启动模式：</p>
@@ -320,6 +317,41 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/stm32/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 
@@ -374,9 +406,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/08/19/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BPOSIX-%E4%BF%A1%E5%8F%B7%E9%87%8F/" title="Linux下的进程通信方式之POSIX-信号量">
+                      <a href="/2024/08/20/%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8printf%E5%87%BD%E6%95%B0/" title="在stm32中使用printf函数">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux下的进程通信方式之POSIX-信号量</span>
+                        <span class="hidden-mobile">在stm32中使用printf函数</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -384,8 +416,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8B%E4%BF%A1%E5%8F%B7/" title="Linux下的进程通信方式之信号">
-                        <span class="hidden-mobile">Linux下的进程通信方式之信号</span>
+                      <a href="/2024/08/17/Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E4%B9%8BPOSIX-%E4%BF%A1%E5%8F%B7%E9%87%8F/" title="Linux下的进程通信方式之POSIX-信号量">
+                        <span class="hidden-mobile">Linux下的进程通信方式之POSIX-信号量</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

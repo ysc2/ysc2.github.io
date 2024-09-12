@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录该项目的硬件设计过程">
+    <meta name="description" content="Yshll 项目相关的文章">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自制电子相机（2）- 硬件设计">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:title" content="Yshell（1）">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/09/09/Yshell%EF%BC%881%EF%BC%89/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="记录该项目的硬件设计过程">
+<meta property="og:description" content="Yshll 项目相关的文章">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg">
-<meta property="article:published_time" content="2024-02-24T17:06:38.000Z">
-<meta property="article:modified_time" content="2024-04-12T12:44:25.818Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o5qo39.jpg">
+<meta property="article:published_time" content="2024-09-09T10:00:45.000Z">
+<meta property="article:modified_time" content="2024-09-12T07:53:34.650Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o5qo39.jpg">
   
   
   
-  <title>自制电子相机（2）- 硬件设计 - Ysc Web</title>
+  <title>Yshell（1） - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-o5qo39.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="自制电子相机（2）- 硬件设计"></span>
+            <span id="subtitle" data-typed-text="Yshell（1）"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-25 01:06" pubdate>
-          2024年2月25日 凌晨
+        <time datetime="2024-09-09 18:00" pubdate>
+          2024年9月9日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          620 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          16 分钟
+          6 分钟
         
       </span>
     
@@ -270,182 +270,31 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">自制电子相机（2）- 硬件设计</h1>
+            <h1 id="seo-header">Yshell（1）</h1>
             
             
               <div class="markdown-body">
                 
-                <p>记录该项目的硬件设计过程</p>
+                <p>Yshll 项目相关的文章</p>
 <span id="more"></span>
 
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我发现，对于stm32的硬件设计其实只需要确定好有哪些外设，这些外设需要使用哪些片上外设。然后根据这个就可以按照stm32的<strong>数据手册中的引脚图来进行选择配置了</strong></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250120951.png" srcset="/img/loading.gif" lazyload></p>
-<p>上图是stm32的数据手册的引脚图的图注。</p>
-<p>根据确定好的硬件就可以开始原理图的绘制，然后布置好PCB发至工厂进行制作即可。</p>
-<p>所以我们进行硬件设计的重要的是<strong>明确需求，根据需求来选择合适的硬件进行设计</strong></p>
-<h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>由于我想制作一个电子摄像机，主要功能就是可以进行拍摄照片、录制视频；然后可以在显示器中显示，并且自带一个锂电池方便出行。</p>
-<p>根据上面分析的需求，我需要一下模块：</p>
-<ul>
-<li>主芯片</li>
-<li>镜头模块</li>
-<li>电池模块</li>
-<li>显示器模块</li>
-<li>JTAG调试接口</li>
-<li>其他芯片必须外部电路</li>
-</ul>
-<p>其中提供三种模式：</p>
-<ul>
-<li>实时模式</li>
-<li>视频模式</li>
-<li>拍照模式</li>
-</ul>
-<p>以上三种模式要有不同的硬、软件要求。</p>
-<h1 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h1><p>这一步主要是进行系统的设计，提出一个系统的设计方案。由于我需要制作一个相机，所以一定<strong>不可以是一块PCB板就可以的，我的打算是做三块PCB板</strong>：</p>
-<ul>
-<li>中间层：芯片核心板以及主要的外设电路</li>
-<li>上层：显示板以及按钮电路</li>
-<li>下层：镜头板</li>
-</ul>
-<p>各个PCB之间使用连接器或者是排插来连接。</p>
-<p>3张<code>PCB</code>板中放置的电路以及<code>PCB</code>之间的联系：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281729087.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="摄像模块的设计"><a href="#摄像模块的设计" class="headerlink" title="摄像模块的设计"></a>摄像模块的设计</h2><h3 id="实时模式"><a href="#实时模式" class="headerlink" title="实时模式"></a>实时模式</h3><p>在这个模式下，摄像头所拍摄到的数据直接显示到显示器上。所以其对于实行性有着更高的要求。</p>
-<p>所以可以<strong>有摄像头读取到数据之后直接通过<code>DMA</code>将数据从<code>DCMA</code>直接传输到<code>FSMC</code>再到显示器中。</strong>以此来提高速度。</p>
-<h3 id="拍照模式"><a href="#拍照模式" class="headerlink" title="拍照模式"></a>拍照模式</h3><p>将拍下的数据直接存进<code>sd</code>中，之后去查看的时候就可以直接从<code>sd</code>卡中读取数据。</p>
-<h3 id="视频模式"><a href="#视频模式" class="headerlink" title="视频模式"></a>视频模式</h3><h1 id="外设选型"><a href="#外设选型" class="headerlink" title="外设选型"></a>外设选型</h1><h2 id="摄像头"><a href="#摄像头" class="headerlink" title="摄像头"></a>摄像头</h2><p>我选用的是微雪的<code>ov5640</code>模组，主要的参数如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141545529.png" srcset="/img/loading.gif" lazyload></p>
-<p>TODO<br><strong>更多的信息可以参考<a href="">这篇文章</a></strong></p>
-<h3 id="引脚定义"><a href="#引脚定义" class="headerlink" title="引脚定义"></a>引脚定义</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141547740.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404122004176.png" srcset="/img/loading.gif" lazyload></p>
-<p>以上的数据都是在微雪的<code>0v7670</code>模组的数据手册中获取的。</p>
-<h3 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404122004952.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404122005381.png" srcset="/img/loading.gif" lazyload></p>
-<table>
-<thead>
-<tr>
-<th>模块引脚</th>
-<th>STM32引脚</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>DCMI_SCL</td>
-<td>PD6</td>
-</tr>
-<tr>
-<td>DCMI_SDA</td>
-<td>PD7</td>
-</tr>
-<tr>
-<td>DCMI_D0</td>
-<td>PC6</td>
-</tr>
-<tr>
-<td>DCMI_D1</td>
-<td>PC7</td>
-</tr>
-<tr>
-<td>DCMI_D2&#x2F;SDIO_D0</td>
-<td>PC8</td>
-</tr>
-<tr>
-<td>DCMI_D3</td>
-<td>PC9</td>
-</tr>
-<tr>
-<td>DCMI_D4</td>
-<td>PE4</td>
-</tr>
-<tr>
-<td>DCMI_D5</td>
-<td>PE5</td>
-</tr>
-<tr>
-<td>DCMI_D6</td>
-<td>PB8</td>
-</tr>
-<tr>
-<td>DCMI_D7</td>
-<td>PE6</td>
-</tr>
-<tr>
-<td>DCMI_HREF</td>
-<td>PA4</td>
-</tr>
-<tr>
-<td>DCMI_VSYNC</td>
-<td>PB7</td>
-</tr>
-<tr>
-<td>DCMI_PCLK</td>
-<td>PA6</td>
-</tr>
-<tr>
-<td>DCMI_XCLK</td>
-<td>PA8</td>
-</tr>
-<tr>
-<td>DCMI_RESET</td>
-<td>PC1</td>
-</tr>
-<tr>
-<td>DCMI_PWDN</td>
-<td>PC0</td>
-</tr>
-</tbody></table>
-<p>下面这个是在主控芯片为<code>stm32f75xx</code>时绘制的。</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404122018250.png" srcset="/img/loading.gif" lazyload></p>
-<p><strong>实际上，大部分的摄像机模块的引脚都是相同的。所以可以连起来使用的</strong></p>
-<h2 id="按钮-旋钮电路"><a href="#按钮-旋钮电路" class="headerlink" title="按钮&amp;旋钮电路"></a>按钮&amp;旋钮电路</h2><p>这里主要是两个按钮，当作快门和模式选择键。那一个旋钮键是用来切换图片的，其主要作用是用在软件的切换图片当中。</p>
-<h3 id="电路图绘制"><a href="#电路图绘制" class="headerlink" title="电路图绘制"></a>电路图绘制</h3><p>旋钮：</p>
-<p>这是第一种方法：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202144819.png" srcset="/img/loading.gif" lazyload></p>
-<p>第二种方法：<a target="_blank" rel="noopener" href="https://oshwhub.com/lightandelectricity/keyboard16">来源</a></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202145277.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202145549.png" srcset="/img/loading.gif" lazyload></p>
-<p>按钮：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202213834.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202214957.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="FLASH存储"><a href="#FLASH存储" class="headerlink" title="FLASH存储"></a>FLASH存储</h2><p><code>flash</code>存储在单片机中担任外存的角色。由于预算有效，我使用的是华邦的<code>W25Q256JVEIQ</code> NOR FLASH。单片价格是14左右，相比于瑞萨等等公司动则3、40的nor flash芯片还是便宜不少的。</p>
-<p>关于这个芯片的数据手册可以去其官网，或者是嘉立创上下载。</p>
-<p><strong>其与单片机之间的通信主要是通过SPI</strong></p>
-<h3 id="引脚定义-1"><a href="#引脚定义-1" class="headerlink" title="引脚定义"></a>引脚定义</h3><p>其一共有<code>8</code>个引脚，其定义如下：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403161407118.png" srcset="/img/loading.gif" lazyload></p>
-<p>更加详细的定义可以在数据手册中的第四章找到。</p>
-<h3 id="电路图连接"><a href="#电路图连接" class="headerlink" title="电路图连接"></a>电路图连接</h3><p>由于其主要通过<code>SPI</code>来和单片机通信，所以：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202137018.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="EEPROM存储"><a href="#EEPROM存储" class="headerlink" title="EEPROM存储"></a>EEPROM存储</h2><p><strong>其与单片机之间的通信主要是通过IIC</strong></p>
-<h2 id="扩展外部SRAM"><a href="#扩展外部SRAM" class="headerlink" title="扩展外部SRAM"></a>扩展外部SRAM</h2><p>这里我选择的是美国芯成的<code>IS62WV51216BLL-55TLI</code>单片价格位30左右，价格较低。其大小为<code>8MB</code>。</p>
-<h3 id="引脚定义-2"><a href="#引脚定义-2" class="headerlink" title="引脚定义"></a>引脚定义</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403161744478.png" srcset="/img/loading.gif" lazyload></p>
-<p><strong>其与单片机之间的通信主要是通过FSMC</strong></p>
-<h3 id="原理图绘制"><a href="#原理图绘制" class="headerlink" title="原理图绘制"></a>原理图绘制</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202137837.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="外设"><a href="#外设" class="headerlink" title="外设"></a>外设</h1><p>在使用的<code>stm32f4x</code>的数据手册中有一副图显示了所有可以使用的外设所需要的接线口：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141528030.png" srcset="/img/loading.gif" lazyload></p>
-<p><strong>该图的位置<code>stm32f4x</code>数据手册的<code>19</code>页</strong>。</p>
-<p>下面记录各个外设所需要使用的<code>stm32</code>中的哪些外设。</p>
-<h2 id="显示器模块"><a href="#显示器模块" class="headerlink" title="显示器模块"></a>显示器模块</h2><p>我直接使用了现成的显示器模块，而不是自己制作。原因是更加方便，节省时间。但是我仍然会尝试自己绘制一个显示器模块的原理图，只是不会制作成PCB</p>
-<p>我选择的是：<a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?abbucket=3&id=565115209712&ns=1&spm=a21n57.1.0.0.27fe523c0LOyzH">中景园电子</a>的一块屏幕，类似的还有：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.waveshare.net/shop/3.2inch-320x240-Touch-LCD-D.htm">微雪电子的这款屏幕</a>这个是一个完整的模块</li>
-<li><a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?abbucket=3&id=757148877235&ns=1&spm=a21n57.1.0.0.27fe523c0LOyzH">鸿讯电子</a>这个是一个屏幕，而不是模块。</li>
-<li><a target="_blank" rel="noopener" href="https://item.taobao.com/item.htm?abbucket=3&id=652798852741&ns=1&spm=a21n57.1.0.0.4d37523c9EqjjZ">电子液晶工厂</a>完整的模块</li>
-</ul>
-<p>中景原电子的<code>3.2inch</code>的电阻触摸显示屏，其主要参数如下：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202227691.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404012219350.png" srcset="/img/loading.gif" lazyload></p>
-<p>物理结构：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404012218851.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404012219848.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="引脚定义-3"><a href="#引脚定义-3" class="headerlink" title="引脚定义"></a>引脚定义</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404012219115.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="显示模块之杂项"><a href="#显示模块之杂项" class="headerlink" title="显示模块之杂项"></a>显示模块之杂项</h3><p>除开上述的东西外。这个显示器还需要使用一种特殊的连接方式，就是<code>FPC</code>软板。其使用特殊的连接器。在购买时可以搜索<code>FPC/FFC</code>连接器。</p>
-<p>这种连接器在原理图上显示为：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202231230.png" srcset="/img/loading.gif" lazyload></p>
-<p>实际图片：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403202230969.png" srcset="/img/loading.gif" lazyload></p>
-<p>更加详细的信息可以查看这篇<a href="https://ysc2.github.io/2024/01/25/stm32%E5%92%8C%E6%B6%B2%E6%99%B6%E6%98%BE%E7%A4%BA/">文章</a></p>
-<p><a target="_blank" rel="noopener" href="http://www.szholy.com/product/list-16.html">这个网站有各种FPC连接器</a></p>
-<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>首先在电路图中，如果芯片引脚上标注了<code>GND</code>，则这个引脚所接的是导线<code>GND</code>，而不是哪个符号<code>GND</code></p>
-<p>如图：</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402250122683.png" srcset="/img/loading.gif" lazyload></p>
-<p>这个图上<code>1</code>号引脚是<code>GND</code>。所以其接的也是<code>GND</code>，而不是右边排针上接的那个<code>GND</code>的接地符号。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Yshell 是一个模拟 bash 写的一个终端命令行程序，其主要的功能都来自于 Bash 。</p>
+<p>主要实现的功能主要是：</p>
+<ol>
+<li>通过 Readline 库实现命令行的自动补全和历史记录功能。并且可以支持常见的命令行快捷键：<code>Ctrl+l</code> 、<code>Ctrl+u</code>、<code>Ctrl+a</code>、<code>Ctrl+e</code>等。</li>
+<li>实现了一个终端需要的基本命令，如 <code>cd</code>、<code>ls</code>、<code>pwd</code>、<code>mkdir</code>、<code>rm</code>、<code>mv</code>、<code>cp</code>、<code>touch</code>、<code>cat</code>、<code>echo</code>、<code>grep</code>、<code>find</code>、<code>sed</code>、<code>awk</code>、<code>head</code>、<code>tail</code>、<code>history</code>、<code>alias</code>、<code>unalias</code>、<code>source</code>、<code>exec</code>、<code>exit</code>等。</li>
+<li>实现了一些常用的 shell 扩展，如 <code>source</code>、<code>alias</code>、<code>history</code>、<code>cd</code>、<code>pwd</code>、<code>echo</code>、<code>printf</code>、<code>read</code>、<code>test</code>、<code>if</code>、<code>for</code>、<code>while</code>、<code>until</code>、<code>case</code>、<code>function</code>等。</li>
+<li>实现了常见的环境变量，如 <code>$HOME</code>、<code>$PATH</code>、<code>$PS1</code>、<code>$PS2</code>等</li>
+<li>实现了常见的命令符号：<code>|</code>、<code>&gt;</code>、<code>&lt;</code>、<code>&amp;&amp;</code>、<code>||</code>等</li>
+<li>实现了对于常见的信号的支持：<code>SIGINT</code>、<code>SIGHUB</code>、<code>SIGQUIT</code>、<code>SIGPIPE</code>等</li>
+<li>支持多线程的程序执行</li>
+</ol>
+<h1 id="项目设想"><a href="#项目设想" class="headerlink" title="项目设想"></a>项目设想</h1><ol>
+<li>Yshell应该可以应用于嵌入式系统，所以对其的要求是可以在小内存、低功耗的系统上运行。</li>
+<li>Yshell应该主要运行在Linux系统上，并且兼容POSIX标准。</li>
+<li>可以不支持Shell脚本，只支持命令行输入。</li>
+<li>Yshell可以不支持选项操作，只支持命令行输入。</li>
+</ol>
 
                 
               </div>
@@ -464,15 +313,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%A1%AC%E4%BB%B6/" class="category-chain-item">硬件</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
-  
-  
-
   
 
       </span>
@@ -498,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>自制电子相机（2）- 硬件设计</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/02/25/自制电子相机（2）- 硬件设计/</div>
+      <div>Yshell（1）</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/09/09/Yshell（1）/</div>
     </div>
     <div class="license-meta">
       
@@ -511,7 +353,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月25日</div>
+          <div>2024年9月9日</div>
         </div>
       
       
@@ -543,9 +385,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/26/%E5%A6%82%E4%BD%95%E7%94%A8Markdown%E5%86%99%E4%B8%80%E4%BB%BD%E7%AE%80%E5%8E%86/" title="如何使用Markdown写一份简历">
+                      <a href="/2024/09/09/Yshell%EF%BC%882%EF%BC%89/" title="Yshell（2）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">如何使用Markdown写一份简历</span>
+                        <span class="hidden-mobile">Yshell（2）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -553,8 +395,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/" title="自制电子相机（1）硬件基础">
-                        <span class="hidden-mobile">自制电子相机（1）硬件基础</span>
+                      <a href="/2024/08/27/Linux%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0/" title="Linux系统中的常用的系统函数">
+                        <span class="hidden-mobile">Linux系统中的常用的系统函数</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

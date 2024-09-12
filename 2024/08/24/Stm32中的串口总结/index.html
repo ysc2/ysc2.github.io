@@ -16,22 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言什么是串口：按位发送、接收的接口就是串口，比如所 RS-232、RS-485、 等等。 RS-232（DB9）这个串口的接口有 9 个孔，所以又称之为 DB9 接口。  从上图我们可以看到，这个常见的电平中，RS-232 和其他两个还是有很大的不同的：  RS-232 没有使用正电平就是表示逻辑1，使用负电平表示逻辑0。而是使用了 -15~-3 来表示逻辑1，+3~+15 来表示逻辑0。 由于">
+    <meta name="description" content="前言什么是串口：按位发送、接收的接口就是串口，比如所 RS-232、RS-485、 等等。 RS-232（DB9）这个串口的接口有 9 个孔，所以又称之为 DB9 接口。  从上图我们可以看到，这个常见的电平中，RS-232 和其他两个还是有很大的不同的：  RS-232 没有使用正电平就是表示逻辑1，使用负电平表示逻辑0。而是使用了 -15~-3 来表示逻辑1，+3~+15 来表示逻辑0。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Stm32中的串口总结">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/08/24/Stm32%E4%B8%AD%E7%9A%84%E4%B8%B2%E5%8F%A3%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言什么是串口：按位发送、接收的接口就是串口，比如所 RS-232、RS-485、 等等。 RS-232（DB9）这个串口的接口有 9 个孔，所以又称之为 DB9 接口。  从上图我们可以看到，这个常见的电平中，RS-232 和其他两个还是有很大的不同的：  RS-232 没有使用正电平就是表示逻辑1，使用负电平表示逻辑0。而是使用了 -15~-3 来表示逻辑1，+3~+15 来表示逻辑0。 由于">
+<meta property="og:description" content="前言什么是串口：按位发送、接收的接口就是串口，比如所 RS-232、RS-485、 等等。 RS-232（DB9）这个串口的接口有 9 个孔，所以又称之为 DB9 接口。  从上图我们可以看到，这个常见的电平中，RS-232 和其他两个还是有很大的不同的：  RS-232 没有使用正电平就是表示逻辑1，使用负电平表示逻辑0。而是使用了 -15~-3 来表示逻辑1，+3~+15 来表示逻辑0。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/21ed40f0af3c51f5343730b5972b131e.jpg">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/391deb79c0ed08fc599ecc1379623550.jpg">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/6aa79618ffb54b0613b8b8fc7e90ad96.jpg">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/64fbd5b03a79fa5c6b9606ea2134aa09.jpg">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-we76qq.png">
 <meta property="article:published_time" content="2024-08-23T19:27:16.000Z">
-<meta property="article:modified_time" content="2024-08-23T19:56:36.618Z">
+<meta property="article:modified_time" content="2024-09-12T08:10:53.462Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/21ed40f0af3c51f5343730b5972b131e.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-we76qq.png">
   
   
   
@@ -195,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-we76qq.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -277,7 +275,9 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是串口：<strong>按位发送、接收的接口就是串口，比如所 RS-232、RS-485、 等等。</strong></p>
+                <span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是串口：<strong>按位发送、接收的接口就是串口，比如所 RS-232、RS-485、 等等。</strong></p>
 <h1 id="RS-232（DB9）"><a href="#RS-232（DB9）" class="headerlink" title="RS-232（DB9）"></a>RS-232（DB9）</h1><p>这个串口的接口有 9 个孔，所以又称之为 DB9 接口。</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/21ed40f0af3c51f5343730b5972b131e.jpg" srcset="/img/loading.gif" lazyload></p>
 <p>从上图我们可以看到，这个常见的电平中，RS-232 和其他两个还是有很大的不同的：</p>
@@ -299,6 +299,41 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/stm32/%E4%B8%B2%E5%8F%A3/" class="category-chain-item">串口</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 

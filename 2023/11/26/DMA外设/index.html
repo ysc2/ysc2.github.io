@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/building-8357270_1280.jpg">
 <meta property="article:published_time" content="2023-11-25T17:54:48.000Z">
-<meta property="article:modified_time" content="2023-12-14T08:55:59.739Z">
+<meta property="article:modified_time" content="2024-09-08T13:34:09.482Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.1k 字
+          2.2k 字
         
       </span>
     
@@ -306,6 +306,7 @@
 <li>存储器到外设：stm32发送数据到上位机，这个存储器就是FLASH，外设就是USART</li>
 <li>存储器到存储器：将SARM中的数据传输到FLASH中。跟上面两个不一样的是，这里需要把DMA_CCR位14：MEM2MEM：存储器到存储器模式配置为1，启动M2M模式。</li>
 </ol>
+<p><strong>这里说的外设实际上就是通过串口来实现的，所以说是外设到存储器，实际上是从串口到存储器。</strong></p>
 <h2 id="传输多少、一次传输单位是什么"><a href="#传输多少、一次传输单位是什么" class="headerlink" title="传输多少、一次传输单位是什么"></a>传输多少、一次传输单位是什么</h2><p>要传输好数据，我们必须使双方的数据传输的单位（大小）一致。</p>
 <h3 id="数据宽度"><a href="#数据宽度" class="headerlink" title="数据宽度"></a>数据宽度</h3><p>当外设和存储器之间传数据时，两边的数据宽度应该设置为一致大小。</p>
 <h3 id="设置增量模式"><a href="#设置增量模式" class="headerlink" title="设置增量模式"></a>设置增量模式</h3><p>在DMA控制器的控制下，数据要想有条不紊的从一个地方搬到另外一个地方，还必须正确设置两边数据指针的增量模式。 外设的地址指针由DMA_CCRx的PINC配置，存储器的地址指针由MINC配置。以串口向电脑发送数据为例，要发送的数据很多，每发送完一个，那么存储器的地址指针就应该加1，而串口数据寄存器只有一个， 那么外设的地址指针就固定不变。具体的数据指针的增量模式由实际情况决定。</p>

@@ -16,19 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前置知识优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。 优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机">
+    <meta name="description" content="这是FreeRTOS系列学习文章的第六篇，主要介绍FreeRTOS中的互斥量。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FreeRTOS-7-互斥量">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/01/22/FreeRTOS-6-%E4%BA%92%E6%96%A5%E9%87%8F/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前置知识优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。 优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机">
+<meta property="og:description" content="这是FreeRTOS系列学习文章的第六篇，主要介绍FreeRTOS中的互斥量。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401250027032.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8zl2r.jpg">
 <meta property="article:published_time" content="2024-01-22T09:17:23.000Z">
-<meta property="article:modified_time" content="2024-01-24T17:16:42.355Z">
+<meta property="article:modified_time" content="2024-09-12T08:27:56.080Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202401250027032.png">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8zl2r.jpg">
   
   
   
@@ -192,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8zl2r.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -274,7 +275,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。</p>
+                <p>这是FreeRTOS系列学习文章的第六篇，主要介绍FreeRTOS中的互斥量。</p>
+<span id="more"></span>
+
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>优先级的翻转：在操作系统的，每个任务的优先级都是确定好的。如果某个时间点低优先级持有互斥量，此时高优先级的任务就会阻塞。如果在低优先级执行时有唤醒了中优先级任务，此时这个中优先级任务就会抢占低优先级的任务。此时导致高优先级的任务变成了最后执行的任务。此时就导致了优先级的翻转问题。优先级高的任务在等待优先级的任务执行完毕。</p>
 <p>优先级的继承：由于操作系统的会出现优先级的反转的情况。所以使用一个机制来<strong>缓解</strong>这个问题。在出现高优先级在等待低优先级的任务执行完毕时，操作系统会临时将低优先级的任务的优先级调至和高优先级的任务一样高。这就防止了低优先级任务被中优先级任务抢占。</p>
 <p><strong>互斥量与二值信号量最大的不同之处在于，互斥量具有优先级继承机制，而信号量没有。</strong></p>
 <h1 id="互斥量控制块"><a href="#互斥量控制块" class="headerlink" title="互斥量控制块"></a>互斥量控制块</h1><p>和信号量等等一致，互斥量也通过控制块来进行控制。</p>
@@ -335,6 +339,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/FreeRTOS/" class="category-chain-item">FreeRTOS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 
