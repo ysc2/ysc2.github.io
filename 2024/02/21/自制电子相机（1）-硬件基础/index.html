@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对于自制相机的硬件知识点的记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自制电子相机（1）硬件基础">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/21/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%881%EF%BC%89-%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="对于自制相机的硬件知识点的记录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wevrpx.jpg">
+<meta property="article:published_time" content="2024-02-21T15:54:14.000Z">
+<meta property="article:modified_time" content="2024-06-17T15:47:41.331Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wevrpx.jpg">
+  
+  
+  
+  <title>自制电子相机（1）硬件基础 - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-wevrpx.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="自制电子相机（1）硬件基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-21 23:54" pubdate>
+          2024年2月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">自制电子相机（1）硬件基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>对于自制相机的硬件知识点的记录</p>
+<span id="more"></span>
+
+<h1 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h1><p>这篇文章主要是记录一下硬件方面的基础知识点。</p>
+<h2 id="为什么需要分多组电源引脚"><a href="#为什么需要分多组电源引脚" class="headerlink" title="为什么需要分多组电源引脚"></a>为什么需要分多组电源引脚</h2><p>我们知道一般的IC元器件通常只有两个电源引脚，一个是Vcc或Vdd，另一个是Gnd或Vss。但是现在的MCU通常却有多组电源引脚，这是什么原因呢？</p>
+<p>通过下面可以看到，这个芯片包含了5组。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220019874.png" srcset="/img/loading.gif" lazyload></p>
+<p>之所以这样设置的原因有：</p>
+<ol>
+<li>如果只设置一组的话会导致电流在芯片内部的路径过长：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220102241.png" srcset="/img/loading.gif" lazyload><br>对于频率高的电路，VDD电流会在高频突变（因为频率越高，需要的电流越大），这时候路径上产生的感抗会阻碍电流的变化，<strong>路径越长感抗越大，从而对电流的阻碍作用就会更明显，</strong>进而导致芯片网络中的电压变化，这样就会影响MCU系统的正常工作。</li>
+</ol>
+<p>对于低频或者直流电路，路径长其影响不大。所以早期的低频MCU，只有一个VDD。<strong>多组VDD可以减少电感效应（电感并联总电感变小，路径变短电感也越小）。</strong></p>
+<ol start="2">
+<li><p>MCU的模拟外设比如ADC通常是独立的电源VDDA，这是因为ADC需要尽可能干净的电源以保证转换结果的准确性，独立一路可以避免受到其他电源噪声的干扰。</p>
+</li>
+<li><p>多种电压要求。有时，芯片的不同部分会以不同的电压运行。一个典型的例子是低压内核和高压 I&#x2F;O。内核使用较低的电压来降低功耗而 I&#x2F;O 以更高的电压运行，以便更好地与外部电路连接。这时也需要分出来多组供电，常见的是复杂的SOC芯片。</p>
+</li>
+<li><p>多组VDD相比单个VDD，一个VDD引脚上经过的电流会减小，这样引脚不必承受过高的电流，增强可靠性。</p>
+</li>
+</ol>
+<h2 id="各种“地”之间有何区别"><a href="#各种“地”之间有何区别" class="headerlink" title="各种“地”之间有何区别"></a>各种“地”之间有何区别</h2><p>在电子电路中，“地”是一个重要的概念。其被作为是相应种类的器件电路的零电平参考点。</p>
+<p>主要的“地”有：</p>
+<ol>
+<li><p>直流地：直流电路“地”，零电位参考点。</p>
+</li>
+<li><p>交流地：交流电的零线。应与地线区别开。</p>
+</li>
+<li><p>功率地：大电流网络器件、功放器件的零电位参考点。</p>
+</li>
+<li><p>模拟地：放大器、采样保持器、A&#x2F;D转换器和比较器的零电位参考点。</p>
+</li>
+<li><p>数字地：也叫逻辑地，是数字电路的零电位参考点。</p>
+</li>
+<li><p>“热地”：开关电源无需使用工频变压器，其开关电路的“地”和市电电网有关，即所谓的“热地”，它是带电的。</p>
+</li>
+<li><p>“冷地”：由于开关电源的高频变压器将输入、输出端隔离;又由于其反馈电路常用光电耦合器，既能传送反馈信号，又将双方的“地”隔离;所以输出端的地称之为“冷地”，它不带电。</p>
+</li>
+</ol>
+<p>信号接地：设备的信号接地，可能是以设备中的一点或一块金属来作为信号的接地参考点，它为设备中的所有信号提供了一个公共参考电位。</p>
+<p>有单点接地，多点接地，浮地和混合接地。</p>
+<ul>
+<li>单点接地是指整个电路系统中只有一个物理点被定义为接地参考点，其他各个需要接地的点都直接接到这一点上。在低频电路中，布线和元件之间不会产生太大影响。通常频率小于1MHz的电路，采用一点接地。</li>
+<li>多点接地是指电子设备中各个接地点都直接接到距它最近的接地平面上(即设备的金属底板)。</li>
+</ul>
+<p>在高频电路中，寄生电容和电感的影响较大。通常频率大于10MHz的电路，常采用 多点接地。浮地，即该电路的地与大地无导体连接。『 虚地:没有接地，却和地等电位的点。』其优点是该电路不受大地电性能的影响。</p>
+<p>浮地可使功率地(强电地)和信号地(弱电地)之间的隔离电阻很大，所以能阻止共地阻抗电路性耦合产生的电磁干扰。其缺点是该电路易受寄生电容的影响，而使该电路的地电位变动和增加了对模拟电路的感应干扰。</p>
+<p>一个折衷方案是在浮地与公共地之间跨接一个阻值很大的泄放电阻，用以释放所积累的电荷。注意控制释放电阻的阻抗，太低的电阻会影响设备泄漏电流的合格性。</p>
+<p>下图总结了为什么要划分数字地和模拟地：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220236286.png" srcset="/img/loading.gif" lazyload></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/400824869">https://zhuanlan.zhihu.com/p/400824869</a></p>
+<p>总的来说就是：<strong>减少数字电路和模拟电路之间的干扰，提高电路的可靠性</strong>。</p>
+<h2 id="“地”的-图像"><a href="#“地”的-图像" class="headerlink" title="“地”的 图像"></a>“地”的 图像</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232027373.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232028872.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232029712.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232029476.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="电源引脚有哪些"><a href="#电源引脚有哪些" class="headerlink" title="电源引脚有哪些"></a>电源引脚有哪些</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220252764.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="关于旁路电容和去耦电容"><a href="#关于旁路电容和去耦电容" class="headerlink" title="关于旁路电容和去耦电容"></a>关于旁路电容和去耦电容</h1><p>在电子电路中，去耦电容和旁路电容都是起到抗干扰的作用，电容所处的位置不同，称呼就不一样了。对于同一个电路来说，旁路（bypass）电容是把输入信号中的高频噪声作为滤除对象，把前级携带的高频杂波滤除，而去耦（decoupling）电容也称退耦电容，是把输出信号的干扰作为滤除对象。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281553027.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="旁路电容"><a href="#旁路电容" class="headerlink" title="旁路电容"></a>旁路电容</h2><p>所谓旁路电容其实就是<strong>利用了电容对于直流电的阻断，对于交流电的让行的特点</strong>，使用一个电容来吸收高频噪声的。如下图所示的，旁路电容可以给高频的信号一个短路，让其直接回到电源中防止其影响后面的<code>IC</code>等等电路。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232238773.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="去耦电容"><a href="#去耦电容" class="headerlink" title="去耦电容"></a>去耦电容</h2><p>这个电容的作用是去耦，就是去掉耦合。耦合就是联系：</p>
+<p>一般大小为<strong>100nf</strong> +<strong>10uf</strong>并联，电容并联会使得容值加大。</p>
+<p>或者是多个<code>100nf</code>的电容并联。如下图所示：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281557381.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232349141.png" srcset="/img/loading.gif" lazyload></p>
+<p>通过上图可以看到，去耦电容的位置接近于<code>IC</code>芯片，其作用有</p>
+<ul>
+<li>去耦，防止由于<code>IC</code>出现的波动对于前面电路的影响</li>
+<li>作为一个“水库”，存储电荷，在<code>IC</code>需要的时候给<code>IC</code>放电。</li>
+</ul>
+<p>使用一个例子来说明：</p>
+<ol>
+<li><p>你可以把总电源看作水库，我们大楼内的家家户户都需要供水，这时候，水不是直接来自于水库，那样距离太远了，等水过来，我们已经渴的不行了。实际水是来自于大楼顶上的水塔，水塔其实是一个buffer的作用。<br><br>如果微观来看，高频器件在工作的时候，其电流是不连续的，而且频率很高，而器件VCC到总电源有一段距离，即便距离不长，在频率很高的情况下，  阻抗Z＝i*wL+R，线路的电感影响也会非常大，会导致器件在需要电流的时候，不能被及时供给。<br><br>而去耦电容可以弥补此不足。<br><br><br>这也是为什么很多电路板在高频器件VCC管脚处放置小电容的原因之一  （在vcc引脚上通常并联一个去藕电容，这样交流分量就从这个电容接地。）</p>
+</li>
+<li><p>有源器件在开关时产生的高频开关噪声将沿着电源线传播。去耦电容的主要功能就是提供一个局部的直流电源给有源器件，以减少开关噪声在板上的传播和将噪声引导到地</p>
+</li>
+</ol>
+<h2 id="二者的区别"><a href="#二者的区别" class="headerlink" title="二者的区别"></a>二者的区别</h2><p>去耦：去除在器件切换时从高频器件进入到配电网络中的RF能量。去耦电容还可以为器件供局部化的DC电压源，它在减少跨板浪涌电流方面特别有用。</p>
+<p>旁路：从元件或电缆中转移出不想要的共模RF能量。这主要是通过产生AC旁路消除无意的能量进入敏感的部分，另外还可以提供基带滤波功能（带宽受限）。</p>
+<p>下图可以看到，二者在电路中位置的不同：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402232358283.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们经常可以看到，<strong>在电源和地之间连接着去耦电容</strong>，它有三个方面的作用：</p>
+<ol>
+<li><p>是作为本集成电路的蓄能电容；</p>
+</li>
+<li><p>是滤除该器件产生的高频噪声，切断其通过供电回路进行传播的通路；</p>
+</li>
+<li><p>三是防止电源携带的噪声对电路构成干扰。</p>
+</li>
+</ol>
+<p><strong>不管是去耦还是旁路，其在电路中都是并联的。旁路时，被并联的是障碍物，去耦时，被并联的是功能区</strong></p>
+<h1 id="stm32的最小系统板"><a href="#stm32的最小系统板" class="headerlink" title="stm32的最小系统板"></a>stm32的最小系统板</h1><p>对于stm32来说，有一些电路是芯片运行所必须的：</p>
+<ul>
+<li>电源电路<ul>
+<li>保险电路</li>
+<li>电压转换电路</li>
+<li>电源接口电路（USB、TYPEC等等）</li>
+</ul>
+</li>
+<li>时钟电路（晶振）</li>
+<li>复位电路（启动模式）</li>
+<li>自动下载电路</li>
+<li>存储电路（在最小电路中这个是不需要的，但是一般都不是最小电路。这个部分的信息可以去<a href=""></a>这里找到</li>
+<li>TODO</li>
+<li>调试电路</li>
+</ul>
+<p>下面将基于 STM32 单片机（F1 系列）展开讲解。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>学嵌入式，我们一般从单片机学起。学单片机，不能只学软件，硬件知识也要跟上。软硬件相结合的设计，才是真正优秀的设计。</p>
+<p>谈及单片机的硬件设计，我们会先将其浓缩为最小系统，即能实现最基础的功能的最简化设计。以 STM32（F1 系列）单片机为例，最小系统无非是这几部分：<strong>电源、复位、时钟、启动模式、下载调试</strong>。</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605234144.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="电源"><a href="#电源" class="headerlink" title="电源"></a>电源</h2><p>STM32 的电源有以下几种类型：</p>
+<h3 id="电源开关"><a href="#电源开关" class="headerlink" title="电源开关"></a>电源开关</h3><p>不管是 PCB板 都需要电源开关，但是这个开关需要注意要选择特殊的开关，否则会导致电流无法通过。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406172346245.png" srcset="/img/loading.gif" lazyload></p>
+<p>上面这张图显示了一种电源开关的时候，需要注意<strong>稳压芯片的 <code>SW</code> 引脚其实就是用来连接开关用的</strong></p>
+<h3 id="主电源（VDD-VSS）"><a href="#主电源（VDD-VSS）" class="headerlink" title="主电源（VDD &#x2F; VSS）"></a>主电源（VDD &#x2F; VSS）</h3><p>主电源指的是标记为 VDD1、VDD2… 的引脚。<br>每个引脚必须加一个 100nF 的滤波电容，且尽量靠近引脚放置，此外需要一个 10uF 的钽电容公用。</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605163136.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605163204.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="后备电源（VBAT）"><a href="#后备电源（VBAT）" class="headerlink" title="后备电源（VBAT）"></a>后备电源（VBAT）</h3><p>VBAT 引脚可用于电池供电。如果不用，可以与 VDD 连接在一起。VBAT 也需要一个 100nF 电容滤波。<br>可参考以下的电源选择电路：</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605163337.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="ADC-电源（VDDA-VSSA）"><a href="#ADC-电源（VDDA-VSSA）" class="headerlink" title="ADC 电源（VDDA &#x2F; VSSA）"></a>ADC 电源（VDDA &#x2F; VSSA）</h3><p>为了提高转换精度，ADC 设备可以从这里取电。一般将 VDDA 通过一个电感后， 与 VDD 相连接。</p>
+<p>若不用到 ADC，可将 VDD，VDDA，VREF+（如果有的话） 接在一起，并对地接 1uF 钽电容 + 10nF 陶瓷电容滤波。</p>
+<h3 id="电源引脚的设置"><a href="#电源引脚的设置" class="headerlink" title="电源引脚的设置"></a>电源引脚的设置</h3><p>在stm32中有很多不同种类的电源，如何处理这些电源成为原理图绘制的一个问题。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402220252764.png" srcset="/img/loading.gif" lazyload></p>
+<p>其中一般只有一下引脚需要特殊的连接：</p>
+<ul>
+<li><p>VDD：整个引脚的作用一般是当作某个芯片的供电引脚</p>
+</li>
+<li><p>VDDA：stm32中的数据手册规定，整个引脚必须连接在VDD上，其作用一般是给某个芯片正电压（模拟）。<strong>并且必须使用一个电感或者磁珠来将二者隔离开，这是因为VDD是数字电源，而VDDA是模拟电源。</strong><br><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260058621.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>VCC：这个引脚的作用一般是当作整个电路的输入电压</p>
+</li>
+<li><p>VSS：整个引脚就是数字信号的GND</p>
+</li>
+<li><p>VSSA：整个引脚就是芯片的负电压（数字），这个引脚必须连接VSS，这是数据手册中规定的。其接线方式如下所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281610784.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>VBAT：VBAT &#x3D; 1.8～3.6V：当关闭VDD时，(通过内部电源切换器)为RTC、外部32kHz振荡器和后备寄存器供电。所以一般这个需要单独一个电源进行供电，当然也可以直接接到VDD上，但是这样就失去了其独特的效果。<code>VBAT</code>常见的接法如下图所示： </p>
+<ol>
+<li>使用一个肖特基二极管来整流，改图的主控为<code>stm32f407VGT6</code><br> <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281528043.png" srcset="/img/loading.gif" lazyload></li>
+<li>使用锂电池来提供<code>VBAT</code>其实就是使用了电池情况下的接线情况，下图的主控为<code>stm32f407ZET6</code>：<br> <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281535427.png" srcset="/img/loading.gif" lazyload></li>
+<li>下面这个接线方式和第一种其实是一样的，其主控为<code>stm32f103ZET6</code>。<br> <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281537021.png" srcset="/img/loading.gif" lazyload><br> <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281537556.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+</li>
+<li><p>VREF+：这个引脚一般作为ADC基准参考电压（正），这个引脚只有在引脚数大于等于100以上时才会有。下图展示了该引脚的接法：</p>
+<ul>
+<li><p>当VREF+没有接在VDDA上时：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281806588.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>当VREF-接在了VDDA上时：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281803133.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p><strong>注意，这里的电容必须时质量好的陶瓷电容。</strong></p>
+</li>
+<li><p>一般接法如下：</p>
+<ul>
+<li><p>这个接法没有遵照上面手册中提到的，但是也可以正常工作。<br>   <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281926011.png" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281926093.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>还有一种按照手册中的接法：注意图中的<code>GNDA</code>就是<code>VSSA</code>。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281931485.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>VREF-：这个引脚是ADC基准参考电压（负），注意，只有在封装为<code>UFBGA176</code>是才会有。如果有这个引脚，直接将其接到<code>GND</code>上，同<code>VSSA</code>一起。</p>
+</li>
+<li><p>VCAP_1和VCAP_2这两个引脚直接连上电容后接地。一般接法如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402290254685.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h2 id="调试电路"><a href="#调试电路" class="headerlink" title="调试电路"></a>调试电路</h2><p>这类其实不需要额外算一种模块，主要就是通过：</p>
+<ul>
+<li>放置<code>LED</code>灯的方式来判断是否有电</li>
+<li>在各个电源处放置测试点，方便对于是否有电进行测试。</li>
+</ul>
+<h2 id="复位电路"><a href="#复位电路" class="headerlink" title="复位电路"></a>复位电路</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281545785.png" srcset="/img/loading.gif" lazyload></p>
+<p>由上可知，<code>NRST</code>是低电平有效，所以接线如上所示。</p>
+<p>还有一种接法：</p>
+<p>因为 STM32 内部有上拉电阻（这里没有使用上拉电阻，但是有些人也会加上一个上拉电阻，因为他们认为stm32内部的上拉电阻并不可靠），所以外部只接 100nF 电容 + 按键即可：</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605163429.png" srcset="/img/loading.gif" lazyload></p>
+<p>上电时，CPU 处于复位状态，此时电容充电，NRST 引脚电位持续拉低，当电容充满电后，NRST 电位变为高电平，此时 CPU 退出复位模式，进入正常运行状态。当按钮被按下时，电容被短路清空电量，按钮松开后重新充电，触发复位。</p>
+<p>根据官方设计指南，电容选取 100nF 即可，以保证 NRST 低电平持续的时间满足 CPU 复位的最小脉宽要求，能正常触发复位。</p>
+<p>如果不需要手动复位功能，也可以略去按键。</p>
+<h2 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h2><p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605155729.png" srcset="/img/loading.gif" lazyload></p>
+<p>如上图，STM32 的时钟分以下几种：</p>
+<ol>
+<li><strong>HSI</strong>：高速内部时钟，是内部的 RC 振荡器，频率为 8MHz</li>
+<li><strong>HSE</strong>：高速外部时钟，可接石英 &#x2F; 陶瓷谐振器，或者接外部时钟源，频率范围为 4MHz~16MHz</li>
+<li><strong>LSI</strong>：低速内部时钟，RC 振荡器，频率为 40kHz. 独立看门狗的时钟源只能是它，同时它也可以作为 RTC 的时钟源</li>
+<li><strong>LSE</strong>：低速外部时钟，接频率为 32.768kHz 的石英晶体。LSE 是给 RTC 用的时钟源</li>
+<li><strong>PLL</strong>：锁相环倍频输出，其时钟输入源可选择为 HSI&#x2F;2，HSE 或 HSE&#x2F;2. 倍频可为 2~16 倍，但是输出频率最大不得超过 72MHz</li>
+</ol>
+<p>从稳定性上考虑，我们在设计的时候一般使用外部晶振作为时钟源。<strong>一般选取 8MHz 晶振作为 HSE</strong>，便于倍频（一般倍频到 72MHz）；<strong>选取 32.768kHz 晶振作为 LSE</strong>，RTC 使用便于分频（32768 是 2 的 15 次方，可以得到精准的时间）。</p>
+<p>至于晶振的选用，有源的精度高，无源的成本低，一般无源就足够了。<br>如果选用无源晶振，则需要在两端要加上起振电容，滤除晶振波形中的高频杂波。容值可选 10 ～ 40pF。这个容值手册中没有明确规定，具体多少可以看晶振的手册。</p>
+<p>晶振输入输出引脚之间可加一个 1M 的电阻，产生负反馈，保证放大器工作在高增益的线性区。同时还起到限流作用，防止反相器驱动过载损坏晶振。</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605171011.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200612130149.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="启动模式配置"><a href="#启动模式配置" class="headerlink" title="启动模式配置"></a>启动模式配置</h2><p><strong>一般将 BOOT0 引脚下拉</strong>（串接 10K 电阻再接地），<strong>BOOT1 任意</strong> 即可。</p>
+<p>如果需要模式切换，也可以参照以下的设计：</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605163537.png" srcset="/img/loading.gif" lazyload></p>
+<p>启动模式详见 <a target="_blank" rel="noopener" href="https://wiki-power.com/STM32%E7%9A%84%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F"><strong>STM32 的启动模式</strong></a></p>
+<h2 id="下载调试接口"><a href="#下载调试接口" class="headerlink" title="下载调试接口"></a>下载调试接口</h2><p>首先我们需要知道现在主流的调试接口有哪些：</p>
+<ul>
+<li>SWD</li>
+<li>JTAG</li>
+</ul>
+<p>其中<code>JTAG</code>的功能如下：</p>
+<ul>
+<li>下载器，即下载软件到FLASH里。</li>
+<li>DEBUG，跟医生的听诊器似的，可探听芯片内部小心思。</li>
+<li>边界扫描，可以访问芯片内部的信号逻辑状态，还有芯片引脚的状态等等。</li>
+</ul>
+<p>JTAG根本没有标准的接口定义，甚至每家公司定义都不一样，推丸菌罗列了4种接口定义，有ARM公司的定义，有ST公司的定义等等，仅供大家参考。深入理解TMS&#x2F;TCK&#x2F;TDO&#x2F;TDI等信号。下图为常见的几种定义(大部分采用ARM 20PINS的标准)</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141331576.png" srcset="/img/loading.gif" lazyload></p>
+<p>从上图可以看出，不同的公司有自己的定义。<strong>一般使用最多的是ARM公司的20PI的定义</strong></p>
+<p><code>SWD</code>的主要的引脚定义如下：<strong>注意，SWD和JTAG所用引脚的作用是差不多的。</strong></p>
+<ul>
+<li>VRef：目标板参考电压信号。用于检查目标板是否供电，直接与目标板VDD联，并不向外输出电压；</li>
+<li>GND：公共地信号；</li>
+<li>SWDIO：串行数据输入输出，作为仿真信号的双向数据信号线，建议上拉(高速下载时一定需要上拉)；</li>
+<li>SWCLK：串行时钟输入，作为仿真信号的时钟信号线，建议下拉(高速下载时一定需要下拉)；</li>
+<li>SWO：串行数据输出引脚，CPU调试接口可通过SWO引脚输出一些调试信息。<strong>该引脚是可选的</strong>；</li>
+<li>RESET：仿真器输出至目标CPU的系统复位信号。该引脚可选，建议选择上，因为ULINK是一定需要该管脚的，使得仿真器能够在连接器件前对器件进行复位，以获得较理想的初始状态，便于后续连接仿真。</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141511383.png" srcset="/img/loading.gif" lazyload></p>
+<p>调试接口一般使用<code>SWD</code>或者是<code>JTAG</code>，前者的优势是需要的引脚少，后者优势为下载速度更快，更加稳定。</p>
+<h3 id="使用SWD接口的原理图"><a href="#使用SWD接口的原理图" class="headerlink" title="使用SWD接口的原理图"></a>使用SWD接口的原理图</h3><p>四根线的<code>SWD</code>接法是STM32最小系统用的最多的方式，体积小。不过还是建议选择五线SWD。</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141515618.png" srcset="/img/loading.gif" lazyload></p>
+<p>一般我们用 SWD 接口（接线少，方便），<strong>直接引出 SWDIO，SWCLK，VCC，GND 即可</strong>。<br>不需要添加外部上拉／下拉电阻，因为 STM32 内部已经有集成了。</p>
+<p><img src="https://img.wiki-power.com/d/wiki-media/img/20200605170741.png" srcset="/img/loading.gif" lazyload></p>
+<p>五根线的<code>SWD</code>接法如下所示：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141516839.png" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406111734555.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="使用JTAG接口的原理图"><a href="#使用JTAG接口的原理图" class="headerlink" title="使用JTAG接口的原理图"></a>使用JTAG接口的原理图</h3><p>这个是<code>20pi</code>接口图<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141254566.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202406111728892.png" srcset="/img/loading.gif" lazyload></p>
+<p>使用<code>JTAG</code>的接法比使用<code>SWD</code>的接法速度更快，并且稳定性也更好。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是 STM32（F1 系列）最小系统的电路设计。更加详细的内容，可以跳转下面的官方文档和相关文章。</p>
+<h1 id="PCB板之间的连接"><a href="#PCB板之间的连接" class="headerlink" title="PCB板之间的连接"></a>PCB板之间的连接</h1><ol>
+<li>焊接方式： 该方式优点是简单、成本低、可靠性高，可以避免因接触不良而造成的故障;缺点是互换、维修不方便。<ol>
+<li>PCB导线焊接该方式不需任何接插件，只要用导线将PCB板上的对外连接点与板外的元器件直接焊牢即可。</li>
+<li>PCB排线焊接两块 PCB板之间采用排线连接，既可靠又不易出现连接错误</li>
+<li>PCB之间直接焊接此方式常用于两块印制板之间为90度夹角的连接。</li>
+</ol>
+</li>
+<li>插接件连接方式：在比较复杂的仪器设备中，常采用插接件连接方式。不仅保证产品批量生产的质量，降低系统成本，还为调试、维修提供了方便。 <ol>
+<li>印制板插座: 在比较复杂的仪器设备中，经常采用这种连接方式。该方式是从PCB板边缘做出印制插头，插头部分按照插座的尺寸、接点数、接点距离、定位孔的位置等进行设计，使其与专用插座相配。</li>
+<li>标准插针连接：该方式用于PCB板的对外连接；通过标准插针将两块PCB板连接时，一般呈平行或垂直状态，容易实现批量生产。</li>
+</ol>
+</li>
+</ol>
+<h1 id="stm官方提供的手册"><a href="#stm官方提供的手册" class="headerlink" title="stm官方提供的手册"></a>stm官方提供的手册</h1><p>st实际上提供了非常多的参考手册，这不仅仅有编程手册和数据手册还包括：</p>
+<ul>
+<li>笔记文档(AN)</li>
+<li>勘误手册(ES)</li>
+<li>编程手册(PM)</li>
+<li>数据手册(DS)</li>
+<li>参考手册(RM)</li>
+<li>闪存编程手册（Flash Programming Manual</li>
+<li>内核编程手册（Cortex-M Programming Manual）</li>
+<li>用户手册（User Manual）一般是对某个软件库的说明文档。</li>
+<li>工具软件</li>
+</ul>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402252355234.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意在官方网页中，不同的手册有不同的字母开头。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/armfly/p/13026991.html">https://www.cnblogs.com/armfly/p/13026991.html</a></p>
+<h2 id="数据手册怎么看"><a href="#数据手册怎么看" class="headerlink" title="数据手册怎么看"></a>数据手册怎么看</h2><p>一般我们只需要关注数据手册中的：</p>
+<ul>
+<li>第二章，规格说明。这一章的主要作用是给原理图的绘制提供参考和帮助有</li>
+<li>第三章，引脚定义。这一涨啊主要也是对于原理图的绘制有作用</li>
+<li>第五章，电气特性。这个主要是对于各引脚可以承受的电压范围，各种时序之间的时间长短设置。</li>
+</ul>
+<p><strong>需要注意的是，上面的章节数可能随着不同的芯片而不同</strong></p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402260015810.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg">https://mp.weixin.qq.com/s/XAM3G57q2F1J60Za8K8iIg</a><br><br><a target="_blank" rel="noopener" href="https://murata.eetrend.com/article/2019-09/1003054.html">https://murata.eetrend.com/article/2019-09/1003054.html</a><br><br><a target="_blank" rel="noopener" href="https://ez.analog.com/cn/other/f/forum/96956/thread">https://ez.analog.com/cn/other/f/forum/96956/thread</a><br></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Creative_Team/article/details/80006705?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-7&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-7">STM32F1 系列单片机硬件设计方法</a><br><br><a target="_blank" rel="noopener" href="https://cedar-renjun.github.io/2015/12/12/STM32-Hardware-Design/">STM32 硬件设计</a><br><br><a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-24219701-id-4081961.html">STM32 时钟系统</a><br><br>AN2586 应用笔记-STM32F10xxx 硬件开发使用入门》<br><br>AN2867 应用笔记-ST 微控制器振荡器电路设计指南》<br></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/pl0020/article/details/119354772">https://blog.csdn.net/pl0020/article/details/119354772</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/FourLeafCloverLLLS/article/details/124448986">JTAG和SWD调试接口</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A1%AC%E4%BB%B6/" class="category-chain-item">硬件</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>自制电子相机（1）硬件基础</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/02/21/自制电子相机（1）-硬件基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/25/%E8%87%AA%E5%88%B6%E7%94%B5%E5%AD%90%E7%9B%B8%E6%9C%BA%EF%BC%882%EF%BC%89-%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/" title="自制电子相机（2）- 硬件设计">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">自制电子相机（2）- 硬件设计</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/17/%E5%9C%A8vscode%E4%B8%AD%E4%BD%BF%E7%94%A8vim/" title="在vscode中使用vim">
+                        <span class="hidden-mobile">在vscode中使用vim</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -16,19 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言我们知道，标准的USB使用主从式的架构，USB主机端（即电脑）是“主”，而USB周边设备是“从”。只有USB主机端可以调度该链接的设置与资料传输。USB周边设备不能够自行启动资料传输，只能回应服务器的指令。 USB OTG改变了这种状况，配件不再需要一定要成为单纯的周边设备，它们有时候也可以成为主机端。举例来说，USB打印机与电脑连接时作为电脑的外界周边被电脑控制，与其他USB储存设备连接时作">
+    <meta name="description" content="总结 USB OTG 线和普通 USB 线相关的知识点。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OTG线和USB线">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/03/10/OTG%E7%BA%BF%E5%92%8CUSB%E7%BA%BF/index.html">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/03/10/stm32-OTG%E7%BA%BF%E5%92%8CUSB%E7%BA%BF/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言我们知道，标准的USB使用主从式的架构，USB主机端（即电脑）是“主”，而USB周边设备是“从”。只有USB主机端可以调度该链接的设置与资料传输。USB周边设备不能够自行启动资料传输，只能回应服务器的指令。 USB OTG改变了这种状况，配件不再需要一定要成为单纯的周边设备，它们有时候也可以成为主机端。举例来说，USB打印机与电脑连接时作为电脑的外界周边被电脑控制，与其他USB储存设备连接时作">
+<meta property="og:description" content="总结 USB OTG 线和普通 USB 线相关的知识点。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403102354241.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-qzqyv7.jpg">
 <meta property="article:published_time" content="2024-03-10T15:48:08.000Z">
-<meta property="article:modified_time" content="2024-03-10T15:55:51.475Z">
+<meta property="article:modified_time" content="2024-09-12T09:00:07.649Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403102354241.png">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-qzqyv7.jpg">
   
   
   
@@ -192,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-qzqyv7.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -221,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          718 字
+          741 字
         
       </span>
     
@@ -232,7 +233,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -274,7 +275,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们知道，标准的USB使用主从式的架构，USB主机端（即电脑）是“主”，而USB周边设备是“从”。只有USB主机端可以调度该链接的设置与资料传输。USB周边设备不能够自行启动资料传输，只能回应服务器的指令。</p>
+                <p>总结 USB OTG 线和普通 USB 线相关的知识点。</p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们知道，标准的USB使用主从式的架构，USB主机端（即电脑）是“主”，而USB周边设备是“从”。只有USB主机端可以调度该链接的设置与资料传输。USB周边设备不能够自行启动资料传输，只能回应服务器的指令。</p>
 <p>USB OTG改变了这种状况，配件不再需要一定要成为单纯的周边设备，它们有时候也可以成为主机端。举例来说，USB打印机与电脑连接时作为电脑的外界周边被电脑控制，与其他USB储存设备连接时作为控制主机来读取储存设备；平板电脑等手持智能终端与电脑连接时主要作为电脑的储存设备等，单独与USB储存设备或USB输入设备连接时则作为这些接入设备的主机来操控储存设备或接收输入。</p>
 <p>随着手机的不断普及，OTG线也不断普及。OTG(On The Go)线和USB线是不同的，虽然，前者是在后者的基础上进行的扩展。</p>
 <p>主要的扩展内容就是：<strong>OTG线可以使得从机变为主机</strong>。例如：USB数据线用来连接手机和电脑，可通过电脑访问手机里面的照片、音乐，把手机当做U盘使用。OTG数据线则无需PC，手机可直接通过OTG数据线与U盘、鼠标、键盘等USB设备连接。接U盘直接查找资料，接鼠标方便玩游戏，接键盘可快速打字，接相机直接浏览图片，即拍即传。OTG扩展了手机的功能。</p>
@@ -290,6 +294,41 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/stm32/" class="category-chain-item">stm32</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/stm32/USB/" class="category-chain-item">USB</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 
@@ -300,7 +339,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>OTG线和USB线</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/03/10/OTG线和USB线/</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/03/10/stm32-OTG线和USB线/</div>
     </div>
     <div class="license-meta">
       

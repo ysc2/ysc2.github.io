@@ -16,19 +16,20 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言在 Linux 中，fork() 函数用来创建子进程，exec() 函数用来替换当前进程的执行文件。 当我们创建了一个进程之后，通常将子进程替换成新的进程映象，这可以用exec系列的函数来进行。当然，exec系列的函数也可以将当前进程替换掉。 exec只是用磁盘上的一个新程序替换了当前进程的正文段, 数据段, 堆段和栈段.并没有创建新进程，所以进程的ID是不变的。 而对于 fork 函数来说，">
+    <meta name="description" content="总结关于 fork 函数族和 exec 函数族的知识。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fork函数和exec函数族">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/08/21/fork%E5%87%BD%E6%95%B0%E5%92%8Cexec%E5%87%BD%E6%95%B0%E6%97%8F/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="前言在 Linux 中，fork() 函数用来创建子进程，exec() 函数用来替换当前进程的执行文件。 当我们创建了一个进程之后，通常将子进程替换成新的进程映象，这可以用exec系列的函数来进行。当然，exec系列的函数也可以将当前进程替换掉。 exec只是用磁盘上的一个新程序替换了当前进程的正文段, 数据段, 堆段和栈段.并没有创建新进程，所以进程的ID是不变的。 而对于 fork 函数来说，">
+<meta property="og:description" content="总结关于 fork 函数族和 exec 函数族的知识。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408212003889.png">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-yjxw5d.jpg">
 <meta property="article:published_time" content="2024-08-21T11:57:55.000Z">
-<meta property="article:modified_time" content="2024-08-21T12:49:59.675Z">
+<meta property="article:modified_time" content="2024-09-12T08:51:50.144Z">
 <meta property="article:author" content="Ysc">
+<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202408212003889.png">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-yjxw5d.jpg">
   
   
   
@@ -192,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202311041642948.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-yjxw5d.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -274,7 +275,9 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 Linux 中，fork() 函数用来创建子进程，exec() 函数用来替换当前进程的执行文件。</p>
+                <p>总结关于 fork 函数族和 exec 函数族的知识。</p>
+<span id="more"></span>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 Linux 中，fork() 函数用来创建子进程，exec() 函数用来替换当前进程的执行文件。</p>
 <p>当我们创建了一个进程之后，通常将子进程替换成新的进程映象，这可以用exec系列的函数来进行。当然，exec系列的函数也可以将当前进程替换掉。</p>
 <p>exec只是用磁盘上的一个新程序替换了当前进程的正文段, 数据段, 堆段和栈段.并没有创建新进程，所以进程的ID是不变的。</p>
 <p>而对于 fork 函数来说，其用来创建一个子进程，这个子进程<strong>继承父进程的一切关于程序方面的资源（而非属性上面的）</strong>。所以这两类函数实际上是可以共同合作使用的。</p>
@@ -315,6 +318,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+    </div>
   
 </div>
 
