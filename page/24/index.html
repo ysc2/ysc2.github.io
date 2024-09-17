@@ -222,6 +222,80 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/11/09/Linux%E5%A0%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89%20(1)/" target="_blank">
+          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8p6gy.jpg" srcset="/img/loading.gif" lazyload alt="Linux堆内存管理深入分析（下）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/11/09/Linux%E5%A0%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89%20(1)/" target="_blank">
+          Linux堆内存管理深入分析（下）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2023/11/09/Linux%E5%A0%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%8B%EF%BC%89%20(1)/" target="_blank">
+        <div>
+          0 前言回顾在上一篇文章中（链接见文章底部），详细介绍了堆内存管理中涉及到的基本概念以及相互关系，同时也着重介绍了堆中chunk分配和释放策略中使用到的隐式链表技术。通过前面的介绍，我们知道使用隐式链表来管理内存chunk总会涉及到内存的遍历，效率极低。对此glibc malloc引入了显示链表技术来提高堆内存分配和释放的效率。 所谓的显示链表就是我们在数据结构中常用的链表，而链表本质上就是将一些
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-11-09 13:15" pubdate>
+              2023-11-09
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Linux/%E5%A0%86-%E6%A0%88/" class="category-chain-item">堆&amp;栈</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2023/11/09/free%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E2%80%94%E2%80%941/" target="_blank">
           <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-9dpxjx.jpg" srcset="/img/loading.gif" lazyload alt="free源码分析——1">
         </a>
@@ -863,73 +937,6 @@
   
   
 
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2023/11/09/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/" target="_blank">
-          <img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/404.jpg" srcset="/img/loading.gif" lazyload alt="栈溢出原理与实践">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/11/09/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/" target="_blank">
-          栈溢出原理与实践
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2023/11/09/%E6%A0%88%E6%BA%A2%E5%87%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/" target="_blank">
-        <div>
-          声明：本章的所有实验都是在Windows 2000 Server上完成的。生成字符串并查找其偏移是在kali 2.0上，查找跳转函数的VA是在windows 10上用IDA。 1. 栈溢出原理1.1 修改邻接变量的原理用实例来反映原理  #include &lt;stdio.h&gt; #include &lt;string.h&gt;  #define PASSWORD "1234567"  i
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-11-09 13:15" pubdate>
-              2023-11-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%AE%89%E5%85%A8/" class="category-chain-item">安全</a>
-  
   
 
       </span>
