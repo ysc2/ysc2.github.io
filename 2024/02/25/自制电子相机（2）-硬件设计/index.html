@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-x6k5pl.jpg">
 <meta property="article:published_time" content="2024-02-24T17:06:38.000Z">
-<meta property="article:modified_time" content="2024-04-12T12:44:25.818Z">
+<meta property="article:modified_time" content="2024-09-16T18:01:48.564Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          1.8k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          16 分钟
+          15 分钟
         
       </span>
     
@@ -293,13 +293,16 @@
 <li>JTAG调试接口</li>
 <li>其他芯片必须外部电路</li>
 </ul>
-<p>其中提供三种模式：</p>
+<p>其中提供两种模式：</p>
 <ul>
-<li>实时模式</li>
+<li>拍摄模式<ul>
 <li>视频模式</li>
 <li>拍照模式</li>
 </ul>
-<p>以上三种模式要有不同的硬、软件要求。</p>
+</li>
+<li>查看模式</li>
+</ul>
+<p>以上两种模式要有不同的硬、软件要求。</p>
 <h1 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h1><p>这一步主要是进行系统的设计，提出一个系统的设计方案。由于我需要制作一个相机，所以一定<strong>不可以是一块PCB板就可以的，我的打算是做三块PCB板</strong>：</p>
 <ul>
 <li>中间层：芯片核心板以及主要的外设电路</li>
@@ -309,10 +312,7 @@
 <p>各个PCB之间使用连接器或者是排插来连接。</p>
 <p>3张<code>PCB</code>板中放置的电路以及<code>PCB</code>之间的联系：</p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402281729087.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="摄像模块的设计"><a href="#摄像模块的设计" class="headerlink" title="摄像模块的设计"></a>摄像模块的设计</h2><h3 id="实时模式"><a href="#实时模式" class="headerlink" title="实时模式"></a>实时模式</h3><p>在这个模式下，摄像头所拍摄到的数据直接显示到显示器上。所以其对于实行性有着更高的要求。</p>
-<p>所以可以<strong>有摄像头读取到数据之后直接通过<code>DMA</code>将数据从<code>DCMA</code>直接传输到<code>FSMC</code>再到显示器中。</strong>以此来提高速度。</p>
-<h3 id="拍照模式"><a href="#拍照模式" class="headerlink" title="拍照模式"></a>拍照模式</h3><p>将拍下的数据直接存进<code>sd</code>中，之后去查看的时候就可以直接从<code>sd</code>卡中读取数据。</p>
-<h3 id="视频模式"><a href="#视频模式" class="headerlink" title="视频模式"></a>视频模式</h3><h1 id="外设选型"><a href="#外设选型" class="headerlink" title="外设选型"></a>外设选型</h1><h2 id="摄像头"><a href="#摄像头" class="headerlink" title="摄像头"></a>摄像头</h2><p>我选用的是微雪的<code>ov5640</code>模组，主要的参数如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141545529.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h1 id="外设选型"><a href="#外设选型" class="headerlink" title="外设选型"></a>外设选型</h1><h2 id="摄像头"><a href="#摄像头" class="headerlink" title="摄像头"></a>摄像头</h2><p>我选用的是微雪的<code>ov5640</code>模组，主要的参数如下：<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141545529.png" srcset="/img/loading.gif" lazyload></p>
 <p>TODO<br><strong>更多的信息可以参考<a href="">这篇文章</a></strong></p>
 <h3 id="引脚定义"><a href="#引脚定义" class="headerlink" title="引脚定义"></a>引脚定义</h3><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202403141547740.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202404122004176.png" srcset="/img/loading.gif" lazyload></p>

@@ -16,16 +16,16 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C语言中的顺序点是什么情况？">
+    <meta name="description" content="传入 **p 还是传入 *p">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言中引用传递的骗局">
 <meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/04/21/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E7%9A%84%E9%AA%97%E5%B1%80/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="C语言中的顺序点是什么情况？">
+<meta property="og:description" content="传入 **p 还是传入 *p">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-5g8r11.jpg">
 <meta property="article:published_time" content="2024-04-21T09:03:20.000Z">
-<meta property="article:modified_time" content="2024-09-12T08:22:32.854Z">
+<meta property="article:modified_time" content="2024-09-17T06:11:49.045Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="转载">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          675 字
+          672 字
         
       </span>
     
@@ -275,7 +275,7 @@
             
               <div class="markdown-body">
                 
-                <p>C语言中的顺序点是什么情况？</p>
+                <p>传入 **p 还是传入 *p</p>
 <span id="more"></span>
 
 <p>在以前的 C 教科书上，一直教导我们， C 语言函数有两种传递参数的方式：值传递和引用传递。 但是，今天在看 <code>c-faq</code> 的 <code>4.11</code> 的时候，才了解到真相。其实严格意义上来讲， C 语言只有值传递，但是编译器可以模拟引用传递，但本质上，还是值传递。 举个例子：</p>
