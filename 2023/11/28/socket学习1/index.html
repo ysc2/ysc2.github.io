@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/pexels-dico-baskoro-18937801.jpg">
 <meta property="article:published_time" content="2023-11-28T09:10:50.000Z">
-<meta property="article:modified_time" content="2024-09-17T13:19:22.012Z">
+<meta property="article:modified_time" content="2024-09-19T05:52:08.049Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.7k 字
+          6.9k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          48 分钟
+          58 分钟
         
       </span>
     
@@ -279,6 +279,16 @@
 <span id="more"></span>
 
 <h1 id="什么是Socket"><a href="#什么是Socket" class="headerlink" title="什么是Socket"></a>什么是Socket</h1><p>socket 的原意是“插座”，在计算机通信领域，socket 被翻译为“套接字”，它是计算机之间进行通信的<strong>一种约定或一种方式</strong>。通过 socket 这种约定，一台计算机可以接收其他计算机的数据，也可以向其他计算机发送数据。</p>
+<p><strong>简单来说，socket 是对底层网络通信的一层抽象，让程序员可以像文件那样操作网络上发送和接收的数据。</strong></p>
+<p>再说的详细一点，假设现在你要编程网络程序，进行服务器端和客户端的通信（数据交换）。不适用 socket 的话，你会做下面的一堆事情：</p>
+<ul>
+<li>管理缓存区来接收和发送数据</li>
+<li>告诉操作系统自己要监听某个端口的数据，还有自己处理这些系统调用来读取数据</li>
+<li>当没有连接的时候或者另外一端要还没有发送数据时候，要处理 IO 阻塞，把自己挂起</li>
+<li>封装和解析 tcp&#x2F;ip 协议的数据，维护数据发送的顺序</li>
+<li>等等</li>
+</ul>
+<p>做了一大堆东西，发现最重要的还没有做：发送&#x2F;接收数据。如果有一个程序能够自动帮我们把上面的东西都做掉，这样我们就可以只关心数据的读写，编程就简单的多了。那么这样一个程序就是 socket，它现在已经是操作系统的一部分，在 linux 中是标准的系统调用，只要调用它提供的一组接口（下面会详解常用函数的使用），就能轻松地建立连接，读写数据，关闭连接，让网络操作就像文件操作一样简单。</p>
 <p>首先我们知道在Linux中一切皆是文件个概念，所以网络连接也是文件，其和普通的文件一样也有文件描述符。</p>
 <p>我们可以通过 socket() 函数来创建一个网络连接，或者说打开一个网络文件，socket() 的返回值就是文件描述符。有了文件描述符，我们就可以使用普通的文件操作函数来传输数据了，例如：</p>
 <ul>
@@ -296,6 +306,26 @@
 <li>SOCK_DGRAM：无连接的通信，底层是 UDP 协议，需要上层的协议来保证可靠性。</li>
 <li>SOCK_RAW：更加灵活的数据控制，能让你指定 IP 头部</li>
 </ul>
+<h1 id="套接字和TCP-IP协议"><a href="#套接字和TCP-IP协议" class="headerlink" title="套接字和TCP&#x2F;IP协议"></a>套接字和TCP&#x2F;IP协议</h1><p>实际上，套接字是一种包装。套接字是对 TCP&#x2F;IP 协议的一种抽象，它屏蔽了底层网络通信的复杂性，使得程序员可以更加简单地进行网络通信。所以，我们还需要知道 socket 与 TCP&#x2F;IP 协议之间的关系。</p>
+<h2 id="三次握手建立连接"><a href="#三次握手建立连接" class="headerlink" title="三次握手建立连接"></a>三次握手建立连接</h2><p>我们知道，TCP 协议是建立可靠连接的协议，所以在通信之前，需要先建立连接。建立连接的过程称为三次握手（Three-way Handshake）。</p>
+<ul>
+<li>客户端向服务器发送一个SYN J</li>
+<li>服务器向客户端响应一个SYN K，并对SYN J进行确认ACK J+1</li>
+<li>客户端再想服务器发一个确认ACK K+1</li>
+</ul>
+<p>那么，TCP 协议和 socket 之间有什么关系呢？</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409191317212.png" srcset="/img/loading.gif" lazyload></p>
+<p>从图中可以看出，当客户端调用connect时，触发了连接请求，向服务器发送了SYN J包，这时connect进入阻塞状态；服务器监听到连接请求，即收到SYN J包，调用accept函数接收请求向客户端发送SYN K ，ACK J+1，这时accept进入阻塞状态；客户端收到服务器的SYN K ，ACK J+1之后，这时connect返回，并对SYN K进行确认；服务器收到ACK K+1时，accept返回，至此三次握手完毕，连接建立。</p>
+<p>总结就是：总结：客户端的connect在三次握手的第二个次返回，而服务器端的accept在三次握手的第三次返回。</p>
+<h2 id="四次挥手释放连接"><a href="#四次挥手释放连接" class="headerlink" title="四次挥手释放连接"></a>四次挥手释放连接</h2><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409191319443.png" srcset="/img/loading.gif" lazyload></p>
+<p>图示过程如下：</p>
+<ul>
+<li>某个应用进程首先调用close主动关闭连接，这时TCP发送一个FIN M；</li>
+<li>另一端接收到FIN M之后，执行被动关闭，对这个FIN进行确认。它的接收也作为文件结束符传递给应用进程，因为FIN的接收意味着应用进程在相应的连接上再也接收不到额外数据；</li>
+<li>一段时间之后，接收到文件结束符的应用进程调用close关闭它的socket。这导致它的TCP也发送一个FIN N；</li>
+<li>接收到这个FIN的源发送端TCP对它进行确认。</li>
+</ul>
+<p>这样每个方向上都有一个FIN和ACK。</p>
 <h1 id="Internet套接字"><a href="#Internet套接字" class="headerlink" title="Internet套接字"></a>Internet套接字</h1><h2 id="主要的传输方式"><a href="#主要的传输方式" class="headerlink" title="主要的传输方式"></a>主要的传输方式</h2><p><a target="_blank" rel="noopener" href="https://c.biancheng.net/view/2124.html">https://c.biancheng.net/view/2124.html</a></p>
 <p>流格式套接字：SOCK_STREAM 是一种<strong>可靠的、双向的</strong>通信数据流，数据可以准确无误地到达另一台计算机，如果损坏或丢失，可以重新发送。</p>
 <p>数据报套接字：数据报格式套接字（Datagram Sockets）也叫“无连接的套接字”，在代码中使用 SOCK_DGRAM 表示。<br>计算机只管传输数据，不作数据校验，如果数据在传输中损坏，或者没有到达另一台计算机，是没有办法补救的。也就是说，数据错了就错了，无法重传。</p>

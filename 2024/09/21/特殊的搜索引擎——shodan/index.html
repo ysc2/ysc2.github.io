@@ -1,0 +1,695 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ysc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Shodan介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="特殊的搜索引擎——shodan">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/09/21/%E7%89%B9%E6%AE%8A%E7%9A%84%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E2%80%94%E2%80%94shodan/index.html">
+<meta property="og:site_name" content="Ysc Web">
+<meta property="og:description" content="Shodan介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-2yx2x6.jpg">
+<meta property="article:published_time" content="2024-09-21T08:14:22.000Z">
+<meta property="article:modified_time" content="2024-09-21T08:26:07.623Z">
+<meta property="article:author" content="Ysc">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-2yx2x6.jpg">
+  
+  
+  
+  <title>特殊的搜索引擎——shodan - Ysc Web</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ysc2.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"c"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ysc博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-2yx2x6.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="特殊的搜索引擎——shodan"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-21 16:14" pubdate>
+          2024年9月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">特殊的搜索引擎——shodan</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Shodan介绍</p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们知道，Google 是搜索引擎巨头，但是 Google 也是有自己的局限性的。这里我们提到的搜索引擎解决了 Google 的这个问题——搜索线上设备</p>
+<p>你可以通过 Shodan 搜索指定的设备，或者搜索特定类型的设备，其中 Shodan 上最受欢迎的搜索内容是：webcam，linksys，cisco，netgear，SCADA等等。</p>
+<h4 id="Shodan简介"><a href="#Shodan简介" class="headerlink" title="Shodan简介"></a><a target="_blank" rel="noopener" href="https://marmalade.vip/shodanuse.html#Shodan%E7%AE%80%E4%BB%8B" title="Shodan简介"></a>Shodan简介</h4><p>CNNMoney的一篇文章写道，虽然目前人们都认为谷歌是最强劲的搜索引擎，但Shodan才是互联网上最可怕的搜索引擎。下面简单介绍一下shodan和它的极其强大乃至恐怖的搜索能力。</p>
+<p>与谷歌不同的是，Shodan不是在网上搜索网址，而是直接进入互联网的背后通道。Shodan可以说是一款“黑暗”谷歌，一刻不停的在寻找着所有和互联网关联的服务器、摄像头、打印机、路由器等等。每个月Shodan都会在大约5亿个服务器上日夜不停地搜集信息。  </p>
+<p>Shodan所搜集到的信息是极其惊人的。凡是链接到互联网的红绿灯、安全摄像头、家庭自动化设备以及加热系统等等都会被轻易的搜索到。Shodan的使用者曾发现过一个水上公园的控制系统，一个加油站，甚至一个酒店的葡萄酒冷却器。而网站的研究者也曾使用Shodan定位到了核电站的指挥和控制系统及一个粒子回旋加速器。  </p>
+<p>Shodan真正值得注意的能力就是能找到几乎所有和互联网相关联的东西。而Shodan真正的可怕之处就是这些设备几乎都没有安装安全防御措施，其可以随意进入。  </p>
+<p>Rapid 7 的首席安全官HD Moore,表示：你可以用一个默认密码登陆几乎一半的互联网。就安全而言，这是一个巨大的失误。  </p>
+<p>如果你搜索“默认密码”的话，你会发现无数的打印机，服务器及系统的用户名都是“admin”，密码全都是“1234”。还有很多系统根本不需要认证，你所需要做的就是用浏览器进行链接。所以如果你在使用默认密码的话，请现在就改换新的密码。</p>
+<h3 id="Shodan简单使用"><a href="#Shodan简单使用" class="headerlink" title="Shodan简单使用"></a><a target="_blank" rel="noopener" href="https://marmalade.vip/shodanuse.html#Shodan%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8" title="Shodan简单使用"></a>Shodan简单使用</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/student-programmer/p/6732873.html">参考网址</a><br>在主页的搜索框中输入想要搜索的内容即可，例如下面我搜索 “SSH”：</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211623498.png" srcset="/img/loading.gif" lazyload></p>
+<p>上图的搜索结果包含两个部分，左侧是大量的汇总数据包括：  </p>
+<ul>
+<li>Results map – 搜索结果展示地图  </li>
+<li>Top services (Ports) – 使用最多的服务&#x2F;端口  </li>
+<li>Top organizations (ISPs) – 使用最多的组织&#x2F;ISP  </li>
+<li>Top operating systems – 使用最多的操作系统  </li>
+<li>Top products (Software name) – 使用最多的产品&#x2F;软件名称</li>
+</ul>
+<p>随后，在中间的主页面我们可以看到包含如下的搜索结果：  </p>
+<ul>
+<li>IP 地址  </li>
+<li>主机名  </li>
+<li>ISP  <ul>
+<li>该条目的收录收录时间  </li>
+<li>该主机位于的国家</li>
+</ul>
+</li>
+<li>Banner 信息</li>
+</ul>
+<p>想要了解每个条目的具体信息，只需要点击每个条目下方的 details 按钮即可。此时，URL 会变成这种格式 <a target="_blank" rel="noopener" href="https://www.shodan.io/host/[IP]%EF%BC%8C%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E7%9B%B4%E6%8E%A5%E8%AE%BF%E9%97%AE%E6%8C%87%E5%AE%9A%E7%9A%84">https://www.shodan.io/host/[IP]，所以我们也可以通过直接访问指定的</a> IP 来查看详细信息。  </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211624127.png" srcset="/img/loading.gif" lazyload></p>
+<p>上图中我们可以从顶部在地图中看到主机的物理地址，从左侧了解到主机的相关信息，右侧则包含目标主机的端口列表及其详细信息。</p>
+<p>使用搜索过滤如果像前面单纯只使用关键字直接进行搜索，搜索结果可能不尽人意，那么此时我们就需要使用一些特定的命令对搜索结果进行过滤，常见用的过滤命令如下所示：</p>
+<blockquote>
+<p>hostname：搜索指定的主机或域名，例如 hostname:”google”<br>port：搜索指定的端口或服务，例如 port:”21”<br>country：搜索指定的国家，例如 country:”CN”<br>city：搜索指定的城市，例如 city:”Hefei”<br>org：搜索指定的组织或公司，例如 org:”google”<br>isp：搜索指定的ISP供应商，例如 isp:”China Telecom”<br>product：搜索指定的操作系统&#x2F;软件&#x2F;平台，例如 product:”Apache httpd”<br>version：搜索指定的软件版本，例如 version:”1.6.2”<br>geo：搜索指定的地理位置，参数为经纬度，例如 geo:”31.8639, 117.2808”<br>before&#x2F;after：搜索指定收录时间前后的数据，格式为dd-mm-yy，例如 before:”11-11-15”<br>net：搜索指定的IP地址或子网，例如 net:”210.45.240.0&#x2F;24”</p>
+</blockquote>
+<h6 id="搜索实例"><a href="#搜索实例" class="headerlink" title="搜索实例"></a><a target="_blank" rel="noopener" href="https://marmalade.vip/shodanuse.html#%E6%90%9C%E7%B4%A2%E5%AE%9E%E4%BE%8B" title="搜索实例"></a>搜索实例</h6><p>查找位于山东的 Apache 服务器：<br>apache city:”Shandon”<br>查找位于国内的 Nginx 服务器：<br>nginx country:”CN”<br>查找 GWS(Google Web Server) 服务器：<br>“Server: gws” hostname:”google”<br>查找指定网段的华为设备：<br>huawei net:”61.191.146.0&#x2F;24”<br>如上通过在基本关键字后增加指定的过滤关键字，能快速的帮助发现我们感兴趣的内容。<br>当然，还有更快速更有意思的方法，那就是点击 Shodan 搜索栏右侧的 “Explore” 按钮，就会得到很多别人分享的搜索语法，你问我别人分享的语法有什么好玩的？那咱们就随便来看看吧：  </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211624475.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>高能！</strong><br>随便选取一个名为“NetSureveillance Web”的用户分享语法，从下面的描述信息我们基本就能得知这就是一个弱密码的漏洞，为了方便测试让我们把语法在增加一个国家的过滤信息，最终语法如下：<br>Server: uc-httpd 1.0.0 200 OK Country:”CN”</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211624063.png" srcset="/img/loading.gif" lazyload></p>
+<p>随便选取一个页面进去输入，使用admin账号和空密码就能顺利进入了!</p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211624751.png" srcset="/img/loading.gif" lazyload></p>
+<p>某马来西亚一家公寓的监控，admin+123456进入<br>60.50.115.98:60001  </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211624859.png" srcset="/img/loading.gif" lazyload></p>
+<p>泰国一家商店监控，admin+空<br><a target="_blank" rel="noopener" href="http://124.121.168.78:60001/">http://124.121.168.78:60001</a>  </p>
+<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202409211625800.png" srcset="/img/loading.gif" lazyload></p>
+<h6 id="在shodan中搜索JAWS-1-0，会查到一批admin-空密码（或123456等弱密码）即可进入的监控"><a href="#在shodan中搜索JAWS-1-0，会查到一批admin-空密码（或123456等弱密码）即可进入的监控" class="headerlink" title="在shodan中搜索JAWS&#x2F;1.0，会查到一批admin+空密码（或123456等弱密码）即可进入的监控"></a><a target="_blank" rel="noopener" href="https://marmalade.vip/shodanuse.html#%E5%9C%A8shodan%E4%B8%AD%E6%90%9C%E7%B4%A2JAWS-1-0%EF%BC%8C%E4%BC%9A%E6%9F%A5%E5%88%B0%E4%B8%80%E6%89%B9admin-%E7%A9%BA%E5%AF%86%E7%A0%81%EF%BC%88%E6%88%96123456%E7%AD%89%E5%BC%B1%E5%AF%86%E7%A0%81%EF%BC%89%E5%8D%B3%E5%8F%AF%E8%BF%9B%E5%85%A5%E7%9A%84%E7%9B%91%E6%8E%A7" title="在shodan中搜索JAWS/1.0，会查到一批admin+空密码（或123456等弱密码）即可进入的监控"></a>在shodan中搜索JAWS&#x2F;1.0，会查到一批admin+空密码（或123456等弱密码）即可进入的监控</h6><p>慎用！！！</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/student-programmer/p/6732873.html">https://www.cnblogs.com/student-programmer/p/6732873.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://marmalade.vip/shodanuse.html#">https://marmalade.vip/shodanuse.html#</a>!</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AE%89%E5%85%A8/" class="category-chain-item">安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="print-no-link">#转载</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>特殊的搜索引擎——shodan</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/09/21/特殊的搜索引擎——shodan/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Ysc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/21/LLM%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/" title="LLM学习资料">
+                        <span class="hidden-mobile">LLM学习资料</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
