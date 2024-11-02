@@ -16,24 +16,24 @@
   <meta name="author" content="Ysc">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录电机的相关知识点">
+    <meta name="description" content="自寻路机器人项目介绍">
 <meta property="og:type" content="article">
-<meta property="og:title" content="电机与舵机">
-<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/02/29/%E7%94%B5%E6%9C%BA%E4%B8%8E%E8%88%B5%E6%9C%BA/index.html">
+<meta property="og:title" content="自寻路机器人">
+<meta property="og:url" content="https://ysc2.github.io/ysc2.github.io/2024/11/02/%E8%87%AA%E5%AF%BB%E8%B7%AF%E6%9C%BA%E5%99%A8%E4%BA%BA/index.html">
 <meta property="og:site_name" content="Ysc Web">
-<meta property="og:description" content="记录电机的相关知识点">
+<meta property="og:description" content="自寻路机器人项目介绍">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8v112.jpg">
-<meta property="article:published_time" content="2024-02-28T18:42:43.000Z">
-<meta property="article:modified_time" content="2024-09-12T08:59:28.281Z">
+<meta property="og:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-p91dym.jpg">
+<meta property="article:published_time" content="2024-11-02T03:17:22.000Z">
+<meta property="article:modified_time" content="2024-11-02T04:59:06.580Z">
 <meta property="article:author" content="Ysc">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8v112.jpg">
+<meta name="twitter:image" content="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-p91dym.jpg">
   
   
   
-  <title>电机与舵机 - Ysc Web</title>
+  <title>自寻路机器人 - Ysc Web</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -193,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-l8v112.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/wallhaven-p91dym.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="电机与舵机"></span>
+            <span id="subtitle" data-typed-text="自寻路机器人"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-29 02:42" pubdate>
-          2024年2月29日 凌晨
+        <time datetime="2024-11-02 11:17" pubdate>
+          2024年11月2日 上午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.2k 字
+          603 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          19 分钟
+          6 分钟
         
       </span>
     
@@ -270,68 +270,35 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">电机与舵机</h1>
+            <h1 id="seo-header">自寻路机器人</h1>
             
             
               <div class="markdown-body">
                 
-                <p>记录电机的相关知识点</p>
+                <p>自寻路机器人项目介绍</p>
 <span id="more"></span>
 
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>这个项目是我对于 <a target="_blank" rel="noopener" href="https://oshwhub.com/dnoo2/zhi-neng-dian-nao-shu-gao-ji-mi-">该项目的一个复刻</a>，这个机器人主要的需要实现的功能就是自动寻路，可以根据地图和障碍物的位置，自动的走到目标位置。一个实际的应用就是走迷宫。</p>
+<h1 id="整体解决方案"><a href="#整体解决方案" class="headerlink" title="整体解决方案"></a>整体解决方案</h1><ul>
+<li>主控： 立创开发板</li>
+<li>电源： 3S航模电池</li>
+<li>底盘： 2带编码器的N20电机+2被动轮</li>
+<li>传感器：使用地磁传感器感知方向，使用TOF距离传感器感知地图。</li>
+<li>开发框架：STM32 HAL</li>
+<li>任务流程：工具链：CubeMx + GNU&#x2F;Make + GCC</li>
+</ul>
+<h1 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h1><p>由于主控直接使用的是立创的开发板，所以这里就不详细介绍了。</p>
+<p>同时，使用了三个 PCB 板来完成任务：</p>
+<ol>
+<li>最底层是底盘层，主要包括电池接口、降压电路、电机驱动电路、电机孔位。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202411021159225.png" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202411021205736.png" srcset="/img/loading.gif" lazyload></li>
+<li>第二层是传感器层，主要包括地磁传感器、TOF传感器、编码器接口。<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202411021158675.png" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202411021205861.png" srcset="/img/loading.gif" lazyload></li>
+<li>第三层是主控层，主要包括主控、电源接口、串口接口、电机接口，这个就是使用的立创开发板<br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202411021200389.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<h1 id="软件设计"><a href="#软件设计" class="headerlink" title="软件设计"></a>软件设计</h1><p>由于原项目使用地磁传感器感知方向，使用TOF距离传感器感知地图。但是我没有办法去搭建一个迷宫，所以我使用了地图的二维数组来模拟地图。</p>
+<p>使用 1 来表示墙壁，使用 0 来表示路。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">booleen <span class="hljs-built_in">map</span>[<span class="hljs-number">10</span>][<span class="hljs-number">10</span>] = &#123;<br>    &#123;<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>&#125;,<br>    &#123;<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>&#125;,<br>    &#123;<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>&#125;,<br>    &#123;<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>&#125;,<br>    &#123;<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>电机与舵机</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060312947.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="电机的基本概念"><a href="#电机的基本概念" class="headerlink" title="电机的基本概念"></a>电机的基本概念</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402290242472.png" srcset="/img/loading.gif" lazyload></p>
-<p>其中异步电机和同步电机的主要区别就是：转子是否以等同于旋转磁场的速度、方向旋转。</p>
-<h1 id="电机是什么？"><a href="#电机是什么？" class="headerlink" title="电机是什么？"></a>电机是什么？</h1><ol>
-<li>按工作电源种类划分：可分为直流电机和交流电机。<ul>
-<li>直流电动机按结构及工作原理可划分：无刷直流电动机和有刷直流电动机。<br>有刷直流电动机可划分：永磁直流电动机和电磁直流电动机。</li>
-</ul>
-</li>
-</ol>
-<p>电磁直流电动机划分：串励直流电动机、并励直流电动机、他励直流电动机和复励直流电动机。</p>
-<p>永磁直流电动机划分：稀土永磁直流电动机、铁氧体永磁直流电动机和铝镍钴永磁直流电动机。</p>
-<ul>
-<li>其中交流电机还可划分：单相电机和三相电机。<img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060325998.png" srcset="/img/loading.gif" lazyload></li>
-</ul>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060312518.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li>按用途可划分：驱动用电动机和控制用电动机。<ul>
-<li>驱动用电动机可划分：电动工具（包括钻孔、抛光、磨光、开槽、切割、扩孔等工具）用电动机、家电（包括洗衣机、电风扇、电冰箱、空调器、录音机、录像机、影碟机、吸尘器、照相机、电吹风、电动剃须刀等）用电动机及其他通用小型机械设备（包括各种小型机床、小型机械、医疗器械、电子仪器等）用电动机。</li>
-<li>控制用电动机又划分：<strong>步进电动机和伺服电动机</strong>等。</li>
-</ul>
-</li>
-</ol>
-<h1 id="舵机是什么？"><a href="#舵机是什么？" class="headerlink" title="舵机是什么？"></a>舵机是什么？</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060313505.png" srcset="/img/loading.gif" lazyload></p>
-<p><strong>舵机其实就是伺服电机，因为国内的用户已开始使用在航模等设备的舵轴控制，所以国内对这些轻量级的伺服电机称之为舵机。</strong></p>
-<h2 id="什么是伺服电机"><a href="#什么是伺服电机" class="headerlink" title="什么是伺服电机"></a>什么是伺服电机</h2><p>伺服电机（servo motor ）是指在伺服系统中控制机械元件运转的发动机，是一种补助马达间接变速装置。<br>伺服电机可使控制速度，位置精度非常准确，可以将电压信号转化为转矩和转速以驱动控制对象。伺服电机转子转速受输入信号控制，并能快速反应，在自动控制系统中，用作执行元件，且具有机电时间常数小、线性度高等特性，可把所收到的电信号转换成电动机轴上的角位移或角速度输出。分为直流和交流伺服电动机两大类，其主要特点是，当信号电压为零时无自转现象，转速随着转矩的增加而匀速下降。</p>
-<h2 id="伺服电机的工作原理"><a href="#伺服电机的工作原理" class="headerlink" title="伺服电机的工作原理"></a>伺服电机的工作原理</h2><ol>
-<li><p>伺服系统（servo mechanism）是使物体的位置、方位、状态等输出被控量能够跟随输入目标（或给定值）的任意变化的自动控制系统。伺服主要靠脉冲来定位，基本上可以这样理解，伺服电机接收到1个脉冲，就会旋转1个脉冲对应的角度，从而实现位移，因为，伺服电机本身具备发出脉冲的功能，所以伺服电机每旋转一个角度，都会发出对应数量的脉冲，这样，和伺服电机接受的脉冲形成了呼应，或者叫闭环，如此一来，系统就会知道发了多少脉冲给伺服电机，同时又收了多少脉冲回来，这样，就能够很精确的控制电机的转动，从而实现精确的定位，可以达到0.001mm。直流伺服电机分为有刷和无刷电机。有刷电机成本低，结构简单，启动转矩大，调速范围宽，控制容易，需要维护，但维护不方便（换碳刷），产生电磁干扰，对环境有要求。因此它可以用于对成本敏感的普通工业和民用场合。<br>无刷电机体积小，重量轻，出力大，响应快，速度高，惯量小，转动平滑，力矩稳定。控制复杂，容易实现智能化，其电子换相方式灵活，可以方波换相或正弦波换相。电机免维护，效率很高，运行温度低，电磁辐射很小，长寿命，可用于各种环境。</p>
-</li>
-<li><p>交流伺服电机也是无刷电机，分为同步和异步电机，运动控制中一般都用同步电机，它的功率范围大，可以做到很大的功率。大惯量，最高转动速度低，且随着功率增大而快速降低。因而适合做低速平稳运行的应用。</p>
-</li>
-<li><p>伺服电机内部的转子是永磁铁，驱动器控制的U&#x2F;V&#x2F;W三相电形成电磁场，转子在此磁场的作用下转动，同时电机自带的编码器反馈信号给驱动器，驱动器根据反馈值与目标值进行比较，调整转子转动的角度。伺服电机的精度决定于编码器的精度（线数）。</p>
-</li>
-</ol>
-<p>交流伺服电机和无刷直流伺服电机在功能上的区别：交流伺服要好一些，因为是正弦波控制，转矩脉动小。直流伺服是梯形波。但直流伺服比较简单，便宜。</p>
-<p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/202402060313689.png" srcset="/img/loading.gif" lazyload> 工业用伺服电机</p>
-<h2 id="伺服电机的特点对比"><a href="#伺服电机的特点对比" class="headerlink" title="伺服电机的特点对比"></a>伺服电机的特点对比</h2><p>直流无刷伺服电机特点 转动惯量小、启动电压低、空载电流小； 弃接触式换向系统，大大提高电机转速，最高转速高达100 000rpm；无刷伺服电机在执行伺服控制时，无须编码器也可实现速度、位置、扭矩等的控制； 不存在电刷磨损情况，除转速高之外，还具有寿命长、噪音低、无电磁干扰等特点。 直流有刷伺服电机特点</p>
-<ol>
-<li>体积小、动作快反应快、过载能力大、调速范围宽</li>
-<li>低速力矩大, 波动小，运行平稳</li>
-<li>低噪音,高效率</li>
-<li>后端编码器反馈（选配）构成直流伺服等优点</li>
-<li>变压范围大，频率可调</li>
-</ol>
-<h2 id="伺服电机对于普通电机的优点"><a href="#伺服电机对于普通电机的优点" class="headerlink" title="伺服电机对于普通电机的优点"></a>伺服电机对于普通电机的优点</h2><ol>
-<li>精度：实现了位置，速度和力矩的闭环控制；克服了步进电机失步的问题；</li>
-<li>转速：高速性能好，一般额定转速能达到2000～3000转；</li>
-<li>适应性：抗过载能力强，能承受三倍于额定转矩的负载，对有瞬间负载波动和要求快速起动的场合特别适用；</li>
-<li>稳定：低速运行平稳，低速运行时不会产生类似于步进电机的步进运行现象。适用于有高速响应要求的场合；</li>
-<li>及时性：电机加减速的动态相应时间短，一般在几十毫秒之内；</li>
-<li>舒适性：发热和噪音明显降低。<br>简单点说就是：平常看到的那种普通的电机，断电后它还会因为自身的惯性再转一会儿，然后停下。而伺服电机和步进电机是说停就停，说走就走，反应极快。但步进电机存在失步现象。</li>
-</ol>
-<h2 id="伺服电机的应用场景"><a href="#伺服电机的应用场景" class="headerlink" title="伺服电机的应用场景"></a>伺服电机的应用场景</h2><p>伺服电机的应用领域就太多了。只要是要有动力源的，而且对精度有要求的一般都可能涉及到伺服电机。如机床、印刷设备、包装设备、纺织设备、激光加工设备、机器人、自动化生产线等对工艺精度、加工效率和工作可靠性等要求相对较高的设备。</p>
+<h1 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h1><p><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_120317.jpg" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_120321.jpg" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_120328.jpg" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_120332.jpg" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_114452.jpg" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_114448.jpg" srcset="/img/loading.gif" lazyload><br><img src="https://picgo-ysc.oss-cn-shenzhen.aliyuncs.com/web/IMG_20241102_115342.jpg" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -350,7 +317,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%94%B5%E6%9C%BA/" class="category-chain-item">电机</a>
+  <a href="/categories/%E6%9C%BA%E6%A2%B0/" class="category-chain-item">机械</a>
   
   
 
@@ -377,8 +344,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>电机与舵机</div>
-      <div>https://ysc2.github.io/ysc2.github.io/2024/02/29/电机与舵机/</div>
+      <div>自寻路机器人</div>
+      <div>https://ysc2.github.io/ysc2.github.io/2024/11/02/自寻路机器人/</div>
     </div>
     <div class="license-meta">
       
@@ -390,7 +357,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月29日</div>
+          <div>2024年11月2日</div>
         </div>
       
       
@@ -422,18 +389,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/01/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Arch-Linux%E8%AE%B0%E5%BD%95/" title="虚拟机安装Arch-Linux记录">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">虚拟机安装Arch-Linux记录</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/29/%E7%94%B5%E6%9C%BA%E5%8F%8A%E5%85%B6%E9%A9%B1%E5%8A%A8/" title="电机及其驱动">
-                        <span class="hidden-mobile">电机及其驱动</span>
+                      <a href="/2024/11/02/FOC%E9%A9%B1%E5%8A%A8%E6%9D%BF/" title="FOC驱动板">
+                        <span class="hidden-mobile">FOC驱动板</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
